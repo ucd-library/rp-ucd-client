@@ -1,8 +1,11 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import spaMiddleware from '@ucd-lib/spa-router-middleware';
-import config from '../lib/config';
+import config from '../lib/config.js';
+import esmUtils from '../lib/esm-utils.js';
 
+const {__dirname} = esmUtils.moduleLocation(import.meta);
 const assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
 const loaderPath = path.join(assetsDir, 'loader', 'loader.js');
 const loaderSrc = fs.readFileSync(loaderPath, 'utf-8');
@@ -33,7 +36,8 @@ export default (app) => {
       });
     },
     template : (req, res, next) => {
-      next({bundle})
+      let jsonld = '';
+      next({bundle, jsonld});
     }
   });
 

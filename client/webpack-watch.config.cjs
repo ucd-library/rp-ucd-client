@@ -1,8 +1,6 @@
-import wp from '@ucd-lib/cork-app-build'
-
-const config = wp.watch({
+const config = require('@ucd-lib/cork-app-build').watch({
   root : __dirname,
-  entry : 'public/elements/research-profiles.js',
+  entry : 'public/elements/researcher-profiles.js',
   preview : 'public/js',
   clientModules : 'public/node_modules'
 });
@@ -12,4 +10,4 @@ const config = wp.watch({
 // Adding the second flag will generate a ie build as well as a modern
 // build when in development.  Note this slows down the build process.
 
-export default config;
+module.exports = config;

@@ -1,6 +1,6 @@
 import express from 'express'
-import staticController from './controllers/static'
-import config from './lib/config'
+import staticController from './controllers/static.js'
+import config from './lib/config.js'
 
 const app = express();
 

@@ -11,3 +11,5 @@ COPY index.js .
 COPY client client
 COPY lib lib
 COPY controllers controllers
+
+CMD node index.js
