@@ -1,6 +1,6 @@
 import { html } from 'lit-element';
 
-export default function render() { 
+export default function render() {
 return html`
 
 <style>
@@ -12,9 +12,9 @@ return html`
     width: 100%;
     min-height: 700px;
     height: 75vh;
-    display: flex; 
+    display: flex;
     flex-direction: column;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     background-color: white;
   }
@@ -60,26 +60,27 @@ return html`
   }
 
 
-</style>  
+</style>
 
-<!-- 
+<!--
   Required for AppStateModel
   @ucd-lib/app-state-model imports this element
 -->
 <app-route .appRoutes="${this.appRoutes}"></app-route>
 
 
-<iron-pages 
-  selected="${this.page}" 
-  attr-for-selected="id" 
+<iron-pages
+  selected="${this.page}"
+  attr-for-selected="id"
   selected-attribute="visible">
-  
+
   <div id="loading">
     <img src="/images/logos/logo-icon.svg" style="max-width: 128px" />
     <div class="loading-dots">
       <h1 class="dot one">.</h1><h1 class="dot two">.</h1><h1 class="dot three">.</h1>
     </div>
   </div>
+  <app-page-components id="components"></app-page-components>
   <app-page-home id="home"></app-page-home>
   <app-page-search id="search"></app-page-search>
   <app-page-person id="record"></app-page-record>
