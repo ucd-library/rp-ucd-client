@@ -1,6 +1,10 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html"
+
+import "../../components/a-z"
+import "../../components/avatar"
 import "../../components/badge"
+import "../../components/person-preview"
 
 export default function render() {
 return html`
@@ -9,10 +13,41 @@ return html`
   :host {
     display: block;
   }
+  .people-vertical {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .people-vertical rp-person-preview {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .people-columns {
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: auto auto;
+  }
+
+  .people-columns rp-person-preview {
+  }
   ${styles}
 </style>
 
 <h1 class="text-primary">Site Components</h1>
+<p>These don't connect to the main bus, they are pure lit.
+You control them with attributes, and build more complicated (bus-connected) elements with them.
+</p>
+<h2>A-Z list</h2>
+<p>A-Z list that changes attribute when a different value is selected.</p>
+<rp-a-z></rp-a-z>
+<h2>Avatars</h2>
+<p>Use the size attribute to adjust Kimmy-defined sizes.</p>
+<rp-avatar size="lg"></rp-avatar>
+<rp-avatar></rp-avatar>
+<rp-avatar size="sm"></rp-avatar>
+<p>Use the src attribute to use a photo.<p>
+<rp-avatar size="lg" src="https://www.library.ucdavis.edu/wp-content/uploads/2017/02/pb_asilomar_2475-Peter-Brantley-280x350-c-center.jpg"></rp-avatar>
+<rp-avatar size="lg" src="https://www.library.ucdavis.edu/wp-content/uploads/2017/02/quinn-280x350-c-center.jpg"></rp-avatar>
+
 <h2>Badges</h2>
 <small>
   <rp-badge>I'm a Badge!</rp-badge>
@@ -32,5 +67,61 @@ but you can also increase padding with the size attribute <rp-badge size="lg">si
 </p>
 <p>If you pass in an href attribute, <rp-badge href="https://www.google.com">the badges</rp-badge> <rp-badge href="https://www.library.ucdavis.edu">become links</rp-badge>
 and have hover styles.
-<p>
+</p>
+<h2>Person Preview</h2>
+<p>You can arrange them how you see fit.</p><p>Vertically, like in search/browse page:</p>
+<div class="people-vertical">
+  <rp-person-preview
+    name="Quinn Hart"
+    avatar-src="https://www.library.ucdavis.edu/wp-content/uploads/2017/02/quinn-280x350-c-center.jpg"
+    href="https://www.library.ucdavis.edu/author/quinn-hart/"
+    title="Digital Applications Manager"
+    badges='["foo-bar"]'>
+  </rp-person-preview>
+  <hr class="dotted light"/>
+  <rp-person-preview
+    name="Peter Brantly"
+    avatar-src="https://www.library.ucdavis.edu/wp-content/uploads/2017/02/pb_asilomar_2475-Peter-Brantley-280x350-c-center.jpg"
+    href="https://www.library.ucdavis.edu/author/peter-brantley/"
+    title="Director of Online Strategy"
+    badges='[{"text" : "Im a link!", "href" : "https://google.com"}]'>
+  </rp-person-preview>
+  <hr class="dotted light"/>
+  <rp-person-preview
+    name="Man of Mystery"
+    title="Has no avatar-src or href attributes">
+  </rp-person-preview>
+  <hr class="dotted light"/>
+</div>
+<p>or in columns like on the homepage:</p>
+<div class="people-columns">
+  <rp-person-preview
+    name="Quinn Hart"
+    avatar-src="https://www.library.ucdavis.edu/wp-content/uploads/2017/02/quinn-280x350-c-center.jpg"
+    href="https://www.library.ucdavis.edu/author/quinn-hart/"
+    avatar-size='sm'
+    title="Digital Applications Manager">
+  </rp-person-preview>
+  <rp-person-preview
+    name="Peter Brantly"
+    avatar-src="https://www.library.ucdavis.edu/wp-content/uploads/2017/02/pb_asilomar_2475-Peter-Brantley-280x350-c-center.jpg"
+    avatar-size='sm'
+    href="https://www.library.ucdavis.edu/author/peter-brantley/"
+    title="Director of Online Strategy">
+  </rp-person-preview>
+  <rp-person-preview
+    name="Justin Merz"
+    avatar-src="https://www.library.ucdavis.edu/wp-content/uploads/2017/03/headshot_cropped-280x350-c-center.png"
+    avatar-size='sm'
+    href="https://www.library.ucdavis.edu/author/justin-merz/"
+    title="Research Support Engineer">
+  </rp-person-preview>
+  <rp-person-preview
+    name="Kimmy Hescock"
+    avatar-src="https://www.library.ucdavis.edu/wp-content/uploads/2017/07/Kimmy2018-01-001-280x350-c-center.jpg"
+    avatar-size='sm'
+    href="https://www.library.ucdavis.edu/author/kimmy-hescock/"
+    title="User Experience Designer">
+  </rp-person-preview>
+</div>
 `;}

@@ -4,6 +4,10 @@ import render from "./researcher-profiles.tpl.js"
 // sets globals Mixin and EventInterface
 import "@ucd-lib/cork-app-utils";
 
+// Polymer
+import "@polymer/iron-icons/iron-icons"
+import "@polymer/iron-iconset-svg/iron-iconset-svg"
+
 // styles
 import "./styles/properties"
 import "./styles/site"

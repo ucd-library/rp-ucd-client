@@ -13,46 +13,33 @@ return html`
     padding: .3em .7em;
     line-height: 1;
     border-color: var(--tcolor-accent0);
-    transition: 0.4s;
+    transition: 0.3s;
   }
   span.size-lg {
     padding: .55em .9em;
   }
-  span.color-0 {
-    border-color: var(--tcolor-accent0)
+  a:hover span {
+      background-color: var(--tcolor-hover-bg);
+      color:  var(--tcolor-hover-text);
+      border-color: var(--tcolor-hover-bg);
   }
-  a:hover span.color-0 {
-      background-color: var(--tcolor-accent0)
+  span.color-0 {
+    border-color: var(--tcolor-accent0);
   }
   span.color-1 {
-    border-color: var(--tcolor-accent1)
-  }
-  a:hover span.color-1 {
-      background-color: var(--tcolor-accent1)
+    border-color: var(--tcolor-accent1);
   }
   span.color-2 {
-    border-color: var(--tcolor-accent2)
-  }
-  a:hover span.color-2 {
-      background-color: var(--tcolor-accent2)
+    border-color: var(--tcolor-accent2);
   }
   span.color-3 {
-    border-color: var(--tcolor-accent3)
-  }
-  a:hover span.color-3 {
-      background-color: var(--tcolor-accent3)
+    border-color: var(--tcolor-accent3);
   }
   span.color-4 {
-    border-color: var(--tcolor-accent4)
-  }
-  a:hover span.color-4 {
-      background-color: var(--tcolor-accent4)
+    border-color: var(--tcolor-accent4);
   }
   span.color-5 {
-    border-color: var(--tcolor-accent5)
-  }
-  a:hover span.color-5 {
-      background-color: var(--tcolor-accent5)
+    border-color: var(--tcolor-accent5);
   }
   a {
     text-decoration: none;

@@ -2,6 +2,25 @@
     <template>
       <style>
 
+        a {
+          color: var(--tcolor-link-text);
+        }
+        a:hover {
+            color:  var(--tcolor-hover-bg);
+        }
+
+        hr {
+          border-color: var(--hr-color);
+          border-style: solid;
+          border-width: var(--hr-weight);
+        }
+        hr.dotted {
+          border-style: dotted;
+        }
+        hr.light {
+          border-color: var(--hr-color-light);
+        }
+
         [hidden] {
           display: none !important;
         }
@@ -13,6 +32,7 @@
           color: var(--tcolor-secondary) !important;
         }
 
+
         h1, .h1 {
           font-size: var(--font-size-h1);
         }
@@ -21,6 +41,9 @@
         }
         h3, .h3 {
           font-size: var(--font-size-h3);
+        }
+        p, .p {
+          font-size: var(--font-size);
         }
         small, .small {
           font-size: var(--font-size-small);
