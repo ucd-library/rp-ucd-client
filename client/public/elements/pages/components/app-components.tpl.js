@@ -4,6 +4,7 @@ import styles from "../../styles/site.html"
 import "../../components/a-z"
 import "../../components/avatar"
 import "../../components/badge"
+import "../../components/pagination"
 import "../../components/person-preview"
 
 export default function render() {
@@ -12,6 +13,11 @@ return html`
 <style>
   :host {
     display: block;
+    margin: 15px;
+  }
+  section {
+    padding: 15px;
+    margin-bottom: 15px;
   }
   .people-vertical {
     padding-left: 20px;
@@ -26,6 +32,11 @@ return html`
     grid-gap: 30px;
     grid-template-columns: auto auto;
   }
+  @media only screen and (max-width: 500px) {
+    .people-columns {
+      display: block;
+    }
+}
 
   .people-columns rp-person-preview {
   }
@@ -36,9 +47,13 @@ return html`
 <p>These don't connect to the main bus, they are pure lit.
 You control them with attributes, and build more complicated (bus-connected) elements with them.
 </p>
+<section>
 <h2>A-Z list</h2>
-<p>A-Z list that changes attribute when a different value is selected.</p>
-<rp-a-z></rp-a-z>
+<p>Attach a listener to be notified when the selected letter changes i.e.<br /><code>@changed-letter=${(e) => console.log(e.target.selectedLetter)}</code></p>
+<rp-a-z selected-letter="all" @changed-letter=${(e) => console.log(e.target.selectedLetter)}></rp-a-z>
+</section>
+
+<section>
 <h2>Avatars</h2>
 <p>Use the size attribute to adjust Kimmy-defined sizes.</p>
 <rp-avatar size="lg"></rp-avatar>
@@ -47,7 +62,9 @@ You control them with attributes, and build more complicated (bus-connected) ele
 <p>Use the src attribute to use a photo.<p>
 <rp-avatar size="lg" src="https://www.library.ucdavis.edu/wp-content/uploads/2017/02/pb_asilomar_2475-Peter-Brantley-280x350-c-center.jpg"></rp-avatar>
 <rp-avatar size="lg" src="https://www.library.ucdavis.edu/wp-content/uploads/2017/02/quinn-280x350-c-center.jpg"></rp-avatar>
+</section>
 
+<section>
 <h2>Badges</h2>
 <small>
   <rp-badge>I'm a Badge!</rp-badge>
@@ -68,6 +85,19 @@ but you can also increase padding with the size attribute <rp-badge size="lg">si
 <p>If you pass in an href attribute, <rp-badge href="https://www.google.com">the badges</rp-badge> <rp-badge href="https://www.library.ucdavis.edu">become links</rp-badge>
 and have hover styles.
 </p>
+</section>
+
+<section>
+<h2>Pagination</h2>
+<p>Attach a listener to be notified when the selected letter changes i.e.<br /><code>@changed-page=${(e) => console.log(e.target.currentPage)}</code></p>
+<rp-pagination max-page=8 @changed-page=${(e) => console.log(e.target.currentPage)}></rp-pagination>
+<p>Use the <code>max-page</code>, <code>min-page</code>, and <code>current-page</code> attributes to control the display.</p>
+<rp-pagination max-page=15 current-page=7></rp-pagination>
+<p>Use the <code>pages-per-side</code> attribute to show more pages on either side of the current page<p>
+<rp-pagination max-page=20 current-page=10 pages-per-side=3></rp-pagination>
+</section>
+
+<section>
 <h2>Person Preview</h2>
 <p>You can arrange them how you see fit.</p><p>Vertically, like in search/browse page:</p>
 <div class="people-vertical">
@@ -124,4 +154,5 @@ and have hover styles.
     title="User Experience Designer">
   </rp-person-preview>
 </div>
+<p>Because of the general awfullness of the css overflow properties, you have to set the textWidth property in a resize event.</p>
 `;}

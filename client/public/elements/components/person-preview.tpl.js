@@ -1,4 +1,5 @@
 import { html } from 'lit-element';
+import { styleMap } from 'lit-html/directives/style-map';
 import "./avatar"
 
 export default function render() {
@@ -49,7 +50,7 @@ export default function render() {
   </style>
   <div class=container>
     <rp-avatar size="${this.avatarSize}" src="${this.avatarSrc}"></rp-avatar>
-    <div class="text-container">
+    <div class="text-container" style="${styleMap({"max-width" : this.textWidth})}">
       <a class="name" href="${this.href}" ?disabled="${!this.href}">${this.name}</a>
       <small>${this.title}</small>
       <small class="badges">${this.badges.map(b => this._renderBadge(b))}</small>

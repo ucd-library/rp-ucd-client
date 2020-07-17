@@ -11,7 +11,8 @@ export class RpPersonPreview extends LitElement {
     title: {type: String},
     badges: {type: Array},
     avatarSize: {type: String, attribute: 'avatar-size'},
-    avatarSrc: {type: String, attribute: 'avatar-src'}
+    avatarSrc: {type: String, attribute: 'avatar-src'},
+    textWidth: {type: String, attribute: 'text-width'}
   };
   }
 
@@ -21,6 +22,9 @@ export class RpPersonPreview extends LitElement {
 
     if (!this.badges) {
       this.badges = [];
+    }
+    if (!this.textWidth) {
+      this.textWidth = (window.innerWidth.toString() - 70) + "px";
     }
   }
 
