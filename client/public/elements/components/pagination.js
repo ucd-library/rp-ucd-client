@@ -5,41 +5,20 @@ import render from './pagination.tpl.js';
 export class RpPagination extends LitElement {
   static get properties() {
   return {
-    currentPage:  {type: Number, attribute: 'current-page', reflect: true},
-    maxPage: {type: Number, attribute: 'max-page', reflect: true},
-    minPage: {type: Number, attribute: 'min-page', reflect: true},
-    pagesPerSide: {type: Number, attribute: 'pages-per-side'}
+    currentPage:  {converter: parseInt, attribute: 'current-page', reflect: true},
+    maxPage: {converter: parseInt, attribute: 'max-page', reflect: true},
+    minPage: {converter: parseInt, attribute: 'min-page', reflect: true},
+    pagesPerSide: {converter: parseInt, attribute: 'pages-per-side'}
   };
   }
 
   constructor() {
     super();
     this.render = render.bind(this);
-    if (!this.pagesPerSide) {
-      this.pagesPerSide = 1;
-    }
-
-    if (this.minPage) {
-      this.minPage = Math.floor(this.minPage);
-    }
-    else {
-      this.minPage = 1;
-    }
-
-    if (this.currentPage) {
-      this.currrentPage = Math.floor(this.currentPage);
-    }
-    else {
-      this.currentPage = this.minPage;
-    }
-
-    if (this.maxPage) {
-      this.maxPage = Math.floor(this.maxPage);
-    }
-    else {
-      this.maxPage = this.currentPage;
-    }
-
+    this.pagesPerSide = 1;
+    this.minPage = 1;
+    this.currentPage = this.minPage;
+    this.maxPage = this.currentPage;
 
     this._changedPage = new CustomEvent('changed-page', {
       detail: {

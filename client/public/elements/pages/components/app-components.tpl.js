@@ -4,6 +4,7 @@ import styles from "../../styles/site.html"
 import "../../components/a-z"
 import "../../components/avatar"
 import "../../components/badge"
+import "../../components/link-list"
 import "../../components/pagination"
 import "../../components/person-preview"
 
@@ -36,9 +37,10 @@ return html`
     .people-columns {
       display: block;
     }
-}
-
-  .people-columns rp-person-preview {
+  }
+  .subnav {
+    font-size: 18px;
+    padding: 20px;
   }
   ${styles}
 </style>
@@ -88,11 +90,31 @@ and have hover styles.
 </section>
 
 <section>
+<h2>Link List</h2>
+<p>Displays a list of "links". Attach a listener to be notified when the active link changes i.e.<br /><code>@changed-link=\${(e) => console.log(e.target.links[e.target.currentLink])}</code></p>
+<rp-link-list links='["Hello World", "Hello Again!", "And One More Time"]'
+              @changed-link=${(e) => console.log(e.target.links[e.target.currentLink])}>
+</rp-link-list>
+<p>Switch to horizontal view by using <code>direction=h</code></p>
+<div class="subnav">
+  <rp-link-list direction="horizontal"
+                @changed-link="${(e) => console.log(e.target.links[e.target.currentLink])}"
+                links='[{"text": "All Info"},
+                        {"text": "About"},
+                        {"text": "Publications"},
+                        {"text": "Research"},
+                        {"text": "Contact"},
+                        {"text": "Disabled Link", "disabled": true} ]'>
+  </rp-link-list>
+</div>
+</section>
+
+<section>
 <h2>Pagination</h2>
-<p>Attach a listener to be notified when the selected letter changes i.e.<br /><code>@changed-page=${(e) => console.log(e.target.currentPage)}</code></p>
+<p>Attach a listener to be notified when the page changes i.e.<br /><code>@changed-page=\${(e) => console.log(e.target.currentPage)}</code></p>
 <rp-pagination max-page=8 @changed-page=${(e) => console.log(e.target.currentPage)}></rp-pagination>
 <p>Use the <code>max-page</code>, <code>min-page</code>, and <code>current-page</code> attributes to control the display.</p>
-<rp-pagination max-page=15 current-page=7></rp-pagination>
+<rp-pagination max-page=15 current-page="7"></rp-pagination>
 <p>Use the <code>pages-per-side</code> attribute to show more pages on either side of the current page<p>
 <rp-pagination max-page=20 current-page=10 pages-per-side=3></rp-pagination>
 </section>
