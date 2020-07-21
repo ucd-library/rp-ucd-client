@@ -4,9 +4,12 @@ import styles from "../../styles/site.html"
 import "../../components/a-z"
 import "../../components/avatar"
 import "../../components/badge"
+import "../../components/hero-image"
+import "../../components/icon"
 import "../../components/link-list"
 import "../../components/pagination"
 import "../../components/person-preview"
+import "../../components/view-all"
 
 export default function render() {
 return html`
@@ -19,6 +22,23 @@ return html`
   section {
     padding: 15px;
     margin-bottom: 15px;
+  }
+  section.hero {
+    margin-bottom: 0;
+  }
+  rp-hero-image {
+    margin-bottom: 15px;
+  }
+  .herotop {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    flex-grow: 1;
+  }
+  .heromain {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
   }
   .people-vertical {
     padding-left: 20px;
@@ -42,17 +62,24 @@ return html`
     font-size: 18px;
     padding: 20px;
   }
+  .linklist1 {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 15px;
+  }
   ${styles}
 </style>
 
 <h1 class="text-primary">Site Components</h1>
-<p>These don't connect to the main bus, they are pure lit.
+<p>These don't connect to the main bus, and they don't inherit any shared styles (other than site variables).
 You control them with attributes, and build more complicated (bus-connected) elements with them.
 </p>
 <section>
 <h2>A-Z list</h2>
 <p>Attach a listener to be notified when the selected letter changes i.e.<br /><code>@changed-letter=${(e) => console.log(e.target.selectedLetter)}</code></p>
-<rp-a-z selected-letter="all" @changed-letter=${(e) => console.log(e.target.selectedLetter)}></rp-a-z>
+<rp-a-z  selected-letter="all" @changed-letter=${(e) => console.log(e.target.selectedLetter)}></rp-a-z>
+<p>Use <code>hide-all</code> to not render the All link</p>
+<rp-a-z hide-all=true selected-letter="f"></rp-a-z>
 </section>
 
 <section>
@@ -89,12 +116,56 @@ and have hover styles.
 </p>
 </section>
 
+<section class="hero">
+<h2>Hero Image</h2>
+<p>Hero image will randomly pull a background-photo from the path declared in <code>asset-folder</code> attribute.
+Running <code>ele.shuffle()</code> will load a new image.
+However, specifying a <code>src</code> attribute will override this functionality and just load the src bg photo.
+There are three slots to populate the hero content - "top", "main", and "bottom".
+<p>
+</section>
+<rp-hero-image>
+  <div slot="top" class="herotop">
+    <rp-icon icon="iron-link" circle-bg is-link style="margin-right:5px;"></rp-icon>
+    <rp-icon icon="rp-qr" circle-bg is-link></rp-icon>
+  </div>
+  <div slot="main" class="heromain">
+    <rp-avatar size="lg" src="https://www.library.ucdavis.edu/wp-content/uploads/2017/02/pb_asilomar_2475-Peter-Brantley-280x350-c-center.jpg"></rp-avatar>
+    <h2 class="name text-secondary h1 bold mb-0 text-center">Brantley, Peter</h2>
+    <p class="text-light h3 mb-2 mt-1 text-center">Director of Online Strategy</p>
+    <p class="bold text-light h3 mt-1 mb-0 text-center">My research areas include: </p>
+    <p class="text-light mt-2 mb-0">
+      <rp-badge>Foobar</rp-badge>
+      <rp-badge>Stuff</rp-badge>
+      <rp-badge>Things</rp-badge>
+      <rp-badge>Widgets</rp-badge>
+      </p>
+    <div></div>
+  </div>
+</rp-hero-image>
+
+<section>
+<h2>Icons</h2>
+<p>Use the <code>icon</code> attribute to specify your icon. Use the prefix "iron-" to call an iron icon:</p>
+<rp-icon icon="iron-link" circle-bg></rp-icon>
+<rp-icon icon="iron-arrow-forward" circle-bg></rp-icon>
+<p>The <code>theme-color</code> attribute will adjust the color, <code>is-link</code> will apply link styles, and <code>size</code> will change the size<p>
+<rp-icon icon="iron-face" circle-bg is-link></rp-icon>
+<rp-icon icon="iron-link" circle-bg is-link theme-color='secondary' size="lg"></rp-icon>
+<p>Preface the <code>icon</code> attribute with "rp-" to use one of the custom icons</p>
+<rp-icon icon="rp-search" circle-bg is-link theme-color='secondary' size="lg"></rp-icon>
+<rp-icon icon="rp-qr" circle-bg is-link></rp-icon>
+</section>
+
 <section>
 <h2>Link List</h2>
 <p>Displays a list of "links". Attach a listener to be notified when the active link changes i.e.<br /><code>@changed-link=\${(e) => console.log(e.target.links[e.target.currentLink])}</code></p>
-<rp-link-list links='["Hello World", "Hello Again!", "And One More Time"]'
-              @changed-link=${(e) => console.log(e.target.links[e.target.currentLink])}>
-</rp-link-list>
+<div class="linklist1">
+  <rp-link-list links='["Hello World", "Hello Again!", "And One More Time"]'
+                @changed-link=${(e) => console.log(e.target.links[e.target.currentLink])}>
+  </rp-link-list>
+</div>
+
 <p>Switch to horizontal view by using <code>direction=h</code></p>
 <div class="subnav">
   <rp-link-list direction="horizontal"
@@ -177,4 +248,12 @@ and have hover styles.
   </rp-person-preview>
 </div>
 <p>Because of the general awfullness of the css overflow properties, you have to set the textWidth property in a resize event.</p>
+</section>
+
+<section>
+<h1>View All</h1>
+<p>Dead simple element that displays a View All link. Use the <code>text</code> attribute to customize.</p>
+<rp-view-all></rp-view-all>
+<rp-view-all text="View All People"></rp-view-all>
+</section>
 `;}

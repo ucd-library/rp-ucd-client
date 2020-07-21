@@ -14,9 +14,6 @@ export class RpAZ extends LitElement {
     this.render = render.bind(this);
 
     this.azlist = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
-    if (!this.hideAll) {
-      this.azlist.unshift('All');
-    }
     this._changedLetter = new CustomEvent('changed-letter', {
       detail: {
         message: 'A new letter has been selected.'
@@ -25,8 +22,14 @@ export class RpAZ extends LitElement {
   }
 
   _renderAz(letter) {
+    let selected = "";
+    if (this.selectedLetter) {
+      if (this.selectedLetter.toLowerCase() === letter.toLowerCase()) {
+        selected = "selected"
+      }
+    }
     return html`<div @click="${this.handleClick}"
-                     class="letter ${this.selectedLetter.toLowerCase() === letter.toLowerCase() ? 'selected' : ''}"
+                     class="letter ${selected}"
                      letter="${letter}">${letter}</div>`
   }
   handleClick(e) {
@@ -34,6 +37,13 @@ export class RpAZ extends LitElement {
     if (new_letter != this.selectedLetter) {
       this.selectedLetter = new_letter;
       this.dispatchEvent(this._changedLetter);
+    }
+  }
+
+  firstUpdated(changedProperties) {
+    if (!this.hideAll) {
+      this.azlist.unshift('All');
+      this.requestUpdate();
     }
   }
 }

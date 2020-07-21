@@ -20,12 +20,8 @@ export class RpPersonPreview extends LitElement {
     super();
     this.render = render.bind(this);
 
-    if (!this.badges) {
-      this.badges = [];
-    }
-    if (!this.textWidth) {
-      this.textWidth = (window.innerWidth.toString() - 70) + "px";
-    }
+    this.badges = [];
+    this.textWidth = (window.innerWidth.toString() - 70) + "px";
   }
 
   _renderBadge(badge) {

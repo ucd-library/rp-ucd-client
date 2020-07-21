@@ -6,7 +6,7 @@ import "@ucd-lib/cork-app-utils";
 
 // Polymer
 import "@polymer/iron-icons/iron-icons"
-import "@polymer/iron-iconset-svg/iron-iconset-svg"
+import "@polymer/iron-icons/av-icons"
 
 // styles
 import "./styles/properties"
