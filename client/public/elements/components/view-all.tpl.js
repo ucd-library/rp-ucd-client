@@ -17,6 +17,12 @@ export default function render() {
       color: var(--tcolor-text);
       transition: .3s;
     }
+    .container.start {
+      justify-content: flex-start;
+    }
+    .container.center {
+      justify-content: center;
+    }
     .container:hover {
       color: var(--tcolor-link-hover-text) !important;
     }
@@ -38,7 +44,7 @@ export default function render() {
       font-weight: var(--font-weight-bold);
     }
   </style>
-  <div class="container ${classMap(this.constructClasses())}" style="${styleMap(this.constructStyles())}">
+  <div class="container ${classMap(this.constructClasses())}">
     <div class="view-all"><span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon></div>
   </div>
   `;

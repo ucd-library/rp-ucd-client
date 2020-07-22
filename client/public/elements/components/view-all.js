@@ -4,7 +4,8 @@ import render from './view-all.tpl.js';
 export class RpViewAll extends LitElement {
   static get properties() {
   return {
-    text: {type: String}
+    text: {type: String},
+    justify: {type: String}
   };
   }
 
@@ -16,12 +17,10 @@ export class RpViewAll extends LitElement {
 
   constructClasses() {
     let classes = {};
+    if (this.justify) {
+      classes[this.justify] = true;
+    }
     return classes;
-  }
-
-  constructStyles() {
-    let styles = {};
-    return styles;
   }
 }
 

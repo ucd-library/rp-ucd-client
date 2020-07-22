@@ -2,11 +2,14 @@ import { html } from 'lit-element';
 import styles from "../../styles/site.html"
 
 import "../../components/a-z"
+import "../../components/accordian"
 import "../../components/avatar"
 import "../../components/badge"
+import "../../components/citation"
 import "../../components/hero-image"
 import "../../components/icon"
 import "../../components/link-list"
+import "../../components/link-list-counts"
 import "../../components/pagination"
 import "../../components/person-preview"
 import "../../components/view-all"
@@ -67,6 +70,12 @@ return html`
     align-items: flex-start;
     margin-left: 15px;
   }
+  rp-accordian {
+    margin-bottom: 22px;
+  }
+  rp-citation {
+    margin-bottom: 10px;
+  }
   ${styles}
 </style>
 
@@ -80,6 +89,16 @@ You control them with attributes, and build more complicated (bus-connected) ele
 <rp-a-z  selected-letter="all" @changed-letter=${(e) => console.log(e.target.selectedLetter)}></rp-a-z>
 <p>Use <code>hide-all</code> to not render the All link</p>
 <rp-a-z hide-all=true selected-letter="f"></rp-a-z>
+</section>
+
+<section>
+<h2>Accordians for FAQ section</h2>
+<p>Use the <code>title</code> attribute to specify the link text. The expandable content is an unnamed slot.</p>
+<rp-accordian title="How often do you update the data in the registry?">${'Hello world! '.repeat(40)}</rp-accordian>
+<rp-accordian></rp-accordian>
+<rp-accordian expanded title="Use the expanded attribute or toggle method to control expansion">
+This is open on page load because I'm using the expanded attribute.
+</rp-accordian>
 </section>
 
 <section>
@@ -115,12 +134,24 @@ but you can also increase padding with the size attribute <rp-badge size="lg">si
 and have hover styles.
 </p>
 </section>
+<section>
+<h2>Citations</h2>
+<p>Simply renders bibliographic info in some standard format. What format that is, I need to find out.</p>
+<rp-citation title="Some Witty Eye-catching Title: The Effect of X on Z"
+             href="some link"
+             journal="Nature"
+             pages="12:123-456">
+</rp-citation>
+<rp-citation title="Examining the Effects of Dogs on Cats"
+             journal="Behavioral Science" pages="4:9-13">
+</rp-citation>
+</section>
 
 <section class="hero">
 <h2>Hero Image</h2>
 <p>Hero image will randomly pull a background-photo from the path declared in <code>asset-folder</code> attribute.
 Running <code>ele.shuffle()</code> will load a new image.
-However, specifying a <code>src</code> attribute will override this functionality and just load the src bg photo.
+However, specifying a <code>src</code> attribute will override the random asset pull functionality and just load the src bg photo.
 There are three slots to populate the hero content - "top", "main", and "bottom".
 <p>
 </section>
@@ -178,6 +209,24 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
                         {"text": "Disabled Link", "disabled": true} ]'>
   </rp-link-list>
 </div>
+</section>
+
+<section>
+<h2>Link List with Counts</h2>
+<p>Link list that will prepend counts. Listen with <code>@link-click="\${(e) => console.log(e.target.Clickedlink)}"</code></p>
+<p>Use the <code>view-all-links</code> and <code>header</code> attributes to enable these displays:</p>
+<rp-link-list-counts links='[{"text": "Academic Articles", "count": 3080},
+                             {"text": "Books", "count": 8},
+                             {"text": "Chapters", "count": 52},
+                             {"text": "Conference Papers", "count": 451},
+                             {"text": "Datasets", "count": 70},
+                             {"text": "Journals", "count": 960},
+                             {"text": "Reports", "count": 4}]'
+                      view-all-link='{"text": "View All Works"}'
+                      header='{"text": "Academic Works", "count": 8413}'
+                      @link-click="${(e) => console.log(e.target.Clickedlink)}"
+                      >
+</rp-link-list-counts>
 </section>
 
 <section>
@@ -252,8 +301,8 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 
 <section>
 <h1>View All</h1>
-<p>Dead simple element that displays a View All link. Use the <code>text</code> attribute to customize.</p>
-<rp-view-all></rp-view-all>
+<p>Dead simple element that displays a View All link. Use the <code>text</code> attribute to customize, and <code>justify</code> to control horizontal alignment.</p>
+<rp-view-all justify="start"></rp-view-all>
 <rp-view-all text="View All People"></rp-view-all>
 </section>
 `;}
