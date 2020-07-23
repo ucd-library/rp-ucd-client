@@ -12,6 +12,7 @@ import "../../components/link-list"
 import "../../components/link-list-counts"
 import "../../components/pagination"
 import "../../components/person-preview"
+import "../../components/quick-search"
 import "../../components/view-all"
 
 export default function render() {
@@ -75,6 +76,10 @@ return html`
   }
   rp-citation {
     margin-bottom: 10px;
+  }
+  .quick-search-container {
+    display: flex;
+    justify-content: flex-end;
   }
   ${styles}
 </style>
@@ -297,6 +302,16 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
   </rp-person-preview>
 </div>
 <p>Because of the general awfullness of the css overflow properties, you have to set the textWidth property in a resize event.</p>
+</section>
+
+<section>
+<h2>Quick Search</h2>
+<div class="quick-search-container">
+<rp-quick-search></rp-quick-search>
+</div>
+<div class="quick-search-container">
+<rp-quick-search input-value="steve"></rp-quick-search>
+</div>
 </section>
 
 <section>
