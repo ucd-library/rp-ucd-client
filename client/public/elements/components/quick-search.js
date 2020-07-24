@@ -5,7 +5,7 @@ import "./icon"
 export class RpQuickSearch extends LitElement {
   static get properties() {
   return {
-    inputWidth: {type: String, attribute: "input-width"},
+    inputWidth: {type: parseInt, attribute: "input-width"},
     inputValue: {type: String, attribute: "input-value", reflect: true},
     placeholder: {type: String},
     opened: {type: Boolean},
@@ -18,10 +18,16 @@ export class RpQuickSearch extends LitElement {
     this.render = render.bind(this);
     this.placeholder = "Search the registry";
     this.opened = false;
-    this.inputWidth = "200px";
+    this.inputWidth = 220;
     this.inputValue = "";
     this.preventOpen = false;
     this.closing = false;
+
+    this._newSearch = new CustomEvent('new-search', {
+      detail: {
+        message: 'A new search has been triggered'
+      }
+    });
   }
 
   constructClasses() {
@@ -41,7 +47,7 @@ export class RpQuickSearch extends LitElement {
   constructInputStyles() {
     let styles = {};
     if (this.inputWidth) {
-      styles['width'] = this.inputWidth;
+      styles['width'] = (this.inputWidth - 20) + "px";
     }
     return styles;
   }
@@ -53,7 +59,7 @@ export class RpQuickSearch extends LitElement {
       if (!i.value) {
         return;
       }
-      console.log("Do Search!");
+      this.dispatchEvent(this._newSearch);
     }
 
     else {
@@ -85,17 +91,22 @@ export class RpQuickSearch extends LitElement {
       this.preventOpen = true;
       //this.opened = false;
       this.closing = true;
-      console.log(this.closing);
       self = this;
       setTimeout(function(){ self.preventOpen = false; }, 300);
     }
   }
 
   _handleAnimationEnd() {
-    console.log("animation end!");
     if (this.closing) {
       this.opened = false;
       this.closing = false;
+    }
+  }
+
+  _handleKeyup(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      this.dispatchEvent(this._newSearch);
     }
   }
 

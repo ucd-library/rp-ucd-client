@@ -6,6 +6,7 @@ import "../../components/accordian"
 import "../../components/avatar"
 import "../../components/badge"
 import "../../components/citation"
+import "../../components/dropdown"
 import "../../components/hero-image"
 import "../../components/icon"
 import "../../components/link-list"
@@ -13,6 +14,7 @@ import "../../components/link-list-counts"
 import "../../components/pagination"
 import "../../components/person-preview"
 import "../../components/quick-search"
+import "../../components/search"
 import "../../components/view-all"
 
 export default function render() {
@@ -81,6 +83,18 @@ return html`
     display: flex;
     justify-content: flex-end;
   }
+  .search-container {
+    width: 75%;
+    display: flex;
+    justify-content: center;
+  }
+  .search-blue {
+    background-color: var(--tcolor-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
   ${styles}
 </style>
 
@@ -139,6 +153,7 @@ but you can also increase padding with the size attribute <rp-badge size="lg">si
 and have hover styles.
 </p>
 </section>
+
 <section>
 <h2>Citations</h2>
 <p>Simply renders bibliographic info in some standard format. What format that is, I need to find out.</p>
@@ -150,6 +165,16 @@ and have hover styles.
 <rp-citation title="Examining the Effects of Dogs on Cats"
              journal="Behavioral Science" pages="4:9-13">
 </rp-citation>
+</section>
+
+<section>
+<h2>Dropdown</h2>
+<p>A stylized dropdown. Listen with <code>@new-selection="\${e => console.log(e.target.choices[e.target.chosen])}</code></p>
+<rp-dropdown choices='["People",
+                       {"text": "Organizations"},
+                       {"text": "Works"}]'
+             @new-selection="${e => console.log(e.target.choices[e.target.chosen])}">
+</rp-dropdown>
 </section>
 
 <section class="hero">
@@ -306,12 +331,26 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 
 <section>
 <h2>Quick Search</h2>
+<p> Use <code>@new-search="\${(e) => console.log(e.target.inputValue)}"</code> to listen for search.</p>
 <div class="quick-search-container">
-<rp-quick-search></rp-quick-search>
+<rp-quick-search @new-search="${(e) => console.log(e.target.inputValue)}"></rp-quick-search>
 </div>
+
+<p>Use <code>input-value</code> and <code>opened</code> attributes to change initial render state.</p>
 <div class="quick-search-container">
-<rp-quick-search input-value="steve"></rp-quick-search>
+<rp-quick-search input-value="A pre-loaded search" opened></rp-quick-search>
 </div>
+</section>
+
+<section>
+<h2>Main Search Widget</h2>
+<p> Use <code>@new-search="\${(e) => console.log(e.target.searchObject)}"</code> to listen for search.</p>
+<div class="search-blue">
+  <div class="search-container">
+    <rp-search style="width:75%" @new-search="${(e) => console.log(e.target.searchObject)}"></rp-search>
+  </div>
+</div>
+
 </section>
 
 <section>

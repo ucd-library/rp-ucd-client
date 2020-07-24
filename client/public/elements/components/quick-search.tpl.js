@@ -23,6 +23,7 @@ export default function render() {
       border-right: 0;
       position: relative;
       left: 25px;
+      padding-right: 30px;
       height: 34px;
     }
     input {
@@ -46,6 +47,9 @@ export default function render() {
     .container.closing input {
       animation-duration: .75s;
       animation-name: close;
+      padding-right: 0 !important;
+    }
+    .container.closing {
     }
     rp-icon {
       z-index: 1;
@@ -56,7 +60,7 @@ export default function render() {
       }
 
       to {
-        width: 100%;
+        width: 83%;
         }
     }
     @keyframes close {
@@ -75,6 +79,7 @@ export default function render() {
            id="search-input"
            .value="${this.inputValue}"
            @animationend="${this._handleAnimationEnd}"
+           @keyup="${this._handleKeyup}"
            @blur="${this._handleBlur}"
            @input="${(e) => this.inputValue = e.target.value}">
     <rp-icon @click="${this._handleClick}" icon="rp-search" circle-bg ?is-link="${this._activateLink()}" theme-color='secondary' size="lg"></rp-icon>
