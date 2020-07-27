@@ -4,11 +4,20 @@ import fs from 'fs';
 import spaMiddleware from '@ucd-lib/spa-router-middleware';
 import config from '../lib/config.js';
 import esmUtils from '../lib/esm-utils.js';
+import rpNodeUtils from '@ucd-lib/rp-node-utils';
 
+const {logger} = rpNodeUtils;
 const {__dirname} = esmUtils.moduleLocation(import.meta);
 const assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
 const loaderPath = path.join(assetsDir, 'loader', 'loader.js');
-const loaderSrc = fs.readFileSync(loaderPath, 'utf-8');
+let loaderSrc = '';
+
+if( fs.existsSync(loaderPath) ) {
+  loaderSrc = fs.readFileSync(loaderPath, 'utf-8');
+} else {
+  logger.warn(`JS loaded not found on disk! ${loaderPath}`);
+}
+
 const bundle = `
   <script>
     var CORK_LOADER_VERSIONS = {
