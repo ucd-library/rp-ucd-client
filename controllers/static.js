@@ -29,7 +29,14 @@ const bundle = `
 
 export default (app) => {
   // path to your spa assets dir
-  let assetsDir = path.join(__dirname, '..', 'client', 'public');
+  let assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
+
+  logger.info('Static PWA controller using: ', {
+    env: config.client.env,
+    assetsDir,
+    appRoutes : config.client.appRoutes,
+    versions : config.client.versions
+  })
 
   /**
    * Setup SPA app routes
