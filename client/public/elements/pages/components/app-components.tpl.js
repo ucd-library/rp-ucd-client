@@ -3,6 +3,7 @@ import styles from "../../styles/site.html"
 
 import "../../components/a-z"
 import "../../components/accordian"
+import "../../components/alert"
 import "../../components/avatar"
 import "../../components/badge"
 import "../../components/citation"
@@ -118,6 +119,12 @@ You control them with attributes, and build more complicated (bus-connected) ele
 <rp-accordian expanded title="Use the expanded attribute or toggle method to control expansion">
 This is open on page load because I'm using the expanded attribute.
 </rp-accordian>
+</section>
+
+<section>
+<h2>Basic Alert</h2>
+<p>Not part of the initial design specs, but needed some way to handle errors. Uses slot.</p>
+<rp-alert>Uh oh! Something went horribly wrong (not that that ever happens). Can't load content!</rp-alert>
 </section>
 
 <section>

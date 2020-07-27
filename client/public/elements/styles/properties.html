@@ -1,6 +1,7 @@
 <custom-style>
   <style>
     html {
+      /* UCD-Colors. Not called directly in application */
       --color-blue : #022851;
       --color-blue70 : #355B85;
       --color-blue50 : #6884A3;
@@ -17,13 +18,16 @@
       --color-thiebaud-icing : #F095CD;
       --color-rose : #FF8189;
       --color-putah-creek : #008EAA;
+      --color-double-decker : #C10230;
 
+      /* Theme colors called throughout application.  */
       --tcolor-primary : var(--color-blue);
       --tcolor-primary70 : var(--color-blue70);
       --tcolor-primary10 : var(--color-blue10);
       --tcolor-primary-disabled : var(--color-blue20);
       --tcolor-secondary : var(--color-gold);
       --tcolor-light : var(--color-white);
+      --tcolor-danger : var(--color-double-decker);
       --tcolor-text : var(--color-black90);
       --tcolor-bg : var(--color-black10);
       --tcolor-bg-primary : var(--color-blue10);
@@ -44,6 +48,7 @@
       --tcolor-placeholder-text : var(--color-black60);
       --tcolor-code-bg : var(--color-black10 );
 
+      /* Theme font variables */
       --font-size : 16px;
       --font-size-h1 : 26px;
       --font-size-h2 : 22px;
@@ -52,6 +57,7 @@
       --font-weight : 400;
       --font-weight-bold : 700;
 
+      /* Misc. theme variables */
       --hr-color : var(--color-blue20);
       --hr-color-light : var(--color-blue10);
       --hr-weight : 1px;
