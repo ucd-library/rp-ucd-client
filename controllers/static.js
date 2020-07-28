@@ -48,7 +48,8 @@ export default (app) => {
     appRoutes : config.client.appRoutes, // array of root paths.  ie appRoutes = ['foo', 'bar'] to server /foo/* /bar/*
     getConfig : async (req, res, next) => {
       next({
-        appRoutes : config.client.appRoutes
+        appRoutes : config.client.appRoutes,
+        theme : config.client.theme
       });
     },
     template : (req, res, next) => {

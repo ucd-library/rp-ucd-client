@@ -1,5 +1,6 @@
-import { LitElement } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 import render from "./researcher-profiles.tpl.js"
+import { styleMap } from 'lit-html/directives/style-map';
 
 // sets globals Mixin and EventInterface
 import "@ucd-lib/cork-app-utils";
@@ -27,7 +28,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   static get properties() {
     return {
       appRoutes : {type: Array},
-      page : {type: String}
+      page : {type: String},
+      theme: {type: Object}
     }
   }
 
@@ -36,6 +38,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.render = render.bind(this);
 
     this.appRoutes = APP_CONFIG.appRoutes;
+    this.theme = APP_CONFIG.theme;
     this.page = 'loading';
 
     this._injectModel('AppStateModel');
@@ -50,6 +53,15 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   _onAppStateUpdate(e) {
     console.log('Current app state:', e);
     this.page = e.page;
+  }
+
+  _renderMasthead(){
+    if (!this.theme.masthead) {
+      return html``;
+    }
+    let styles = {};
+    styles['background-image'] = `url(${this.theme.masthead})`;
+    return html`<div id="masthead" style="${styleMap(styles)}"></div>`
   }
 
 }

@@ -1,4 +1,5 @@
 import { html } from 'lit-element';
+import styles from "./styles/site.html"
 
 export default function render() {
 return html`
@@ -59,6 +60,16 @@ return html`
     100% { opacity: 0; }
   }
 
+  #masthead {
+    width: 100%;
+    height: var(--masthead-height);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  ${styles}
+
 
 </style>
 
@@ -67,6 +78,10 @@ return html`
   @ucd-lib/app-state-model imports this element
 -->
 <app-route .appRoutes="${this.appRoutes}"></app-route>
+
+<div id="app-header">
+  ${this._renderMasthead()}
+</div>
 
 
 <iron-pages
@@ -83,6 +98,6 @@ return html`
   <app-page-components id="components"></app-page-components>
   <app-page-home id="home"></app-page-home>
   <app-page-search id="search"></app-page-search>
-  <app-page-person id="record"></app-page-record>
+  <app-page-person id="person"></app-page-person>
 </iron-pages>
 `;}
