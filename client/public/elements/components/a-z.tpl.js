@@ -17,9 +17,8 @@ export default function render() {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 30px;
-      min-height: 30px;
-      border-radius: 50%;
+      min-width: 22px;
+      min-height: 22px;
       transition: 0.3s;
       cursor: pointer;
     }
@@ -27,10 +26,19 @@ export default function render() {
       color: var(--tcolor-link-hover-text);
     }
     .letter.selected {
-      background-color: var(--tcolor-secondary);
       font-weight: var(--font-weight-bold);
-      pointer-event: none;
+      pointer-events: none;
       cursor: auto;
+      z-index: 1;
+    }
+    .letter.selected::before {
+      content: "";
+      border-radius: 50%;
+      background-color: var(--tcolor-secondary);
+      min-width: 30px;
+      min-height: 30px;
+      position: absolute;
+      z-index: -1;
     }
     .letter.selected:hover {
       color: var(--tcolor-primary);

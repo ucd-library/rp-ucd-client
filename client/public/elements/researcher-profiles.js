@@ -19,7 +19,6 @@ import "./styles/site"
 import "../src"
 
 // app elements
-import "./pages/components/app-components"
 import "./components/quick-search"
 
 import "@polymer/iron-pages"
@@ -43,7 +42,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.appRoutes = APP_CONFIG.appRoutes;
     this.theme = APP_CONFIG.theme;
     this.page = 'loading';
-    this.navLinks = [{text: 'People', page: 'people', href: '#'},
+    this.loadedPages = {};
+    this.navLinks = [{text: 'People', page: 'people', href: '/people'},
                      {text: 'Organizations', page: 'organizations', href: '#'},
                      {text: 'Works', page: 'works', href: '#'},
                      {text: 'Help', page: 'help', href: '#'}];
@@ -57,9 +57,31 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    *
    * @param {Object} e
    */
-  _onAppStateUpdate(e) {
+  async _onAppStateUpdate(e) {
     console.log('Current app state:', e);
-    this.page = e.page;
+    let page = e.page;
+    if (!this.loadedPages[page]) {
+      this.page = 'loading';
+      this.loadedPages[page] = this.loadPage(page);
+    }
+    await this.loadedPages[page];
+    this.page = page;
+  }
+
+  /**
+   * @method loadPage
+   * @description code splitting done here.  dynamic import a page based on route
+   *
+   * @param {String} page page to load
+   */
+  loadPage(page) {
+    if( page === 'home' ) {
+      return import(/* webpackChunkName: "page-home" */ "./pages/home/rp-page-home")
+    } else if( page === 'components' ) {
+      return import(/* webpackChunkName: "page-components" */ "./pages/components/app-components")
+    } else if( page === 'people' ) {
+      return import(/* webpackChunkName: "page-components" */ "./pages/people/rp-page-people")
+    }
   }
 
   _renderMasthead(){

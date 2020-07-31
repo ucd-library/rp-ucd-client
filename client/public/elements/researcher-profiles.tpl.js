@@ -34,10 +34,10 @@ return html`
     animation: showLoading 400ms ease-in;
   }
 
-  loading-dots {
+  .loading-dots {
     text-align: center;
     z-index: 5;
-    color: var(--default-primary-color);
+    color: var(--tcolor-primary);
   }
 
   .dot {
@@ -164,10 +164,12 @@ return html`
   ${this._renderMasthead()}
   <div id="app-header-content" class="bg-light text-primary">
     <div class="container flex align-items-center justify-content-between">
-      <h1>
-        ${this.theme.siteTitle? html`<span>${this.theme.siteTitle}</span>` : html``}
-        ${this.theme.siteSubTitle? html`<span class="weight-regular italic text-primary50">${this.theme.siteSubTitle}</span>` : html``}
-      </h1>
+      <a href="/" class="no-decoration">
+        <h1>
+          ${this.theme.siteTitle? html`<span class="text-primary">${this.theme.siteTitle}</span>` : html``}
+          ${this.theme.siteSubTitle? html`<span class="weight-regular italic text-primary50">${this.theme.siteSubTitle}</span>` : html``}
+        </h1>
+      </a>
       <div class="small bold hlist">
         <a class="no-decoration" href="#">Help</a>
         <a class="no-decoration" href="#">Login</a>
@@ -177,7 +179,7 @@ return html`
     <hr class="mb-0 mt-0 light dashed">
     </div>
 
-    <div id="nav-container" class="container flex align-items-center justify-content-between">
+    <div id="nav-container" class="container flex flex-wrap align-items-center justify-content-between">
       <div id="nav-left" class="flex align-items-center bold">
         ${this.navLinks.map(link => html`<a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration">${link.text}</a>`)}
       </div>
@@ -195,15 +197,14 @@ return html`
   selected-attribute="visible">
 
   <div id="loading">
-    <img src="/images/logos/logo-icon.svg" style="max-width: 128px" />
+    <img src="${this.theme.loadingIcon}" style="max-width: 128px" />
     <div class="loading-dots">
       <h1 class="dot one">.</h1><h1 class="dot two">.</h1><h1 class="dot three">.</h1>
     </div>
   </div>
   <app-page-components id="components"></app-page-components>
-  <app-page-home id="home">
-    <div class="container"><section class="top">Content Goes Here!</section></div>
-  </app-page-home>
+  <rp-page-home id="home"></rp-page-home>
+  <rp-page-people id="people"></rp-page-people>
   <app-page-search id="search"></app-page-search>
   <app-page-person id="person"></app-page-person>
 </iron-pages>
@@ -211,7 +212,7 @@ return html`
   <div class="container">
     <div class="footer-top">
       <div>
-        ${this.theme.libraryLogo? html`<img class="logo" alt="Logo" src="${this.theme.libraryLogo}">` : html``}
+        ${this.theme.libraryLogo? html`<a href="${this.theme.libraryUrl}"><img class="logo" alt="Logo" src="${this.theme.libraryLogo}"></a>` : html``}
         <div class="address mt-4">
         ${this.theme.libraryAddress? this.theme.libraryAddress.map(line => html`<div>${unsafeHTML(line)}</div>`) : html`` }
         </div>
