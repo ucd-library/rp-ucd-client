@@ -1,10 +1,13 @@
 import { LitElement } from 'lit-element';
 import render from "./rp-page-home.tpl.js"
 
+import "@ucd-lib/cork-app-utils";
+
 import "../../components/search"
 
 
-export default class RpPageHome extends LitElement {
+export default class RpPageHome extends Mixin(LitElement)
+  .with(LitCorkUtils) {
 
   static get properties() {
     return {
@@ -16,7 +19,14 @@ export default class RpPageHome extends LitElement {
     super();
     this.render = render.bind(this);
 
+    this._injectModel('CollectionModel');
+
     this.theme = APP_CONFIG.theme;
+  }
+
+  async _renderAcademicWorks() {
+    let facetList = await this.CollectionModel.overview('facets');
+    console.log(facetList);
   }
 
 }

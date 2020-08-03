@@ -49,7 +49,8 @@ export default (app) => {
     getConfig : async (req, res, next) => {
       next({
         appRoutes : config.client.appRoutes,
-        theme : config.client.theme
+        theme : config.client.theme,
+        data : config.client.data
       });
     },
     template : (req, res, next) => {
