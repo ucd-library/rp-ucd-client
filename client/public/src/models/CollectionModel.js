@@ -20,12 +20,24 @@ class CollectionModel extends BaseModel {
     this.register('CollectionModel');
   }
 
-  async overview(id) {
+  async overview(id, kwargs={}) {
     let state = {state : CollectionStore.STATE.INIT};
     let queryObject = {...this.baseQueryObject};
+
     if (id == "facets") {
       queryObject.facets["@type"] = {"type" : "facet"};
       queryObject.limit = 0;
+    }
+    else if (id == "randomPeople") {
+      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: ["ucdrp:person"]};
+      queryObject.limit = 4;
+      if (kwargs.limit) {
+        queryObject.limit = kwargs.limit;
+      }
+      if (kwargs.total) {
+        let randomOffset = Math.floor(Math.random() * (kwargs.total - queryObject.limit));
+        queryObject.offset = randomOffset;
+      }
     }
     if( state.state === 'init' ) {
       await this.service.overview(id, queryObject);

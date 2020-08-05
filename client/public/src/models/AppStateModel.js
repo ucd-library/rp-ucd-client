@@ -11,8 +11,10 @@ class AppStateModelImpl extends AppStateModel {
   }
 
   set(update) {
-    update.page = update.location.path ? update.location.path[0] || this.defaultPage : this.defaultPage;
-
+    if (update.location) {
+      update.page = update.location.path ? update.location.path[0] || this.defaultPage : this.defaultPage;
+    }
+    
     // TODO: add bundle loading for pages
     // if page needs to be loaded, set update.page='loading'
     // then set page

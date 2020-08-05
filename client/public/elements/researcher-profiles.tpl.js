@@ -196,7 +196,7 @@ return html`
   attr-for-selected="id"
   selected-attribute="visible">
 
-  <div id="loading">
+  <div id="loading" class="my-3">
     <img src="${this.theme.loadingIcon}" style="max-width: 128px" />
     <div class="loading-dots">
       <h1 class="dot one">.</h1><h1 class="dot two">.</h1><h1 class="dot three">.</h1>

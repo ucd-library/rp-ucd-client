@@ -1,5 +1,6 @@
 import { html } from 'lit-element';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { until } from 'lit-html/directives/until.js';
 import styles from "../../styles/site.html"
 
 export default function render() {
@@ -64,14 +65,26 @@ return html`
 <div class="data bg-light">
   <div class="container flex">
     <div class="col-l">
-      <h2><span class="bold mr-2">8431</span><span class="weight-regular">Academic Works</span></h2>
+      <div ?hidden="${this.facetsStatus == 'error' || this.facetsStatus == 'loaded' }" class="loading1">loading</div>
+      <rp-alert ?hidden="${this.facetsStatus == 'loading' || this.facetsStatus == 'loaded' }">Error loading academic works</rp-alert>
+      <rp-link-list-counts ?hidden="${this.facetsStatus == 'loading' || this.facetsStatus == 'error' }"
+                            links="${JSON.stringify(this.academicWorks)}"
+                            view-all-link='{"text": "View All Works"}'
+                            header="${JSON.stringify({text: "Academic Works", count: this.academicWorksTotal})}">
+      </rp-link-list-counts>
     </div>
     <div class="col-r flex-grow-1">
       <div class="people">
-        <h2><span class="bold mr-2">100</span><span class="weight-regular">People</span></h2>
+        <h2 class="mt-0">
+          <span class="bold mr-2">${this.peopleTotal}</span>
+          <span class="weight-regular">People</span>
+        </h2>
       </div>
       <div class="subjects">
-        <h2><span class="bold mr-2">200</span><span class="weight-regular">Research Subjects</span></h2>
+        <h2>
+          <span class="bold mr-2">${this.subjectsTotal}</span>
+          <span class="weight-regular">Research Subjects</span>
+        </h2>
       </div>
     </div>
   </div>

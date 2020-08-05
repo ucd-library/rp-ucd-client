@@ -106,6 +106,19 @@
           border-color: var(--tcolor-primary70);
         }
 
+        /* Animations */
+        .loading1 {
+          animation: pulseColorPrimary 2s ease-in-out infinite;
+          color: var(--tcolor-primary70);
+        }
+
+        @keyframes pulseColorPrimary {
+          0% { color: var(--tcolor-primary10); }
+          50% { color: var(--tcolor-primary); }
+          60% { color: var(--tcolor-primary); }
+          100% { color: var(--tcolor-primary10); }
+        }
+
 
         /* Layout classes */
         .container {
