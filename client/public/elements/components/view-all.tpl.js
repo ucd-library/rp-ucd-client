@@ -33,6 +33,7 @@ export default function render() {
       color: var(--tcolor-secondary);
       transition: .3s;
       width: 28px;
+      min-width: 28px;
       height: 28px;
     }
     .view-all {

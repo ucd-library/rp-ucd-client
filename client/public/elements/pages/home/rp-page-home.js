@@ -5,6 +5,7 @@ import "@ucd-lib/cork-app-utils";
 
 import "../../components/alert";
 import "../../components/link-list-counts";
+import "../../components/person-preview";
 import "../../components/search";
 
 export default class RpPageHome extends Mixin(LitElement)
@@ -20,6 +21,7 @@ export default class RpPageHome extends Mixin(LitElement)
       peopleStatus: {type: String},
       people: {type: Array},
       peopleTotal: {type: parseInt},
+      peopleWidth: {type: parseInt},
       subjectsTotal: {type: parseInt},
       context: {type: String}
     }
@@ -38,14 +40,11 @@ export default class RpPageHome extends Mixin(LitElement)
     this.people = [];
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
+    this.setPeopleWidth(window.innerWidth);
     this.context = APP_CONFIG.data.jsonldContext;
 
     this.theme = APP_CONFIG.theme;
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
-  }
-
-  async _onAppStateUpdate(e) {
-    await this._getFacets();
   }
 
   updated(changedProperties) {
@@ -54,6 +53,38 @@ export default class RpPageHome extends Mixin(LitElement)
         this._getPeople();
       }
     }
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('resize', this._handleResize);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('resize', this._handleResize);
+    super.disconnectedCallback();
+  }
+
+  async _onAppStateUpdate(e) {
+    await this._getFacets();
+  }
+
+  _handleResize() {
+    let w = window.innerWidth;
+    let self = document.body.getElementsByTagName('researcher-profiles')[0].shadowRoot.getElementById('home');
+    self.setPeopleWidth(w);
+  }
+
+  setPeopleWidth(w) {
+    let pw = 250;
+    let avatarWidth = 72;
+    if ( w < 576 ) {
+      pw = w - 30 - avatarWidth;
+    }
+    else if (w < 768 ) {
+      pw = (w - 30) * .7 - avatarWidth - 30;
+    }
+    this.peopleWidth = pw;
+    console.log(pw);
   }
 
   async _getPeople() {
@@ -100,6 +131,24 @@ export default class RpPageHome extends Mixin(LitElement)
       return 0;
     });
 
+  }
+
+  _formatPeople(people) {
+    let out = []
+    for (let person of people) {
+      let p = {name: person.label ? person.label : "", title: ""};
+      if (person.contactInfoFor && person.contactInfoFor.title) {
+        if (Array.isArray(person.contactInfoFor.title)) {
+          p.title = person.contactInfoFor.title.join(", ");
+        }
+        else {
+          p.title = person.contactInfoFor.title;
+        }
+
+      }
+      out.push(p)
+    }
+    return out;
   }
 
   _formatBibType(bib, splitCamel=true, makePlural=true) {

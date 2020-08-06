@@ -37,12 +37,36 @@ return html`
   }
   .data .container {
     padding: 50px 0;
+    flex-flow: row wrap;
   }
   .data .col-l {
-    width: 30%;
+    width: 100%;
   }
   .data .col-r {
-    padding-left: 24px;
+  }
+  .people-container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-column-gap: 24px;
+    grid-row-gap: 10px;
+  }
+
+  @media (min-width: 768px){
+    .people-container {
+      grid-template-columns: auto auto;
+    }
+  }
+
+  @media (min-width: 576px){
+    .data .container {
+      flex-flow: row nowrap;
+    }
+    .data .col-l {
+      width: 30%;
+    }
+    .data .col-r {
+      padding-left: 24px;
+    }
   }
 
   ${styles}
@@ -79,6 +103,16 @@ return html`
           <span class="bold mr-2">${this.peopleTotal}</span>
           <span class="weight-regular">People</span>
         </h2>
+        <div class="people-container">
+          ${this._formatPeople(this.people).map(person => html`
+            <rp-person-preview
+              name="${person.name}"
+              title="${person.title}"
+              avatar-size='sm'
+              text-width=${this.peopleWidth}>
+            </rp-person-preview>
+            `)}
+        </div>
       </div>
       <div class="subjects">
         <h2>
