@@ -23,7 +23,8 @@ export default class RpPageHome extends Mixin(LitElement)
       peopleTotal: {type: parseInt},
       peopleWidth: {type: parseInt},
       subjectsTotal: {type: parseInt},
-      context: {type: String}
+      context: {type: String},
+      visible: {type: Boolean}
     }
   }
 
@@ -45,13 +46,18 @@ export default class RpPageHome extends Mixin(LitElement)
 
     this.theme = APP_CONFIG.theme;
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
+
+    this._handleResize = this._handleResize.bind(this);
   }
 
-  updated(changedProperties) {
-    if (changedProperties.has('facetsStatus')) {
+  updated(props) {
+    if (props.has('facetsStatus')) {
       if (this.facetsStatus == 'loaded') {
         this._getPeople();
       }
+    }
+    if (props.has('visible') && this.visible ) {
+      requestAnimationFrame( () => this._handleResize());
     }
   }
   connectedCallback() {
@@ -69,9 +75,9 @@ export default class RpPageHome extends Mixin(LitElement)
   }
 
   _handleResize() {
+    if (!this.visible) return;
     let w = window.innerWidth;
-    let self = document.body.getElementsByTagName('researcher-profiles')[0].shadowRoot.getElementById('home');
-    self.setPeopleWidth(w);
+    this.setPeopleWidth(w);
   }
 
   setPeopleWidth(w) {
@@ -83,7 +89,7 @@ export default class RpPageHome extends Mixin(LitElement)
     else if (w < 768 ) {
       pw = (w - 30) * .7 - avatarWidth - 30;
     }
-    this.peopleWidth = pw;
+    this.peopleWidth = Math.floor(pw);
     console.log(pw);
   }
 

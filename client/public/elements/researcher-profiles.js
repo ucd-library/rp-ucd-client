@@ -31,7 +31,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       appRoutes : {type: Array},
       page : {type: String},
       theme: {type: Object},
-      navLinks: {type: Array}
+      navLinks: {type: Array},
+      user: {type: Object}
     }
   }
 
@@ -43,12 +44,14 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.theme = APP_CONFIG.theme;
     this.page = 'loading';
     this.loadedPages = {};
+    this.user = APP_CONFIG.user;
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
                      {text: 'Organizations', page: 'organizations', href: '#'},
                      {text: 'Works', page: 'works', href: '#'},
                      {text: 'Help', page: 'help', href: '#'}];
 
     this._injectModel('AppStateModel');
+    console.log(this.appRoutes);
   }
 
   /**

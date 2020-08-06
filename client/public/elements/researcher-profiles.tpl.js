@@ -172,7 +172,12 @@ return html`
       </a>
       <div class="small bold hlist">
         <a class="no-decoration" href="#">Help</a>
-        <a class="no-decoration" href="#">Login</a>
+        ${this.user ? html`
+          <a class="no-decoration" href="/auth/logout">Logout</a>
+          ` : html`
+          <a class="no-decoration" href="/auth/login">Login</a>
+          `}
+
       </div>
     </div>
     <div class="container">
