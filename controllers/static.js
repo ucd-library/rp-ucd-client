@@ -6,7 +6,7 @@ import config from '../lib/config.js';
 import esmUtils from '../lib/esm-utils.js';
 import rpNodeUtils from '@ucd-lib/rp-node-utils';
 
-const {logger} = rpNodeUtils;
+const {logger, auth} = rpNodeUtils;
 const {__dirname} = esmUtils.moduleLocation(import.meta);
 const assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
 const loaderPath = path.join(assetsDir, 'loader', 'loader.js');
@@ -47,7 +47,20 @@ export default (app) => {
     isRoot : true, // are we serving from host root (/)?
     appRoutes : config.client.appRoutes, // array of root paths.  ie appRoutes = ['foo', 'bar'] to server /foo/* /bar/*
     getConfig : async (req, res, next) => {
+      // grab current user
+      let user = null;
+      let token = auth.getTokenFromRequest(req);
+      if( token ) {
+        try {
+          user = await auth.verifyToken(token);
+        } catch(e) {
+          console.log('error', e);
+        }
+      }
+
+
       next({
+        user,
         appRoutes : config.client.appRoutes,
         theme : config.client.theme,
         data : config.client.data
