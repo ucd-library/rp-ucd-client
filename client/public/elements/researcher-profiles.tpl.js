@@ -173,7 +173,7 @@ return html`
       <div class="small bold hlist">
         <a class="no-decoration" href="#">Help</a>
         ${this.user ? html`
-          <a class="no-decoration" href="/auth/logout">Logout</a>
+          <a class="no-decoration" href="/auth/logout">${this.user.username}</a>
           ` : html`
           <a class="no-decoration" href="/auth/login">Login</a>
           `}
