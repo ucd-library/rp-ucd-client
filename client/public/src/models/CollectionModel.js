@@ -61,6 +61,25 @@ class CollectionModel extends BaseModel {
     return this.store.data.queryById[id];
   }
 
+
+    _formatPeople(people) {
+      let out = []
+      for (let person of people) {
+        let p = {name: person.label ? person.label : "", title: ""};
+        if (person.contactInfoFor && person.contactInfoFor.title) {
+          if (Array.isArray(person.contactInfoFor.title)) {
+            p.title = person.contactInfoFor.title.join(", ");
+          }
+          else {
+            p.title = person.contactInfoFor.title;
+          }
+
+        }
+        out.push(p)
+      }
+      return out;
+    }
+
 }
 
 module.exports = new CollectionModel();
