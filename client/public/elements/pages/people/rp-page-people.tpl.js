@@ -14,14 +14,7 @@ return html`
   ${styles}
 </style>
 <div class="container bg-light top">
-  <div class="header flex align-items-center">
-    <div class="col-facets">
-      <h1>People</h1>
-    </div>
-    <div class="col-main">
-      <rp-a-z></rp-a-z>
-    </div>
-  </div>
+  ${this._renderBrowseHeader('People')}
   <hr>
   <div class="body">
     <div class="col-facets"></div>

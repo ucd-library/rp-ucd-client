@@ -24,6 +24,10 @@ export default function render() {
       padding-left: 15px;
       padding-right: 10px;
     }
+    .nopadding #button {
+      padding-left: 0;
+      padding-right: 0;
+    }
     #input::placeholder {
       color: var(--tcolor-placeholder-text);
     }
@@ -63,10 +67,10 @@ export default function render() {
   <div class="container ${classMap(this._constructClasses())}">
    <div id="button"
         @click="${this.openDropdown}">
-        <span id="button-text">${this._parseChoices()[this.chosen].text}</span>
+        <span id="button-text">${this.stickyTitle ? this.stickyTitle : this._parseChoices()[this.chosen].text}</span>
         <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
    </div>
-    <iron-dropdown id="dropdown" scroll-action="cancel" vertical-align="top">
+    <iron-dropdown id="dropdown" scroll-action="cancel" vertical-align="top" vertical-offset=${this.stickyTitle ? "35" : "0"}>
       <ul slot="dropdown-content">${this._parseChoices().map(choice => this._renderChoices(choice))}</ul>
     </iron-dropdown>
   </div>

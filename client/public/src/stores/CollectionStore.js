@@ -6,6 +6,7 @@ class CollectionStore extends BaseStore {
     super();
 
     this.data = {
+      queryById : {},
       overview : {}
     };
     this.events = {};
@@ -35,6 +36,32 @@ class CollectionStore extends BaseStore {
   _setOverviewState(state) {
     //if( !this.stateChanged(this.data.overview[id], state) ) return;
     this.data.overview[state.id] = state;
+  }
+
+  setQueryLoading(id, request) {
+    this._setQueryState({
+      state: this.STATE.LOADING,
+      id, request
+    });
+  }
+
+  setQueryLoaded(id, payload) {
+    this._setQueryState({
+      state: this.STATE.LOADED,
+      id, payload
+    });
+  }
+
+  setQueryError(id, error) {
+    this._setQueryState({
+      state: this.STATE.ERROR,
+      id, error
+    });
+  }
+
+  _setQueryState(state) {
+    //if( !this.stateChanged(this.data.overview[id], state) ) return;
+    this.data.queryById[state.id] = state;
   }
 
 }

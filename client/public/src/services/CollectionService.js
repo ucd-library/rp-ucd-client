@@ -27,6 +27,23 @@ class CollectionService extends BaseService {
     });
   }
 
+  async query(id, searchObject) {
+  return this.request({
+    url : this.searchUrl,
+    fetchOptions : {
+      method : 'POST',
+      headers : {
+        'Content-Type' : 'application/json'
+      },
+      body : JSON.stringify(searchObject)
+    },
+    checkCached : () => this.store.data.queryById[id],
+    onLoading : request => this.store.setQueryLoading(id, request),
+    onLoad : result => this.store.setQueryLoaded(id, result.body),
+    onError : e => this.store.setQueryError(id, e)
+  });
+}
+
 }
 
 module.exports = new CollectionService();

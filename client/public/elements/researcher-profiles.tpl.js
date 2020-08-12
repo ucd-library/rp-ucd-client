@@ -173,7 +173,11 @@ return html`
       <div class="small bold hlist">
         <a class="no-decoration" href="#">Help</a>
         ${this.user ? html`
-          <a class="no-decoration" href="/auth/logout">${this.user.username}</a>
+          <rp-dropdown no-padding
+                       sticky-title="${this.user.username.split('@')[0]}"
+                       @new-selection="${e => location.href = e.target.choices[e.target.chosen].href}"
+                       choices=${JSON.stringify([{text: "Logout", href: "/auth/logout"}])}>
+          </rp-dropdown>
           ` : html`
           <a class="no-decoration" href="/auth/login">Login</a>
           `}
@@ -227,7 +231,7 @@ return html`
     </div>
     <div class="flex align-items-center logo-line">
       <hr class="flex-grow-1">
-      ${this.theme.universityLogo? html`<img class="logo" alt="Logo" src="${this.theme.universityLogo}">` : html``}
+      ${this.theme.universityLogo? html`<a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html``}
       <hr class="flex-grow-1">
     </div>
     ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center justify-content-center mb-3">${unsafeHTML(line)}</div>`) : html``}
