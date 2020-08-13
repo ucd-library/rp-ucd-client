@@ -9,9 +9,10 @@ class CollectionModel extends BaseModel {
 
     this.store = CollectionStore;
     this.service = CollectionService;
+    this.jsonldContext = APP_CONFIG.data.jsonldContext;
 
     this.baseQueryObject = {offset: 0,
-                            limit: 10,
+                            limit: 8,
                             sort: [{}],
                             filters: {},
                             facets: {}
@@ -29,7 +30,7 @@ class CollectionModel extends BaseModel {
       queryObject.limit = 0;
     }
     else if (id == "randomPeople") {
-      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: ["ucdrp:person"]};
+      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":person"]};
       queryObject.limit = 4;
       if (kwargs.limit) {
         queryObject.limit = kwargs.limit;
@@ -45,7 +46,20 @@ class CollectionModel extends BaseModel {
       await state.request;
     }
     return this.store.data.overview[id];
-}
+  }
+
+  async query(userQuery={}){
+    let state = {state : CollectionStore.STATE.INIT};
+    let queryObject = {...this.baseQueryObject, ...userQuery};
+    let id = JSON.stringify(queryObject);
+
+    if( state.state === 'init' ) {
+      await this.service.query(id, queryObject);
+    } else if( state.state === 'loading' ) {
+      await state.request;
+    }
+    return this.store.data.queryById[id];
+  }
 
 }
 

@@ -20,6 +20,7 @@ import "../src"
 
 // app elements
 import "./components/quick-search"
+import "./components/dropdown"
 
 import "@polymer/iron-pages"
 
@@ -51,7 +52,6 @@ export default class ResearcherProfiles extends Mixin(LitElement)
                      {text: 'Help', page: 'help', href: '#'}];
 
     this._injectModel('AppStateModel');
-    console.log(this.appRoutes);
   }
 
   /**

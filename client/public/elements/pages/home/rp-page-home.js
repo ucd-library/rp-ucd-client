@@ -83,14 +83,14 @@ export default class RpPageHome extends Mixin(LitElement)
   setPeopleWidth(w) {
     let pw = 250;
     let avatarWidth = 72;
+    let screenPadding = 30;
     if ( w < 576 ) {
-      pw = w - 30 - avatarWidth;
+      pw = w - screenPadding - avatarWidth;
     }
     else if (w < 768 ) {
-      pw = (w - 30) * .7 - avatarWidth - 30;
+      pw = (w - screenPadding) * .7 - avatarWidth - 30;
     }
     this.peopleWidth = Math.floor(pw);
-    console.log(pw);
   }
 
   async _getPeople() {

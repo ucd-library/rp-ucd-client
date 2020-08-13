@@ -8,7 +8,9 @@ export class RpDropdown extends LitElement {
     themeColor: {type: String, attribute: 'theme-color'},
     choices: {type: Array},
     chosen: {type: parseInt, reflect: true},
-    opened: {type: Boolean}
+    opened: {type: Boolean},
+    noPadding: {type: Boolean, attribute: "no-padding"},
+    stickyTitle: {type: String, attribute: "sticky-title"}
   };
   }
 
@@ -19,6 +21,8 @@ export class RpDropdown extends LitElement {
     this.choices = [];
     this.themeColor = "outline-primary";
     this.opened = false;
+    this.noPadding = false;
+    this.stickyTitle = "";
 
     this._newSelection = new CustomEvent('new-selection', {
       detail: {
@@ -41,18 +45,24 @@ export class RpDropdown extends LitElement {
     if (this._parseChoices().length === 0) {
       classes.hidden = true;
     }
+    if (this.noPadding) {
+      classes.nopadding = true;
+    }
+    if (this.stickyTitle) {
+      classes.stickytitle = true;
+    }
 
     return classes;
   }
   _renderChoices(choice) {
     return html`<li index="${choice.index}"
-                    ?selected="${choice.index == this.chosen}"
+                    ?selected="${choice.index == this.chosen && !this.stickyTitle}"
                     @click="${this._handleClick}">${choice.text}</li>`;
   }
 
   _handleClick(e){
     let i = e.target.getAttribute('index');
-    if (i == this.chosen) {
+    if (i == this.chosen && !this.stickyTitle) {
       return;
     }
     this.chosen = i;
