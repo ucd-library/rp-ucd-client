@@ -14,12 +14,9 @@ export default (app) => {
    * Setup SPA app routes
    */
   spaMiddleware({
-    app: app, // pass the express app
+    app, // pass the express app
     htmlFile : path.join(assetsDir, 'login.html'), // pass the file you want to use
-    isRoot : false, // are we serving from host root (/)?
-    appRoutes : ['login.html'],
     getConfig : async (req, res, next) => {
-
       next({
         theme : config.client.theme
       });
