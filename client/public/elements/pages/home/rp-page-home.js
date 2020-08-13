@@ -139,24 +139,6 @@ export default class RpPageHome extends Mixin(LitElement)
 
   }
 
-  _formatPeople(people) {
-    let out = []
-    for (let person of people) {
-      let p = {name: person.label ? person.label : "", title: ""};
-      if (person.contactInfoFor && person.contactInfoFor.title) {
-        if (Array.isArray(person.contactInfoFor.title)) {
-          p.title = person.contactInfoFor.title.join(", ");
-        }
-        else {
-          p.title = person.contactInfoFor.title;
-        }
-
-      }
-      out.push(p)
-    }
-    return out;
-  }
-
   _formatBibType(bib, splitCamel=true, makePlural=true) {
     bib = bib.slice(5,);
 

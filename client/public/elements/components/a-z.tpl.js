@@ -10,7 +10,6 @@ export default function render() {
       display: flex;
       flex-flow: row wrap;
       align-items: center;
-      justify-content: center;
     }
     .letter {
       color: var(--tcolor-primary);

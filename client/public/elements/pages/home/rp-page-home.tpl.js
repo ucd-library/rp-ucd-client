@@ -104,7 +104,7 @@ return html`
           <span class="weight-regular">People</span>
         </h2>
         <div class="people-container">
-          ${this._formatPeople(this.people).map(person => html`
+          ${this.CollectionModel._formatPeople(this.people).map(person => html`
             <rp-person-preview
               name="${person.name}"
               title="${person.title}"

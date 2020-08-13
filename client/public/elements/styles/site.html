@@ -49,6 +49,9 @@
         [hidden] {
           display: none !important;
         }
+        .flex[hidden] {
+          display: none !important;
+        }
 
         /* color classes*/
         .text-primary {
@@ -130,6 +133,9 @@
         .container.top {
           margin-top: 2px;
         }
+        .container.collections {
+          padding: 40px 0 20px 0;
+        }
         @media (min-width: 992px) {
           .container {
             margin-right: auto;
@@ -152,9 +158,14 @@
         }
         .col-facets {
           width: 30%;
+          margin-left: 40px;
         }
         .col-main {
           width: 70%;
+          margin-right: 40px;
+        }
+        .col-facets > * {
+          margin-right: 70px;
         }
 
 
