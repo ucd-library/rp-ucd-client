@@ -32,6 +32,7 @@ return html`
           </rp-person-preview>
           <hr class="dotted">
           `)}
+        ${this._renderPagination(this.dataTotal)}
       </div>
 
     </div>

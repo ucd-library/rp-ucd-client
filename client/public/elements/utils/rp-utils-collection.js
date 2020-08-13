@@ -1,30 +1,37 @@
 import { LitElement, html } from 'lit-element';
 import "../components/a-z";
 import "../components/link-list";
+import "../components/pagination";
 
 export default class RpUtilsCollection extends LitElement {
 
   static get properties() {
     return {
+      hasAz: {type: Boolean},
+      hasPagination: {type: Boolean},
       azSelected: {type: String},
       azDisabled: {type: Array},
       pgPer: {type: parseInt},
+      urlQuery: {type: Object}
     }
   }
 
   constructor() {
     super();
+    this.hasAz = false;
+    this.hasPagination = false;
     this.azSelected = 'All';
     this.azDisabled = [];
     this.pgPer = 8;
+    this.urlQuery = {};
   }
 
   _onUserAction(action) {
     console.log(action);
-    console.log(this.pgPer);
   }
 
   _renderBrowseHeader(title, Azselected) {
+    this.hasAz = true;
     if (Azselected) {
       this.azSelected = Azselected;
     }
@@ -46,6 +53,35 @@ export default class RpUtilsCollection extends LitElement {
                   links=${links}>
     </rp-link-list>
     `
+  }
+
+  _renderPagination(totalResults) {
+    if (!totalResults || !this.urlQuery) {
+      return html``;
+    }
+    this.hasPagination = true;
+    let maxPage = Math.ceil(totalResults / this.urlQuery.limit);
+    let currentPage = Math.ceil((this.urlQuery.offset + 1) / this.urlQuery.limit)
+    return html`
+    <rp-pagination max-page="${maxPage}"
+                   current-page="1"
+                   @changed-page="${e => this._onUserAction("pagination")}"
+                   class="mt-3"
+    ></rp-pagination>
+    `
+  }
+
+  _parseUrlQuery(){
+    // read url args, construct search query
+    let q = {};
+    if (!q.limit) {
+      q.limit = this.pgPer;
+    }
+    if (!q.offset) {
+      q.offset = 0;
+    }
+    this.urlQuery = q;
+    return q;
   }
 
 }

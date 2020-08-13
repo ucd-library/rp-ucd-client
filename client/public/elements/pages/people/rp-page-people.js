@@ -16,6 +16,7 @@ export default class RpPagePeople extends Mixin(RpUtilsCollection)
       sortDefault: {type: Array},
       dataStatus: {type: String},
       data: {type: Array},
+      dataMax: {type: parseInt},
       peopleWidth: {type: parseInt},
       visible: {type: Boolean}
     }
@@ -29,6 +30,7 @@ export default class RpPagePeople extends Mixin(RpUtilsCollection)
     this.filtersDefault = {"@type": {"type": "keyword", "op": "and", "value": [APP_CONFIG.data.jsonldContext + ":person"]}};
     this.sortDefault = [{"label": "asc"}];
     this.dataStatus = 'loading';
+    this.dataTotal = 0;
     this.setPeopleWidth(window.innerWidth);
     this.data = [];
 
@@ -69,15 +71,11 @@ export default class RpPagePeople extends Mixin(RpUtilsCollection)
     if (data.state != 'loaded') {
       return;
     }
+    this.dataTotal = data.payload.total;
     this.data = data.payload.results;
     console.log(data);
     console.log(this.data);
 
-  }
-
-  _parseUrlQuery(){
-    // read url args, construct search query
-    return {};
   }
 
   _handleResize() {
