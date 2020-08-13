@@ -1,6 +1,90 @@
 (window.webpackJsonp=window.webpackJsonp||[]).push([[2],{80:function(t,e,i){"use strict";var r=i(2),s=i(33);i(34);function o(){return r.b`
   <style>
     :host {
+      display: inline-block;
+    }
+    .container {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      font-size: var(--font-size-small);
+    }
+    .container.danger {
+      background-color: var(--tcolor-light);
+      border-width: 1px;
+      border-style: solid;
+      border-color: var(--tcolor-danger);
+      color: var(--tcolor-danger);
+    }
+    .container iron-icon {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      margin-right: 8px;
+    }
+  </style>
+  <div class="container ${Object(s.a)(this._constructClasses())}">
+    <iron-icon icon="warning"></iron-icon>
+    <div id="content"><slot></slot></div>
+  </div>
+  `}class a extends r.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=o.bind(this),this.themeColor="danger"}_constructClasses(){let t={};return t[this.themeColor]=!0,t}}customElements.define("rp-alert",a)},81:function(t,e,i){"use strict";var r=i(2),s=i(34);i(83);function o(){return r.b`
+  <style>
+    :host {
+      display: block;
+    }
+    .container {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+    .text-container {
+      margin-left: 12px;
+      flex-grow: 1;
+    }
+    .name {
+      font-size: var(--font-size);
+      color : var(--tcolor-link-text);
+      font-weight : var(--font-weight-bold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+    .name:hover {
+      color : var(--tcolor-link-hover-text);
+    }
+    .name[disabled] {
+      pointer-events: none;
+      text-decoration: none;
+    }
+    .name[disabled]:hover {
+      color : var(--tcolor-link-text);
+    }
+    small {
+      font-size : var(--font-size-small);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      line-height: 1.4;
+    }
+    small.badges {
+      margin-top: 5px;
+    }
+  </style>
+  <div class=container>
+    <rp-avatar size="${this.avatarSize}" src="${this.avatarSrc}"></rp-avatar>
+    <div class="text-container" style="${Object(s.a)({"max-width":this.textWidth})}">
+      <a class="name" href="${this.href}" ?disabled="${!this.href}">${this.name}</a>
+      <small>${this.title}</small>
+      <small class="badges">${this.badges.map(t=>this._renderBadge(t))}</small>
+    </div>
+  </div>
+
+  `}i(84);class a extends r.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=o.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(t){if("string"==typeof t)return r.b`<rp-badge>${t}</rp-badge>`;if("object"==typeof t){let e=t.text;if(!e)return r.b``;let i=t.href;return i?r.b`<rp-badge href="${i}">${e}</rp-badge>`:r.b`<rp-badge>${e}</rp-badge>`}return r.b``}}customElements.define("rp-person-preview",a)},82:function(t,e,i){"use strict";var r=i(2),s=i(33);i(34);function o(){return r.b`
+  <style>
+    :host {
       display: block;
     }
     .container {
@@ -43,7 +127,7 @@
   <div class="container ${Object(s.a)(this.constructClasses())}">
     <div class="view-all"><span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon></div>
   </div>
-  `}class a extends r.a{static get properties(){return{text:{type:String},justify:{type:String}}}constructor(){super(),this.render=o.bind(this),this.text="View All"}constructClasses(){let t={};return this.justify&&(t[this.justify]=!0),t}}customElements.define("rp-view-all",a)},81:function(t,e,i){"use strict";var r=i(2),s=i(33),o=i(34);function a(){return r.b`
+  `}class a extends r.a{static get properties(){return{text:{type:String},justify:{type:String}}}constructor(){super(),this.render=o.bind(this),this.text="View All"}constructClasses(){let t={};return this.justify&&(t[this.justify]=!0),t}}customElements.define("rp-view-all",a)},83:function(t,e,i){"use strict";var r=i(2),s=i(33),o=i(34);function a(){return r.b`
   <style>
     :host {
       display: inline-block;
@@ -79,7 +163,7 @@
   <div class="circle ${Object(s.a)(this.constructClasses())}" style="${Object(o.a)(this.constructStyles())}">
     ${this.renderFace()}
   </div>
-  `}class n extends r.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=a.bind(this)}constructClasses(){let t={};return this.size&&"undefined"!=this.size&&(t["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(t.photo=!0),t}constructStyles(){let t={};return this.src&&"undefined"!=this.src&&(t["background-image"]=`url(${this.src})`),t}renderFace(){if(!this.src||"undefined"==this.src)return r.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",n)},82:function(t,e,i){"use strict";var r=i(2),s=i(33);function o(){return r.b`
+  `}class n extends r.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=a.bind(this)}constructClasses(){let t={};return this.size&&"undefined"!=this.size&&(t["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(t.photo=!0),t}constructStyles(){let t={};return this.src&&"undefined"!=this.src&&(t["background-image"]=`url(${this.src})`),t}renderFace(){if(!this.src||"undefined"==this.src)return r.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",n)},84:function(t,e,i){"use strict";var r=i(2),s=i(33);function o(){return r.b`
 <style>
   :host {
     display: inline-block;
@@ -139,37 +223,7 @@
   ${this._renderBadge()}
 `}class a extends r.a{static get properties(){return{size:{type:String},href:{type:String},colorSequence:{type:Number,attribute:"color-sequence"}}}constructor(){super(),this.maxColor=6,this.render=o.bind(this)}constructClasses(){let t={};if(this.size&&(t["size-"+this.size]=!0),this.colorSequence){t["color-"+Math.floor(this.colorSequence).toString()]=!0}else{let e=[...this.parentNode.childNodes].filter(t=>t.tagName===this.tagName);if(e.length>0){t["color-"+(e.indexOf(this)%this.maxColor).toString()]=!0}else t["color-0"]=!0}return t}_renderBadge(){return this.href?r.b`<a href=${this.href}>${this._renderSpan()}</a>`:r.b`${this._renderSpan()}`}_renderSpan(){return r.b`<span class=${Object(s.a)(this.constructClasses())}>
       <slot></slot>
-    </span>`}}customElements.define("rp-badge",a)},83:function(t,e,i){"use strict";var r=i(2),s=i(33);i(34);function o(){return r.b`
-  <style>
-    :host {
-      display: inline-block;
-    }
-    .container {
-      display: flex;
-      align-items: center;
-      padding: 8px;
-      font-size: var(--font-size-small);
-    }
-    .container.danger {
-      background-color: var(--tcolor-light);
-      border-width: 1px;
-      border-style: solid;
-      border-color: var(--tcolor-danger);
-      color: var(--tcolor-danger);
-    }
-    .container iron-icon {
-      width: 24px;
-      height: 24px;
-      min-width: 24px;
-      min-height: 24px;
-      margin-right: 8px;
-    }
-  </style>
-  <div class="container ${Object(s.a)(this._constructClasses())}">
-    <iron-icon icon="warning"></iron-icon>
-    <div id="content"><slot></slot></div>
-  </div>
-  `}class a extends r.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=o.bind(this),this.themeColor="danger"}_constructClasses(){let t={};return t[this.themeColor]=!0,t}}customElements.define("rp-alert",a)},84:function(t,e,i){"use strict";var r=i(2);function s(){return r.b`
+    </span>`}}customElements.define("rp-badge",a)},85:function(t,e,i){"use strict";var r=i(2);function s(){return r.b`
   <style>
     :host {
       display: block;
@@ -226,7 +280,7 @@
     ${this.links.map((t,e)=>this._renderLink(t,e))}
     ${this._renderViewAll()}
   </div>
-  `}i(33),i(80);class o extends r.a{static get properties(){return{links:{type:Array},viewAllLink:{type:Object,attribute:"view-all-link"},header:{type:Object,attribute:"header"}}}constructor(){super(),this.render=s.bind(this),this.links=[],this._linkClick=new CustomEvent("link-click",{detail:{message:"A new link has been clicked."}})}_renderHeader(){return this.header&&this.header.text?r.b`<div class="row header">
+  `}i(33),i(82);class o extends r.a{static get properties(){return{links:{type:Array},viewAllLink:{type:Object,attribute:"view-all-link"},header:{type:Object,attribute:"header"}}}constructor(){super(),this.render=s.bind(this),this.links=[],this._linkClick=new CustomEvent("link-click",{detail:{message:"A new link has been clicked."}})}_renderHeader(){return this.header&&this.header.text?r.b`<div class="row header">
                 <div class="count">${this.header.count}</div>
                 <div class="link-container"><span>${this.header.text}</span></div>
                 </div>`:r.b``}_renderLink(t,e){return t.text?r.b`<div class="row">
@@ -234,61 +288,7 @@
                   <div class="link-container">
                     <span @click="${this.handleClick}" link-index="${e}" class="link">${t.text}</span>
                   </div>
-                </div>`:r.b``}_renderViewAll(){return this.viewAllLink?(this.viewAllLink.text||(this.viewAllLink.text="View All"),r.b`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`):r.b``}handleClick(t){t.target.classList.contains("link")?this.Clickedlink=this.links[parseInt(t.target.getAttribute("link-index"))]:this.Clickedlink=this.viewAllLink,this.dispatchEvent(this._linkClick)}}customElements.define("rp-link-list-counts",o)},85:function(t,e,i){"use strict";var r=i(2),s=i(34);i(81);function o(){return r.b`
-  <style>
-    :host {
-      display: block;
-    }
-    .container {
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-    }
-    .text-container {
-      margin-left: 12px;
-      flex-grow: 1;
-    }
-    .name {
-      font-size: var(--font-size);
-      color : var(--tcolor-link-text);
-      font-weight : var(--font-weight-bold);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: block;
-    }
-    .name:hover {
-      color : var(--tcolor-link-hover-text);
-    }
-    .name[disabled] {
-      pointer-events: none;
-      text-decoration: none;
-    }
-    .name[disabled]:hover {
-      color : var(--tcolor-link-text);
-    }
-    small {
-      font-size : var(--font-size-small);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: block;
-      line-height: 1.4;
-    }
-    small.badges {
-      margin-top: 5px;
-    }
-  </style>
-  <div class=container>
-    <rp-avatar size="${this.avatarSize}" src="${this.avatarSrc}"></rp-avatar>
-    <div class="text-container" style="${Object(s.a)({"max-width":this.textWidth})}">
-      <a class="name" href="${this.href}" ?disabled="${!this.href}">${this.name}</a>
-      <small>${this.title}</small>
-      <small class="badges">${this.badges.map(t=>this._renderBadge(t))}</small>
-    </div>
-  </div>
-
-  `}i(82);class a extends r.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=o.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(t){if("string"==typeof t)return r.b`<rp-badge>${t}</rp-badge>`;if("object"==typeof t){let e=t.text;if(!e)return r.b``;let i=t.href;return i?r.b`<rp-badge href="${i}">${e}</rp-badge>`:r.b`<rp-badge>${e}</rp-badge>`}return r.b``}}customElements.define("rp-person-preview",a)},86:function(t,e,i){"use strict";var r=i(2),s=i(33);i(34);function o(){return r.b`
+                </div>`:r.b``}_renderViewAll(){return this.viewAllLink?(this.viewAllLink.text||(this.viewAllLink.text="View All"),r.b`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`):r.b``}handleClick(t){t.target.classList.contains("link")?this.Clickedlink=this.links[parseInt(t.target.getAttribute("link-index"))]:this.Clickedlink=this.viewAllLink,this.dispatchEvent(this._linkClick)}}customElements.define("rp-link-list-counts",o)},86:function(t,e,i){"use strict";var r=i(2),s=i(33);i(34);function o(){return r.b`
   <style>
     :host {
       display: inline-block;
@@ -342,7 +342,7 @@
     </div>
 
   </div>
-  `}i(55),i(56);class a extends r.a{static get properties(){return{facets:{type:Array},inputValue:{type:String,attribute:"input-value",reflect:!0},placeholder:{type:String},activeFacet:{type:parseInt,attribute:"active-facet",reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.facets=[{text:"PEOPLE"},{text:"ORGANIZATIONS"},{text:"WORKS"}],this.placeholder="Search the registry",this.activeFacet=0,this.inputValue="",this._newSearch=new CustomEvent("new-search",{detail:{message:"A new search has been triggered"}})}updated(t){(t.has("inputValue")||t.has("activeFacet"))&&(this.searchObject={search:this.inputValue,facet:this.facets[this.activeFacet]})}_constructClasses(){return{}}doSearch(){this.inputValue&&this.dispatchEvent(this._newSearch)}_handleKeyup(t){13===t.keyCode&&(t.preventDefault(),this.doSearch())}}customElements.define("rp-search",a)},90:function(t,e,i){"use strict";i.r(e),i.d(e,"default",(function(){return h}));var r=i(2),s=i(36),o=i(10),a=i(11);
+  `}i(55),i(56);class a extends r.a{static get properties(){return{facets:{type:Array},inputValue:{type:String,attribute:"input-value",reflect:!0},placeholder:{type:String},activeFacet:{type:parseInt,attribute:"active-facet",reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.facets=[{text:"PEOPLE"},{text:"ORGANIZATIONS"},{text:"WORKS"}],this.placeholder="Search the registry",this.activeFacet=0,this.inputValue="",this._newSearch=new CustomEvent("new-search",{detail:{message:"A new search has been triggered"}})}updated(t){(t.has("inputValue")||t.has("activeFacet"))&&(this.searchObject={search:this.inputValue,facet:this.facets[this.activeFacet]})}_constructClasses(){return{}}doSearch(){this.inputValue&&this.dispatchEvent(this._newSearch)}_handleKeyup(t){13===t.keyCode&&(t.preventDefault(),this.doSearch())}}customElements.define("rp-search",a)},91:function(t,e,i){"use strict";i.r(e),i.d(e,"default",(function(){return h}));var r=i(2),s=i(36),o=i(10),a=i(11);
 /**
  * @license
  * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -456,7 +456,7 @@ const n=new WeakMap;Object(a.d)((...t)=>e=>{let i=n.get(e);void 0===i&&(i={lastR
           <span class="weight-regular">People</span>
         </h2>
         <div class="people-container">
-          ${this._formatPeople(this.people).map(t=>r.b`
+          ${this.CollectionModel._formatPeople(this.people).map(t=>r.b`
             <rp-person-preview
               name="${t.name}"
               title="${t.title}"
@@ -476,4 +476,4 @@ const n=new WeakMap;Object(a.d)((...t)=>e=>{let i=n.get(e);void 0===i&&(i={lastR
   </div>
 </div>
 
-`}i(22),i(83),i(84),i(85),i(86);class h extends(Mixin(r.a).with(LitCorkUtils)){static get properties(){return{theme:{type:Object},facetsStatus:{type:String},facets:{type:Object},academicWorks:{type:Array},academicWorksTotal:{type:parseInt},peopleStatus:{type:String},people:{type:Array},peopleTotal:{type:parseInt},peopleWidth:{type:parseInt},subjectsTotal:{type:parseInt},context:{type:String},visible:{type:Boolean}}}constructor(){super(),this.render=d.bind(this),this._injectModel("CollectionModel","AppStateModel"),this.facets={},this.academicWorks=[],this.facetsStatus="loading",this.academicWorksTotal=0,this.peopleStatus="loading",this.people=[],this.peopleTotal=0,this.subjectsTotal=0,this.setPeopleWidth(window.innerWidth),this.context=APP_CONFIG.data.jsonldContext,this.theme=APP_CONFIG.theme,this.AppStateModel.get().then(t=>this._onAppStateUpdate(t)),this._handleResize=this._handleResize.bind(this)}updated(t){t.has("facetsStatus")&&"loaded"==this.facetsStatus&&this._getPeople(),t.has("visible")&&this.visible&&requestAnimationFrame(()=>this._handleResize())}connectedCallback(){super.connectedCallback(),window.addEventListener("resize",this._handleResize)}disconnectedCallback(){window.removeEventListener("resize",this._handleResize),super.disconnectedCallback()}async _onAppStateUpdate(t){await this._getFacets()}_handleResize(){if(!this.visible)return;let t=window.innerWidth;this.setPeopleWidth(t)}setPeopleWidth(t){let e=250;t<576?e=t-30-72:t<768&&(e=.7*(t-30)-72-30),this.peopleWidth=Math.floor(e)}async _getPeople(){let t=await this.CollectionModel.overview("randomPeople",{limit:4,total:this.peopleTotal});this.peopleStatus=t.state,"loaded"==t.state&&(this.people=t.payload.results,console.log(this.people))}async _getFacets(){let t=await this.CollectionModel.overview("facets");if(this.facetsStatus=t.state,"loaded"==t.state){this.facets=t.payload.aggregations.facets["@type"];for(let t in this.facets)if(t.startsWith("bibo:")){let e=this._formatBibType(t);this.academicWorks.push({text:e,count:this.facets[t],facet:t})}else t==this.context+":publication"&&(this.academicWorksTotal=this.facets[t]),t==this.context+":person"&&(this.peopleTotal=this.facets[t]);this.academicWorks.sort((function(t,e){let i=t.text.toUpperCase(),r=e.text.toUpperCase();return i<r?-1:i>r?1:0}))}}_formatPeople(t){let e=[];for(let i of t){let t={name:i.label?i.label:"",title:""};i.contactInfoFor&&i.contactInfoFor.title&&(Array.isArray(i.contactInfoFor.title)?t.title=i.contactInfoFor.title.join(", "):t.title=i.contactInfoFor.title),e.push(t)}return e}_formatBibType(t,e=!0,i=!0){if(t=t.slice(5),e){t=[...t];for(let e=0;e<t.length;e++)0!=e&&t[e]==t[e].toUpperCase()&&(t[e]=" "+t[e]);t=t.join("")}return i&&(t+="s"),t}}customElements.define("rp-page-home",h)}}]);
+`}i(22),i(80),i(85),i(81),i(86);class h extends(Mixin(r.a).with(LitCorkUtils)){static get properties(){return{theme:{type:Object},facetsStatus:{type:String},facets:{type:Object},academicWorks:{type:Array},academicWorksTotal:{type:parseInt},peopleStatus:{type:String},people:{type:Array},peopleTotal:{type:parseInt},peopleWidth:{type:parseInt},subjectsTotal:{type:parseInt},context:{type:String},visible:{type:Boolean}}}constructor(){super(),this.render=d.bind(this),this._injectModel("CollectionModel","AppStateModel"),this.facets={},this.academicWorks=[],this.facetsStatus="loading",this.academicWorksTotal=0,this.peopleStatus="loading",this.people=[],this.peopleTotal=0,this.subjectsTotal=0,this.setPeopleWidth(window.innerWidth),this.context=APP_CONFIG.data.jsonldContext,this.theme=APP_CONFIG.theme,this.AppStateModel.get().then(t=>this._onAppStateUpdate(t)),this._handleResize=this._handleResize.bind(this)}updated(t){t.has("facetsStatus")&&"loaded"==this.facetsStatus&&this._getPeople(),t.has("visible")&&this.visible&&requestAnimationFrame(()=>this._handleResize())}connectedCallback(){super.connectedCallback(),window.addEventListener("resize",this._handleResize)}disconnectedCallback(){window.removeEventListener("resize",this._handleResize),super.disconnectedCallback()}async _onAppStateUpdate(t){await this._getFacets()}_handleResize(){if(!this.visible)return;let t=window.innerWidth;this.setPeopleWidth(t)}setPeopleWidth(t){let e=250;t<576?e=t-30-72:t<768&&(e=.7*(t-30)-72-30),this.peopleWidth=Math.floor(e)}async _getPeople(){let t=await this.CollectionModel.overview("randomPeople",{limit:4,total:this.peopleTotal});this.peopleStatus=t.state,"loaded"==t.state&&(this.people=t.payload.results,console.log(this.people))}async _getFacets(){let t=await this.CollectionModel.overview("facets");if(this.facetsStatus=t.state,"loaded"==t.state){this.facets=t.payload.aggregations.facets["@type"];for(let t in this.facets)if(t.startsWith("bibo:")){let e=this._formatBibType(t);this.academicWorks.push({text:e,count:this.facets[t],facet:t})}else t==this.context+":publication"&&(this.academicWorksTotal=this.facets[t]),t==this.context+":person"&&(this.peopleTotal=this.facets[t]);this.academicWorks.sort((function(t,e){let i=t.text.toUpperCase(),r=e.text.toUpperCase();return i<r?-1:i>r?1:0}))}}_formatBibType(t,e=!0,i=!0){if(t=t.slice(5),e){t=[...t];for(let e=0;e<t.length;e++)0!=e&&t[e]==t[e].toUpperCase()&&(t[e]=" "+t[e]);t=t.join("")}return i&&(t+="s"),t}}customElements.define("rp-page-home",h)}}]);
