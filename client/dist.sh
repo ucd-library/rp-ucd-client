@@ -4,6 +4,7 @@ rm -rf dist
 mkdir -p dist
 
 cp ./public/index.html ./dist
+cp ./public/login.html ./dist
 cp -r ./public/loader ./dist
 cp -r ./public/images ./dist
 
