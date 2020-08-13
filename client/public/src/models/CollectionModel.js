@@ -40,6 +40,12 @@ class CollectionModel extends BaseModel {
         queryObject.offset = randomOffset;
       }
     }
+    else if (id == "peopleAggs") {
+      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":person"]};
+      queryObject.limit = 0;
+      queryObject.facets["@type"] = {"type" : "facet"};
+    }
+
     if( state.state === 'init' ) {
       await this.service.overview(id, queryObject);
     } else if( state.state === 'loading' ) {
@@ -78,6 +84,25 @@ class CollectionModel extends BaseModel {
         out.push(p)
       }
       return out;
+    }
+
+    _formatAgg(agg, prefix, splitCamel=true) {
+      if (prefix && agg.startsWith(prefix)) {
+        agg = agg.slice(prefix.length,);
+      }
+      if (splitCamel) {
+        agg = [...agg];
+        for (let i = 0; i < agg.length; i++) {
+          if (i == 0) {
+            continue;
+          }
+          if (agg[i] == agg[i].toUpperCase()) {
+            agg[i] = " " + agg[i];
+          }
+        }
+        agg = agg.join("");
+      }
+      return agg;
     }
 
 }

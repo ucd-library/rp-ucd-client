@@ -59,7 +59,7 @@ export class RpLinkList extends LitElement {
       classes['selected'] = true;
     }
     if (this.hasHeaderLink && index == 0) {
-      classess['link-header'] = true;
+      classes['link-header'] = true;
     }
     classes['disabled'] = disabled;
 

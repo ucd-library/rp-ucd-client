@@ -18,7 +18,9 @@ export default class RpPagePeople extends Mixin(RpUtilsCollection)
       data: {type: Array},
       dataMax: {type: parseInt},
       peopleWidth: {type: parseInt},
-      visible: {type: Boolean}
+      visible: {type: Boolean},
+      facetStatus: {type: String},
+      facets: {type: Array}
     }
   }
 
@@ -33,6 +35,8 @@ export default class RpPagePeople extends Mixin(RpUtilsCollection)
     this.dataTotal = 0;
     this.setPeopleWidth(window.innerWidth);
     this.data = [];
+    this.facetStatus = 'loading';
+    this.facets = [];
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
     this._handleResize = this._handleResize.bind(this);
@@ -55,11 +59,11 @@ export default class RpPagePeople extends Mixin(RpUtilsCollection)
   }
 
   async _onAppStateUpdate(e) {
-    await this._doQuery();
+    let q = {...this._parseUrlQuery()};
+    await Promise.all([this._doQuery(q), this._getFacets(q)]);
   }
 
-  async _doQuery() {
-    let q = this._parseUrlQuery();
+  async _doQuery(q) {
     if (!q.filters) {
       q.filters = this.filtersDefault;
     }
@@ -75,7 +79,49 @@ export default class RpPagePeople extends Mixin(RpUtilsCollection)
     this.data = data.payload.results;
     console.log(data);
     console.log(this.data);
+  }
 
+  async _getFacets(q) {
+    let activeFilters = q.filters;
+    let peopleAggs = await this.CollectionModel.overview('peopleAggs');
+    this.facetStatus = peopleAggs.state;
+    if (peopleAggs.state != 'loaded') {
+      return;
+    }
+    this.facets = [];
+
+    // Format people types
+    let facetName = "@type";
+    let activeFilterValue = "";
+    let activeFilterIndex = 0;
+    let peopleTypes = [{label: 'All',
+                        count: peopleAggs.payload.total, text: `All (${peopleAggs.payload.total})`}];
+    let t = peopleAggs.payload.aggregations.facets[facetName];
+    let prefix = 'vivo:';
+    let i = 1;
+    if (activeFilters && activeFilters[facetName]) {
+      activeFilterValue = JSON.stringify(activeFilters[facetName].value);
+    }
+    for (let key in t) {
+      if (key.startsWith(prefix)) {
+        let label = this.CollectionModel._formatAgg(key, prefix);
+        let filters = {type: "keyword", op: 'and', value: [key]};
+        if (activeFilterValue == JSON.stringify(filters.value) ) {
+          activeFilterIndex = i;
+        }
+        peopleTypes.push({label: label,
+                          count: t[key],
+                          text: `${label} (${t[key]})`,
+                          filters: {"@type": filters},
+                          name: key});
+        i++;
+      }
+    }
+    this.facets.push({values: peopleTypes,
+                      activeIndex: activeFilterIndex,
+                      id: facetName})
+    //console.log(peopleAggs);
+    console.log(this.facets);
   }
 
   _handleResize() {

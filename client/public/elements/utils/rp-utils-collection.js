@@ -12,6 +12,7 @@ export default class RpUtilsCollection extends LitElement {
       azSelected: {type: String},
       azDisabled: {type: Array},
       pgPer: {type: parseInt},
+      pgCurrent: {type: parseInt},
       urlQuery: {type: Object}
     }
   }
@@ -23,11 +24,55 @@ export default class RpUtilsCollection extends LitElement {
     this.azSelected = 'All';
     this.azDisabled = [];
     this.pgPer = 8;
+    this.pgCurrent = 1;
     this.urlQuery = {};
   }
 
-  _onUserAction(action) {
-    console.log(action);
+  _onUserAction(action, ...args) {
+    if (!action) {
+      return;
+    }
+    let q = {...this.urlQuery};
+    if (!q.filters) {
+      q.filters = {};
+    }
+    console.log("User action:", action);
+
+    // handle az
+    if (action == 'az') {
+      return;
+    }
+
+    // handle pagination
+    if (action == 'pagination' && this.hasPagination) {
+      this.pgCurrent = args[0];
+      q.offset = this.pgCurrent * this.urlQuery.limit - this.urlQuery.limit;
+    }
+
+    // handle facets
+    if (action.startsWith('facet_')) {
+      if (args[0].filters) {
+        q.filters = {...q.filters, ...args[0].filters}
+      }
+      else {
+        let f = action.slice('facet_'.length, );
+        if (q.filters[f]) {
+          delete q.filters[f];
+        }
+      }
+      q.offset = 0;
+    }
+
+    // construct new url and redirect
+    let p = "";
+    if (this.AppStateModel) {
+      p = "/" + this.AppStateModel.store.data.location.path.join("/")
+    }
+
+    p = p + this._urlEncode(q)
+    //console.log(p);
+    //return;
+    location.href = p;
   }
 
   _renderBrowseHeader(title, Azselected) {
@@ -47,11 +92,17 @@ export default class RpUtilsCollection extends LitElement {
     `;
   }
 
-  _renderFacet(facetId, links) {
-    return html`
-    <rp-link-list has-header-link
-                  links=${links}>
-    </rp-link-list>
+  _renderFacets(facets) {
+    if (!facets) {
+      return html``;
+    }
+    return html`${facets.map(facet => html`
+      <rp-link-list has-header-link
+                    links='${JSON.stringify(facet.values)}'
+                    current-link='${facet.activeIndex}'
+                    @changed-link="${e => this._onUserAction('facet_' + facet.id, e.target.links[e.target.currentLink])}">
+      </rp-link-list>
+      `)}
     `
   }
 
@@ -61,11 +112,11 @@ export default class RpUtilsCollection extends LitElement {
     }
     this.hasPagination = true;
     let maxPage = Math.ceil(totalResults / this.urlQuery.limit);
-    let currentPage = Math.ceil((this.urlQuery.offset + 1) / this.urlQuery.limit)
+    this.pgCurrent = Math.ceil((this.urlQuery.offset + 1) / this.urlQuery.limit)
     return html`
     <rp-pagination max-page="${maxPage}"
-                   current-page="1"
-                   @changed-page="${e => this._onUserAction("pagination")}"
+                   current-page="${this.pgCurrent}"
+                   @changed-page="${e => this._onUserAction("pagination", e.target.currentPage)}"
                    class="mt-3"
     ></rp-pagination>
     `
@@ -74,6 +125,12 @@ export default class RpUtilsCollection extends LitElement {
   _parseUrlQuery(){
     // read url args, construct search query
     let q = {};
+    if (this.AppStateModel) {
+      let query = this.AppStateModel.store.data.location.query;
+      for (let arg in query) {
+        q[arg] = JSON.parse(query[arg])
+      }
+    }
     if (!q.limit) {
       q.limit = this.pgPer;
     }
@@ -82,6 +139,27 @@ export default class RpUtilsCollection extends LitElement {
     }
     this.urlQuery = q;
     return q;
+  }
+
+  _urlEncode(obj) {
+    let str = [];
+    for (let p in obj)
+      if (obj.hasOwnProperty(p)) {
+        if (p == 'offset' && obj[p] == 0) {
+          continue;
+        }
+        if (p == 'filters' && Object.keys(obj[p]).length == 0) {
+          continue;
+        }
+        if (p == 'limit') {
+          continue;
+        }
+        str.push(encodeURIComponent(p) + "=" + encodeURIComponent( JSON.stringify(obj[p]) ));
+      }
+    if (!str.length) {
+      return ""
+    }
+    return "?" + str.join("&");
   }
 
 }
