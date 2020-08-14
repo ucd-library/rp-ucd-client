@@ -214,8 +214,8 @@ return html`
   <app-page-components id="components"></app-page-components>
   <rp-page-home id="home"></rp-page-home>
   <rp-page-people id="people"></rp-page-people>
+  <rp-page-individual id="individual"></rp-page-individual>
   <app-page-search id="search"></app-page-search>
-  <app-page-person id="person"></app-page-person>
 </iron-pages>
 <div id="app-footer">
   <div class="container">

@@ -5,6 +5,7 @@ export class RpViewAll extends LitElement {
   static get properties() {
   return {
     text: {type: String},
+    href: {type: String},
     justify: {type: String}
   };
   }
@@ -12,7 +13,8 @@ export class RpViewAll extends LitElement {
   constructor() {
     super();
     this.render = render.bind(this);
-    this.text = "View All"
+    this.text = "View All";
+    this.href = "";
   }
 
   constructClasses() {
@@ -21,6 +23,10 @@ export class RpViewAll extends LitElement {
       classes[this.justify] = true;
     }
     return classes;
+  }
+
+  _renderInnerContent() {
+    return html`<span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon>`;
   }
 }
 

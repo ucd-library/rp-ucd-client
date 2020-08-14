@@ -108,7 +108,7 @@ You control them with attributes, and build more complicated (bus-connected) ele
 <p>Attach a listener to be notified when the selected letter changes i.e.<br /><code>@changed-letter=${(e) => console.log(e.target.selectedLetter)}</code></p>
 <rp-a-z  selected-letter="all" @changed-letter=${(e) => console.log(e.target.selectedLetter)}></rp-a-z>
 <p>Use <code>hide-all</code> to not render the All link</p>
-<rp-a-z hide-all=true selected-letter="f"></rp-a-z>
+<rp-a-z hide-all=true selected-letter="f" disabled-letters=${JSON.stringify(['g','q', 'S'])}></rp-a-z>
 </section>
 
 <section>
@@ -365,5 +365,6 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <p>Dead simple element that displays a View All link. Use the <code>text</code> attribute to customize, and <code>justify</code> to control horizontal alignment.</p>
 <rp-view-all justify="start"></rp-view-all>
 <rp-view-all text="View All People"></rp-view-all>
+<rp-view-all text="Add an href to make it a normal link" href="https://google.com"></rp-view-all>
 </section>
 `;}

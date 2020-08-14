@@ -83,7 +83,9 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     } else if( page === 'components' ) {
       return import(/* webpackChunkName: "page-components" */ "./pages/components/app-components")
     } else if( page === 'people' ) {
-      return import(/* webpackChunkName: "page-components" */ "./pages/people/rp-page-people")
+      return import(/* webpackChunkName: "page-people" */ "./pages/people/rp-page-people")
+    } else if( page === 'individual' ) {
+      return import(/* webpackChunkName: "page-individual" */ "./pages/individual/rp-page-individual")
     }
   }
 

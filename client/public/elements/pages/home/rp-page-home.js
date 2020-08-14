@@ -7,6 +7,7 @@ import "../../components/alert";
 import "../../components/link-list-counts";
 import "../../components/person-preview";
 import "../../components/search";
+import "../../components/view-all";
 
 export default class RpPageHome extends Mixin(LitElement)
   .with(LitCorkUtils) {

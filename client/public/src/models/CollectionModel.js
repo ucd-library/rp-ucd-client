@@ -71,16 +71,16 @@ class CollectionModel extends BaseModel {
     _formatPeople(people) {
       let out = []
       for (let person of people) {
-        let p = {name: person.label ? person.label : "", title: ""};
-        if (person.contactInfoFor && person.contactInfoFor.title) {
-          if (Array.isArray(person.contactInfoFor.title)) {
-            p.title = person.contactInfoFor.title.join(", ");
+        let p = {name: person.label ? person.label : "", title: "", "@id": person['@id']};
+        if (person.hasContactInfo && person.hasContactInfo.title) {
+          if (Array.isArray(person.hasContactInfo.title)) {
+            p.title = person.hasContactInfo.title.join(", ");
           }
           else {
-            p.title = person.contactInfoFor.title;
+            p.title = person.hasContactInfo.title;
           }
-
         }
+        p['id'] = person['@id'].replace(this.jsonldContext + ":", "");
         out.push(p)
       }
       return out;

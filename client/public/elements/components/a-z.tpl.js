@@ -24,6 +24,11 @@ export default function render() {
     .letter:hover {
       color: var(--tcolor-link-hover-text);
     }
+    .letter[disabled] {
+      pointer-events: none;
+      cursor: auto;
+      color: var(--tcolor-link-disabled-text);
+    }
     .letter.selected {
       font-weight: var(--font-weight-bold);
       pointer-events: none;

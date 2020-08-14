@@ -1,133 +1,4 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[1],{80:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function s(){return r.b`
-  <style>
-    :host {
-      display: inline-block;
-    }
-    .container {
-      display: flex;
-      align-items: center;
-      padding: 8px;
-      font-size: var(--font-size-small);
-    }
-    .container.danger {
-      background-color: var(--tcolor-light);
-      border-width: 1px;
-      border-style: solid;
-      border-color: var(--tcolor-danger);
-      color: var(--tcolor-danger);
-    }
-    .container iron-icon {
-      width: 24px;
-      height: 24px;
-      min-width: 24px;
-      min-height: 24px;
-      margin-right: 8px;
-    }
-  </style>
-  <div class="container ${Object(a.a)(this._constructClasses())}">
-    <iron-icon icon="warning"></iron-icon>
-    <div id="content"><slot></slot></div>
-  </div>
-  `}class n extends r.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=s.bind(this),this.themeColor="danger"}_constructClasses(){let e={};return e[this.themeColor]=!0,e}}customElements.define("rp-alert",n)},81:function(e,t,i){"use strict";var r=i(2),a=i(34);i(83);function s(){return r.b`
-  <style>
-    :host {
-      display: block;
-    }
-    .container {
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-    }
-    .text-container {
-      margin-left: 12px;
-      flex-grow: 1;
-    }
-    .name {
-      font-size: var(--font-size);
-      color : var(--tcolor-link-text);
-      font-weight : var(--font-weight-bold);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: block;
-    }
-    .name:hover {
-      color : var(--tcolor-link-hover-text);
-    }
-    .name[disabled] {
-      pointer-events: none;
-      text-decoration: none;
-    }
-    .name[disabled]:hover {
-      color : var(--tcolor-link-text);
-    }
-    small {
-      font-size : var(--font-size-small);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: block;
-      line-height: 1.4;
-    }
-    small.badges {
-      margin-top: 5px;
-    }
-  </style>
-  <div class=container>
-    <rp-avatar size="${this.avatarSize}" src="${this.avatarSrc}"></rp-avatar>
-    <div class="text-container" style="${Object(a.a)({"max-width":this.textWidth})}">
-      <a class="name" href="${this.href}" ?disabled="${!this.href}">${this.name}</a>
-      <small>${this.title}</small>
-      <small class="badges">${this.badges.map(e=>this._renderBadge(e))}</small>
-    </div>
-  </div>
-
-  `}i(84);class n extends r.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=s.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(e){if("string"==typeof e)return r.b`<rp-badge>${e}</rp-badge>`;if("object"==typeof e){let t=e.text;if(!t)return r.b``;let i=e.href;return i?r.b`<rp-badge href="${i}">${t}</rp-badge>`:r.b`<rp-badge>${t}</rp-badge>`}return r.b``}}customElements.define("rp-person-preview",n)},82:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function s(){return r.b`
-  <style>
-    :host {
-      display: block;
-    }
-    .container {
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-      justify-content: flex-end;
-      cursor: pointer;
-      color: var(--tcolor-text);
-      transition: .3s;
-    }
-    .container.start {
-      justify-content: flex-start;
-    }
-    .container.center {
-      justify-content: center;
-    }
-    .container:hover {
-      color: var(--tcolor-link-hover-text) !important;
-    }
-    .container:hover iron-icon{
-      color: var(--tcolor-link-hover-text) !important;
-    }
-    iron-icon {
-      color: var(--tcolor-secondary);
-      transition: .3s;
-      width: 28px;
-      min-width: 28px;
-      height: 28px;
-    }
-    .view-all {
-      display: flex;
-      align-items: center;
-      flex-flow: row nowrap;
-    }
-    .text {
-      font-weight: var(--font-weight-bold);
-    }
-  </style>
-  <div class="container ${Object(a.a)(this.constructClasses())}">
-    <div class="view-all"><span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon></div>
-  </div>
-  `}class n extends r.a{static get properties(){return{text:{type:String},justify:{type:String}}}constructor(){super(),this.render=s.bind(this),this.text="View All"}constructClasses(){let e={};return this.justify&&(e[this.justify]=!0),e}}customElements.define("rp-view-all",n)},83:function(e,t,i){"use strict";var r=i(2),a=i(33),s=i(34);function n(){return r.b`
+(window.webpackJsonp=window.webpackJsonp||[]).push([[1],{83:function(e,t,r){"use strict";var i=r(2),n=r(33),a=r(34);function s(){return i.b`
   <style>
     :host {
       display: inline-block;
@@ -160,10 +31,10 @@
       background-size: cover;
     }
   </style>
-  <div class="circle ${Object(a.a)(this.constructClasses())}" style="${Object(s.a)(this.constructStyles())}">
+  <div class="circle ${Object(n.a)(this.constructClasses())}" style="${Object(a.a)(this.constructStyles())}">
     ${this.renderFace()}
   </div>
-  `}class o extends r.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=n.bind(this)}constructClasses(){let e={};return this.size&&"undefined"!=this.size&&(e["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(e.photo=!0),e}constructStyles(){let e={};return this.src&&"undefined"!=this.src&&(e["background-image"]=`url(${this.src})`),e}renderFace(){if(!this.src||"undefined"==this.src)return r.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",o)},84:function(e,t,i){"use strict";var r=i(2),a=i(33);function s(){return r.b`
+  `}class o extends i.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=s.bind(this)}constructClasses(){let e={};return this.size&&"undefined"!=this.size&&(e["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(e.photo=!0),e}constructStyles(){let e={};return this.src&&"undefined"!=this.src&&(e["background-image"]=`url(${this.src})`),e}renderFace(){if(!this.src||"undefined"==this.src)return i.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",o)},84:function(e,t,r){"use strict";var i=r(2),n=r(33);function a(){return i.b`
 <style>
   :host {
     display: inline-block;
@@ -221,9 +92,202 @@
 
 </style>
   ${this._renderBadge()}
-`}class n extends r.a{static get properties(){return{size:{type:String},href:{type:String},colorSequence:{type:Number,attribute:"color-sequence"}}}constructor(){super(),this.maxColor=6,this.render=s.bind(this)}constructClasses(){let e={};if(this.size&&(e["size-"+this.size]=!0),this.colorSequence){e["color-"+Math.floor(this.colorSequence).toString()]=!0}else{let t=[...this.parentNode.childNodes].filter(e=>e.tagName===this.tagName);if(t.length>0){e["color-"+(t.indexOf(this)%this.maxColor).toString()]=!0}else e["color-0"]=!0}return e}_renderBadge(){return this.href?r.b`<a href=${this.href}>${this._renderSpan()}</a>`:r.b`${this._renderSpan()}`}_renderSpan(){return r.b`<span class=${Object(a.a)(this.constructClasses())}>
+`}class s extends i.a{static get properties(){return{size:{type:String},href:{type:String},colorSequence:{type:Number,attribute:"color-sequence"}}}constructor(){super(),this.maxColor=6,this.render=a.bind(this)}constructClasses(){let e={};if(this.size&&(e["size-"+this.size]=!0),this.colorSequence){e["color-"+Math.floor(this.colorSequence).toString()]=!0}else{let t=[...this.parentNode.childNodes].filter(e=>e.tagName===this.tagName);if(t.length>0){e["color-"+(t.indexOf(this)%this.maxColor).toString()]=!0}else e["color-0"]=!0}return e}_renderBadge(){return this.href?i.b`<a href=${this.href}>${this._renderSpan()}</a>`:i.b`${this._renderSpan()}`}_renderSpan(){return i.b`<span class=${Object(n.a)(this.constructClasses())}>
       <slot></slot>
-    </span>`}}customElements.define("rp-badge",n)},85:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
+    </span>`}}customElements.define("rp-badge",s)},85:function(e,t,r){"use strict";var i=r(2),n=r(33);r(34);function a(){return i.b`
+  <style>
+    :host {
+      display: inline-block;
+    }
+    .container {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      font-size: var(--font-size-small);
+    }
+    .container.danger {
+      background-color: var(--tcolor-light);
+      border-width: 1px;
+      border-style: solid;
+      border-color: var(--tcolor-danger);
+      color: var(--tcolor-danger);
+    }
+    .container iron-icon {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      margin-right: 8px;
+    }
+  </style>
+  <div class="container ${Object(n.a)(this._constructClasses())}">
+    <iron-icon icon="warning"></iron-icon>
+    <div id="content"><slot></slot></div>
+  </div>
+  `}class s extends i.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=a.bind(this),this.themeColor="danger"}_constructClasses(){let e={};return e[this.themeColor]=!0,e}}customElements.define("rp-alert",s)},86:function(e,t,r){"use strict";var i=r(2),n=r(33);r(34);function a(){return i.b`
+  <style>
+    :host {
+      display: block;
+    }
+    .container {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: flex-end;
+      cursor: pointer;
+      color: var(--tcolor-text);
+      transition: .3s;
+    }
+    .container.start {
+      justify-content: flex-start;
+    }
+    .container.center {
+      justify-content: center;
+    }
+    .container:hover {
+      color: var(--tcolor-link-hover-text) !important;
+    }
+    .container:hover iron-icon, .container:hover a{
+      color: var(--tcolor-link-hover-text) !important;
+    }
+    a {
+      text-decoration: none;
+      color: var(--tcolor-text);
+      transition: .3s;
+    }
+
+    iron-icon {
+      color: var(--tcolor-secondary);
+      transition: .3s;
+      width: 28px;
+      min-width: 28px;
+      height: 28px;
+    }
+    .view-all {
+      display: flex;
+      align-items: center;
+      flex-flow: row nowrap;
+    }
+    .text {
+      font-weight: var(--font-weight-bold);
+    }
+  </style>
+  <div class="container ${Object(n.a)(this.constructClasses())}">
+    ${this.href?i.b`
+      <a class="view-all" href="${this.href}">${this._renderInnerContent()}</a>
+      `:i.b`
+      <div class="view-all">${this._renderInnerContent()}</div>
+      `}
+
+  </div>
+  `}class s extends i.a{static get properties(){return{text:{type:String},href:{type:String},justify:{type:String}}}constructor(){super(),this.render=a.bind(this),this.text="View All",this.href=""}constructClasses(){let e={};return this.justify&&(e[this.justify]=!0),e}_renderInnerContent(){return i.b`<span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon>`}}customElements.define("rp-view-all",s)},87:function(e,t,r){"use strict";var i=r(2),n=r(34);r(83);function a(){return i.b`
+  <style>
+    :host {
+      display: block;
+    }
+    .container {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+    .text-container {
+      margin-left: 12px;
+      flex-grow: 1;
+    }
+    .name {
+      font-size: var(--font-size);
+      color : var(--tcolor-link-text);
+      font-weight : var(--font-weight-bold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+    .name:hover {
+      color : var(--tcolor-link-hover-text);
+    }
+    .name[disabled] {
+      pointer-events: none;
+      text-decoration: none;
+    }
+    .name[disabled]:hover {
+      color : var(--tcolor-link-text);
+    }
+    small {
+      font-size : var(--font-size-small);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      line-height: 1.4;
+    }
+    small.badges {
+      margin-top: 5px;
+    }
+  </style>
+  <div class=container>
+    <rp-avatar size="${this.avatarSize}" src="${this.avatarSrc}"></rp-avatar>
+    <div class="text-container" style="${Object(n.a)({"max-width":this.textWidth})}">
+      <a class="name" href="${this.href}" ?disabled="${!this.href}">${this.name}</a>
+      <small>${this.title}</small>
+      <small class="badges">${this.badges.map(e=>this._renderBadge(e))}</small>
+    </div>
+  </div>
+
+  `}r(84);class s extends i.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=a.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(e){if("string"==typeof e)return i.b`<rp-badge>${e}</rp-badge>`;if("object"==typeof e){let t=e.text;if(!t)return i.b``;let r=e.href;return r?i.b`<rp-badge href="${r}">${t}</rp-badge>`:i.b`<rp-badge>${t}</rp-badge>`}return i.b``}}customElements.define("rp-person-preview",s)},88:function(e,t,r){"use strict";var i=r(2),n=r(33);function a(){return i.b`
+  <style>
+    :host {
+      display: block;
+      color: var(--tcolor-link-text);
+    }
+    .container {
+      display: flex;
+    }
+    .container.h {
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: center;
+    }
+    .container.h .link {
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+    .container.v {
+      flex-flow: column nowrap;
+      align-items: flex-end;
+    }
+    .container.v .link {
+      margin-bottom: 1.5em;
+    }
+    .link {
+      cursor: pointer;
+    }
+    .link:hover {
+      color: var(--tcolor-link-hover-text);
+    }
+    .link.selected {
+      pointer-events: none;
+      color: var(--tcolor-text);
+      font-weight: var(--font-weight-bold);
+      cursor: auto;
+      border-bottom: 2px solid var(--tcolor-secondary);
+    }
+    .link.disabled {
+      color: var(--tcolor-link-disabled-text);
+      pointer-events: none;
+      cursor: auto;
+    }
+    link.disabeld:hover {
+      color: var(--tcolor-link-disabled-text);
+    }
+    .link.selected:hover {
+      color: var(--tcolor-text);
+    }
+  </style>
+  <div class=${Object(n.a)(this._containerClasses)}>
+    ${this.links.map((e,t)=>this._renderLink(e,t))}
+  </div>
+  `}class s extends i.a{static get properties(){return{links:{type:Array},currentLink:{converter:parseInt,attribute:"current-link",reflect:!0},direction:{type:String,attribute:"direction"},hasHeaderLink:{type:Boolean,attribute:"has-header-link"}}}constructor(){super(),this.render=a.bind(this),this.direction="v",this.currentLink=0,this._containerClasses={container:!0},this._containerClasses[this.direction]=!0,this._changedLink=new CustomEvent("changed-link",{detail:{message:"A new link has been selected."}})}attributeChangedCallback(e,t,r){"direction"==e&&r&&(this._containerClasses.v&&delete this._containerClasses.v,this._containerClasses[r.toLowerCase()[0]]=!0),super.attributeChangedCallback(e,t,r)}_renderLink(e,t){let r="",a=!1,s={link:!0};if("string"==typeof e?r=e:"object"==typeof e&&(r=e.text,e.disabled&&(a=!0)),t==this.currentLink&&(s.selected=!0),this.hasHeaderLink&&0==t&&(s["link-header"]=!0),s.disabled=a,r)return i.b`<div @click="${this.handleClick}" link="${t}" class=${Object(n.a)(s)}>${r}</div>`}handleClick(e){let t=parseInt(e.target.getAttribute("link"));t==this.currentLink||e.target.classList.contains("disabled")||(this.currentLink=t,this.dispatchEvent(this._changedLink))}}customElements.define("rp-link-list",s)},89:function(e,t,r){"use strict";var i=r(2);function n(){return i.b`
   <style>
     :host {
       display: block;
@@ -280,15 +344,15 @@
     ${this.links.map((e,t)=>this._renderLink(e,t))}
     ${this._renderViewAll()}
   </div>
-  `}i(33),i(82);class s extends r.a{static get properties(){return{links:{type:Array},viewAllLink:{type:Object,attribute:"view-all-link"},header:{type:Object,attribute:"header"}}}constructor(){super(),this.render=a.bind(this),this.links=[],this._linkClick=new CustomEvent("link-click",{detail:{message:"A new link has been clicked."}})}_renderHeader(){return this.header&&this.header.text?r.b`<div class="row header">
+  `}r(33),r(86);class a extends i.a{static get properties(){return{links:{type:Array},viewAllLink:{type:Object,attribute:"view-all-link"},header:{type:Object,attribute:"header"}}}constructor(){super(),this.render=n.bind(this),this.links=[],this._linkClick=new CustomEvent("link-click",{detail:{message:"A new link has been clicked."}})}_renderHeader(){return this.header&&this.header.text?i.b`<div class="row header">
                 <div class="count">${this.header.count}</div>
                 <div class="link-container"><span>${this.header.text}</span></div>
-                </div>`:r.b``}_renderLink(e,t){return e.text?r.b`<div class="row">
+                </div>`:i.b``}_renderLink(e,t){return e.text?i.b`<div class="row">
                   <div class="count">${e.count}</div>
                   <div class="link-container">
                     <span @click="${this.handleClick}" link-index="${t}" class="link">${e.text}</span>
                   </div>
-                </div>`:r.b``}_renderViewAll(){return this.viewAllLink?(this.viewAllLink.text||(this.viewAllLink.text="View All"),r.b`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`):r.b``}handleClick(e){e.target.classList.contains("link")?this.Clickedlink=this.links[parseInt(e.target.getAttribute("link-index"))]:this.Clickedlink=this.viewAllLink,this.dispatchEvent(this._linkClick)}}customElements.define("rp-link-list-counts",s)},86:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function s(){return r.b`
+                </div>`:i.b``}_renderViewAll(){return this.viewAllLink?(this.viewAllLink.text||(this.viewAllLink.text="View All"),i.b`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`):i.b``}handleClick(e){e.target.classList.contains("link")?this.Clickedlink=this.links[parseInt(e.target.getAttribute("link-index"))]:this.Clickedlink=this.viewAllLink,this.dispatchEvent(this._linkClick)}}customElements.define("rp-link-list-counts",a)},90:function(e,t,r){"use strict";var i=r(2),n=r(33);r(34);function a(){return i.b`
   <style>
     :host {
       display: inline-block;
@@ -325,7 +389,7 @@
       height: 34px;
     }
   </style>
-  <div class="container ${Object(a.a)(this._constructClasses())}">
+  <div class="container ${Object(n.a)(this._constructClasses())}">
     <rp-dropdown choices="${JSON.stringify(this.facets)}"
                  chosen="${this.activeFacet}"
                  @new-selection="${e=>this.activeFacet=e.target.chosen}">
@@ -342,7 +406,43 @@
     </div>
 
   </div>
-  `}i(55),i(56);class n extends r.a{static get properties(){return{facets:{type:Array},inputValue:{type:String,attribute:"input-value",reflect:!0},placeholder:{type:String},activeFacet:{type:parseInt,attribute:"active-facet",reflect:!0}}}constructor(){super(),this.render=s.bind(this),this.facets=[{text:"PEOPLE"},{text:"ORGANIZATIONS"},{text:"WORKS"}],this.placeholder="Search the registry",this.activeFacet=0,this.inputValue="",this._newSearch=new CustomEvent("new-search",{detail:{message:"A new search has been triggered"}})}updated(e){(e.has("inputValue")||e.has("activeFacet"))&&(this.searchObject={search:this.inputValue,facet:this.facets[this.activeFacet]})}_constructClasses(){return{}}doSearch(){this.inputValue&&this.dispatchEvent(this._newSearch)}_handleKeyup(e){13===e.keyCode&&(e.preventDefault(),this.doSearch())}}customElements.define("rp-search",n)},87:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
+  `}r(57),r(56);class s extends i.a{static get properties(){return{facets:{type:Array},inputValue:{type:String,attribute:"input-value",reflect:!0},placeholder:{type:String},activeFacet:{type:parseInt,attribute:"active-facet",reflect:!0}}}constructor(){super(),this.render=a.bind(this),this.facets=[{text:"PEOPLE"},{text:"ORGANIZATIONS"},{text:"WORKS"}],this.placeholder="Search the registry",this.activeFacet=0,this.inputValue="",this._newSearch=new CustomEvent("new-search",{detail:{message:"A new search has been triggered"}})}updated(e){(e.has("inputValue")||e.has("activeFacet"))&&(this.searchObject={search:this.inputValue,facet:this.facets[this.activeFacet]})}_constructClasses(){return{}}doSearch(){this.inputValue&&this.dispatchEvent(this._newSearch)}_handleKeyup(e){13===e.keyCode&&(e.preventDefault(),this.doSearch())}}customElements.define("rp-search",s)},91:function(e,t,r){"use strict";var i=r(2),n=r(33),a=r(34);function s(){return i.b`
+  <style>
+    :host {
+      display: block;
+    }
+    .container {
+      width: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .slot {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    #top {
+      height: 30px;
+      padding-top: 10px;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+    #bottom {
+      height: 30px;
+      padding-bottom: 10px;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+  </style>
+  <div class="container ${Object(n.a)(this.constructClasses())}" style="${Object(a.a)(this.constructStyles())}">
+      <div class="slot" id="top"><slot name="top"></slot></div>
+      <div class="slot" id="main"><slot name="main"></slot></div>
+      <div class="slot" id="bottom"><slot name="bottom"></slot></div>
+
+  </div>
+  `}class o extends i.a{static get properties(){return{src:{type:String},assetFolder:{type:String,attribute:"asset-folder"},assetMax:{type:parseInt,attribute:"asset-max"},assetPick:{type:parseInt,attribute:"asset-pick",reflect:!0}}}constructor(){super(),this.render=s.bind(this),this.assetFolder="/images/profile-features/",this.assetMax=29,this.shuffle()}constructClasses(){return{}}constructStyles(){let e={};return this.src?e["background-image"]=`var(--tcolor-hero-film), url(${this.src})`:(this.assetPick<0&&(this.assetPick=1),this.assetPick>this.assetMax&&(this.assetPick=this.assetMax),e["background-image"]=`var(--tcolor-hero-film), url(${this.assetFolder+this.assetPick+".jpg"})`),e}shuffle(){this.src||(this.assetPick=Math.floor(Math.random()*this.assetMax+1))}}customElements.define("rp-hero-image",o)},92:function(e,t,r){"use strict";var i=r(2);function n(){return i.b`
   <style>
     :host {
       display: block;
@@ -366,6 +466,11 @@
     .letter:hover {
       color: var(--tcolor-link-hover-text);
     }
+    .letter[disabled] {
+      pointer-events: none;
+      cursor: auto;
+      color: var(--tcolor-link-disabled-text);
+    }
     .letter.selected {
       font-weight: var(--font-weight-bold);
       pointer-events: none;
@@ -388,62 +493,10 @@
   <div class=container>
     ${this.azlist.map(e=>this._renderAz(e))}
   </div>
-  `}class s extends r.a{static get properties(){return{hideAll:{type:Boolean,attribute:"hide-all"},selectedLetter:{type:String,attribute:"selected-letter",reflect:!0}}}constructor(){super(),this.render=a.bind(this),this.azlist=[..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"],this._changedLetter=new CustomEvent("changed-letter",{detail:{message:"A new letter has been selected."}})}_renderAz(e){let t="";return this.selectedLetter&&this.selectedLetter.toLowerCase()===e.toLowerCase()&&(t="selected"),r.b`<div @click="${this.handleClick}"
+  `}class a extends i.a{static get properties(){return{hideAll:{type:Boolean,attribute:"hide-all"},disabledLetters:{type:Array,attribute:"disabled-letters"},disabledLettersFmt:{type:Array},selectedLetter:{type:String,attribute:"selected-letter",reflect:!0}}}constructor(){super(),this.render=n.bind(this),this.azlist=[..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"],this.disabledLetters=[],this.disabledLettersFmt=[],this._changedLetter=new CustomEvent("changed-letter",{detail:{message:"A new letter has been selected."}})}updated(e){e.has("disabledLetters")&&(this.disabledLettersFmt=this.disabledLetters.map(e=>e.toUpperCase()))}_renderAz(e){let t="";return this.selectedLetter&&this.selectedLetter.toLowerCase()===e.toLowerCase()&&(t="selected"),i.b`<div @click="${this.handleClick}"
+                     ?disabled="${this.disabledLettersFmt.includes(e)}"
                      class="letter ${t}"
-                     letter="${e}">${e}</div>`}handleClick(e){let t=e.target.getAttribute("letter").toLowerCase();t!=this.selectedLetter&&(this.selectedLetter=t,this.dispatchEvent(this._changedLetter))}firstUpdated(e){this.hideAll||(this.azlist.unshift("All"),this.requestUpdate())}}customElements.define("rp-a-z",s)},88:function(e,t,i){"use strict";var r=i(2),a=i(33);function s(){return r.b`
-  <style>
-    :host {
-      display: block;
-      color: var(--tcolor-link-text);
-    }
-    .container {
-      display: flex;
-    }
-    .container.h {
-      flex-flow: row nowrap;
-      align-items: center;
-      justify-content: center;
-    }
-    .container.h .link {
-      margin-left: 1em;
-      margin-right: 1em;
-    }
-    .container.v {
-      flex-flow: column nowrap;
-      align-items: flex-end;
-    }
-    .container.v .link {
-      margin-bottom: 1.5em;
-    }
-    .link {
-      cursor: pointer;
-    }
-    .link:hover {
-      color: var(--tcolor-link-hover-text);
-    }
-    .link.selected {
-      pointer-events: none;
-      color: var(--tcolor-text);
-      font-weight: var(--font-weight-bold);
-      cursor: auto;
-      border-bottom: 2px solid var(--tcolor-secondary);
-    }
-    .link.disabled {
-      color: var(--tcolor-link-disabled-text);
-      pointer-events: none;
-      cursor: auto;
-    }
-    link.disabeld:hover {
-      color: var(--tcolor-link-disabled-text);
-    }
-    .link.selected:hover {
-      color: var(--tcolor-text);
-    }
-  </style>
-  <div class=${Object(a.a)(this._containerClasses)}>
-    ${this.links.map((e,t)=>this._renderLink(e,t))}
-  </div>
-  `}class n extends r.a{static get properties(){return{links:{type:Array},currentLink:{converter:parseInt,attribute:"current-link",reflect:!0},direction:{type:String,attribute:"direction"},hasHeaderLink:{type:Boolean,attribute:"has-header-link"}}}constructor(){super(),this.render=s.bind(this),this.direction="v",this.currentLink=0,this._containerClasses={container:!0},this._containerClasses[this.direction]=!0,this._changedLink=new CustomEvent("changed-link",{detail:{message:"A new link has been selected."}})}attributeChangedCallback(e,t,i){"direction"==e&&i&&(this._containerClasses.v&&delete this._containerClasses.v,this._containerClasses[i.toLowerCase()[0]]=!0),super.attributeChangedCallback(e,t,i)}_renderLink(e,t){let i="",s=!1,n={link:!0};if("string"==typeof e?i=e:"object"==typeof e&&(i=e.text,e.disabled&&(s=!0)),t==this.currentLink&&(n.selected=!0),this.hasHeaderLink&&0==t&&(n["link-header"]=!0),n.disabled=s,i)return r.b`<div @click="${this.handleClick}" link="${t}" class=${Object(a.a)(n)}>${i}</div>`}handleClick(e){let t=parseInt(e.target.getAttribute("link"));t==this.currentLink||e.target.classList.contains("disabled")||(this.currentLink=t,this.dispatchEvent(this._changedLink))}}customElements.define("rp-link-list",n)},89:function(e,t,i){"use strict";var r=i(2),a=i(33);function s(){return r.b`
+                     letter="${e}">${e}</div>`}handleClick(e){let t=e.target.getAttribute("letter").toLowerCase();t==this.selectedLetter||e.target.hasAttribute("disabled")||(this.selectedLetter=t,this.dispatchEvent(this._changedLetter))}firstUpdated(e){this.hideAll||(this.azlist.unshift("All"),this.requestUpdate())}}customElements.define("rp-a-z",a)},93:function(e,t,r){"use strict";var i=r(2),n=r(33);function a(){return i.b`
   <style>
     :host {
       display: block;
@@ -524,9 +577,9 @@
                icon="arrow-forward">
     </iron-icon>
   </div>
-  `}class n extends r.a{static get properties(){return{currentPage:{converter:parseInt,attribute:"current-page",reflect:!0},maxPage:{converter:parseInt,attribute:"max-page",reflect:!0},minPage:{converter:parseInt,attribute:"min-page",reflect:!0},pagesPerSide:{converter:parseInt,attribute:"pages-per-side"}}}constructor(){super(),this.render=s.bind(this),this.pagesPerSide=1,this.minPage=1,this.currentPage=this.minPage,this.maxPage=this.currentPage,this._changedPage=new CustomEvent("changed-page",{detail:{message:"A new page has been selected."}})}_hasValidLogic(){return!(this.maxPage<this.currentPage||this.maxPage<this.minPage)&&!(this.minPage>this.currentPage)}_renderEdge(e){if(!this._hasValidLogic())return r.b``;if("left"==e){if(this.currentPage-this.minPage>this.pagesPerSide+1)return r.b`<div @click="${this.handleClick}" class="page" page="${this.minPage}">${this.minPage}</div><div class="ellipsis">...</div>`}else if("right"==e&&this.maxPage-this.currentPage>this.pagesPerSide+1)return r.b`<div class="ellipsis">...</div><div @click="${this.handleClick}" class="page" page="${this.maxPage}">${this.maxPage}</div>`}_renderCenter(){if(!this._hasValidLogic())return r.b`<div class="${Object(a.a)({page:!0,selected:!0})}" page="${this.currentPage}">${this.currentPage}</div>`;let e=[{page:this.currentPage,selected:!0}],t=2*this.pagesPerSide,i=this;return s(this.pagesPerSide),s(t),e[0].page-this.minPage==1&&e.unshift({page:this.minPage,selected:!1}),this.maxPage-e.slice(-1)[0].page==1&&e.push({page:this.maxPage,selected:!1}),r.b`${e.map(e=>r.b`<div @click="${this.handleClick}"
-                                              class="${Object(a.a)({page:!0,selected:e.selected})}"
-                                              page="${e.page}">${e.page}</div>`)}`;function s(r){let a=["left","right"];for(let s of a){if("left"===s)for(let a=0;a<r;a++){let r=e[0].page;r>i.minPage&&(e.unshift({page:r-1,selected:!1}),t-=1)}if("right"===s)for(let a=0;a<r;a++){let r=e.slice(-1)[0].page;r<i.maxPage&&(e.push({page:r+1,selected:!1}),t-=1)}}}}handleClick(e){let t=parseInt(e.target.getAttribute("page"));t!=this.currentPage&&(this.currentPage=t,this.dispatchEvent(this._changedPage))}}customElements.define("rp-pagination",n)},90:function(e,t,i){"use strict";i.r(t),i.d(t,"AppPageComponents",(function(){return v}));var r=i(2),a=i(41),s=i.n(a),n=(i(87),i(33));function o(){return r.b`
+  `}class s extends i.a{static get properties(){return{currentPage:{converter:parseInt,attribute:"current-page",reflect:!0},maxPage:{converter:parseInt,attribute:"max-page",reflect:!0},minPage:{converter:parseInt,attribute:"min-page",reflect:!0},pagesPerSide:{converter:parseInt,attribute:"pages-per-side"}}}constructor(){super(),this.render=a.bind(this),this.pagesPerSide=1,this.minPage=1,this.currentPage=this.minPage,this.maxPage=this.currentPage,this._changedPage=new CustomEvent("changed-page",{detail:{message:"A new page has been selected."}})}_hasValidLogic(){return!(this.maxPage<this.currentPage||this.maxPage<this.minPage)&&!(this.minPage>this.currentPage)}_renderEdge(e){if(!this._hasValidLogic())return i.b``;if("left"==e){if(this.currentPage-this.minPage>this.pagesPerSide+1)return i.b`<div @click="${this.handleClick}" class="page" page="${this.minPage}">${this.minPage}</div><div class="ellipsis">...</div>`}else if("right"==e&&this.maxPage-this.currentPage>this.pagesPerSide+1)return i.b`<div class="ellipsis">...</div><div @click="${this.handleClick}" class="page" page="${this.maxPage}">${this.maxPage}</div>`}_renderCenter(){if(!this._hasValidLogic())return i.b`<div class="${Object(n.a)({page:!0,selected:!0})}" page="${this.currentPage}">${this.currentPage}</div>`;let e=[{page:this.currentPage,selected:!0}],t=2*this.pagesPerSide,r=this;return a(this.pagesPerSide),a(t),e[0].page-this.minPage==1&&e.unshift({page:this.minPage,selected:!1}),this.maxPage-e.slice(-1)[0].page==1&&e.push({page:this.maxPage,selected:!1}),i.b`${e.map(e=>i.b`<div @click="${this.handleClick}"
+                                              class="${Object(n.a)({page:!0,selected:e.selected})}"
+                                              page="${e.page}">${e.page}</div>`)}`;function a(i){let n=["left","right"];for(let a of n){if("left"===a)for(let n=0;n<i;n++){let i=e[0].page;i>r.minPage&&(e.unshift({page:i-1,selected:!1}),t-=1)}if("right"===a)for(let n=0;n<i;n++){let i=e.slice(-1)[0].page;i<r.maxPage&&(e.push({page:i+1,selected:!1}),t-=1)}}}}handleClick(e){let t=parseInt(e.target.getAttribute("page"));t!=this.currentPage&&(this.currentPage=t,this.dispatchEvent(this._changedPage))}}customElements.define("rp-pagination",s)},94:function(e,t,r){"use strict";r.r(t),r.d(t,"AppPageComponents",(function(){return h}));var i=r(2),n=r(41),a=r.n(n),s=(r(92),r(33));function o(){return i.b`
   <style>
     :host {
       display: block;
@@ -561,7 +614,7 @@
       margin-top: 14px;
     }
   </style>
-  <div class="container ${Object(n.a)(this.constructClasses())}" ?hidden="${!this.title}">
+  <div class="container ${Object(s.a)(this.constructClasses())}" ?hidden="${!this.title}">
     <div id="container-title" @click="${this.toggle}">
       <iron-icon icon="arrow-drop-down" ?rotated="${!this.expanded}"></iron-icon>
       <span id="title">${this.title}</span>
@@ -570,7 +623,7 @@
       <slot></slot>
     </div>
   </div>
-  `}class l extends r.a{static get properties(){return{title:{type:String},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",l);i(80),i(83),i(84);function c(){return r.b`
+  `}class l extends i.a{static get properties(){return{title:{type:String},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",l);r(85),r(83),r(84);function c(){return i.b`
   <style>
     :host {
       display: block;
@@ -592,48 +645,12 @@
       color: var(--tcolor-link-hover-text);
     }
   </style>
-  <div class="container ${Object(n.a)(this.constructClasses())}" ?hidden="${!this.title}">
+  <div class="container ${Object(s.a)(this.constructClasses())}" ?hidden="${!this.title}">
     <span id="title" @click="${this.handleClick}" ?disabled="${!this.href}">${this._formatComponent(this.title,"title")}</span>
     <span id="journal">${this._formatComponent(this.journal,"journal")}</span>
     <span id="pages">${this._formatComponent(this.pages,"pages")}</span>
   </div>
-  `}class d extends r.a{static get properties(){return{title:{type:String},journal:{type:String},href:{type:String},pages:{type:String},citationStyle:{type:String,attribute:"citation-style"}}}constructor(){super(),this.render=c.bind(this),this.citationStyle="article"}constructClasses(){return{}}handleClick(e){e.target.hasAttribute("disabled")||console.log("Citation was clicked: ",this.href)}_formatComponent(e,t){return e?(("title"==t||"journal"==t)&&(e+="."),e):""}}customElements.define("rp-citation",d);i(55);var p=i(34);function h(){return r.b`
-  <style>
-    :host {
-      display: block;
-    }
-    .container {
-      width: 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-    .slot {
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-    #top {
-      height: 30px;
-      padding-top: 10px;
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-    }
-    #bottom {
-      height: 30px;
-      padding-bottom: 10px;
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-    }
-  </style>
-  <div class="container ${Object(n.a)(this.constructClasses())}" style="${Object(p.a)(this.constructStyles())}">
-      <div class="slot" id="top"><slot name="top"></slot></div>
-      <div class="slot" id="main"><slot name="main"></slot></div>
-      <div class="slot" id="bottom"><slot name="bottom"></slot></div>
-
-  </div>
-  `}class u extends r.a{static get properties(){return{src:{type:String},assetFolder:{type:String,attribute:"asset-folder"},assetMax:{type:parseInt,attribute:"asset-max"},assetPick:{type:parseInt,attribute:"asset-pick",reflect:!0}}}constructor(){super(),this.render=h.bind(this),this.assetFolder="/images/profile-features/",this.assetMax=29,this.shuffle()}constructClasses(){return{}}constructStyles(){let e={};return this.src?e["background-image"]=`var(--tcolor-hero-film), url(${this.src})`:(this.assetPick<0&&(this.assetPick=1),this.assetPick>this.assetMax&&(this.assetPick=this.assetMax),e["background-image"]=`var(--tcolor-hero-film), url(${this.assetFolder+this.assetPick+".jpg"})`),e}shuffle(){this.src||(this.assetPick=Math.floor(Math.random()*this.assetMax+1))}}customElements.define("rp-hero-image",u);i(56),i(88),i(85),i(89),i(81),i(57),i(86),i(82);function g(){return r.b`
+  `}class d extends i.a{static get properties(){return{title:{type:String},journal:{type:String},href:{type:String},pages:{type:String},citationStyle:{type:String,attribute:"citation-style"}}}constructor(){super(),this.render=c.bind(this),this.citationStyle="article"}constructClasses(){return{}}handleClick(e){e.target.hasAttribute("disabled")||console.log("Citation was clicked: ",this.href)}_formatComponent(e,t){return e?(("title"==t||"journal"==t)&&(e+="."),e):""}}customElements.define("rp-citation",d);r(57),r(91),r(56),r(88),r(89),r(93),r(87),r(58),r(90),r(86);function p(){return i.b`
 
 <style>
   :host {
@@ -710,7 +727,7 @@
     align-items: center;
     height: 100px;
   }
-  ${s.a}
+  ${a.a}
 </style>
 
 <h1 class="text-primary">Site Components</h1>
@@ -722,7 +739,7 @@ You control them with attributes, and build more complicated (bus-connected) ele
 <p>Attach a listener to be notified when the selected letter changes i.e.<br /><code>@changed-letter=${e=>console.log(e.target.selectedLetter)}</code></p>
 <rp-a-z  selected-letter="all" @changed-letter=${e=>console.log(e.target.selectedLetter)}></rp-a-z>
 <p>Use <code>hide-all</code> to not render the All link</p>
-<rp-a-z hide-all=true selected-letter="f"></rp-a-z>
+<rp-a-z hide-all=true selected-letter="f" disabled-letters=${JSON.stringify(["g","q","S"])}></rp-a-z>
 </section>
 
 <section>
@@ -979,66 +996,6 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <p>Dead simple element that displays a View All link. Use the <code>text</code> attribute to customize, and <code>justify</code> to control horizontal alignment.</p>
 <rp-view-all justify="start"></rp-view-all>
 <rp-view-all text="View All People"></rp-view-all>
+<rp-view-all text="Add an href to make it a normal link" href="https://google.com"></rp-view-all>
 </section>
-`}class v extends r.a{constructor(){super(),this.render=g.bind(this)}}customElements.define("app-page-components",v)},92:function(e,t,i){"use strict";i.r(t),i.d(t,"default",(function(){return l}));var r=i(2),a=i(41),s=i.n(a);function n(){return r.b`
-
-<style>
-  :host {
-    display: block;
-  }
-  ${s.a}
-</style>
-<div class="collections container bg-light top">
-  ${this._renderBrowseHeader("People")}
-  <hr class="mb-0">
-  <div class="body flex">
-    <div class="col-facets mt-3">
-      ${this._renderFacets(this.facets)}
-    </div>
-    <div class="col-main">
-      <div ?hidden="${"error"==this.dataStatus||"loaded"==this.dataStatus}" class="flex align-items-center justify-content-center">
-        <div class="loading1">loading</div>
-      </div>
-      <div ?hidden="${"loading"==this.dataStatus||"loaded"==this.dataStatus}" class="flex align-items-center justify-content-center">
-        <rp-alert>Error loading people.</rp-alert>
-      </div>
-      <div class="data" ?hidden="${"loading"==this.dataStatus||"error"==this.dataStatus}">
-        ${this.CollectionModel._formatPeople(this.data).map(e=>r.b`
-          <rp-person-preview
-            name="${e.name}"
-            title="${e.title}"
-            text-width="${this.peopleWidth}"
-            class="my-3">
-          </rp-person-preview>
-          <hr class="dotted">
-          `)}
-        ${this._renderPagination(this.dataTotal)}
-      </div>
-
-    </div>
-  </div>
-
-</div>
-`}i(87),i(88),i(89);class o extends r.a{static get properties(){return{hasAz:{type:Boolean},hasPagination:{type:Boolean},azSelected:{type:String},azDisabled:{type:Array},pgPer:{type:parseInt},pgCurrent:{type:parseInt},urlQuery:{type:Object}}}constructor(){super(),this.hasAz=!1,this.hasPagination=!1,this.azSelected="All",this.azDisabled=[],this.pgPer=8,this.pgCurrent=1,this.urlQuery={}}_onUserAction(e,...t){if(!e)return;let i={...this.urlQuery};if(i.filters||(i.filters={}),console.log("User action:",e),"az"==e)return;if("pagination"==e&&this.hasPagination&&(this.pgCurrent=t[0],i.offset=this.pgCurrent*this.urlQuery.limit-this.urlQuery.limit),e.startsWith("facet_")){if(t[0].filters)i.filters={...i.filters,...t[0].filters};else{let t=e.slice("facet_".length);i.filters[t]&&delete i.filters[t]}i.offset=0}let r="";this.AppStateModel&&(r="/"+this.AppStateModel.store.data.location.path.join("/")),r+=this._urlEncode(i),location.href=r}_renderBrowseHeader(e,t){return this.hasAz=!0,t&&(this.azSelected=t),r.b`
-    <div class="header flex align-items-center">
-      <div class="col-facets">
-        <h1>${e}</h1>
-      </div>
-      <div class="col-main">
-        <rp-a-z selected-letter="${this.azSelected}" @changed-letter=${e=>this._onUserAction("az")}></rp-a-z>
-      </div>
-    </div>
-    `}_renderFacets(e){return e?r.b`${e.map(e=>r.b`
-      <rp-link-list has-header-link
-                    links='${JSON.stringify(e.values)}'
-                    current-link='${e.activeIndex}'
-                    @changed-link="${t=>this._onUserAction("facet_"+e.id,t.target.links[t.target.currentLink])}">
-      </rp-link-list>
-      `)}
-    `:r.b``}_renderPagination(e){if(!e||!this.urlQuery)return r.b``;this.hasPagination=!0;let t=Math.ceil(e/this.urlQuery.limit);return this.pgCurrent=Math.ceil((this.urlQuery.offset+1)/this.urlQuery.limit),r.b`
-    <rp-pagination max-page="${t}"
-                   current-page="${this.pgCurrent}"
-                   @changed-page="${e=>this._onUserAction("pagination",e.target.currentPage)}"
-                   class="mt-3"
-    ></rp-pagination>
-    `}_parseUrlQuery(){let e={};if(this.AppStateModel){let t=this.AppStateModel.store.data.location.query;for(let i in t)e[i]=JSON.parse(t[i])}return e.limit||(e.limit=this.pgPer),e.offset||(e.offset=0),this.urlQuery=e,e}_urlEncode(e){let t=[];for(let i in e)if(e.hasOwnProperty(i)){if("offset"==i&&0==e[i])continue;if("filters"==i&&0==Object.keys(e[i]).length)continue;if("limit"==i)continue;t.push(encodeURIComponent(i)+"="+encodeURIComponent(JSON.stringify(e[i])))}return t.length?"?"+t.join("&"):""}}customElements.define("rp-utils-collection",o);i(80),i(81);class l extends(Mixin(o).with(LitCorkUtils)){static get properties(){return{filtersDefault:{type:Object},sortDefault:{type:Array},dataStatus:{type:String},data:{type:Array},dataMax:{type:parseInt},peopleWidth:{type:parseInt},visible:{type:Boolean},facetStatus:{type:String},facets:{type:Array}}}constructor(){super(),this.render=n.bind(this),this._injectModel("CollectionModel","AppStateModel"),this.filtersDefault={"@type":{type:"keyword",op:"and",value:[APP_CONFIG.data.jsonldContext+":person"]}},this.sortDefault=[{label:"asc"}],this.dataStatus="loading",this.dataTotal=0,this.setPeopleWidth(window.innerWidth),this.data=[],this.facetStatus="loading",this.facets=[],this.AppStateModel.get().then(e=>this._onAppStateUpdate(e)),this._handleResize=this._handleResize.bind(this)}updated(e){e.has("visible")&&this.visible&&requestAnimationFrame(()=>this._handleResize())}connectedCallback(){super.connectedCallback(),window.addEventListener("resize",this._handleResize)}disconnectedCallback(){window.removeEventListener("resize",this._handleResize),super.disconnectedCallback()}async _onAppStateUpdate(e){let t={...this._parseUrlQuery()};await Promise.all([this._doQuery(t),this._getFacets(t)])}async _doQuery(e){e.filters||(e.filters=this.filtersDefault),e.sort||(e.sort=this.sortDefault);let t=await this.CollectionModel.query(e);this.dataStatus=t.state,"loaded"==t.state&&(this.dataTotal=t.payload.total,this.data=t.payload.results,console.log(t),console.log(this.data))}async _getFacets(e){let t=e.filters,i=await this.CollectionModel.overview("peopleAggs");if(this.facetStatus=i.state,"loaded"!=i.state)return;this.facets=[];let r="",a=0,s=[{label:"All",count:i.payload.total,text:`All (${i.payload.total})`}],n=i.payload.aggregations.facets["@type"],o=1;t&&t["@type"]&&(r=JSON.stringify(t["@type"].value));for(let e in n)if(e.startsWith("vivo:")){let t=this.CollectionModel._formatAgg(e,"vivo:"),i={type:"keyword",op:"and",value:[e]};r==JSON.stringify(i.value)&&(a=o),s.push({label:t,count:n[e],text:`${t} (${n[e]})`,filters:{"@type":i},name:e}),o++}this.facets.push({values:s,activeIndex:a,id:"@type"}),console.log(this.facets)}_handleResize(){if(!this.visible)return;let e=window.innerWidth;this.setPeopleWidth(e)}setPeopleWidth(e){let t=250;t=.7*(e-30)-82-40,this.peopleWidth=Math.floor(t)}}customElements.define("rp-page-people",l)}}]);
+`}class h extends i.a{constructor(){super(),this.render=p.bind(this)}}customElements.define("app-page-components",h)}}]);

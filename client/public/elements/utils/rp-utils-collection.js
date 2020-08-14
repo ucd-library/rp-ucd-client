@@ -72,7 +72,8 @@ export default class RpUtilsCollection extends LitElement {
     p = p + this._urlEncode(q)
     //console.log(p);
     //return;
-    location.href = p;
+    this.AppStateModel.setLocation(p);
+    //location.href = p;
   }
 
   _renderBrowseHeader(title, Azselected) {
@@ -86,7 +87,9 @@ export default class RpUtilsCollection extends LitElement {
         <h1>${title}</h1>
       </div>
       <div class="col-main">
-        <rp-a-z selected-letter="${this.azSelected}" @changed-letter=${e => this._onUserAction("az")}></rp-a-z>
+        <rp-a-z selected-letter="${this.azSelected}"
+                disabled-letters="${JSON.stringify(this.azDisabled)}"
+                @changed-letter=${e => this._onUserAction("az")}></rp-a-z>
       </div>
     </div>
     `;

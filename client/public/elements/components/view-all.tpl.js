@@ -26,9 +26,15 @@ export default function render() {
     .container:hover {
       color: var(--tcolor-link-hover-text) !important;
     }
-    .container:hover iron-icon{
+    .container:hover iron-icon, .container:hover a{
       color: var(--tcolor-link-hover-text) !important;
     }
+    a {
+      text-decoration: none;
+      color: var(--tcolor-text);
+      transition: .3s;
+    }
+
     iron-icon {
       color: var(--tcolor-secondary);
       transition: .3s;
@@ -46,7 +52,12 @@ export default function render() {
     }
   </style>
   <div class="container ${classMap(this.constructClasses())}">
-    <div class="view-all"><span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon></div>
+    ${this.href ? html`
+      <a class="view-all" href="${this.href}">${this._renderInnerContent()}</a>
+      ` : html`
+      <div class="view-all">${this._renderInnerContent()}</div>
+      `}
+
   </div>
   `;
 }

@@ -107,11 +107,14 @@ return html`
           ${this.CollectionModel._formatPeople(this.people).map(person => html`
             <rp-person-preview
               name="${person.name}"
+              href="${"/individual/" + person.id}"
               title="${person.title}"
               avatar-size='sm'
               text-width=${this.peopleWidth}>
             </rp-person-preview>
             `)}
+            <div></div>
+            <rp-view-all text="View All People" href="/people" justify="start" style="margin-left:72px;"></rp-view-all>
         </div>
       </div>
       <div class="subjects">
