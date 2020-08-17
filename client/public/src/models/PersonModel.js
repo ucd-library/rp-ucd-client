@@ -26,6 +26,7 @@ class PersonModel extends BaseModel {
   async getPublications(id, searchObject={}) {
     // let ogid = id;
     // if searchObject.offset id += ("_" + searchObject.offset)
+    searchObject.facets = {"hasSubjectArea.label": {"type": "facet"}};
     let state = {state : PersonStore.STATE.INIT};
     if( state.state === 'init' ) {
       await this.service.getPublications(id, searchObject);

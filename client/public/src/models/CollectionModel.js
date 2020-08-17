@@ -17,6 +17,11 @@ class CollectionModel extends BaseModel {
                             filters: {},
                             facets: {}
                           }
+    this.mainFacets = [{id: 'people', text: 'People',
+                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
+                       {id: 'organizations', text: 'Organizations', baseFilter: {}, disabled: true},
+                       {id: 'works', text: 'Works',  baseFilter: {}, disabled: true}];
+    this.facets = {};
 
     this.register('CollectionModel');
   }
@@ -56,7 +61,10 @@ class CollectionModel extends BaseModel {
 
   async query(userQuery={}){
     let state = {state : CollectionStore.STATE.INIT};
-    let queryObject = {...this.baseQueryObject, ...userQuery};
+    let queryObject = {...this._constructQueryObject(), ...userQuery};
+    if (queryObject.s) {
+      delete queryObject.s;
+    }
     let id = JSON.stringify(queryObject);
 
     if( state.state === 'init' ) {
@@ -67,43 +75,55 @@ class CollectionModel extends BaseModel {
     return this.store.data.queryById[id];
   }
 
+  _constructQueryObject() {
+    let queryObject = {...this.baseQueryObject};
 
-    _formatPeople(people) {
-      let out = []
-      for (let person of people) {
-        let p = {name: person.label ? person.label : "", title: "", "@id": person['@id']};
-        if (person.hasContactInfo && person.hasContactInfo.title) {
-          if (Array.isArray(person.hasContactInfo.title)) {
-            p.title = person.hasContactInfo.title.join(", ");
-          }
-          else {
-            p.title = person.hasContactInfo.title;
-          }
-        }
-        p['id'] = person['@id'].replace(this.jsonldContext + ":", "");
-        out.push(p)
-      }
-      return out;
-    }
+    return queryObject
+  }
 
-    _formatAgg(agg, prefix, splitCamel=true) {
-      if (prefix && agg.startsWith(prefix)) {
-        agg = agg.slice(prefix.length,);
-      }
-      if (splitCamel) {
-        agg = [...agg];
-        for (let i = 0; i < agg.length; i++) {
-          if (i == 0) {
-            continue;
-          }
-          if (agg[i] == agg[i].toUpperCase()) {
-            agg[i] = " " + agg[i];
-          }
-        }
-        agg = agg.join("");
-      }
-      return agg;
+
+  _formatPeople(people) {
+    let out = []
+    for (let person of people) {
+      let p = this._formatPerson(person);
+      out.push(p)
     }
+    return out;
+  }
+
+  _formatPerson(person) {
+    let p = {name: person.label ? person.label : "", title: "", "@id": person['@id']};
+    if (person.hasContactInfo && person.hasContactInfo.title) {
+      if (Array.isArray(person.hasContactInfo.title)) {
+        p.title = person.hasContactInfo.title.join(", ");
+      }
+      else {
+        p.title = person.hasContactInfo.title;
+      }
+    }
+    p['id'] = person['@id'].replace(this.jsonldContext + ":", "");
+    return p;
+
+  }
+
+  _formatAgg(agg, prefix, splitCamel=true) {
+    if (prefix && agg.startsWith(prefix)) {
+      agg = agg.slice(prefix.length,);
+    }
+    if (splitCamel) {
+      agg = [...agg];
+      for (let i = 0; i < agg.length; i++) {
+        if (i == 0) {
+          continue;
+        }
+        if (agg[i] == agg[i].toUpperCase()) {
+          agg[i] = " " + agg[i];
+        }
+      }
+      agg = agg.join("");
+    }
+    return agg;
+  }
 
 }
 

@@ -4,18 +4,18 @@ import render from './citation.tpl.js';
 export class RpCitation extends LitElement {
   static get properties() {
   return {
-    title: {type: String},
-    journal: {type: String},
-    href: {type: String},
-    pages: {type: String},
-    citationStyle: {type: String, attribute: 'citation-style'}
+    data: {type: Object},
+    citationStyle: {type: String, attribute: 'citation-style'},
+    authors: {type: Array}
   };
   }
 
   constructor() {
     super();
     this.render = render.bind(this);
-    this.citationStyle = "article";
+    this.citationStyle = "MLA";
+    this.data = {};
+    this.authors = [];
   }
 
   constructClasses() {
@@ -23,24 +23,42 @@ export class RpCitation extends LitElement {
     return classes;
   }
 
-  handleClick(e){
-    if (e.target.hasAttribute('disabled')) {
-      return;
+  updated(props) {
+    if (props.has('data')) {
+      this.parseData();
     }
-    console.log("Citation was clicked: ", this.href);
   }
 
-  _formatComponent(component, component_type) {
-    if (!component) {
-      return "";
+  parseData() {
+    if (Object.keys(this.data).length == 0) {
+      return;
     }
-    if (component_type == 'title') {
-      component += ".";
+
+    // Get authors
+    let authors = [];
+    if (this.data.Authorship && typeof this.data.Authorship === 'object') {
+      let auths = this.data.Authorship;
+      if (!Array.isArray(auths)) {
+        auths = [auths];
+      }
+      for (let author of auths) {
+        if (!author.hasName) {
+          continue;
+        }
+        author.nameFirst = author.hasName.givenName;
+        author.nameLast = author.hasName.familyName;
+        if (!author['vivo:rank']) {
+          author['vivo:rank'] = Infinity;
+        }
+        authors.push(author);
+      }
+      authors.sort(function (a, b) {
+        return a['vivo:rank'] - b['vivo:rank'];
+      });
+      this.authors = authors;
     }
-    else if (component_type == 'journal') {
-      component += ".";
-    }
-    return component;
+
+    // Journal info
   }
 }
 

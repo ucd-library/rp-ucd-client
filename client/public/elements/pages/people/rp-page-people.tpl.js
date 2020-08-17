@@ -11,6 +11,7 @@ return html`
   ${styles}
 </style>
 <div class="collections container bg-light top">
+  ${this._renderBrowseHeader('People')}
   <hr class="mb-0">
   <div class="body flex">
     <div class="col-facets mt-3">
@@ -24,14 +25,8 @@ return html`
         <rp-alert>Error loading people.</rp-alert>
       </div>
       <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
-        ${this.CollectionModel._formatPeople(this.data).map(person => html`
-          <rp-person-preview
-            name="${person.name}"
-            href="${"/individual/" + person.id}"
-            title="${person.title}"
-            text-width="${this.peopleWidth}"
-            class="my-3">
-          </rp-person-preview>
+        ${this.data.map(person => html`
+          ${this._renderAssetPreview(person)}
           <hr class="dotted">
           `)}
         ${this._renderPagination(this.dataTotal)}

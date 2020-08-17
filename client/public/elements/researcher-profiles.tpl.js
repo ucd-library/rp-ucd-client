@@ -193,7 +193,7 @@ return html`
         ${this.navLinks.map(link => html`<a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration">${link.text}</a>`)}
       </div>
       <div id="nav-right" class="flex align-items-center">
-        <rp-quick-search></rp-quick-search>
+        <rp-quick-search input-value="${this.textQuery}" ?opened="${this.textQuery}"></rp-quick-search>
       </div>
     </div>
   </div>
@@ -215,7 +215,7 @@ return html`
   <rp-page-home id="home"></rp-page-home>
   <rp-page-people id="people"></rp-page-people>
   <rp-page-individual id="individual"></rp-page-individual>
-  <app-page-search id="search"></app-page-search>
+  <rp-page-search id="search"></rp-page-search>
 </iron-pages>
 <div id="app-footer">
   <div class="container">

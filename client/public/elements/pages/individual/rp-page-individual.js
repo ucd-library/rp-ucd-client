@@ -4,6 +4,7 @@ import render from "./rp-page-individual.tpl.js";
 import "../../components/alert";
 import "../../components/avatar";
 import "../../components/badge";
+import "../../components/citation";
 import "../../components/hero-image";
 import "../../components/icon";
 import "../../components/link-list";
@@ -18,10 +19,11 @@ export default class RpPageIndividual extends Mixin(LitElement)
       individual: {type: Object},
       individualId: {type: String},
       individualStatus: {type: String},
-      publicationState: {type: String},
+      publicationStatus: {type: String},
       retrievedPublications: {type: Array},
-      totalPublications: {type: parseInt}
-
+      totalPublications: {type: parseInt},
+      researchSubjects: {type: Array},
+      researchSubjectsToShow: {type: Number}
     }
   }
 
@@ -35,13 +37,14 @@ export default class RpPageIndividual extends Mixin(LitElement)
     this.publicationStatus = 'loading';
     this.retrievedPublications = [];
     this.totalPublications = 0;
+    this.researchSubjects = [];
+    this.researchSubjectsToShow = 4;
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
-  async _onAppStateUpdate(e) {
-    let path = await this.AppStateModel.get();
-    path = path.location.path;
+  async _onAppStateUpdate(state) {
+    let path = state.location.path;
     if (path.length >= 2) {
       this.individualId = path[1];
     }
@@ -68,9 +71,18 @@ export default class RpPageIndividual extends Mixin(LitElement)
     if (data.state != 'loaded') {
       return;
     }
+    console.log("pubs", data);
     this.retrievedPublications = data.payload.results;
-    this.totalPublications = data.payload.total;
-    console.log(this.retrievedPublications);
+    if (data.payload.results.length > 0) {
+      this.totalPublications = data.payload.total;
+
+      let researchSubjects = data.payload.aggregations.facets["hasSubjectArea.label"];
+      if (researchSubjects && Object.keys(researchSubjects).length > 0) {
+        //this.researchSubjects = this.formatSubjectsObject(researchSubjects);
+      }
+    }
+    console.log("research subjects", this.researchSubjects);
+
   }
 
   getIndividualTitles(){
@@ -116,6 +128,23 @@ export default class RpPageIndividual extends Mixin(LitElement)
       out.push({'text': 'Scopus', 'href': `https://www.scopus.com/authid/detail.uri?authorId=${this.individual.scopusId}`})
     }
 
+    return out;
+  }
+
+  formatSubjectsObject(subjects){
+    let out = [];
+    for (let subject in subjects) {
+      let subObj = {subject: subject, count: subjects[subject], label: subject};
+      let words = subject.split(" ");
+      if (words[0].startsWith("0") && !isNaN(words[0])) {
+        subObj.label = words.slice(1,).join(" ");
+      }
+      out.push(subObj);
+    }
+
+    out.sort(function (a, b) {
+      return b['count'] - a['count'];
+    });
     return out;
   }
 

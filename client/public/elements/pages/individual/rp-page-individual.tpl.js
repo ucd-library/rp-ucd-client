@@ -37,6 +37,12 @@ return html`
     align-items: center;
     justify-content: center;
   }
+  rp-badge {
+    margin-left: 8px;
+  }
+  rp-badge:first-child {
+    margin-left: 0;
+  }
   ${styles}
 </style>
 
@@ -58,13 +64,12 @@ return html`
       <rp-avatar size="lg"></rp-avatar>
       <h2 class="name text-secondary h1 bold mb-0 text-center">${this.individual.label}</h2>
       <p class="text-light h3 mb-2 mt-1 text-center">${this.getIndividualTitles().join(", ")}</p>
-      <p class="bold text-light h3 mt-1 mb-0 text-center">My research areas include: </p>
-      <p class="text-light mt-2 mb-0">
-        <rp-badge>Foobar</rp-badge>
-        <rp-badge>Stuff</rp-badge>
-        <rp-badge>Things</rp-badge>
-        <rp-badge>Widgets</rp-badge>
+      ${this.researchSubjects.length > 0 ? html `
+        <p class="bold text-light h3 mt-1 mb-0 text-center">My research areas include: </p>
+        <p class="text-light mt-2 mb-0">
+        ${this.researchSubjects.splice(0, this.researchSubjectsToShow).map(subject => html`<rp-badge>${subject.label}</rp-badge>`)}
         </p>
+        ` : html``}
       <div></div>
     </div>
   </rp-hero-image>
@@ -72,9 +77,7 @@ return html`
                 direction="horizontal"
                 links='[{"text": "All Info"},
                         {"text": "About"},
-                        {"text": "Publications"},
-                        {"text": "Research"},
-                        {"text": "Contact"}]'>
+                        {"text": "Publications"}]'>
   </rp-link-list>
 
   <section id="about" class="bg-light mt-3">
@@ -104,8 +107,20 @@ return html`
       <div class="pub-count">${this.totalPublications}</div>
     </div>
     <h2>Selected Publications</h2>
+      <div ?hidden="${this.publicationStatus == 'error' || this.publicationStatus == 'loaded' }" class="flex align-items-center justify-content-center">
+        <div class="loading1">loading</div>
+      </div>
+      <div ?hidden="${this.publicationStatus == 'loading' || this.publicationStatus == 'loaded' }" class="flex align-items-center justify-content-center">
+        <rp-alert>Error loading publications.</rp-alert>
+      </div>
+      <div class="data" ?hidden="${this.publicationStatus == 'loading' || this.publicationStatus == 'error' }">
+        ${ this.retrievedPublications.map(pub => html`
+          <rp-citation class="mb-3" .data="${pub}"></rp-citation>
+          `)}
+      </div>
   </section>
-  <section id="research" class="bg-light mt-3">
+
+  <section id="research" class="bg-light mt-3" hidden>
     <h1 class="weight-regular">Research</h1>
     <h2>Overview</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
@@ -113,7 +128,7 @@ return html`
     <h2>Keywords</h2>
       <p>lorem, ipsum, dolor sit amit</p>
   </section>
-  <section id="contact" class="bg-light mt-3">
+  <section id="contact" class="bg-light mt-3" hidden>
     <h1 class="weight-regular">Contact</h1>
   </section>
   </div>

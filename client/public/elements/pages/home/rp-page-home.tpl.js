@@ -18,6 +18,7 @@ return html`
   }
   .hero img {
     min-width: 30%;
+    max-width: 30%;
     height: auto;
   }
   .hero .text {

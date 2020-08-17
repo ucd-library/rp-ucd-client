@@ -33,7 +33,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       page : {type: String},
       theme: {type: Object},
       navLinks: {type: Array},
-      user: {type: Object}
+      user: {type: Object},
+      textQuery: {type: String}
     }
   }
 
@@ -46,6 +47,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.page = 'loading';
     this.loadedPages = {};
     this.user = APP_CONFIG.user;
+    this.textQuery = "";
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
                      {text: 'Organizations', page: 'organizations', href: '#'},
                      {text: 'Works', page: 'works', href: '#'},
@@ -62,6 +64,12 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    */
   async _onAppStateUpdate(e) {
     console.log('Current app state:', e);
+    if (e.location.query.s) {
+      this.textQuery = e.location.query.s;
+    }
+    else {
+      this.textQuery="";
+    }
     let page = e.page;
     if (!this.loadedPages[page]) {
       this.page = 'loading';
@@ -86,6 +94,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       return import(/* webpackChunkName: "page-people" */ "./pages/people/rp-page-people")
     } else if( page === 'individual' ) {
       return import(/* webpackChunkName: "page-individual" */ "./pages/individual/rp-page-individual")
+    } else if( page === 'search' ) {
+      return import(/* webpackChunkName: "page-search" */ "./pages/search/rp-page-search")
     }
   }
 

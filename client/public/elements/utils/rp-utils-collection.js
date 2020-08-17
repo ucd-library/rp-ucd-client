@@ -1,7 +1,9 @@
 import { LitElement, html } from 'lit-element';
+
 import "../components/a-z";
 import "../components/link-list";
 import "../components/pagination";
+import "../components/person-preview"
 
 export default class RpUtilsCollection extends LitElement {
 
@@ -13,7 +15,8 @@ export default class RpUtilsCollection extends LitElement {
       azDisabled: {type: Array},
       pgPer: {type: parseInt},
       pgCurrent: {type: parseInt},
-      urlQuery: {type: Object}
+      urlQuery: {type: Object},
+      jsonldContext: {type: String}
     }
   }
 
@@ -26,6 +29,7 @@ export default class RpUtilsCollection extends LitElement {
     this.pgPer = 8;
     this.pgCurrent = 1;
     this.urlQuery = {};
+    this.jsonldContext = APP_CONFIG.data.jsonldContext;
   }
 
   _onUserAction(action, ...args) {
@@ -36,6 +40,10 @@ export default class RpUtilsCollection extends LitElement {
     if (!q.filters) {
       q.filters = {};
     }
+    if (q.s && q.filters["@type"]) {
+      q.filters = {};
+    }
+    console.log(q);
     console.log("User action:", action);
 
     // handle az
@@ -73,7 +81,6 @@ export default class RpUtilsCollection extends LitElement {
     //console.log(p);
     //return;
     this.AppStateModel.setLocation(p);
-    //location.href = p;
   }
 
   _renderBrowseHeader(title, Azselected) {
@@ -88,7 +95,7 @@ export default class RpUtilsCollection extends LitElement {
       </div>
       <div class="col-main">
         <rp-a-z selected-letter="${this.azSelected}"
-                disabled-letters="${JSON.stringify(this.azDisabled)}"
+                .disabled-letters="${this.azDisabled}"
                 @changed-letter=${e => this._onUserAction("az")}></rp-a-z>
       </div>
     </div>
@@ -101,13 +108,52 @@ export default class RpUtilsCollection extends LitElement {
     }
     return html`${facets.map(facet => html`
       <rp-link-list has-header-link
-                    links='${JSON.stringify(facet.values)}'
+                    .links='${facet.values}'
                     current-link='${facet.activeIndex}'
                     @changed-link="${e => this._onUserAction('facet_' + facet.id, e.target.links[e.target.currentLink])}">
       </rp-link-list>
       `)}
     `
   }
+
+  _renderAssetPreview(data) {
+    let assetType = this._getAssetType(data);
+
+    if (assetType == 'person') {
+      let person = this.CollectionModel._formatPerson(data);
+      return html`
+      <rp-person-preview
+        name="${person.name}"
+        href="${"/individual/" + person.id}"
+        title="${person.title}"
+        text-width="${this.peopleWidth}"
+        class="my-3">
+      </rp-person-preview>
+      `;
+    }
+
+    return html``
+
+  }
+
+  _getAssetType(data) {
+    if (!data['@type']) {
+      return;
+    }
+    if (typeof data['@type'] === 'string') {
+      data['@type'] = [data['@type']];
+    }
+    if ( !Array.isArray(data['@type']) ) {
+      return;
+    }
+
+    if (data['@type'].includes(this.jsonldContext + ":person")) {
+      return "person";
+    }
+
+    return;
+  }
+
 
   _renderPagination(totalResults) {
     if (!totalResults || !this.urlQuery) {
@@ -131,9 +177,27 @@ export default class RpUtilsCollection extends LitElement {
     if (this.AppStateModel) {
       let query = this.AppStateModel.store.data.location.query;
       for (let arg in query) {
-        q[arg] = JSON.parse(query[arg])
+        if (arg == 's') {
+          q[arg] = query[arg];
+          continue;
+        }
+        q[arg] = JSON.parse(query[arg]);
       }
     }
+
+    //get main facet from search
+    if (this.mainFacet) {
+      let mainFacet = {};
+      for (let f of this.CollectionModel.mainFacets) {
+        if (this.mainFacet.toLowerCase() == f.id.toLowerCase() ) {
+          mainFacet = f.baseFilter;
+          break;
+        }
+
+      }
+      q.filters = {...q.filters, ...mainFacet};
+    }
+
     if (!q.limit) {
       q.limit = this.pgPer;
     }
