@@ -56,6 +56,19 @@ return html`
   .load-more:hover {
     background-color: var(--tcolor-hover-bg);
   }
+  a.export {
+    text-decoration: none;
+    display: block;
+    background-color: var(--tcolor-primary20);
+    font-size: var(--font-size);
+    color: var(--tcolor-text) !important;
+    font-weight: var(--font-weight);
+    padding: 10px 15px;
+  }
+  a.export:hover {
+    background-color: var(--tcolor-hover-bg);
+    color: var(--tcolor-text);
+  }
   ${styles}
 </style>
 
@@ -116,7 +129,11 @@ return html`
   <section id="publications" class="bg-light mt-3" ?hidden="${this.hideSection('publications')}">
     <div class="flex justify-content-between">
       <h1 class="weight-regular mt-0">Publications</h1>
-      <div class="pub-count">${this.totalPublications}</div>
+      <div class="flex align-items-center">
+        <a class="export mr-3" href="${`/api/miv/${this.individualId}`}">Export</a>
+        <div class="pub-count">${this.totalPublications}</div>
+      </div>
+
     </div>
     <h2>Selected Publications</h2>
       <div ?hidden="${this.publicationStatus == 'error' || this.publicationStatus == 'loaded' }" class="flex align-items-center justify-content-center">
