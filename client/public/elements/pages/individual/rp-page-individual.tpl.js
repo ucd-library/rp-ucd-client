@@ -75,12 +75,11 @@ return html`
   </rp-hero-image>
   <rp-link-list class="bg-light p-3"
                 direction="horizontal"
-                links='[{"text": "All Info"},
-                        {"text": "About"},
-                        {"text": "Publications"}]'>
+                .links="${this.PersonModel.getSections()}"
+                current-link="${this.activeSection.index}">
   </rp-link-list>
 
-  <section id="about" class="bg-light mt-3">
+  <section id="about" class="bg-light mt-3" ?hidden="${this.hideSection('about')}">
     <h1 class="weight-regular">About</h1>
     <h2>Overview</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
@@ -101,7 +100,7 @@ return html`
     </div>
   </section>
 
-  <section id="publications" class="bg-light mt-3">
+  <section id="publications" class="bg-light mt-3" ?hidden="${this.hideSection('publications')}">
     <div class="flex justify-content-between">
       <h1 class="weight-regular mt-0">Publications</h1>
       <div class="pub-count">${this.totalPublications}</div>

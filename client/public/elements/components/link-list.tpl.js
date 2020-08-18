@@ -13,7 +13,6 @@ export default function render() {
     }
     .container.h {
       flex-flow: row nowrap;
-      align-items: center;
       justify-content: center;
     }
     .container.h .link {
@@ -30,25 +29,29 @@ export default function render() {
     .link {
       cursor: pointer;
     }
-    .link:hover {
+    a {
+      text-decoration: none;
+      color: var(--tcolor-link-text);
+    }
+    .link:hover, a.link:hover {
       color: var(--tcolor-link-hover-text);
     }
-    .link.selected {
+    .link.selected, a.link.selected {
       pointer-events: none;
       color: var(--tcolor-text);
       font-weight: var(--font-weight-bold);
       cursor: auto;
       border-bottom: 2px solid var(--tcolor-secondary);
     }
-    .link.disabled {
+    .link.disabled, a.link.disabled {
       color: var(--tcolor-link-disabled-text);
       pointer-events: none;
       cursor: auto;
     }
-    link.disabeld:hover {
+    link.disabeld:hover, a.link.disabled:hover {
       color: var(--tcolor-link-disabled-text);
     }
-    .link.selected:hover {
+    .link.selected:hover, a.link.selected:hover {
       color: var(--tcolor-text);
     }
   </style>

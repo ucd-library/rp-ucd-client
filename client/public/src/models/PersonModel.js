@@ -9,6 +9,10 @@ class PersonModel extends BaseModel {
 
     this.store = PersonStore;
     this.service = PersonService;
+    this.sections = [{text: 'About', id: 'about', disabled: false},
+                     {text: 'Publications', id: 'publications', disabled: false}
+                    ];
+    this.individualId = "";
 
     this.register('PersonModel');
   }
@@ -39,6 +43,28 @@ class PersonModel extends BaseModel {
     // delete this.store.data.PubsByIndividual[id]
     // return this.store.data.PubsByIndividual[ogid]
     return this.store.data.pubsByIndividual[id];
+  }
+
+  getSections() {
+    let sections = [{id:"all", text: "All Info", href: `/individual/${this.individualId}`, index: 0}];
+    for (let section of this.sections) {
+      section.href = `/individual/${this.individualId}/${section.id}`
+      sections.push(section);
+    }
+    return sections;
+  }
+
+  getActiveSection(id) {
+    let i = 0;
+    let sections = this.getSections();
+    for (let section of sections) {
+      section.index = i;
+      if (id == section.id) {
+        return section;
+      }
+      i++
+    }
+    return sections[0];
   }
 
 }

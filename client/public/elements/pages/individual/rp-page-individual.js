@@ -23,7 +23,8 @@ export default class RpPageIndividual extends Mixin(LitElement)
       retrievedPublications: {type: Array},
       totalPublications: {type: parseInt},
       researchSubjects: {type: Array},
-      researchSubjectsToShow: {type: Number}
+      researchSubjectsToShow: {type: Number},
+      activeSection: {type: Object}
     }
   }
 
@@ -33,12 +34,14 @@ export default class RpPageIndividual extends Mixin(LitElement)
 
     this._injectModel('PersonModel', 'AppStateModel');
     this.individual = {};
+    this.individualId = '';
     this.individualStatus = 'loading';
     this.publicationStatus = 'loading';
     this.retrievedPublications = [];
     this.totalPublications = 0;
     this.researchSubjects = [];
     this.researchSubjectsToShow = 4;
+    this.activeSection = {index: 0};
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
@@ -47,8 +50,11 @@ export default class RpPageIndividual extends Mixin(LitElement)
     let path = state.location.path;
     if (path.length >= 2) {
       this.individualId = path[1];
+      this.PersonModel.individualId = this.individualId;
     }
+    this.activeSection = this.PersonModel.getActiveSection(path[2])
     if (this.individualId) {
+      this.totalPublications = 0;
       await Promise.all([this._doMainQuery(this.individualId),
                          this._doPubQuery(this.individualId)]);
     }
@@ -83,6 +89,18 @@ export default class RpPageIndividual extends Mixin(LitElement)
     }
     console.log("research subjects", this.researchSubjects);
 
+  }
+
+  hideSection(section){
+    if (this.activeSection.index == 0) {
+      return false;
+    }
+
+    if (section == this.activeSection.id) {
+      return false;
+    }
+
+    return true;
   }
 
   getIndividualTitles(){

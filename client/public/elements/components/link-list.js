@@ -43,6 +43,7 @@ export class RpLinkList extends LitElement {
 
   _renderLink(link, index){
     let text = "";
+    let href = "";
     let disabled = false;
     let classes = {link: true};
     if (typeof link === 'string') {
@@ -53,6 +54,7 @@ export class RpLinkList extends LitElement {
       if (link.disabled) {
         disabled = true;
       }
+      if (link.href) href = link.href;
     }
 
     if (index == this.currentLink) {
@@ -62,6 +64,10 @@ export class RpLinkList extends LitElement {
       classes['link-header'] = true;
     }
     classes['disabled'] = disabled;
+
+    if (href) {
+      return html`<a link="${index}" class="${classMap(classes)}" href="${href}">${text}</a>`;
+    }
 
     if (text) {
       return html`<div @click="${this.handleClick}" link="${index}" class=${classMap(classes)}>${text}</div>`;

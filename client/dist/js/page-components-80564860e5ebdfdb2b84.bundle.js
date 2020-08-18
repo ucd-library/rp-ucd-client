@@ -189,7 +189,6 @@
     }
     .container.h {
       flex-flow: row nowrap;
-      align-items: center;
       justify-content: center;
     }
     .container.h .link {
@@ -206,32 +205,36 @@
     .link {
       cursor: pointer;
     }
-    .link:hover {
+    a {
+      text-decoration: none;
+      color: var(--tcolor-link-text);
+    }
+    .link:hover, a.link:hover {
       color: var(--tcolor-link-hover-text);
     }
-    .link.selected {
+    .link.selected, a.link.selected {
       pointer-events: none;
       color: var(--tcolor-text);
       font-weight: var(--font-weight-bold);
       cursor: auto;
       border-bottom: 2px solid var(--tcolor-secondary);
     }
-    .link.disabled {
+    .link.disabled, a.link.disabled {
       color: var(--tcolor-link-disabled-text);
       pointer-events: none;
       cursor: auto;
     }
-    link.disabeld:hover {
+    link.disabeld:hover, a.link.disabled:hover {
       color: var(--tcolor-link-disabled-text);
     }
-    .link.selected:hover {
+    .link.selected:hover, a.link.selected:hover {
       color: var(--tcolor-text);
     }
   </style>
   <div class=${Object(a.a)(this._containerClasses)}>
     ${this.links.map((e,t)=>this._renderLink(e,t))}
   </div>
-  `}class s extends i.a{static get properties(){return{links:{type:Array},currentLink:{converter:parseInt,attribute:"current-link",reflect:!0},direction:{type:String,attribute:"direction"},hasHeaderLink:{type:Boolean,attribute:"has-header-link"}}}constructor(){super(),this.render=n.bind(this),this.direction="v",this.currentLink=0,this._containerClasses={container:!0},this._containerClasses[this.direction]=!0,this._changedLink=new CustomEvent("changed-link",{detail:{message:"A new link has been selected."}})}attributeChangedCallback(e,t,r){"direction"==e&&r&&(this._containerClasses.v&&delete this._containerClasses.v,this._containerClasses[r.toLowerCase()[0]]=!0),super.attributeChangedCallback(e,t,r)}_renderLink(e,t){let r="",n=!1,s={link:!0};if("string"==typeof e?r=e:"object"==typeof e&&(r=e.text,e.disabled&&(n=!0)),t==this.currentLink&&(s.selected=!0),this.hasHeaderLink&&0==t&&(s["link-header"]=!0),s.disabled=n,r)return i.b`<div @click="${this.handleClick}" link="${t}" class=${Object(a.a)(s)}>${r}</div>`}handleClick(e){let t=parseInt(e.target.getAttribute("link"));t==this.currentLink||e.target.classList.contains("disabled")||(this.currentLink=t,this.dispatchEvent(this._changedLink))}}customElements.define("rp-link-list",s)},88:function(e,t,r){"use strict";var i=r(2),a=r(33);function n(){return i.b`
+  `}class s extends i.a{static get properties(){return{links:{type:Array},currentLink:{converter:parseInt,attribute:"current-link",reflect:!0},direction:{type:String,attribute:"direction"},hasHeaderLink:{type:Boolean,attribute:"has-header-link"}}}constructor(){super(),this.render=n.bind(this),this.direction="v",this.currentLink=0,this._containerClasses={container:!0},this._containerClasses[this.direction]=!0,this._changedLink=new CustomEvent("changed-link",{detail:{message:"A new link has been selected."}})}attributeChangedCallback(e,t,r){"direction"==e&&r&&(this._containerClasses.v&&delete this._containerClasses.v,this._containerClasses[r.toLowerCase()[0]]=!0),super.attributeChangedCallback(e,t,r)}_renderLink(e,t){let r="",n="",s=!1,o={link:!0};return"string"==typeof e?r=e:"object"==typeof e&&(r=e.text,e.disabled&&(s=!0),e.href&&(n=e.href)),t==this.currentLink&&(o.selected=!0),this.hasHeaderLink&&0==t&&(o["link-header"]=!0),o.disabled=s,n?i.b`<a link="${t}" class="${Object(a.a)(o)}" href="${n}">${r}</a>`:r?i.b`<div @click="${this.handleClick}" link="${t}" class=${Object(a.a)(o)}>${r}</div>`:void 0}handleClick(e){let t=parseInt(e.target.getAttribute("link"));t==this.currentLink||e.target.classList.contains("disabled")||(this.currentLink=t,this.dispatchEvent(this._changedLink))}}customElements.define("rp-link-list",s)},88:function(e,t,r){"use strict";var i=r(2),a=r(33);function n(){return i.b`
   <style>
     :host {
       display: block;
@@ -637,7 +640,7 @@
       <slot></slot>
     </div>
   </div>
-  `}class c extends i.a{static get properties(){return{title:{type:String},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",c);r(85),r(83),r(84),r(94),r(57),r(95),r(56),r(87),r(92),r(88),r(86),r(58),r(93),r(89);function l(){return i.b`
+  `}class l extends i.a{static get properties(){return{title:{type:String},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",l);r(85),r(83),r(84),r(94),r(57),r(95),r(56),r(87),r(92),r(88),r(86),r(58),r(93),r(89);function c(){return i.b`
 
 <style>
   :host {
@@ -985,4 +988,4 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <rp-view-all text="View All People"></rp-view-all>
 <rp-view-all text="Add an href to make it a normal link" href="https://google.com"></rp-view-all>
 </section>
-`}class d extends i.a{constructor(){super(),this.render=l.bind(this)}}customElements.define("app-page-components",d)}}]);
+`}class d extends i.a{constructor(){super(),this.render=c.bind(this)}}customElements.define("app-page-components",d)}}]);
