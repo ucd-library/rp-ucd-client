@@ -321,9 +321,9 @@
   </rp-link-list>
 
   <section id="about" class="bg-light mt-3" ?hidden="${this.hideSection("about")}">
-    <h1 class="weight-regular">About</h1>
-    <h2>Overview</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+    <h1 class="weight-regular mt-0">About</h1>
+    <h2 hidden>Overview</h2>
+    <p hidden>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
     et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
     ex ea commodo consequat. </p>
     <div class="cols">
