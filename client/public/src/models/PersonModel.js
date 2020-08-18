@@ -27,22 +27,27 @@ class PersonModel extends BaseModel {
     return this.store.data.byIndividual[id];
   }
 
-  async getPublications(id, searchObject={}) {
-    // let ogid = id;
-    // if searchObject.offset id += ("_" + searchObject.offset)
+  async getPublications(id, offset=0) {
+    let searchObject = {};
+    let personid = id;
+    if (offset > 0) {
+      id += `-o${offset}`;
+      searchObject.offset = offset;
+    }
     searchObject.facets = {"hasSubjectArea.label": {"type": "facet"}};
     let state = {state : PersonStore.STATE.INIT};
     if( state.state === 'init' ) {
-      await this.service.getPublications(id, searchObject);
+      await this.service.getPublications(personid, searchObject, id);
     } else if( state.state === 'loading' ) {
       await state.request;
     }
 
     // Add to individual's master pub cache if getting more...
-    // this.store.data.PubsByIndividual[id].payload.results.push(this.store.data.PubsByIndividual[id])
-    // delete this.store.data.PubsByIndividual[id]
-    // return this.store.data.PubsByIndividual[ogid]
-    return this.store.data.pubsByIndividual[id];
+    if (offset > 0) {
+      this.store.data.pubsByIndividual[personid].payload.results = [...this.store.data.pubsByIndividual[personid].payload.results,
+                                                                    ...this.store.data.pubsByIndividual[id].payload.results]
+    }
+    return this.store.data.pubsByIndividual[personid];
   }
 
   getSections() {

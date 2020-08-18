@@ -43,6 +43,19 @@ return html`
   rp-badge:first-child {
     margin-left: 0;
   }
+  .load-more {
+    height: 44px;
+    background-color: var(--tcolor-primary20);
+    font-size: var(--font-size);
+    color: var(--tcolor-text);
+    font-weight: var(--font-weight);
+    border: none;
+    padding: 0 15px;
+    cursor: pointer;
+  }
+  .load-more:hover {
+    background-color: var(--tcolor-hover-bg);
+  }
   ${styles}
 </style>
 
@@ -117,6 +130,8 @@ return html`
           <rp-citation class="mb-3" .data="${pub}"></rp-citation>
           `)}
       </div>
+      ${this.retrievedPublications.length < this.totalPublications ? html`
+        <button type="button" @click="${this._loadMorePubs}" class="load-more">Load more articles</button>` : html``}
   </section>
 
   <section id="research" class="bg-light mt-3" hidden>

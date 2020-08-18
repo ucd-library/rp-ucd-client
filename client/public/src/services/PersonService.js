@@ -27,14 +27,17 @@ class PersonService extends BaseService {
     });
   }
 
-  async getPublications(id, searchObject={}) {
+  async getPublications(personid, searchObject={}, storeid="") {
     if (!searchObject.filters) {
       searchObject.filters = {};
+    }
+    if (!storeid) {
+      storeid = personid
     }
     searchObject.filters['Authorship.identifiers.@id'] = {
       "type": "keyword",
       "op" : "and",
-      "value": [`${this.jsonContext}:${id}`]
+      "value": [`${this.jsonContext}:${personid}`]
     }
     if (!searchObject.offset) {
       searchObject.offset = 0;
@@ -52,10 +55,10 @@ class PersonService extends BaseService {
         },
         body : JSON.stringify(searchObject)
       },
-      checkCached : () => this.store.data.pubsByIndividual[id],
-      onLoading : request => this.store.setPubsLoading(id, request),
-      onLoad : result => this.store.setPubsLoaded(id, result.body),
-      onError : e => this.store.setPubsError(id, e)
+      checkCached : () => this.store.data.pubsByIndividual[storeid],
+      onLoading : request => this.store.setPubsLoading(storeid, request),
+      onLoad : result => this.store.setPubsLoaded(storeid, result.body),
+      onError : e => this.store.setPubsError(storeid, e)
     });
   }
 

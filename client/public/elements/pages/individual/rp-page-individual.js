@@ -61,6 +61,10 @@ export default class RpPageIndividual extends Mixin(LitElement)
 
   }
 
+  async _loadMorePubs(){
+    await this._doPubQuery(this.individualId);
+  }
+
   async _doMainQuery(id){
     let data = await this.PersonModel.getIndividual(id);
     this.individualStatus = data.state;
@@ -71,8 +75,15 @@ export default class RpPageIndividual extends Mixin(LitElement)
     console.log(data);
   }
 
-  async _doPubQuery(id, getMore=false){
-    let data = await this.PersonModel.getPublications(id);
+  async _doPubQuery(id){
+    let offset = 0;
+    if (!id) {
+      id = this.individualId;
+    }
+    if ( this.retrievedPublications.length < this.totalPublications ) {
+      offset = this.retrievedPublications.length;
+    }
+    let data = await this.PersonModel.getPublications(id, offset);
     this.publicationStatus = data.state;
     if (data.state != 'loaded') {
       return;
