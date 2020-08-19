@@ -16,7 +16,7 @@ return html`
   <rp-link-list class="bg-light p-3"
                 direction="horizontal"
                 current-link="${this.mainFacetIndex}"
-                .links="${[...[{id: 'none', text: 'All Results'}], ...this.CollectionModel.mainFacets]}">
+                .links="${this.getMainFacetLinks()}">
   </rp-link-list>
 </div>
 <div class="search container bg-light mt-3 pb-3">

@@ -85,7 +85,7 @@ return html`
   </div>
 </div>
 <div class="search bg-primary">
-  <div class="container flex justify-content-center"><rp-search></rp-search></div>
+  <div class="container flex justify-content-center"><rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}"></rp-search></div>
 </div>
 <div class="data bg-light">
   <div class="container flex">

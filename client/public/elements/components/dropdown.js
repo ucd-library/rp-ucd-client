@@ -9,6 +9,7 @@ export class RpDropdown extends LitElement {
     choices: {type: Array},
     chosen: {type: parseInt, reflect: true},
     opened: {type: Boolean},
+    toUpperCase: {type: Boolean, attribute: 'to-upper-case'},
     noPadding: {type: Boolean, attribute: "no-padding"},
     stickyTitle: {type: String, attribute: "sticky-title"}
   };
@@ -17,6 +18,7 @@ export class RpDropdown extends LitElement {
   constructor() {
     super();
     this.render = render.bind(this);
+    this.toUpperCase = false;
     this.chosen = 0;
     this.choices = [];
     this.themeColor = "outline-primary";
@@ -50,6 +52,9 @@ export class RpDropdown extends LitElement {
     }
     if (this.stickyTitle) {
       classes.stickytitle = true;
+    }
+    if (this.toUpperCase) {
+      classes.upper = true;
     }
 
     return classes;

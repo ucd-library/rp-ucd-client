@@ -22,6 +22,7 @@ class CollectionModel extends BaseModel {
                        {id: 'organizations', text: 'Organizations', baseFilter: {}, disabled: true},
                        {id: 'works', text: 'Works',  baseFilter: {}, disabled: true}];
     this.facets = {};
+    this.textQuery = "";
 
     this.register('CollectionModel');
   }
@@ -77,6 +78,10 @@ class CollectionModel extends BaseModel {
 
   _constructQueryObject() {
     let queryObject = {...this.baseQueryObject};
+    if (this.textQuery) {
+      queryObject.text = this.textQuery;
+      queryObject.textFields =   ["label.text"];
+    }
 
     return queryObject
   }

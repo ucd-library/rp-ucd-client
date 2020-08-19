@@ -63,6 +63,9 @@ export default function render() {
     .container.outline-primary ul {
       background-color: var(--tcolor-light);
     }
+    .container.upper {
+      text-transform: uppercase;
+    }
   </style>
   <div class="container ${classMap(this._constructClasses())}">
    <div id="button"

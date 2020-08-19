@@ -95,12 +95,19 @@ export default class RpPageSearch extends Mixin(RpUtilsCollection)
   }
 
   async _doMainQuery(q){
+    this.CollectionModel.textQuery = this.textQuery;
     let data = await this.CollectionModel.query(q);
     this.dataStatus = data.state;
     if (data.state != 'loaded') {
       return;
     }
-    this.dataTotal = data.payload.total;
+    if (typeof data.payload.total === 'object') {
+      this.dataTotal = 0;
+    }
+    else {
+      this.dataTotal = data.payload.total;
+    }
+
     this.data = data.payload.results;
     console.log(data);
   }
@@ -117,6 +124,15 @@ export default class RpPageSearch extends Mixin(RpUtilsCollection)
     let screenPadding = 30;
     pw = (w - screenPadding) * .7 - avatarWidth - 40;
     this.peopleWidth = Math.floor(pw);
+  }
+
+  getMainFacetLinks(){
+    let links = [{id: 'none', text: 'All Results', href: `/search?s=${encodeURIComponent(this.textQuery)}`}]
+    for (let f of this.CollectionModel.mainFacets) {
+      f.href = `/search/${f.id}?s=${encodeURIComponent(this.textQuery)}`
+      links.push(f)
+    }
+    return links
   }
 
 }

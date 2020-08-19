@@ -41,7 +41,8 @@ export default function render() {
     }
   </style>
   <div class="container ${classMap(this._constructClasses())}">
-    <rp-dropdown choices="${JSON.stringify(this.facets)}"
+    <rp-dropdown .choices="${this.facets}"
+                 to-upper-case
                  chosen="${this.activeFacet}"
                  @new-selection="${e => this.activeFacet = e.target.chosen}">
     </rp-dropdown>

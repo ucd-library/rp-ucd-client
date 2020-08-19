@@ -75,6 +75,15 @@ export default class RpPageHome extends Mixin(LitElement)
     await this._getFacets();
   }
 
+  _onSearch(e){
+    let url = "/search";
+    if (e.target.nodeName == 'RP-SEARCH') {
+      url = `/search/${e.target.searchObject.facet.id}?s=${encodeURIComponent(e.target.inputValue)}`
+    }
+    //console.log(url);
+    this.AppStateModel.setLocation(url);
+  }
+
   _handleResize() {
     if (!this.visible) return;
     let w = window.innerWidth;

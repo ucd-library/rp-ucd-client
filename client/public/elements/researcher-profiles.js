@@ -34,7 +34,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       theme: {type: Object},
       navLinks: {type: Array},
       user: {type: Object},
-      textQuery: {type: String}
+      textQuery: {type: String},
+      isSearch: {type: Boolean}
     }
   }
 
@@ -48,6 +49,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.loadedPages = {};
     this.user = APP_CONFIG.user;
     this.textQuery = "";
+    this.isSearch = false;
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
                      {text: 'Organizations', page: 'organizations', href: '#'},
                      {text: 'Works', page: 'works', href: '#'},
@@ -65,10 +67,12 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   async _onAppStateUpdate(e) {
     console.log('Current app state:', e);
     if (e.location.query.s) {
+      this.isSearch = true;
       this.textQuery = e.location.query.s;
     }
     else {
       this.textQuery="";
+      this.isSearch = false;
     }
     let page = e.page;
     if (!this.loadedPages[page]) {
@@ -97,6 +101,23 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     } else if( page === 'search' ) {
       return import(/* webpackChunkName: "page-search" */ "./pages/search/rp-page-search")
     }
+  }
+
+  _onSearch(e){
+    let url = "/search";
+    if (e.target.nodeName == "RP-QUICK-SEARCH") {
+
+      // keep existing main facet if search
+      if (this.isSearch && this.shadowRoot.getElementById('search')) {
+        let s = this.shadowRoot.getElementById('search');
+        if (s.mainFacet != 'none') {
+          url += ("/" + s.mainFacet)
+        }
+      }
+      url += `?s=${encodeURIComponent(e.target.inputValue)}`
+    }
+    //console.log(url);
+    this.AppStateModel.setLocation(url);
   }
 
   _renderMasthead(){
