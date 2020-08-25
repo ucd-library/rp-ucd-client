@@ -8,39 +8,22 @@ import "../../components/link-list";
 import "../../components/pagination";
 
 
-export default class RpPageSearch extends Mixin(RpUtilsCollection)
-  .with(LitCorkUtils) {
+export default class RpPageSearch extends RpUtilsCollection {
 
   static get properties() {
     return {
-      visible: {type: Boolean},
-      mainFacet: {type: String},
-      mainFacetIndex: {type: Number},
-      textQuery: {type: String},
-      data: {type: Array},
-      dataStatus: {type: String},
-      dataTotal: {type: Number},
-      peopleWidth: {type: Number},
     }
   }
 
   constructor() {
     super();
     this.render = render.bind(this);
-    this._injectModel('CollectionModel', 'AppStateModel');
-    this.mainFacet = 'none';
-    this.mainFacetIndex = 0;
-    this.textQuery = '';
-    this.data = [];
-    this.dataStatus = 'loading';
-    this.dataTotal = 0;
-    this.setPeopleWidth(window.innerWidth);
-
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
   updated(props) {
+    this.doUpdated(props);
 
     // set primary facet
     if (props.has('mainFacet') && this.mainFacet != 'none') {
@@ -63,68 +46,14 @@ export default class RpPageSearch extends Mixin(RpUtilsCollection)
       }
     }
 
-    if (props.has('visible') && this.visible ) {
-      requestAnimationFrame( () => this._handleResize());
-    }
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener('resize', this._handleResize);
-  }
-
-  disconnectedCallback() {
-    window.removeEventListener('resize', this._handleResize);
-    super.disconnectedCallback();
   }
 
   async _onAppStateUpdate(state) {
-    let path = state.location.path;
-    let query = state.location.query;
-    if (path.length >= 2) {
-      this.mainFacet = path[1].toLowerCase();
-    }
-    if (query.s) {
-      this.textQuery = query.s;
-    }
+    this._parseUrlQuery(state);
+    await Promise.all([this._doMainQuery()]);
 
-    let q = {...this._parseUrlQuery()};
-    console.log("q", q);
-    //await this.update
-    await Promise.all([this._doMainQuery(q)]);
   }
 
-  async _doMainQuery(q){
-    this.CollectionModel.textQuery = this.textQuery;
-    let data = await this.CollectionModel.query(q);
-    this.dataStatus = data.state;
-    if (data.state != 'loaded') {
-      return;
-    }
-    if (typeof data.payload.total === 'object') {
-      this.dataTotal = 0;
-    }
-    else {
-      this.dataTotal = data.payload.total;
-    }
-
-    this.data = data.payload.results;
-    console.log(data);
-  }
-
-  _handleResize() {
-    if (!this.visible) return;
-    let w = window.innerWidth;
-    this.setPeopleWidth(w);
-  }
-
-  setPeopleWidth(w) {
-    let pw = 250;
-    let avatarWidth = 82;
-    let screenPadding = 30;
-    pw = (w - screenPadding) * .7 - avatarWidth - 40;
-    this.peopleWidth = Math.floor(pw);
-  }
 
   getMainFacetLinks(){
     let links = [{id: 'none', text: 'All Results', href: `/search?s=${encodeURIComponent(this.textQuery)}`}]

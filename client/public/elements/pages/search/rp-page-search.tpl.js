@@ -28,11 +28,11 @@ return html`
       <div class="loading1">loading</div>
     </div>
     <div ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">
-      <rp-alert>Error loading people.</rp-alert>
+      <rp-alert>Error loading search results.</rp-alert>
     </div>
     <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
-      ${this.data.map(person => html`
-        ${this._renderAssetPreview(person)}
+      ${this.data.map(searchResult => html`
+        ${this._renderAssetPreview(searchResult)}
         <hr class="dotted">
         `)}
       ${this._renderPagination(this.dataTotal)}

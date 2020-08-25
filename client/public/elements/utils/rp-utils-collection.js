@@ -5,7 +5,8 @@ import "../components/link-list";
 import "../components/pagination";
 import "../components/person-preview"
 
-export default class RpUtilsCollection extends LitElement {
+export default class RpUtilsCollection extends Mixin(LitElement)
+  .with(LitCorkUtils) {
 
   static get properties() {
     return {
@@ -13,29 +14,190 @@ export default class RpUtilsCollection extends LitElement {
       hasPagination: {type: Boolean},
       azSelected: {type: String},
       azDisabled: {type: Array},
-      pgPer: {type: parseInt},
-      pgCurrent: {type: parseInt},
       urlQuery: {type: Object},
-      jsonldContext: {type: String}
+      jsonldContext: {type: String},
+      peopleWidth: {type: Number},
+      visible: {type: Boolean},
+      currentQuery: {type: Object},
+      mainFacet: {type: String},
+      pgPer: {type: Number},
+      pgCurrent: {type: Number},
+      textQuery: {type: String},
+      dataFilters: {type: Array},
+      data: {type: Array},
+      dataStatus: {type: String},
+      dataTotal: {type: Number},
+      mainFacetIndex: {type: Number}
     }
   }
 
   constructor() {
     super();
+    this._injectModel('CollectionModel', 'AppStateModel');
     this.hasAz = false;
     this.hasPagination = false;
     this.azSelected = 'All';
     this.azDisabled = [];
-    this.pgPer = 8;
-    this.pgCurrent = 1;
     this.urlQuery = {};
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
+
+    this._resetQueryProperties();
+
+    this.setPeopleWidth(window.innerWidth);
+    //this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
+    this._handleResize = this._handleResize.bind(this);
+  }
+
+
+  _resetQueryProperties(){
+    this.data = [];
+    this.dataStatus = 'loading';
+    this.dataTotal = 0;
+
+    this.currentQuery = {};
+    this.pgPer = 8;
+    this.pgCurrent = 1;
+    this.mainFacet = 'none';
+    this.textQuery = "";
+    this.dataFilters = [];
+    this.mainFacetIndex = 0;
+  }
+
+  updated(props) {
+    this.doUpdated(props);
+  }
+
+  doUpdated(props){
+    if (props.has('visible') && this.visible ) {
+      requestAnimationFrame( () => this._handleResize());
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('resize', this._handleResize);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('resize', this._handleResize);
+    super.disconnectedCallback();
+  }
+
+  async _doMainQuery(){
+    let q = this.currentQuery;
+    let data = await this.CollectionModel.query(q);
+    this.dataStatus = data.state;
+    if (data.state != 'loaded') {
+      return;
+    }
+    if (typeof data.payload.total === 'object') {
+      this.dataTotal = 0;
+    }
+    else {
+      this.dataTotal = data.payload.total;
+    }
+
+    this.data = data.payload.results;
+    console.log("main query result:", data);
+  }
+
+  _parseUrlQuery(state){
+
+    // get current location
+    if (!state) {
+      state = this.AppStateModel.store.data;
+    }
+    let path = state.location.path;
+    let query = state.location.query;
+
+    // start fresh
+    this._resetQueryProperties();
+
+    // get primary facet of query
+    if (path.length < 1) {
+      return;
+    }
+    this.mainFacet = 'none';
+    let facetFromPath = "";
+    if (path[0] == 'search' && path.length > 1) {
+      facetFromPath = path[1].toLowerCase();
+    }
+    else {
+      facetFromPath = path[0].toLowerCase();
+    }
+    for (let f of this.CollectionModel.mainFacets) {
+      if (facetFromPath == f.id.toLowerCase() ) {
+        this.mainFacet = facetFromPath;
+        this.dataFilters.push(f.baseFilter);
+      }
+    }
+
+    // get any query arguments
+    for (let arg in query) {
+      if (arg == 's') {
+        this.textQuery = query.s;
+      }
+      else if (arg == 'filters') {
+        this.dataFilters.push( JSON.parse(query[arg]) );
+      }
+      else if (arg == 'page') {
+        this.pgCurrent = query[arg];
+      }
+    }
+
+    this.currentQuery = this._constructQuery();
+    console.log( 'element query:', this.currentQuery);
+
+  }
+
+  _constructQuery(){
+    let q = {};
+    if (this.textQuery) {
+      q.s = this.textQuery;
+    }
+
+    if (this.pgCurrent) {
+      q.pgCurrent = this.pgCurrent;
+    }
+    if (this.pgPer) {
+      q.pgPer = this.pgPer;
+    }
+
+    if (this.dataFilters) {
+      q.filters = this.dataFilters;
+    }
+
+    return q;
+  }
+
+  _handleResize() {
+    if (!this.visible) return;
+    let w = window.innerWidth;
+    this.setPeopleWidth(w);
+  }
+
+
+  setPeopleWidth(w) {
+    let pw = 250;
+    let avatarWidth = 82;
+    let screenPadding = 30;
+    pw = (w - screenPadding) * .7 - avatarWidth - 40;
+    this.peopleWidth = Math.floor(pw);
   }
 
   _onUserAction(action, ...args) {
     if (!action) {
       return;
     }
+    let q = {...this.currentQuery};
+    q.mainFacet = this.mainFacet;
+    if (action == 'pagination' && this.hasPagination) {
+      q.pgCurrent = args[0]
+    }
+    let path = this.CollectionModel.constructUrl(q);
+    this.AppStateModel.setLocation(path);
+
+    /*
     let q = {...this.urlQuery};
     if (!q.filters) {
       q.filters = {};
@@ -81,6 +243,7 @@ export default class RpUtilsCollection extends LitElement {
     //console.log(p);
     //return;
     this.AppStateModel.setLocation(p);
+    */
   }
 
   _renderBrowseHeader(title, Azselected) {
@@ -156,12 +319,11 @@ export default class RpUtilsCollection extends LitElement {
 
 
   _renderPagination(totalResults) {
-    if (!totalResults || !this.urlQuery) {
+    if (!totalResults) {
       return html``;
     }
     this.hasPagination = true;
-    let maxPage = Math.ceil(totalResults / this.urlQuery.limit);
-    this.pgCurrent = Math.ceil((this.urlQuery.offset + 1) / this.urlQuery.limit)
+    let maxPage = Math.ceil(totalResults / this.pgPer);
     return html`
     <rp-pagination max-page="${maxPage}"
                    current-page="${this.pgCurrent}"
@@ -169,43 +331,6 @@ export default class RpUtilsCollection extends LitElement {
                    class="mt-3"
     ></rp-pagination>
     `
-  }
-
-  _parseUrlQuery(){
-    // read url args, construct search query
-    let q = {};
-    if (this.AppStateModel) {
-      let query = this.AppStateModel.store.data.location.query;
-      for (let arg in query) {
-        if (arg == 's') {
-          q[arg] = query[arg];
-          continue;
-        }
-        q[arg] = JSON.parse(query[arg]);
-      }
-    }
-
-    //get main facet from search
-    if (this.mainFacet) {
-      let mainFacet = {};
-      for (let f of this.CollectionModel.mainFacets) {
-        if (this.mainFacet.toLowerCase() == f.id.toLowerCase() ) {
-          mainFacet = f.baseFilter;
-          break;
-        }
-
-      }
-      q.filters = {...q.filters, ...mainFacet};
-    }
-
-    if (!q.limit) {
-      q.limit = this.pgPer;
-    }
-    if (!q.offset) {
-      q.offset = 0;
-    }
-    this.urlQuery = q;
-    return q;
   }
 
   _urlEncode(obj) {

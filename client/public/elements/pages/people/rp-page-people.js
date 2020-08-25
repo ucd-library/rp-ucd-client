@@ -7,18 +7,10 @@ import "../../components/alert";
 import "../../components/person-preview"
 
 
-export default class RpPagePeople extends Mixin(RpUtilsCollection)
-  .with(LitCorkUtils) {
+export default class RpPagePeople extends RpUtilsCollection {
 
   static get properties() {
     return {
-      filtersDefault: {type: Object},
-      sortDefault: {type: Array},
-      dataStatus: {type: String},
-      data: {type: Array},
-      dataMax: {type: parseInt},
-      peopleWidth: {type: parseInt},
-      visible: {type: Boolean},
       facetStatus: {type: String},
       facets: {type: Array}
     }
@@ -28,61 +20,20 @@ export default class RpPagePeople extends Mixin(RpUtilsCollection)
     super();
     this.render = render.bind(this);
 
-    this._injectModel('CollectionModel', 'AppStateModel');
-    this.filtersDefault = {"@type": {"type": "keyword", "op": "and", "value": [APP_CONFIG.data.jsonldContext + ":person"]}};
-    this.sortDefault = [{"label": "asc"}];
-    this.dataStatus = 'loading';
-    this.dataTotal = 0;
-    this.setPeopleWidth(window.innerWidth);
-    this.data = [];
     this.facetStatus = 'loading';
     this.facets = [];
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
-    this._handleResize = this._handleResize.bind(this);
   }
 
-  updated(props) {
-    if (props.has('visible') && this.visible ) {
-      requestAnimationFrame( () => this._handleResize());
-    }
+  async _onAppStateUpdate(state) {
+    this._parseUrlQuery(state);
+    await Promise.all([this._doMainQuery(), this._getFacets()]);
+
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener('resize', this._handleResize);
-  }
-
-  disconnectedCallback() {
-    window.removeEventListener('resize', this._handleResize);
-    super.disconnectedCallback();
-  }
-
-  async _onAppStateUpdate(e) {
-    let q = {...this._parseUrlQuery()};
-    await Promise.all([this._doQuery(q), this._getFacets(q)]);
-  }
-
-  async _doQuery(q) {
-    if (!q.filters) {
-      q.filters = this.filtersDefault;
-    }
-    if (!q.sort) {
-      q.sort = this.sortDefault;
-    }
-    let data = await this.CollectionModel.query(q);
-    this.dataStatus = data.state;
-    if (data.state != 'loaded') {
-      return;
-    }
-    this.dataTotal = data.payload.total;
-    this.data = data.payload.results;
-    console.log(data);
-    console.log(this.data);
-  }
-
-  async _getFacets(q) {
-    let activeFilters = q.filters;
+  async _getFacets() {
+    let activeFilters = {};
     let peopleAggs = await this.CollectionModel.overview('peopleAggs');
     this.facetStatus = peopleAggs.state;
     if (peopleAggs.state != 'loaded') {
@@ -120,23 +71,8 @@ export default class RpPagePeople extends Mixin(RpUtilsCollection)
     this.facets.push({values: peopleTypes,
                       activeIndex: activeFilterIndex,
                       id: facetName})
-    //console.log(peopleAggs);
-    console.log(this.facets);
-  }
 
-  _handleResize() {
-    if (!this.visible) return;
-    let w = window.innerWidth;
-    this.setPeopleWidth(w);
-  }
-
-
-  setPeopleWidth(w) {
-    let pw = 250;
-    let avatarWidth = 82;
-    let screenPadding = 30;
-    pw = (w - screenPadding) * .7 - avatarWidth - 40;
-    this.peopleWidth = Math.floor(pw);
+    console.log('facets:', this.facets);
   }
 
 }
