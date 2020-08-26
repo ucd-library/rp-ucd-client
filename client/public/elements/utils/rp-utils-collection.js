@@ -166,6 +166,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (this.dataFilters) {
       q.filters = this.dataFilters;
     }
+    if (this.mainFacet && this.mainFacet != 'none') {
+      q.mainFacet = this.mainFacet;
+    }
 
     return q;
   }
@@ -190,7 +193,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       return;
     }
     let q = {...this.currentQuery};
-    q.mainFacet = this.mainFacet;
     if (action == 'pagination' && this.hasPagination) {
       q.pgCurrent = args[0]
     }

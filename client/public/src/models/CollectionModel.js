@@ -22,6 +22,12 @@ class CollectionModel extends BaseModel {
                        {id: 'organizations', text: 'Organizations', baseFilter: {}, disabled: true},
                        {id: 'works', text: 'Works',  baseFilter: {}, disabled: true}];
     this.currentQuery = {};
+    this.subFacets = {
+      people: [
+        {id: 'faculty', es: 'vivo:FacultyMember', text: 'Faculty Member'}, 
+        {id: 'non-academic', es: 'vivo:NonAcademic', text: 'Non Academic'}
+      ]
+    }
     this.pgPer = 8;
 
     this.register('CollectionModel');
@@ -74,19 +80,51 @@ class CollectionModel extends BaseModel {
     return this.store.data.queryById[id];
   }
 
-  _getSubFacets(mainFacet, aggData, indexStart=1) {
+  _getSubFacets(mainFacet, payload, query) {
     let mainFacets = this.mainFacets.map(f => f.id);
-    if (!mainFacets.includes(mainFacet) || !aggData) return [];
+    let subFacets = [];
+    if (!mainFacets.includes(mainFacet) || !payload || !query) return subFacets;
+    if (Object.keys(query).length == 0) {
+      return subFacets;
+    }
+    let elementQuery = {...query};
+    console.log(query);
+
+    let dataTotal = 0;
+    if (typeof payload.total === "number") dataTotal = payload.total;
 
     if (mainFacet == 'people') {
-      
+      subFacets.push({id: "all", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['f'])})
+      let counts = {};
+      try {
+        counts = payload.aggregations.facets['@type'];
+        if (typeof counts != 'object' || Array.isArray(counts)) {
+          throw "Subfacet counts not found.";
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+      for (let facet of this.subFacets.people) {
+        elementQuery.f = facet.id;
+        facet.href = this.constructUrl(elementQuery)
+        if (Object.keys(counts).includes(facet.es)){
+          facet.text += ` (${counts[facet.es]})`;
+        }
+        else {
+          facet.text += " (0)";
+          facet.disabled = true;
+        }
+        subFacets.push(facet);
+      }
+
     }
 
-    return [];
+    return subFacets;
 
   }
 
-  _constructQueryObject(userQuery={}) {
+  _constructQueryObject(query={}) {
+    let userQuery = {...query};
     let queryObject = {...this.baseQueryObject};
     if (Object.keys(userQuery).length == 0) {
       return queryObject;
@@ -143,7 +181,7 @@ class CollectionModel extends BaseModel {
     return queryObject
   }
 
-  constructUrl(elementQuery) {
+  constructUrl(elementQuery, ignoreArgs=[]) {
     let path = "";
 
     // base path
@@ -161,13 +199,20 @@ class CollectionModel extends BaseModel {
     else {
       return "#";
     }
+    let args = [];
 
-    // pagination
-    if (elementQuery.pgCurrent && elementQuery.pgCurrent > 1) {
-      path += `page=${elementQuery.pgCurrent}`;
+    // subfacet
+    if (elementQuery.f && !ignoreArgs.includes('f')) {
+      args.push(`f=${elementQuery.f}`);
     }
 
-    if (path.slice(-1) == "?") path = path.slice(0,-1) ;
+    // pagination
+    if (elementQuery.pgCurrent && elementQuery.pgCurrent > 1 && ignoreArgs.includes('page')) {
+      args.push(`page=${elementQuery.pgCurrent}`);
+    }
+
+    path += args.join('&');
+    if (path.slice(-1) == "?") path = path.slice(0,-1);
     return path;
   }
 

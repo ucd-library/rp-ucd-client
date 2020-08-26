@@ -40,6 +40,8 @@ export default class RpPagePeople extends RpUtilsCollection {
       return;
     }
     this.facets = [];
+    console.log("peopleaggs", peopleAggs);
+    console.log("look here", this.CollectionModel._getSubFacets('people', peopleAggs.payload, this.currentQuery));
 
     // Format people types
     let facetName = "@type";
