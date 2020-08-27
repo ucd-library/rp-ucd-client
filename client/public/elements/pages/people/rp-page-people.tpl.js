@@ -15,7 +15,7 @@ return html`
   <hr class="mb-0">
   <div class="body flex">
     <div class="col-facets mt-3">
-      ${this._renderFacets(this.facets)}
+      ${this._renderFacets()}
     </div>
     <div class="col-main">
       <div ?hidden="${this.dataStatus == 'error' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">

@@ -27,7 +27,11 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       data: {type: Array},
       dataStatus: {type: String},
       dataTotal: {type: Number},
-      mainFacetIndex: {type: Number}
+      mainFacetIndex: {type: Number},
+      subFacet: {type: String},
+      subFacetIndex: {type: Number},
+      subFacetStatus: {type: String}
+
     }
   }
 
@@ -36,6 +40,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this._injectModel('CollectionModel', 'AppStateModel');
     this.hasAz = false;
     this.hasPagination = false;
+    this.visible = false;
     this.azSelected = 'All';
     this.azDisabled = [];
     this.urlQuery = {};
@@ -44,7 +49,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this._resetQueryProperties();
 
     this.setPeopleWidth(window.innerWidth);
-    //this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
     this._handleResize = this._handleResize.bind(this);
   }
 
@@ -58,9 +62,14 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.pgPer = 8;
     this.pgCurrent = 1;
     this.mainFacet = 'none';
+    this.mainFacetIndex = 0;
+    this.subFacet = 'none';
+    this.subFacetIndex = 0;
+    this.subFacets = [];
     this.textQuery = "";
     this.dataFilters = [];
-    this.mainFacetIndex = 0;
+    this.subFacetStatus = "loading";
+    
   }
 
   updated(props) {
@@ -86,6 +95,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   async _doMainQuery(){
     let q = this.currentQuery;
     let data = await this.CollectionModel.query(q);
+    if (this.textQuery) {
+      this.subFacetStatus = data.state;
+    }
     this.dataStatus = data.state;
     if (data.state != 'loaded') {
       return;
@@ -97,6 +109,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       this.dataTotal = data.payload.total;
     }
 
+    if (this.textQuery) {
+      this.subFacets = this.CollectionModel._getSubFacets('people', data.payload, this.currentQuery);
+    }
     this.data = data.payload.results;
     console.log("main query result:", data);
   }
@@ -117,7 +132,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (path.length < 1) {
       return;
     }
-    this.mainFacet = 'none';
+
     let facetFromPath = "";
     if (path[0] == 'search' && path.length > 1) {
       facetFromPath = path[1].toLowerCase();
@@ -129,8 +144,32 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       if (facetFromPath == f.id.toLowerCase() ) {
         this.mainFacet = facetFromPath;
         this.dataFilters.push(f.baseFilter);
+        break;
       }
     }
+
+    let subFacetFromPath = "";
+    if (path[0] == 'search' && path.length > 2) {
+      subFacetFromPath = path[2].toLowerCase();
+    }
+    else if (path[0] != 'search' && path.length > 1) {
+      subFacetFromPath = path[1].toLowerCase();
+    }
+    if (this.CollectionModel.subFacets[this.mainFacet]) {
+      let i = 1;
+      for (let f of this.CollectionModel.subFacets[this.mainFacet]) {
+        if (f.id == subFacetFromPath) {
+          this.subFacet = subFacetFromPath;
+          this.subFacetIndex = i;
+          this.dataFilters.push(f.baseFilter);
+          break;
+        }
+        i += 1;
+      }
+      
+    }
+
+
 
     // get any query arguments
     for (let arg in query) {
@@ -153,7 +192,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   _constructQuery(){
     let q = {};
     if (this.textQuery) {
-      q.s = this.textQuery;
+      q.textQuery = this.textQuery;
     }
 
     if (this.pgCurrent) {
@@ -168,6 +207,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
     if (this.mainFacet && this.mainFacet != 'none') {
       q.mainFacet = this.mainFacet;
+    }
+    if (this.subFacet && this.subFacet != 'none') {
+      q.subFacet = this.subFacet;
     }
 
     return q;
@@ -267,10 +309,18 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     `;
   }
 
-  _renderFacets(facets) {
-    if (!facets) {
+  _renderFacets() {
+    if (!this.subFacets) {
       return html``;
     }
+    return html`
+    <rp-link-list 
+      has-header-link
+      .links='${this.subFacets}'
+      current-link='${this.subFacetIndex}'
+      >
+    </rp-link-list>
+    `;
     return html`${facets.map(facet => html`
       <rp-link-list has-header-link
                     .links='${facet.values}'

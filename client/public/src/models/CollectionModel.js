@@ -10,13 +10,6 @@ class CollectionModel extends BaseModel {
     this.store = CollectionStore;
     this.service = CollectionService;
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
-
-    this.baseQueryObject = {offset: 0,
-                            limit: 8,
-                            sort: [{}],
-                            filters: {},
-                            facets: {}
-                          }
     this.mainFacets = [{id: 'people', text: 'People',
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
                        {id: 'organizations', text: 'Organizations', baseFilter: {}, disabled: true},
@@ -24,10 +17,11 @@ class CollectionModel extends BaseModel {
     this.currentQuery = {};
     this.subFacets = {
       people: [
-        {id: 'faculty', es: 'vivo:FacultyMember', text: 'Faculty Member'}, 
-        {id: 'non-academic', es: 'vivo:NonAcademic', text: 'Non Academic'}
+        {id: 'faculty', es: 'vivo:FacultyMember', text: 'Faculty Member', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:FacultyMember"]}}}, 
+        {id: 'non-academic', es: 'vivo:NonAcademic', text: 'Non Academic', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:NonAcademic"]}}}
       ]
     }
+    this.aggs = {people : {"@type": {"type" : "facet"}} };
     this.pgPer = 8;
 
     this.register('CollectionModel');
@@ -35,7 +29,7 @@ class CollectionModel extends BaseModel {
 
   async overview(id, kwargs={}) {
     let state = {state : CollectionStore.STATE.INIT};
-    let queryObject = {...this.baseQueryObject};
+    let queryObject = this.getBaseQueryObject();
 
     if (id == "facets") {
       queryObject.facets["@type"] = {"type" : "facet"};
@@ -70,7 +64,7 @@ class CollectionModel extends BaseModel {
     let state = {state : CollectionStore.STATE.INIT};
 
     let queryObject = this._constructQueryObject(userQuery);
-    let id = JSON.stringify(queryObject);
+    let id = this._makeQueryId(queryObject);
 
     if( state.state === 'init' ) {
       await this.service.query(id, queryObject);
@@ -78,6 +72,26 @@ class CollectionModel extends BaseModel {
       await state.request;
     }
     return this.store.data.queryById[id];
+  }
+
+  getBaseQueryObject() {
+    return {offset: 0,
+      limit: 8,
+      sort: [{}],
+      filters: {},
+      facets: {}
+    };
+  }
+
+  _makeQueryId(q){
+    let id = {};
+    for (let key in q) {
+      if (key == 'facets') {
+        continue;
+      }
+      id[key] = q[key]
+    }
+      return JSON.stringify(id);
   }
 
   _getSubFacets(mainFacet, payload, query) {
@@ -88,13 +102,12 @@ class CollectionModel extends BaseModel {
       return subFacets;
     }
     let elementQuery = {...query};
-    console.log(query);
 
     let dataTotal = 0;
     if (typeof payload.total === "number") dataTotal = payload.total;
 
     if (mainFacet == 'people') {
-      subFacets.push({id: "all", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['f'])})
+      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page'])})
       let counts = {};
       try {
         counts = payload.aggregations.facets['@type'];
@@ -103,10 +116,12 @@ class CollectionModel extends BaseModel {
         }
       } catch (error) {
         console.warn(error);
+        return subFacets;
       }
-      for (let facet of this.subFacets.people) {
-        elementQuery.f = facet.id;
-        facet.href = this.constructUrl(elementQuery)
+      for (let f of this.subFacets.people) {
+        let facet = {...f};
+        elementQuery.subFacet = facet.id;
+        facet.href = this.constructUrl(elementQuery, ['page']);
         if (Object.keys(counts).includes(facet.es)){
           facet.text += ` (${counts[facet.es]})`;
         }
@@ -118,14 +133,15 @@ class CollectionModel extends BaseModel {
       }
 
     }
+    console.log('subfacets', subFacets);
 
     return subFacets;
 
   }
 
-  _constructQueryObject(query={}) {
-    let userQuery = {...query};
-    let queryObject = {...this.baseQueryObject};
+  _constructQueryObject(query) {
+    let userQuery = JSON.parse(JSON.stringify(query));
+    let queryObject = this.getBaseQueryObject();
     if (Object.keys(userQuery).length == 0) {
       return queryObject;
     }
@@ -133,6 +149,7 @@ class CollectionModel extends BaseModel {
     // merge filters into a single object
     if ( Array.isArray(userQuery.filters) ) {
       for (let f of userQuery.filters) {
+        //let f = {...filter};
         if (typeof f != 'object' || Array.isArray(f)) {
           continue;
         }
@@ -141,8 +158,9 @@ class CollectionModel extends BaseModel {
             queryObject.filters[filterKey] = f[filterKey];
             continue;
           }
-          if (Array.isArray(f[filterKey].name)) {
-            queryObject.filters[filterKey].name.push(...f[filterKey].name)
+          if (Array.isArray(f[filterKey].value)) {
+            queryObject.filters[filterKey].value.push(...f[filterKey].value)
+            //queryObject.filters[filterKey].value = queryObject.filters[filterKey].value.concat(f[filterKey].value);
           }
         }
       }
@@ -153,16 +171,21 @@ class CollectionModel extends BaseModel {
           queryObject.filters[filterKey] = userQuery.filters[filterKey];
           continue;
         }
-        if (ArrayisArray(userQuery.filters[filterKey].name)) {
-          queryObject.filters[filterKey].name.push(...userQuery.filters[filterKey].name)
+        if (ArrayisArray(userQuery.filters[filterKey].value)) {
+          //queryObject.filters[filterKey].value.push(...userQuery.filters[filterKey].value)
         }
       }
     }
 
     // handle search query
-    if (userQuery.s) {
-      queryObject.text = userQuery.s;
+    if (userQuery.textQuery) {
+      queryObject.text = userQuery.textQuery;
       queryObject.textFields =   ["label.text"];
+
+      // get aggs for search query
+      if ( Object.keys(this.aggs).includes(userQuery.mainFacet)) {
+        queryObject.facets = this.aggs[userQuery.mainFacet];
+      }
     }
     else {
       queryObject.sort = [{"label": "asc"}];
@@ -190,29 +213,35 @@ class CollectionModel extends BaseModel {
     }
 
     if (elementQuery.mainFacet == "none") {
-      path += "?"
     }
     else if (elementQuery.mainFacet) {
-      path += `/${elementQuery.mainFacet}?`
+      path += `/${elementQuery.mainFacet}`
 
     }
     else {
       return "#";
     }
-    let args = [];
 
-    // subfacet
-    if (elementQuery.f && !ignoreArgs.includes('f')) {
-      args.push(`f=${elementQuery.f}`);
+    if (elementQuery.subFacet && elementQuery.subFacet != 'none' && !ignoreArgs.includes('subFacet')) {
+      path += `/${elementQuery.subFacet}`;
     }
 
+    // query args
+    let args = [];
+
     // pagination
-    if (elementQuery.pgCurrent && elementQuery.pgCurrent > 1 && ignoreArgs.includes('page')) {
+    if (elementQuery.pgCurrent && elementQuery.pgCurrent > 1 && !ignoreArgs.includes('page')) {
       args.push(`page=${elementQuery.pgCurrent}`);
     }
 
+    // search query
+    if (elementQuery.textQuery && !(ignoreArgs.includes('textQuery') || ignoreArgs.includes('s')) ) {
+      args.push(`s=${elementQuery.textQuery}`);
+    }
+
+    if (args.length > 0) path += "?";
     path += args.join('&');
-    if (path.slice(-1) == "?") path = path.slice(0,-1);
+
     return path;
   }
 

@@ -24,7 +24,8 @@ export default class RpPageIndividual extends Mixin(LitElement)
       totalPublications: {type: parseInt},
       researchSubjects: {type: Array},
       researchSubjectsToShow: {type: Number},
-      activeSection: {type: Object}
+      activeSection: {type: Object},
+      visible: {type: Boolean},
     }
   }
 
@@ -37,6 +38,7 @@ export default class RpPageIndividual extends Mixin(LitElement)
     this.individualId = '';
     this.individualStatus = 'loading';
     this.publicationStatus = 'loading';
+    this.visible = false;
     this.retrievedPublications = [];
     this.totalPublications = 0;
     this.researchSubjects = [];
@@ -47,6 +49,14 @@ export default class RpPageIndividual extends Mixin(LitElement)
   }
 
   async _onAppStateUpdate(state) {
+   requestAnimationFrame( () => this.doUpdate(state));
+  }
+
+  async doUpdate(state) {
+    await this.updateComplete;
+    if (!this.visible) {
+      return;
+    }
     let path = state.location.path;
     if (path.length >= 2) {
       this.individualId = path[1];

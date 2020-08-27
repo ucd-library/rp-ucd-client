@@ -49,9 +49,16 @@ export default class RpPageSearch extends RpUtilsCollection {
   }
 
   async _onAppStateUpdate(state) {
+    requestAnimationFrame( () => this.doUpdate(state));
+  }
+
+  async doUpdate(state){
+    await this.updateComplete;
+    if (!this.visible) {
+      return;
+    }
     this._parseUrlQuery(state);
     await Promise.all([this._doMainQuery()]);
-
   }
 
 

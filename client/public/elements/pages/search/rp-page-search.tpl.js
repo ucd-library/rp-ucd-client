@@ -22,6 +22,7 @@ return html`
 <div class="search container bg-light mt-3 pb-3">
 <div class="body flex">
   <div class="col-facets mt-3">
+    ${this._renderFacets()}
   </div>
   <div class="col-main">
     <div ?hidden="${this.dataStatus == 'error' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">
