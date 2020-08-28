@@ -5,9 +5,9 @@ export class RpAZ extends LitElement {
   static get properties() {
   return {
     hideAll: {type: Boolean, attribute: 'hide-all'},
-    disabledLetters: {type: Array, attribute: 'disabled-letters'},
+    disabledLetters: {type: Array},
     disabledLettersFmt: {type: Array},
-    selectedLetter: {type: String, attribute: 'selected-letter', reflect: true},
+    selectedLetter: {type: String, attribute: 'selected-letter'},
   };
   }
 
@@ -18,6 +18,7 @@ export class RpAZ extends LitElement {
     this.azlist = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
     this.disabledLetters = [];
     this.disabledLettersFmt = [];
+    this.selectedLetter = 'All';
     this._changedLetter = new CustomEvent('changed-letter', {
       detail: {
         message: 'A new letter has been selected.'

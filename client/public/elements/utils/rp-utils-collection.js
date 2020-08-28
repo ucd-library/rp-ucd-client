@@ -13,7 +13,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       hasAz: {type: Boolean},
       hasPagination: {type: Boolean},
       azSelected: {type: String},
+      azStatus: {type: String},
       azDisabled: {type: Array},
+      azOptions: {type: Set},
       urlQuery: {type: Object},
       jsonldContext: {type: String},
       peopleWidth: {type: Number},
@@ -38,11 +40,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   constructor() {
     super();
     this._injectModel('CollectionModel', 'AppStateModel');
-    this.hasAz = false;
+    this.azOptions = new Set(['all', ...'abcdefghijklmnopqrstuvwxyz']);
     this.hasPagination = false;
     this.visible = false;
-    this.azSelected = 'All';
-    this.azDisabled = [];
     this.urlQuery = {};
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
 
@@ -59,16 +59,25 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.dataTotal = 0;
 
     this.currentQuery = {};
+    this.dataFilters = [];
+
     this.pgPer = 8;
     this.pgCurrent = 1;
+
     this.mainFacet = 'none';
     this.mainFacetIndex = 0;
+
     this.subFacet = 'none';
     this.subFacetIndex = 0;
     this.subFacets = [];
-    this.textQuery = "";
-    this.dataFilters = [];
     this.subFacetStatus = "loading";
+
+    this.textQuery = "";
+
+    this.hasAz = false;
+    this.azSelected = 'All';
+    this.azDisabled = [];
+    this.azStatus = 'loading';
     
   }
 
@@ -112,8 +121,31 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (this.textQuery) {
       this.subFacets = this.CollectionModel._getSubFacets('people', data.payload, this.currentQuery);
     }
+    else {
+      this.hasAz = true;
+    }
     this.data = data.payload.results;
     console.log("main query result:", data);
+  }
+
+  async _getAzAgg() {
+    let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet)
+    this.azStatus = data.state;
+    if (data.state != 'loaded') {
+      return;
+    }
+    let aggKey = this.CollectionModel.getAzBaseFilter(this.currentQuery.mainFacet);
+    if (aggKey) {
+      this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[aggKey.key]))].filter(x => x != 'all');
+    }
+    else {
+      this.azStatus = 'error';
+    }
+
+    
+
+    console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`, data);
+
   }
 
   _parseUrlQuery(state){
@@ -169,18 +201,19 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       
     }
 
-
-
     // get any query arguments
     for (let arg in query) {
       if (arg == 's') {
         this.textQuery = query.s;
       }
       else if (arg == 'filters') {
-        this.dataFilters.push( JSON.parse(query[arg]) );
+        //this.dataFilters.push( JSON.parse(query[arg]) );
       }
-      else if (arg == 'page') {
+      else if (arg == 'page' && !isNaN(query[arg])) {
         this.pgCurrent = query[arg];
+      }
+      else if (arg == 'az' && this.azOptions.has(query[arg]) ) {
+        this.azSelected = query[arg];
       }
     }
 
@@ -200,6 +233,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
     if (this.pgPer) {
       q.pgPer = this.pgPer;
+    }
+    if (this.azSelected) {
+      q.azSelected = this.azSelected;
     }
 
     if (this.dataFilters) {
@@ -234,12 +270,23 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (!action) {
       return;
     }
+    let path = ""
     let q = {...this.currentQuery};
+
+    // handle page change
     if (action == 'pagination' && this.hasPagination) {
       q.pgCurrent = args[0]
+      path = this.CollectionModel.constructUrl(q)
     }
-    let path = this.CollectionModel.constructUrl(q);
-    this.AppStateModel.setLocation(path);
+
+    // handle az change
+    else if (action == 'az') {
+      q.azSelected = args[0]
+      path = this.CollectionModel.constructUrl(q, ['page'])
+    }
+
+    if (path) this.AppStateModel.setLocation(path);
+    
 
     /*
     let q = {...this.urlQuery};
@@ -290,6 +337,59 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     */
   }
 
+  _setDifference(setA, setB) {
+    let _difference = new Set(setA)
+    for (let elem of setB) {
+        _difference.delete(elem)
+    }
+    return _difference
+}
+
+_getAssetType(data) {
+  if (!data['@type']) {
+    return;
+  }
+  if (typeof data['@type'] === 'string') {
+    data['@type'] = [data['@type']];
+  }
+  if ( !Array.isArray(data['@type']) ) {
+    return;
+  }
+
+  if (data['@type'].includes(this.jsonldContext + ":person")) {
+    return "person";
+  }
+
+  return;
+}
+
+_urlEncode(obj) {
+  let str = [];
+  for (let p in obj)
+    if (obj.hasOwnProperty(p)) {
+      if (p == 'offset' && obj[p] == 0) {
+        continue;
+      }
+      if (p == 'filters' && Object.keys(obj[p]).length == 0) {
+        continue;
+      }
+      if (p == 'limit') {
+        continue;
+      }
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent( JSON.stringify(obj[p]) ));
+    }
+  if (!str.length) {
+    return ""
+  }
+  return "?" + str.join("&");
+}
+
+/*
+*
+* RENDER FUNCTIONS
+*
+*/
+
   _renderBrowseHeader(title, Azselected) {
     this.hasAz = true;
     if (Azselected) {
@@ -301,9 +401,13 @@ export default class RpUtilsCollection extends Mixin(LitElement)
         <h1>${title}</h1>
       </div>
       <div class="col-main">
+      ${this.hasAz ? html`
         <rp-a-z selected-letter="${this.azSelected}"
-                .disabled-letters="${this.azDisabled}"
-                @changed-letter=${e => this._onUserAction("az")}></rp-a-z>
+                .disabledLetters="${this.azDisabled}"
+                @changed-letter=${e => this._onUserAction("az", e.target.selectedLetter)}>
+        </rp-a-z>
+      ` : html``}
+
       </div>
     </div>
     `;
@@ -351,25 +455,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
   }
 
-  _getAssetType(data) {
-    if (!data['@type']) {
-      return;
-    }
-    if (typeof data['@type'] === 'string') {
-      data['@type'] = [data['@type']];
-    }
-    if ( !Array.isArray(data['@type']) ) {
-      return;
-    }
-
-    if (data['@type'].includes(this.jsonldContext + ":person")) {
-      return "person";
-    }
-
-    return;
-  }
-
-
   _renderPagination(totalResults) {
     if (!totalResults) {
       return html``;
@@ -384,28 +469,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     ></rp-pagination>
     `
   }
-
-  _urlEncode(obj) {
-    let str = [];
-    for (let p in obj)
-      if (obj.hasOwnProperty(p)) {
-        if (p == 'offset' && obj[p] == 0) {
-          continue;
-        }
-        if (p == 'filters' && Object.keys(obj[p]).length == 0) {
-          continue;
-        }
-        if (p == 'limit') {
-          continue;
-        }
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent( JSON.stringify(obj[p]) ));
-      }
-    if (!str.length) {
-      return ""
-    }
-    return "?" + str.join("&");
-  }
-
 }
 
 customElements.define('rp-utils-collection', RpUtilsCollection);

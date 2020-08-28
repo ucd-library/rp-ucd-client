@@ -52,12 +52,18 @@ export class RpQuickSearch extends LitElement {
     return styles;
   }
 
+  _validateSearchText(){
+    if ( !this.inputValue.replace(/ /g,'') ) {
+      return false;
+    }
+    return true;
+  }
+
   _handleClick(e){
 
     if (this.opened) {
-      let i = this.shadowRoot.getElementById('search-input');
-      if (!i.value) {
-        return;
+      if (!this._validateSearchText()) {
+        return false;
       }
       this.dispatchEvent(this._newSearch);
     }
@@ -106,6 +112,9 @@ export class RpQuickSearch extends LitElement {
   _handleKeyup(e) {
     if (e.keyCode === 13) {
       e.preventDefault();
+      if (!this._validateSearchText()) {
+        return false;
+      }
       this.dispatchEvent(this._newSearch);
     }
   }

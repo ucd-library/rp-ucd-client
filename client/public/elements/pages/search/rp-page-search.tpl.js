@@ -36,6 +36,9 @@ return html`
         ${this._renderAssetPreview(searchResult)}
         <hr class="dotted">
         `)}
+      ${this.data.length == 0 ? html`
+      <div class="flex align-items-center justify-content-center" style="height:100%;">No search results found!</div>
+      ` : html``}
       ${this._renderPagination(this.dataTotal)}
     </div>
 

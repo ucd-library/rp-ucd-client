@@ -31,7 +31,7 @@ export default class RpPagePeople extends RpUtilsCollection {
       return;
     }
     this._parseUrlQuery(state);
-    await Promise.all([this._doMainQuery(), this._getFacets()]);
+    await Promise.all([this._doMainQuery(), this._getFacets(), this._getAzAgg()]);
   }
 
   async _getFacets() {

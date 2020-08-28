@@ -7,9 +7,36 @@ class CollectionStore extends BaseStore {
 
     this.data = {
       queryById : {},
+      azAggs : {},
       overview : {}
     };
     this.events = {};
+  }
+
+  setAzAggsLoading(id, request) {
+    this._setAzAggsState({
+      state: this.STATE.LOADING,
+      id, request
+    });
+  }
+
+  setAzAggsLoaded(id, payload) {
+    this._setAzAggsState({
+      state: this.STATE.LOADED,
+      id, payload
+    });
+  }
+
+  setAzAggsError(id, error) {
+    this._setAzAggsState({
+      state: this.STATE.ERROR,
+      id, error
+    });
+  }
+
+  _setAzAggsState(state) {
+    //if( !this.stateChanged(this.data.overview[id], state) ) return;
+    this.data.azAggs[state.id] = state;
   }
 
   setOverviewLoading(id, request) {

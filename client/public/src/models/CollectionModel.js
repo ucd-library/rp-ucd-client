@@ -74,6 +74,49 @@ class CollectionModel extends BaseModel {
     return this.store.data.queryById[id];
   }
 
+  async azAggQuery(mainFacet, subFacet){
+    let state = {state : CollectionStore.STATE.INIT};
+    let id = `${mainFacet}__${subFacet}`;
+    let filters = [];
+    for (let f of this.mainFacets) {
+      if (f.id == mainFacet) {
+        filters.push(f.baseFilter)
+        break;
+      }
+    }
+    if (this.subFacets[mainFacet]) {
+      for (let f of this.subFacets[mainFacet]) {
+        if (f.id == subFacet) {
+          filters.push(f.baseFilter)
+          break;
+        }
+      }
+    }
+    let q = this.getBaseQueryObject();
+    q.limit = 0;
+    q.filters = this._combineFiltersArray(filters);
+
+    // need logic works and orgs
+    q.facets = {"hasContactInfo.familyName.firstLetter" : {"type": "facet"}};
+
+    if( state.state === 'init' ) {
+      await this.service.azAgg(id, q);
+    } else if( state.state === 'loading' ) {
+      await state.request;
+    }
+    return this.store.data.azAggs[id];
+  }
+
+  getAzBaseFilter(mainFacet) {
+    if (!this.mainFacets.map(e => e.id).includes(mainFacet)) {
+      return;
+    }
+    if (mainFacet == 'people') {
+      return {key: "hasContactInfo.familyName.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
+    }
+
+  }
+
   getBaseQueryObject() {
     return {offset: 0,
       limit: 8,
@@ -107,7 +150,7 @@ class CollectionModel extends BaseModel {
     if (typeof payload.total === "number") dataTotal = payload.total;
 
     if (mainFacet == 'people') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page'])})
+      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
       let counts = {};
       try {
         counts = payload.aggregations.facets['@type'];
@@ -121,7 +164,7 @@ class CollectionModel extends BaseModel {
       for (let f of this.subFacets.people) {
         let facet = {...f};
         elementQuery.subFacet = facet.id;
-        facet.href = this.constructUrl(elementQuery, ['page']);
+        facet.href = this.constructUrl(elementQuery, ['page', 'az']);
         if (Object.keys(counts).includes(facet.es)){
           facet.text += ` (${counts[facet.es]})`;
         }
@@ -147,34 +190,17 @@ class CollectionModel extends BaseModel {
     }
 
     // merge filters into a single object
-    if ( Array.isArray(userQuery.filters) ) {
-      for (let f of userQuery.filters) {
-        //let f = {...filter};
-        if (typeof f != 'object' || Array.isArray(f)) {
-          continue;
-        }
-        for (let filterKey in f) {
-          if (!queryObject.filters[filterKey]) {
-            queryObject.filters[filterKey] = f[filterKey];
-            continue;
-          }
-          if (Array.isArray(f[filterKey].value)) {
-            queryObject.filters[filterKey].value.push(...f[filterKey].value)
-            //queryObject.filters[filterKey].value = queryObject.filters[filterKey].value.concat(f[filterKey].value);
-          }
-        }
+    queryObject.filters = {...queryObject.filters, ...this._combineFiltersArray(userQuery.filters)}
+
+
+    // a-z filters
+    if (userQuery.azSelected && userQuery.azSelected.toLowerCase() != 'all') {
+      let azFilter = this.getAzBaseFilter(userQuery.mainFacet);
+      if (azFilter) {
+        azFilter.value.value = [userQuery.azSelected];
+        queryObject.filters[azFilter.key]= azFilter.value;
       }
-    }
-    else if (typeof userQuery.filters === 'object') {
-      for (let filterKey in userQuery.filters) {
-        if (!queryObject.filters[filterKey]) {
-          queryObject.filters[filterKey] = userQuery.filters[filterKey];
-          continue;
-        }
-        if (ArrayisArray(userQuery.filters[filterKey].value)) {
-          //queryObject.filters[filterKey].value.push(...userQuery.filters[filterKey].value)
-        }
-      }
+      
     }
 
     // handle search query
@@ -187,8 +213,10 @@ class CollectionModel extends BaseModel {
         queryObject.facets = this.aggs[userQuery.mainFacet];
       }
     }
+    // asset browsing pages
     else {
       queryObject.sort = [{"label": "asc"}];
+      // queryObject.facets = {"hasContactInfo.familyName.firstLetter" : {"type": "facet"}}; MOVED TO OWN QUERY
     }
 
     // compute offset if pagination parameter is sent
@@ -202,6 +230,41 @@ class CollectionModel extends BaseModel {
     }
 
     return queryObject
+  }
+
+  _combineFiltersArray(filters){
+    filters = JSON.parse(JSON.stringify(filters));
+    let filtersCombined = {};
+    if ( Array.isArray(filters) ) {
+      for (let f of filters) {
+        if (typeof f != 'object' || Array.isArray(f)) {
+          continue;
+        }
+        for (let filterKey in f) {
+          if (!filtersCombined[filterKey]) {
+            filtersCombined[filterKey] = f[filterKey];
+            continue;
+          }
+          if (Array.isArray(f[filterKey].value)) {
+            filtersCombined[filterKey].value.push(...f[filterKey].value)
+          }
+        }
+      }
+    }
+    /*
+    else if (typeof filters === 'object') {
+      for (let filterKey in filters) {
+        if (!filtersCombined[filterKey]) {
+          filtersCombined[filterKey] = filters[filterKey];
+          continue;
+        }
+        if (Array.isArray(filters[filterKey].value)) {
+          filtersCombined[filterKey].value.push(...filters[filterKey].value)
+        }
+      }
+    }
+    */
+    return filtersCombined;
   }
 
   constructUrl(elementQuery, ignoreArgs=[]) {
@@ -237,6 +300,11 @@ class CollectionModel extends BaseModel {
     // search query
     if (elementQuery.textQuery && !(ignoreArgs.includes('textQuery') || ignoreArgs.includes('s')) ) {
       args.push(`s=${elementQuery.textQuery}`);
+    }
+
+    // az
+    if (elementQuery.azSelected && elementQuery.azSelected.toLowerCase() != 'all' && !(ignoreArgs.includes('az') || ignoreArgs.includes('azSelected')) ) {
+      args.push(`az=${elementQuery.azSelected}`);
     }
 
     if (args.length > 0) path += "?";
