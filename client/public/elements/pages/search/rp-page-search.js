@@ -32,9 +32,6 @@ export default class RpPageSearch extends RpUtilsCollection {
       for (let option of this.CollectionModel.mainFacets) {
         i++;
         if (option.id.toLowerCase() == this.mainFacet.toLowerCase()) {
-          if (option.disabled) {
-            continue;
-          }
           isRecognizedFacet = true
           this.mainFacetIndex = i;
           break;
@@ -59,16 +56,6 @@ export default class RpPageSearch extends RpUtilsCollection {
     }
     this._parseUrlQuery(state);
     await Promise.all([this._doMainQuery()]);
-  }
-
-
-  getMainFacetLinks(){
-    let links = [{id: 'none', text: 'All Results', href: `/search?s=${encodeURIComponent(this.textQuery)}`}]
-    for (let f of this.CollectionModel.mainFacets) {
-      f.href = `/search/${f.id}?s=${encodeURIComponent(this.textQuery)}`
-      links.push(f)
-    }
-    return links
   }
 
 }

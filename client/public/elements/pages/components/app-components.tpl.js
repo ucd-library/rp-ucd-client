@@ -17,6 +17,7 @@ import "../../components/person-preview"
 import "../../components/quick-search"
 import "../../components/search"
 import "../../components/view-all"
+import "../../components/work-preview"
 
 export default function render() {
 return html`
@@ -366,5 +367,14 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <rp-view-all justify="start"></rp-view-all>
 <rp-view-all text="View All People"></rp-view-all>
 <rp-view-all text="Add an href to make it a normal link" href="https://google.com"></rp-view-all>
+</section>
+
+<section>
+<h1>Asset Preview (Work)</h1>
+<p>Card for the Work asset type - used in browse and search pages.</p>
+${this.exampleWorks.map((work) => html`
+  <rp-work-preview .data="${work}"></rp-work-preview>
+`)}
+
 </section>
 `;}

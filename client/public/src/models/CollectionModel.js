@@ -10,18 +10,23 @@ class CollectionModel extends BaseModel {
     this.store = CollectionStore;
     this.service = CollectionService;
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
-    this.mainFacets = [{id: 'people', text: 'People',
+    this.mainFacets = [{id: 'people', text: 'People', es: `${this.jsonldContext}:person`,
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
-                       {id: 'organizations', text: 'Organizations', baseFilter: {}, disabled: true},
-                       {id: 'works', text: 'Works',  baseFilter: {}, disabled: true}];
+                       {id: 'organizations', text: 'Organizations', baseFilter: {}, es: ''},
+                       {id: 'works', text: 'Works', es: `${this.jsonldContext}:publication`, 
+                       baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":publication"]}}}];
     this.currentQuery = {};
     this.subFacets = {
       people: [
         {id: 'faculty', es: 'vivo:FacultyMember', text: 'Faculty Member', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:FacultyMember"]}}}, 
-        {id: 'non-academic', es: 'vivo:NonAcademic', text: 'Non Academic', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:NonAcademic"]}}}
+        {id: 'non-academics', es: 'vivo:NonAcademic', text: 'Non Academic', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:NonAcademic"]}}}
+      ],
+      works: [
+        {id: 'articles', es: "bibo:AcademicArticle", text: 'Academic Article', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:AcademicArticle"]}}}
       ]
     }
-    this.aggs = {people : {"@type": {"type" : "facet"}} };
+    this.aggs = {people : {"@type": {"type" : "facet"}}, 
+                 works : {"@type": {"type" : "facet"}} };
     this.pgPer = 8;
 
     this.register('CollectionModel');
@@ -140,7 +145,7 @@ class CollectionModel extends BaseModel {
   _getSubFacets(mainFacet, payload, query) {
     let mainFacets = this.mainFacets.map(f => f.id);
     let subFacets = [];
-    if (!mainFacets.includes(mainFacet) || !payload || !query) return subFacets;
+    if ( !payload || !query) return subFacets;
     if (Object.keys(query).length == 0) {
       return subFacets;
     }
@@ -149,19 +154,44 @@ class CollectionModel extends BaseModel {
     let dataTotal = 0;
     if (typeof payload.total === "number") dataTotal = payload.total;
 
-    if (mainFacet == 'people') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
-      let counts = {};
-      try {
-        counts = payload.aggregations.facets['@type'];
-        if (typeof counts != 'object' || Array.isArray(counts)) {
-          throw "Subfacet counts not found.";
-        }
-      } catch (error) {
-        console.warn(error);
-        return subFacets;
+    let counts = {};
+    try {
+      counts = payload.aggregations.facets['@type'];
+      if (typeof counts != 'object' || Array.isArray(counts)) {
+        throw "Subfacet counts not found.";
       }
+    } catch (error) {
+      console.warn(error);
+      return subFacets;
+    }
+
+    if (mainFacet == 'none') {
+      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+    }
+
+    else if (mainFacet == 'people') {
+      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+
       for (let f of this.subFacets.people) {
+        let facet = {...f};
+        elementQuery.subFacet = facet.id;
+        facet.href = this.constructUrl(elementQuery, ['page', 'az']);
+        if (Object.keys(counts).includes(facet.es)){
+          facet.text += ` (${counts[facet.es]})`;
+        }
+        else {
+          facet.text += " (0)";
+          facet.disabled = true;
+        }
+        subFacets.push(facet);
+      }
+
+    }
+
+    else if (mainFacet == 'works') {
+      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+
+      for (let f of this.subFacets.works) {
         let facet = {...f};
         elementQuery.subFacet = facet.id;
         facet.href = this.constructUrl(elementQuery, ['page', 'az']);
@@ -179,6 +209,50 @@ class CollectionModel extends BaseModel {
     console.log('subfacets', subFacets);
 
     return subFacets;
+
+  }
+
+  _getMainFacets(payload, query) {
+    let mainFacets = [];
+    if (!payload || !query) return mainFacets;
+    if (Object.keys(query).length == 0) {
+      return mainFacets;
+    }
+
+    let elementQuery = {...query};
+
+    // construct "all results" facet
+    let hasResults = false;
+    if (typeof payload.total === "number" && payload.total > 0) hasResults = true;
+    let allResults = {id: 'none', text: 'All Results', href: `/search?s=${encodeURIComponent(elementQuery.textQuery)}`};
+    if (!hasResults) {
+      allResults.disabled = true;
+    }
+    mainFacets.push(allResults);
+
+    // make sure agg object is in payload
+    let counts = {};
+    try {
+      counts = payload.aggregations.facets['@type'];
+      if (typeof counts != 'object' || Array.isArray(counts)) {
+        throw "Main facet counts not found.";
+      }
+    } catch (error) {
+      console.warn(error);
+      return mainFacets;
+    }
+
+    for (let facetOption of this.mainFacets) {
+      facetOption = {...facetOption};
+      facetOption.href = `/search/${facetOption.id}?s=${encodeURIComponent(elementQuery.textQuery)}`;
+      if (!Object.keys(counts).includes(facetOption.es)) {
+        facetOption.disabled = true;
+      }
+      mainFacets.push(facetOption);
+    }
+
+  console.log("mainfacets", mainFacets);
+  return mainFacets
 
   }
 
@@ -211,6 +285,9 @@ class CollectionModel extends BaseModel {
       // get aggs for search query
       if ( Object.keys(this.aggs).includes(userQuery.mainFacet)) {
         queryObject.facets = this.aggs[userQuery.mainFacet];
+      }
+      else {
+        queryObject.facets = {"@type": {"type" : "facet"}};
       }
     }
     // asset browsing pages

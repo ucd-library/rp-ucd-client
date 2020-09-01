@@ -4,6 +4,7 @@ import "../components/a-z";
 import "../components/link-list";
 import "../components/pagination";
 import "../components/person-preview"
+import "../components/work-preview"
 
 export default class RpUtilsCollection extends Mixin(LitElement)
   .with(LitCorkUtils) {
@@ -22,6 +23,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       visible: {type: Boolean},
       currentQuery: {type: Object},
       mainFacet: {type: String},
+      mainFacets: {type: Array},
       pgPer: {type: Number},
       pgCurrent: {type: Number},
       textQuery: {type: String},
@@ -65,6 +67,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.pgCurrent = 1;
 
     this.mainFacet = 'none';
+    this.mainFacets = [];
     this.mainFacetIndex = 0;
 
     this.subFacet = 'none';
@@ -119,7 +122,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
 
     if (this.textQuery) {
-      this.subFacets = this.CollectionModel._getSubFacets('people', data.payload, this.currentQuery);
+      this.mainFacets = this.CollectionModel._getMainFacets(data.payload, this.currentQuery);
+      this.subFacets = this.CollectionModel._getSubFacets(this.mainFacet, data.payload, this.currentQuery);
+
     }
     else {
       this.hasAz = true;
@@ -359,6 +364,9 @@ _getAssetType(data) {
   if (data['@type'].includes(this.jsonldContext + ":person")) {
     return "person";
   }
+  if (data['@type'].includes(this.jsonldContext + ":publication")) {
+    return "work";
+  }
 
   return;
 }
@@ -449,6 +457,13 @@ _urlEncode(obj) {
         class="my-3">
       </rp-person-preview>
       `;
+    }
+
+    if (assetType == 'work') {
+      return html`
+      <rp-work-preview .data="${data}" class="my-3"></rp-work-preview>
+      `;
+      
     }
 
     return html``
