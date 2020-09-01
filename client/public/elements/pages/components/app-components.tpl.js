@@ -12,6 +12,7 @@ import "../../components/hero-image"
 import "../../components/icon"
 import "../../components/link-list"
 import "../../components/link-list-counts"
+import "../../components/organization-preview"
 import "../../components/pagination"
 import "../../components/person-preview"
 import "../../components/quick-search"
@@ -374,6 +375,15 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <p>Card for the Work asset type - used in browse and search pages.</p>
 ${this.exampleWorks.map((work) => html`
   <rp-work-preview .data="${work}"></rp-work-preview>
+`)}
+
+</section>
+
+<section>
+<h1>Asset Preview (Organization)</h1>
+<p>Card for the Organization asset type - used in browse and search pages.</p>
+${this.exampleOrgs.map((org) => html`
+  <rp-organization-preview .data="${org}"></rp-organization-preview>
 `)}
 
 </section>

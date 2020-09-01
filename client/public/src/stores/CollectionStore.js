@@ -8,6 +8,7 @@ class CollectionStore extends BaseStore {
     this.data = {
       queryById : {},
       azAggs : {},
+      searchAggs: {},
       overview : {}
     };
     this.events = {};
@@ -37,6 +38,32 @@ class CollectionStore extends BaseStore {
   _setAzAggsState(state) {
     //if( !this.stateChanged(this.data.overview[id], state) ) return;
     this.data.azAggs[state.id] = state;
+  }
+
+  setSearchAggsLoading(id, request) {
+    this._setSearchAggsState({
+      state: this.STATE.LOADING,
+      id, request
+    });
+  }
+
+  setSearchAggsLoaded(id, payload) {
+    this._setSearchAggsState({
+      state: this.STATE.LOADED,
+      id, payload
+    });
+  }
+
+  setSearchAggsError(id, error) {
+    this._setSearchAggsState({
+      state: this.STATE.ERROR,
+      id, error
+    });
+  }
+
+  _setSearchAggsState(state) {
+    //if( !this.stateChanged(this.data.overview[id], state) ) return;
+    this.data.searchAggs[state.id] = state;
   }
 
   setOverviewLoading(id, request) {

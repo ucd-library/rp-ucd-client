@@ -27,6 +27,23 @@ class CollectionService extends BaseService {
     });
   }
 
+  async searchAgg(id, searchObject) {
+    return this.request({
+      url : this.searchUrl,
+      fetchOptions : {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(searchObject)
+      },
+      checkCached : () => this.store.data.searchAggs[id],
+      onLoading : request => this.store.setSearchAggsLoading(id, request),
+      onLoad : result => this.store.setSearchAggsLoaded(id, result.body),
+      onError : e => this.store.setSearchAggsError(id, e)
+    });
+  }
+
   async azAgg(id, searchObject) {
     return this.request({
       url : this.searchUrl,

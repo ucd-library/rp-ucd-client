@@ -55,7 +55,7 @@ export default class RpPageSearch extends RpUtilsCollection {
       return;
     }
     this._parseUrlQuery(state);
-    await Promise.all([this._doMainQuery()]);
+    await Promise.all([this._doMainQuery(), this._getSearchAggs()]);
   }
 
 }

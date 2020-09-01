@@ -12,9 +12,10 @@ class CollectionModel extends BaseModel {
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.mainFacets = [{id: 'people', text: 'People', es: `${this.jsonldContext}:person`,
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
-                       {id: 'organizations', text: 'Organizations', baseFilter: {}, es: ''},
+                       {id: 'organizations', text: 'Organizations', es: 'ucdrp:organization', 
+                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":organization"]}}},
                        {id: 'works', text: 'Works', es: `${this.jsonldContext}:publication`, 
-                       baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":publication"]}}}];
+                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":publication"]}}}];
     this.currentQuery = {};
     this.subFacets = {
       people: [
@@ -23,11 +24,17 @@ class CollectionModel extends BaseModel {
       ],
       works: [
         {id: 'articles', es: "bibo:AcademicArticle", text: 'Academic Article', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:AcademicArticle"]}}}
+      ],
+      organizations: [
+        {id: 'universities', es: 'vivo:University', text: 'University', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:University"]}}}, 
+        {id: 'departments', es: 'vivo:AcademicDepartment', text: 'Department', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:AcademicDepartment"]}}}
       ]
     }
     this.aggs = {people : {"@type": {"type" : "facet"}}, 
-                 works : {"@type": {"type" : "facet"}} };
+                 works : {"@type": {"type" : "facet"}}, 
+                 organizations : {"@type": {"type" : "facet"}}};
     this.pgPer = 8;
+    this.defaultIndices = ["label.text"];
 
     this.register('CollectionModel');
   }
@@ -77,6 +84,25 @@ class CollectionModel extends BaseModel {
       await state.request;
     }
     return this.store.data.queryById[id];
+  }
+
+
+  async searchAggQuery(textQuery) {
+    let state = {state : CollectionStore.STATE.INIT};
+    let q = this.getBaseQueryObject();
+    let id = textQuery;
+    q.limit = 0;
+    q.text = textQuery;
+    q.textFields =   this.defaultIndices;
+    q.facets = {"@type": {"type" : "facet"}};
+
+    if( state.state === 'init' ) {
+      await this.service.searchAgg(id, q);
+    } else if( state.state === 'loading' ) {
+      await state.request;
+    }
+    return this.store.data.searchAggs[id];
+
   }
 
   async azAggQuery(mainFacet, subFacet){
@@ -151,9 +177,6 @@ class CollectionModel extends BaseModel {
     }
     let elementQuery = {...query};
 
-    let dataTotal = 0;
-    if (typeof payload.total === "number") dataTotal = payload.total;
-
     let counts = {};
     try {
       counts = payload.aggregations.facets['@type'];
@@ -163,6 +186,20 @@ class CollectionModel extends BaseModel {
     } catch (error) {
       console.warn(error);
       return subFacets;
+    }
+
+    let dataTotal = 0;
+    if (typeof payload.total === "number") dataTotal = payload.total;
+    for (let f of this.mainFacets) {
+      if (f.id == mainFacet) {
+        if (Object.keys(counts).includes(f.es)) {
+          dataTotal = counts[f.es];
+        }
+        else {
+          dataTotal = 0;
+        }
+        break;
+      }
     }
 
     if (mainFacet == 'none') {
@@ -185,7 +222,6 @@ class CollectionModel extends BaseModel {
         }
         subFacets.push(facet);
       }
-
     }
 
     else if (mainFacet == 'works') {
@@ -204,7 +240,24 @@ class CollectionModel extends BaseModel {
         }
         subFacets.push(facet);
       }
+    }
 
+    else if (mainFacet == 'organizations') {
+      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+
+      for (let f of this.subFacets.organizations) {
+        let facet = {...f};
+        elementQuery.subFacet = facet.id;
+        facet.href = this.constructUrl(elementQuery, ['page', 'az']);
+        if (Object.keys(counts).includes(facet.es)){
+          facet.text += ` (${counts[facet.es]})`;
+        }
+        else {
+          facet.text += " (0)";
+          facet.disabled = true;
+        }
+        subFacets.push(facet);
+      }
     }
     console.log('subfacets', subFacets);
 
@@ -280,7 +333,7 @@ class CollectionModel extends BaseModel {
     // handle search query
     if (userQuery.textQuery) {
       queryObject.text = userQuery.textQuery;
-      queryObject.textFields =   ["label.text"];
+      queryObject.textFields = this.defaultIndices;
 
       // get aggs for search query
       if ( Object.keys(this.aggs).includes(userQuery.mainFacet)) {
@@ -328,7 +381,6 @@ class CollectionModel extends BaseModel {
         }
       }
     }
-    /*
     else if (typeof filters === 'object') {
       for (let filterKey in filters) {
         if (!filtersCombined[filterKey]) {
@@ -340,7 +392,7 @@ class CollectionModel extends BaseModel {
         }
       }
     }
-    */
+
     return filtersCombined;
   }
 

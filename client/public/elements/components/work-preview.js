@@ -16,7 +16,7 @@ export class RpWorkPreview extends LitElement {
 
   constructor() {
     super();
-    this.workPath = "/work/";
+    this.workPath = "/works/";
     this.authorPath = "/individual/";
     this.grpsWithLinks = ["vivo:FacultyMember"];
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
@@ -30,7 +30,7 @@ export class RpWorkPreview extends LitElement {
       }
       else {
         try {
-            let id = this.data['@id'].split('ucdrp:publication')[1];
+            let id = this.data['@id'].split(`${this.jsonldContext}:publication`)[1];
             href = this.workPath + id;
         } catch (error) {
             console.warn("Unable to construct work href.");

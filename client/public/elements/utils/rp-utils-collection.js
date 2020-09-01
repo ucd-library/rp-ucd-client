@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit-element';
 
 import "../components/a-z";
 import "../components/link-list";
+import "../components/organization-preview"
 import "../components/pagination";
 import "../components/person-preview"
 import "../components/work-preview"
@@ -132,6 +133,25 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.data = data.payload.results;
     console.log("main query result:", data);
   }
+
+
+  async _getSearchAggs() {
+    if (!this.textQuery) {
+      return;
+    }
+    if (this.mainFacet == 'none' && this.subFacet == 'none') {
+      return; // agg retrieved by main query
+    }
+    let data = await this.CollectionModel.searchAggQuery(this.textQuery);
+    this.subFacetStatus = data.state;
+    if (data.state != 'loaded') {
+      return;
+    }
+    console.log('all facets:', data);
+
+
+  }
+
 
   async _getAzAgg() {
     let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet)
@@ -367,6 +387,9 @@ _getAssetType(data) {
   if (data['@type'].includes(this.jsonldContext + ":publication")) {
     return "work";
   }
+  if (data['@type'].includes(this.jsonldContext + ":organization")) {
+    return "organization";
+  }
 
   return;
 }
@@ -463,7 +486,12 @@ _urlEncode(obj) {
       return html`
       <rp-work-preview .data="${data}" class="my-3"></rp-work-preview>
       `;
-      
+    }
+
+    if (assetType == 'organization') {
+      return html`
+      <rp-organization-preview .data="${data}" class="my-3"></rp-organization-preview>
+      `;
     }
 
     return html``

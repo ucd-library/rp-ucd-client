@@ -8,6 +8,7 @@ export class AppPageComponents extends Mixin(LitElement)
   static get properties() {
     return {
       exampleWorks: {type: Array},
+      exampleOrgs: {type: Array},
       visible: {type: Boolean}
     };
     }
@@ -16,6 +17,7 @@ export class AppPageComponents extends Mixin(LitElement)
     this._injectModel('CollectionModel', 'AppStateModel');
     this.visible = false;
     this.exampleWorks = [];
+    this.exampleOrgs = [];
     this.render = render.bind(this);
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
@@ -30,7 +32,7 @@ export class AppPageComponents extends Mixin(LitElement)
     if (!this.visible) {
       return;
     }
-    await Promise.all([this.getWorks()]);
+    await Promise.all([this.getWorks(), this.getOrgs()]);
   }
 
   async getWorks(){
@@ -40,7 +42,17 @@ export class AppPageComponents extends Mixin(LitElement)
       return;
     }
     this.exampleWorks = data.payload.results;
-    console.log(this.exampleWorks);
+
+  }
+
+  async getOrgs(){
+    let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["ucdrp:organization"]}}};
+    let data = await this.CollectionModel.query(q);
+    if (data.state != 'loaded') {
+      return;
+    }
+    this.exampleOrgs = data.payload.results;
+    console.log(this.exampleOrgs);
 
   }
 }
