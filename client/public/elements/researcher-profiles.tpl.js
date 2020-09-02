@@ -215,6 +215,8 @@ return html`
   <rp-page-home id="home"></rp-page-home>
   <rp-page-people id="people"></rp-page-people>
   <rp-page-individual id="individual"></rp-page-individual>
+  <rp-page-works id="works"></rp-page-works>
+  <rp-page-organizations id="organizations"></rp-page-organizations>
   <rp-page-search id="search"></rp-page-search>
 </iron-pages>
 <div id="app-footer">

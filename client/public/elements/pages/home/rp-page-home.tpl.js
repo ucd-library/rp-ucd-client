@@ -25,7 +25,7 @@ return html`
     flex-grow: 1;
     padding: 0 50px;
   }
-  .hero .content: {
+  .hero .content {
     font-size: var(--font-size);
     line-height: 23px;
   }
@@ -93,9 +93,9 @@ return html`
       <div ?hidden="${this.facetsStatus == 'error' || this.facetsStatus == 'loaded' }" class="loading1">loading</div>
       <rp-alert ?hidden="${this.facetsStatus == 'loading' || this.facetsStatus == 'loaded' }">Error loading academic works</rp-alert>
       <rp-link-list-counts ?hidden="${this.facetsStatus == 'loading' || this.facetsStatus == 'error' }"
-                            links="${JSON.stringify(this.academicWorks)}"
-                            view-all-link='{"text": "View All Works"}'
-                            header="${JSON.stringify({text: "Academic Works", count: this.academicWorksTotal})}">
+                            .links="${this.academicWorks}"
+                            .viewAllLink='${{text: "View All Works", href: '/works'}}'
+                            .header="${{text: "Academic Works", count: this.academicWorksTotal}}">
       </rp-link-list-counts>
     </div>
     <div class="col-r flex-grow-1">

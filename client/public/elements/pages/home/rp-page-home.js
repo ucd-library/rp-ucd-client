@@ -34,12 +34,9 @@ export default class RpPageHome extends Mixin(LitElement)
     this.render = render.bind(this);
 
     this._injectModel('CollectionModel', 'AppStateModel');
+    this.reset_properties();
     this.facets = {};
-    this.academicWorks = []
-    this.facetsStatus = 'loading';
     this.academicWorksTotal = 0;
-    this.peopleStatus = 'loading';
-    this.people = [];
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
     this.setPeopleWidth(window.innerWidth);
@@ -49,6 +46,15 @@ export default class RpPageHome extends Mixin(LitElement)
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
 
     this._handleResize = this._handleResize.bind(this);
+  }
+
+  reset_properties(){
+    this.people = [];
+    this.academicWorks = [];
+    this.visible = false;
+    this.facetsStatus = 'loading';
+    this.peopleStatus = 'loading';
+
   }
 
   updated(props) {
@@ -71,8 +77,17 @@ export default class RpPageHome extends Mixin(LitElement)
     super.disconnectedCallback();
   }
 
-  async _onAppStateUpdate(e) {
-    await this._getFacets();
+  async doUpdate(state){
+    await this.updateComplete;
+    if (!this.visible) {
+      return;
+    }
+    this.reset_properties();
+    await Promise.all([this._getFacets()]);
+  }
+
+  async _onAppStateUpdate(state) {
+    requestAnimationFrame( () => this.doUpdate(state));
   }
 
   _onSearch(e){
@@ -121,11 +136,11 @@ export default class RpPageHome extends Mixin(LitElement)
     }
     this.facets = facetList.payload.aggregations.facets['@type'];
     for (let facet in this.facets) {
-      if (facet.startsWith('bibo:')) {
-
-        let biboType = this._formatBibType(facet);
-        this.academicWorks.push({text: biboType, count: this.facets[facet], facet: facet});
-        continue;
+      for (let recognizedFacet of this.CollectionModel.subFacets.works) {
+        if (facet == recognizedFacet.es) {
+          this.academicWorks.push({text: recognizedFacet.text, count: this.facets[facet], href: `/works/${recognizedFacet.id}`});
+          break;
+        }
       }
       if (facet == (this.context + ":publication")) {
         this.academicWorksTotal = this.facets[facet];
@@ -147,28 +162,6 @@ export default class RpPageHome extends Mixin(LitElement)
       return 0;
     });
 
-  }
-
-  _formatBibType(bib, splitCamel=true, makePlural=true) {
-    bib = bib.slice(5,);
-
-    if (splitCamel) {
-      bib = [...bib];
-      for (let i = 0; i < bib.length; i++) {
-        if (i == 0) {
-          continue;
-        }
-        if (bib[i] == bib[i].toUpperCase()) {
-          bib[i] = " " + bib[i];
-        }
-      }
-      bib = bib.join("");
-    }
-
-    if (makePlural) {
-      bib += "s";
-    }
-    return bib;
   }
 
 }

@@ -63,6 +63,16 @@ class CollectionModel extends BaseModel {
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
+    else if (id == "worksAggs") {
+      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":publication"]};
+      queryObject.limit = 0;
+      queryObject.facets["@type"] = {"type" : "facet"};
+    }
+    else if (id == "organizationsAggs") {
+      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":organization"]};
+      queryObject.limit = 0;
+      queryObject.facets["@type"] = {"type" : "facet"};
+    }
 
     if( state.state === 'init' ) {
       await this.service.overview(id, queryObject);
@@ -127,9 +137,12 @@ class CollectionModel extends BaseModel {
     q.limit = 0;
     q.filters = this._combineFiltersArray(filters);
 
-    // need logic works and orgs
-    q.facets = {"hasContactInfo.familyName.firstLetter" : {"type": "facet"}};
-
+    q.facets = {};
+    let f = this.getAzBaseFilter(mainFacet);
+    if (f) {
+      q.facets[f.key] = {"type": "facet"};
+    }
+    
     if( state.state === 'init' ) {
       await this.service.azAgg(id, q);
     } else if( state.state === 'loading' ) {
@@ -144,6 +157,12 @@ class CollectionModel extends BaseModel {
     }
     if (mainFacet == 'people') {
       return {key: "hasContactInfo.familyName.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
+    }
+    if (mainFacet == 'works') {
+      return {key: "undefined", value: {"type": "keyword", "op": "and", "value": []}};
+    }
+    if (mainFacet == 'organizations') {
+      return {key: "undefined", value: {"type": "keyword", "op": "and", "value": []}};
     }
 
   }
@@ -279,7 +298,7 @@ class CollectionModel extends BaseModel {
     if (typeof payload.total === "number" && payload.total > 0) hasResults = true;
     let allResults = {id: 'none', text: 'All Results', href: `/search?s=${encodeURIComponent(elementQuery.textQuery)}`};
     if (!hasResults) {
-      allResults.disabled = true;
+      //allResults.disabled = true;
     }
     mainFacets.push(allResults);
 

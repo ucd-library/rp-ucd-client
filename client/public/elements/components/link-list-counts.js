@@ -42,12 +42,24 @@ export class RpLinkListCounts extends LitElement {
     if (!link.text) {
       return html``;
     }
-    return html`<div class="row">
-                  <div class="count">${link.count}</div>
-                  <div class="link-container">
-                    <span @click="${this.handleClick}" link-index="${index}" class="link">${link.text}</span>
-                  </div>
-                </div>`;
+    if (link.href) {
+      return html`<div class="row">
+      <div class="count">${link.count}</div>
+      <div class="link-container">
+        <a link-index="${index}" class="link" href="${link.href}">${link.text}</a>
+      </div>
+    </div>`;
+    }
+    else {
+      return html`<div class="row">
+      <div class="count">${link.count}</div>
+      <div class="link-container">
+        <span @click="${this.handleClick}" link-index="${index}" class="link">${link.text}</span>
+      </div>
+    </div>`;
+
+    }
+
   }
 
   _renderViewAll(){
@@ -57,7 +69,13 @@ export class RpLinkListCounts extends LitElement {
     if (!this.viewAllLink.text) {
       this.viewAllLink.text = "View All";
     }
-    return html`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`
+    if (this.viewAllLink.href) {
+      return html`<div class="row view-all"><div class="count"></div><rp-view-all href="${this.viewAllLink.href}" text="${this.viewAllLink.text}"></rp-view-all></div>`
+    }
+    else {
+      return html`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`
+    }
+    
   }
 
   handleClick(e) {

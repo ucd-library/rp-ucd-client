@@ -51,8 +51,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.textQuery = "";
     this.isSearch = false;
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
-                     {text: 'Organizations', page: 'organizations', href: '#'},
-                     {text: 'Works', page: 'works', href: '#'},
+                     {text: 'Organizations', page: 'organizations', href: '/organizations'},
+                     {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '#'}];
 
     this._injectModel('AppStateModel');
@@ -98,6 +98,10 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       return import(/* webpackChunkName: "page-people" */ "./pages/people/rp-page-people")
     } else if( page === 'individual' ) {
       return import(/* webpackChunkName: "page-individual" */ "./pages/individual/rp-page-individual")
+    } else if( page === 'works' ) {
+      return import(/* webpackChunkName: "page-works" */ "./pages/works/rp-page-works")
+    } else if( page === 'organizations' ) {
+      return import(/* webpackChunkName: "page-organizations" */ "./pages/organizations/rp-page-organizations")
     } else if( page === 'search' ) {
       return import(/* webpackChunkName: "page-search" */ "./pages/search/rp-page-search")
     }

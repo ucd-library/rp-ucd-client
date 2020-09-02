@@ -108,8 +108,10 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   async _doMainQuery(){
     let q = this.currentQuery;
     let data = await this.CollectionModel.query(q);
-    if (this.textQuery) {
+    let facetAggDoneHere = false;
+    if (this.textQuery && this.mainFacet == 'none' && this.subFacet == 'none') {
       this.subFacetStatus = data.state;
+      facetAggDoneHere = true;
     }
     this.dataStatus = data.state;
     if (data.state != 'loaded') {
@@ -122,7 +124,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       this.dataTotal = data.payload.total;
     }
 
-    if (this.textQuery) {
+    if (facetAggDoneHere) {
+      this.CollectionModel.store.setSearchAggsLoaded(this.textQuery, data.payload);
       this.mainFacets = this.CollectionModel._getMainFacets(data.payload, this.currentQuery);
       this.subFacets = this.CollectionModel._getSubFacets(this.mainFacet, data.payload, this.currentQuery);
 
@@ -147,8 +150,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (data.state != 'loaded') {
       return;
     }
-    console.log('all facets:', data);
-
+    this.mainFacets = this.CollectionModel._getMainFacets(data.payload, this.currentQuery);
+    this.subFacets = this.CollectionModel._getSubFacets(this.mainFacet, data.payload, this.currentQuery);
 
   }
 
@@ -160,15 +163,12 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       return;
     }
     let aggKey = this.CollectionModel.getAzBaseFilter(this.currentQuery.mainFacet);
-    if (aggKey) {
+    if (aggKey && aggKey.key) {
       this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[aggKey.key]))].filter(x => x != 'all');
     }
     else {
       this.azStatus = 'error';
     }
-
-    
-
     console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`, data);
 
   }
