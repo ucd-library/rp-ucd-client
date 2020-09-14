@@ -159,10 +159,10 @@ class CollectionModel extends BaseModel {
       return {key: "hasContactInfo.familyName.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
     }
     if (mainFacet == 'works') {
-      return {key: "undefined", value: {"type": "keyword", "op": "and", "value": []}};
+      return {key: "label.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
     }
     if (mainFacet == 'organizations') {
-      return {key: "undefined", value: {"type": "keyword", "op": "and", "value": []}};
+      return {key: "label.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
     }
 
   }
