@@ -35,6 +35,24 @@ class CollectionModel extends BaseModel {
                  organizations : {"@type": {"type" : "facet"}}};
     this.pgPer = 8;
     this.defaultIndices = ["label.text"];
+    this.searchFields = {
+      all: [
+        "doi^10",
+        'hasContactInfo.familyName.text^9', 
+        'hasContactInfo.givenName.text^8', 
+        "label.text^6", 
+        "hasSubjectArea.label.text^5",
+        "abstract^5"], 
+      people : [
+        'hasContactInfo.familyName.text^9', 
+        'hasContactInfo.givenName.text^8', 
+        'hasContactInfo.title.text^7'], 
+      works: [
+        "doi^10", 
+        "label.text^9", 
+        "abstract^8"], 
+      organizations: [
+        "label.text^10"]}
 
     this.register('CollectionModel');
   }
@@ -97,13 +115,13 @@ class CollectionModel extends BaseModel {
   }
 
 
-  async searchAggQuery(textQuery) {
+  async searchAggQuery(textQuery, mainFacet) {
     let state = {state : CollectionStore.STATE.INIT};
     let q = this.getBaseQueryObject();
     let id = textQuery;
     q.limit = 0;
     q.text = textQuery;
-    q.textFields =   this.defaultIndices;
+    q.textFields =   this.searchFields[mainFacet];
     q.facets = {"@type": {"type" : "facet"}};
 
     if( state.state === 'init' ) {
@@ -180,6 +198,9 @@ class CollectionModel extends BaseModel {
     let id = {};
     for (let key in q) {
       if (key == 'facets') {
+        continue;
+      }
+      if (key == 'textFields') {
         continue;
       }
       id[key] = q[key]
@@ -331,6 +352,7 @@ class CollectionModel extends BaseModel {
   _constructQueryObject(query) {
     let userQuery = JSON.parse(JSON.stringify(query));
     let queryObject = this.getBaseQueryObject();
+    let mainFacet = userQuery.mainFacet ? userQuery.mainFacet : 'all';
     if (Object.keys(userQuery).length == 0) {
       return queryObject;
     }
@@ -352,7 +374,7 @@ class CollectionModel extends BaseModel {
     // handle search query
     if (userQuery.textQuery) {
       queryObject.text = userQuery.textQuery;
-      queryObject.textFields = this.defaultIndices;
+      queryObject.textFields = this.searchFields[mainFacet];
 
       // get aggs for search query
       if ( Object.keys(this.aggs).includes(userQuery.mainFacet)) {

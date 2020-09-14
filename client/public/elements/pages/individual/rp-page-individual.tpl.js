@@ -129,8 +129,9 @@ return html`
   <section id="publications" class="bg-light mt-3" ?hidden="${this.hideSection('publications')}">
     <div class="flex justify-content-between">
       <h1 class="weight-regular mt-0">Publications</h1>
-      <div class="flex align-items-center">
+      <div class="flex align-items-center">${this.isOwnProfile ? html`
         <a class="export mr-3" href="${`/api/miv/${this.individualId}`}">Export</a>
+      ` : html``}
         <div class="pub-count">${this.totalPublications}</div>
       </div>
 

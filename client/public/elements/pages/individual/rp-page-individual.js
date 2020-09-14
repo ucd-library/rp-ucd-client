@@ -21,11 +21,12 @@ export default class RpPageIndividual extends Mixin(LitElement)
       individualStatus: {type: String},
       publicationStatus: {type: String},
       retrievedPublications: {type: Array},
-      totalPublications: {type: parseInt},
+      totalPublications: {type: Number},
       researchSubjects: {type: Array},
       researchSubjectsToShow: {type: Number},
       activeSection: {type: Object},
       visible: {type: Boolean},
+      isOwnProfile: {type: Boolean}
     }
   }
 
@@ -44,6 +45,7 @@ export default class RpPageIndividual extends Mixin(LitElement)
     this.researchSubjects = [];
     this.researchSubjectsToShow = 4;
     this.activeSection = {index: 0};
+    this.isOwnProfile = false;
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
@@ -68,6 +70,7 @@ export default class RpPageIndividual extends Mixin(LitElement)
       await Promise.all([this._doMainQuery(this.individualId),
                          this._doPubQuery(this.individualId)]);
     }
+    this.isOwnProfile = this._isOwnProfile();
 
   }
 
@@ -82,7 +85,7 @@ export default class RpPageIndividual extends Mixin(LitElement)
       return;
     }
     this.individual = data.payload;
-    console.log(data);
+    if (APP_CONFIG.verbose) console.log(data);
   }
 
   async _doPubQuery(id){
@@ -98,7 +101,8 @@ export default class RpPageIndividual extends Mixin(LitElement)
     if (data.state != 'loaded') {
       return;
     }
-    console.log("pubs", data);
+    if (APP_CONFIG.verbose) console.log("pubs", data);
+    
     this.retrievedPublications = data.payload.results;
     if (data.payload.results.length > 0) {
       this.totalPublications = data.payload.total;
@@ -108,8 +112,17 @@ export default class RpPageIndividual extends Mixin(LitElement)
         //this.researchSubjects = this.formatSubjectsObject(researchSubjects);
       }
     }
-    console.log("research subjects", this.researchSubjects);
+    if (APP_CONFIG.verbose) console.log("research subjects", this.researchSubjects);
 
+  }
+
+  _isOwnProfile() {
+    try {
+      if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === this.individualId.toLowerCase()) {
+        return true;
+      }
+    } catch (error) {}
+    return false;
   }
 
   hideSection(section){

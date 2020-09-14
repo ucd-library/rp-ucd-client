@@ -145,7 +145,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (this.mainFacet == 'none' && this.subFacet == 'none') {
       return; // agg retrieved by main query
     }
-    let data = await this.CollectionModel.searchAggQuery(this.textQuery);
+    let data = await this.CollectionModel.searchAggQuery(this.textQuery, this.mainFacet);
     this.subFacetStatus = data.state;
     if (data.state != 'loaded') {
       return;

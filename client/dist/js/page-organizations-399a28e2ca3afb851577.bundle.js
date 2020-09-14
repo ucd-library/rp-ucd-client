@@ -1,4 +1,4 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{103:function(t,a,e){"use strict";e.r(a),e.d(a,"default",(function(){return o}));var s=e(2),i=e(41),n=e.n(i);function d(){return s.b`
+(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{107:function(t,a,e){"use strict";e.r(a),e.d(a,"default",(function(){return o}));var s=e(2),i=e(41),n=e.n(i);function d(){return s.b`
 
 <style>
   :host {
@@ -32,4 +32,4 @@
   </div>
 
 </div>
-`}var r=e(89);e(83),e(84);class o extends r.a{static get properties(){return{}}constructor(){super(),this.render=d.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getFacets(),this._getAzAgg()]))}async _getFacets(){let t=await this.CollectionModel.overview("organizationsAggs");this.subFacetStatus=t.state,"loaded"==t.state&&(this.subFacets=this.CollectionModel._getSubFacets("organizations",t.payload,this.currentQuery))}}customElements.define("rp-page-organizations",o)}}]);
+`}var r=e(93);e(86),e(87);class o extends r.a{static get properties(){return{}}constructor(){super(),this.render=d.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getFacets(),this._getAzAgg()]))}async _getFacets(){let t=await this.CollectionModel.overview("organizationsAggs");this.subFacetStatus=t.state,"loaded"==t.state&&(this.subFacets=this.CollectionModel._getSubFacets("organizations",t.payload,this.currentQuery))}}customElements.define("rp-page-organizations",o)}}]);
