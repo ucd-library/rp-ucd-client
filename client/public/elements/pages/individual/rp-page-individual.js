@@ -65,11 +65,11 @@ export default class RpPageIndividual extends Mixin(LitElement)
       this.PersonModel.individualId = this.individualId;
     }
     this.activeSection = this.PersonModel.getActiveSection(path[2])
-    if (this.individualId) {
-      this.totalPublications = 0;
-      await Promise.all([this._doMainQuery(this.individualId),
-                         this._doPubQuery(this.individualId)]);
-    }
+    if (!this.individualId) return;
+
+    this.totalPublications = 0;
+    await Promise.all([this._doMainQuery(this.individualId),
+                        this._doPubQuery(this.individualId)]);
     this.isOwnProfile = this._isOwnProfile();
 
   }

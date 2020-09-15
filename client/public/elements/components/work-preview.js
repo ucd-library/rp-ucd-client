@@ -16,7 +16,7 @@ export class RpWorkPreview extends LitElement {
 
   constructor() {
     super();
-    this.workPath = "/works/";
+    this.workPath = "/work/";
     this.authorPath = "/individual/";
     this.grpsWithLinks = ["vivo:FacultyMember"];
     this.jsonldContext = APP_CONFIG.data.jsonldContext;

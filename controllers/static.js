@@ -63,7 +63,8 @@ export default (app) => {
         user,
         appRoutes : config.client.appRoutes,
         theme : config.client.theme,
-        data : config.client.data
+        data : config.client.data,
+        verbose : config.client.verbose
       });
     },
     template : (req, res, next) => {

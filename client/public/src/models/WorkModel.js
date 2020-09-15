@@ -13,6 +13,17 @@ class WorkModel extends BaseModel {
     this.register('WorkModel');
   }
 
+  async getWork(id) {
+    let state = {state : WorkStore.STATE.INIT};
+    if( state.state === 'init' ) {
+      await this.service.getWork(id);
+    } else if( state.state === 'loading' ) {
+      await state.request;
+    }
+    return this.store.data.byWork[id];
+  }
+
+
 }
 
 module.exports = new WorkModel();
