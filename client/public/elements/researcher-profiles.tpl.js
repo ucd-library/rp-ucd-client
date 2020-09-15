@@ -171,7 +171,7 @@ return html`
         </h1>
       </a>
       <div class="small bold hlist">
-        <a class="no-decoration" href="#">Help</a>
+        <a class="no-decoration" href="/help">Help</a>
         ${this.user ? html`
           <rp-dropdown no-padding
                        sticky-title="${this.user.username.split('@')[0]}"
@@ -218,6 +218,8 @@ return html`
   <rp-page-works id="works"></rp-page-works>
   <rp-page-work id="work"></rp-page-work>
   <rp-page-organizations id="organizations"></rp-page-organizations>
+  <rp-page-organization id="organization"></rp-page-organization>
+  <rp-page-help id="help"></rp-page-help>
   <rp-page-search id="search"></rp-page-search>
 </iron-pages>
 <div id="app-footer">

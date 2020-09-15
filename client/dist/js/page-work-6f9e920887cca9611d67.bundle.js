@@ -1,4 +1,4 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{106:function(t,e,i){"use strict";i.r(e),i.d(e,"default",(function(){return n}));var r=i(2),s=i(41),o=i.n(s);function a(){return r.b`
+(window.webpackJsonp=window.webpackJsonp||[]).push([[10],{109:function(t,e,i){"use strict";i.r(e),i.d(e,"default",(function(){return n}));var r=i(2),s=i(41),o=i.n(s);function a(){return r.b`
 
 <style>
   :host {
@@ -49,10 +49,10 @@
       <div class="loading1">loading</div>
   </div>
   <div ?hidden="${this._hideStatusSection("error")}" class="flex align-items-center justify-content-center">
-    <rp-alert>Error loading individual.</rp-alert>
+    <rp-alert>Error loading work.</rp-alert>
   </div>
   <div class="data" ?hidden="${this._hideStatusSection("loaded")}">
-    <rp-hero-image>
+    <rp-hero-image id="hero">
       <div slot="top" class="herotop">
         <rp-icon icon="iron-link" circle-bg is-link style="margin-right:5px;"></rp-icon>
         <rp-icon icon="rp-qr" circle-bg is-link></rp-icon>
@@ -72,7 +72,7 @@
   </section>
 </div>
 
-`}i(86),i(92);class n extends(Mixin(r.a).with(LitCorkUtils)){static get properties(){return{visible:{type:Boolean},workId:{type:String},work:{type:Object},workStatus:{type:String},grpsWithLinks:{type:String},authorPath:{type:String}}}constructor(){super(),this.render=a.bind(this),this._injectModel("AppStateModel","WorkModel"),this.visible=!1,this.workId="",this.work={},this.workStatus="loading",this.authorPath="/individual/",this.grpsWithLinks=["vivo:FacultyMember"],this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){if(await this.updateComplete,!this.visible)return;let e=t.location.path;1!=e.length?(this.workId=e[1],this.workId&&await Promise.all([this._doMainQuery(this.workId)])):this.AppStateModel.setLocation("/works")}async _doMainQuery(t){let e=await this.WorkModel.getWork(t);this.workStatus=e.state,"loaded"==e.state&&(this.work=e.payload,APP_CONFIG.verbose&&console.log("work payload:",e))}_hideStatusSection(t,e="workStatus"){return t!=this[e]}_hideSection(t){return"abstract"!=t||!this.work.abstract}_renderAuthors(){let t=[];if(this.work.Authorship&&"object"==typeof this.work.Authorship){let e=this.work.Authorship;Array.isArray(e)||(e=[e]);for(let i of e)if(i.hasName){i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),i.href="";try{"object"!=typeof i.identifiers||Array.isArray(i.identifiers)||(i.identifiers=[i.identifiers]);for(let t of i.identifiers)this.grpsWithLinks.includes(t["@type"])&&(i.href=this.authorPath+t["@id"].replace(this.WorkModel.service.jsonContext+":",""))}catch(t){console.warn("Unable to construct author href.")}t.push(i)}t.sort((function(t,e){return t["vivo:rank"]-e["vivo:rank"]}))}return r.b`<div class="authors">${t.map(t=>r.b`<a class="author" href="${t.href}" ?disabled="${!t.href}">${t.nameLast}, ${t.nameFirst}</a>; `)}</div>`}}customElements.define("rp-page-work",n)},86:function(t,e,i){"use strict";var r=i(2),s=i(33);i(34);function o(){return r.b`
+`}i(89),i(93);class n extends(Mixin(r.a).with(LitCorkUtils)){static get properties(){return{visible:{type:Boolean},workId:{type:String},work:{type:Object},workStatus:{type:String},grpsWithLinks:{type:String},authorPath:{type:String}}}constructor(){super(),this.render=a.bind(this),this._injectModel("AppStateModel","WorkModel"),this.visible=!1,this.workId="",this.work={},this.workStatus="loading",this.authorPath="/individual/",this.grpsWithLinks=["vivo:FacultyMember"],this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){if(await this.updateComplete,!this.visible)return;let e=t.location.path;1!=e.length?(this.workId=e[1],this.workId&&(this.shadowRoot.getElementById("hero").shuffle(),await Promise.all([this._doMainQuery(this.workId)]))):this.AppStateModel.setLocation("/works")}async _doMainQuery(t){let e=await this.WorkModel.getWork(t);this.workStatus=e.state,"loaded"==e.state&&(this.work=e.payload,APP_CONFIG.verbose&&console.log("work payload:",e))}_hideStatusSection(t,e="workStatus"){return t!=this[e]}_hideSection(t){return"abstract"!=t||!this.work.abstract}_renderAuthors(){let t=[];if(this.work.Authorship&&"object"==typeof this.work.Authorship){let e=this.work.Authorship;Array.isArray(e)||(e=[e]);for(let i of e)if(i.hasName){i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),i.href="";try{"object"!=typeof i.identifiers||Array.isArray(i.identifiers)||(i.identifiers=[i.identifiers]);for(let t of i.identifiers)this.grpsWithLinks.includes(t["@type"])&&(i.href=this.authorPath+t["@id"].replace(this.WorkModel.service.jsonContext+":",""))}catch(t){console.warn("Unable to construct author href.")}t.push(i)}t.sort((function(t,e){return t["vivo:rank"]-e["vivo:rank"]}))}return r.b`<div class="authors">${t.map(t=>r.b`<a class="author" href="${t.href}" ?disabled="${!t.href}">${t.nameLast}, ${t.nameFirst}</a>; `)}</div>`}}customElements.define("rp-page-work",n)},89:function(t,e,i){"use strict";var r=i(2),s=i(33);i(34);function o(){return r.b`
   <style>
     :host {
       display: inline-block;
@@ -102,7 +102,7 @@
     <iron-icon icon="warning"></iron-icon>
     <div id="content"><slot></slot></div>
   </div>
-  `}class a extends r.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=o.bind(this),this.themeColor="danger"}_constructClasses(){let t={};return t[this.themeColor]=!0,t}}customElements.define("rp-alert",a)},92:function(t,e,i){"use strict";var r=i(2),s=i(33),o=i(34);function a(){return r.b`
+  `}class a extends r.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=o.bind(this),this.themeColor="danger"}_constructClasses(){let t={};return t[this.themeColor]=!0,t}}customElements.define("rp-alert",a)},93:function(t,e,i){"use strict";var r=i(2),s=i(33),o=i(34);function a(){return r.b`
   <style>
     :host {
       display: block;

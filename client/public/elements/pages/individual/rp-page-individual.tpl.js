@@ -81,7 +81,7 @@ return html`
     <rp-alert>Error loading individual.</rp-alert>
   </div>
   <div class="data" ?hidden="${this.individualStatus == 'loading' || this.individualStatus == 'error' }">
-  <rp-hero-image>
+  <rp-hero-image id="hero">
     <div slot="top" class="herotop">
       <rp-icon icon="iron-link" circle-bg is-link style="margin-right:5px;"></rp-icon>
       <rp-icon icon="rp-qr" circle-bg is-link></rp-icon>

@@ -1,4 +1,125 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{100:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{100:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
+  <style>
+    :host {
+      display: block;
+      font-size: var(--font-size);
+    }
+    a {
+      color: var(--tcolor-link-text)
+    }
+  </style>
+  <div class="container ${Object(a.a)(this.constructClasses())}" ?hidden="${!this.data}">
+  <a href="#">${this.data.label}</a>
+  ${this.authors.map(e=>r.b`<span>${e.nameLast}, ${e.nameFirst}</span>; `)}.
+  </div>
+  `}class s extends r.a{static get properties(){return{data:{type:Object},citationStyle:{type:String,attribute:"citation-style"},authors:{type:Array}}}constructor(){super(),this.render=n.bind(this),this.citationStyle="MLA",this.data={},this.authors=[]}constructClasses(){return{}}updated(e){e.has("data")&&this.parseData()}parseData(){if(0==Object.keys(this.data).length)return;let e=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let t=this.data.Authorship;Array.isArray(t)||(t=[t]);for(let i of t)i.hasName&&(i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),e.push(i));e.sort((function(e,t){return e["vivo:rank"]-t["vivo:rank"]})),this.authors=e}}}customElements.define("rp-citation",s)},101:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
+  <style>
+    :host {
+      display: block;
+      font-size: var(--font-size-small);
+    }
+    .container {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+    }
+    .letter {
+      color: var(--tcolor-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      min-height: 22px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .letter:hover {
+      color: var(--tcolor-link-hover-text);
+    }
+    .letter[disabled] {
+      pointer-events: none;
+      cursor: auto;
+      color: var(--tcolor-link-disabled-text);
+    }
+    .letter.selected {
+      font-weight: var(--font-weight-bold);
+      pointer-events: none;
+      cursor: auto;
+      z-index: 1;
+    }
+    .letter.selected::before {
+      content: "";
+      border-radius: 50%;
+      background-color: var(--tcolor-secondary);
+      min-width: 30px;
+      min-height: 30px;
+      position: absolute;
+      z-index: -1;
+    }
+    .letter.selected:hover {
+      color: var(--tcolor-primary);
+    }
+  </style>
+  <div class=container>
+    ${this.azlist.map(e=>this._renderAz(e))}
+  </div>
+  `}class n extends r.a{static get properties(){return{hideAll:{type:Boolean,attribute:"hide-all"},disabledLetters:{type:Array},disabledLettersFmt:{type:Array},selectedLetter:{type:String,attribute:"selected-letter"}}}constructor(){super(),this.render=a.bind(this),this.azlist=[..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"],this.disabledLetters=[],this.disabledLettersFmt=[],this.selectedLetter="All",this._changedLetter=new CustomEvent("changed-letter",{detail:{message:"A new letter has been selected."}})}updated(e){e.has("disabledLetters")&&(this.disabledLettersFmt=this.disabledLetters.map(e=>e.toUpperCase()))}_renderAz(e){let t="";return this.selectedLetter&&this.selectedLetter.toLowerCase()===e.toLowerCase()&&(t="selected"),r.b`<div @click="${this.handleClick}"
+                     ?disabled="${this.disabledLettersFmt.includes(e)}"
+                     class="letter ${t}"
+                     letter="${e}">${e}</div>`}handleClick(e){let t=e.target.getAttribute("letter").toLowerCase();t==this.selectedLetter||e.target.hasAttribute("disabled")||(this.selectedLetter=t,this.dispatchEvent(this._changedLetter))}firstUpdated(e){this.hideAll||(this.azlist.unshift("All"),this.requestUpdate())}}customElements.define("rp-a-z",n)},102:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
+  <style>
+    :host {
+      display: block;
+    }
+    .container {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+    .icon-container {
+      background-color: var(--tcolor-bg-primary);
+      height: 70px;
+      width: 70px;
+      min-height: 70px;
+      min-width: 70px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    iron-icon {
+      color: var(--tcolor-primary);
+      height: 50%;
+      width: 50%;
+    }
+    .text-container {
+      margin-left: 12px;
+      flex-grow: 1;
+    }
+    .name {
+      font-size: var(--font-size);
+      color : var(--tcolor-link-text);
+      font-weight : var(--font-weight-bold);
+    }
+    .author {
+      color : var(--tcolor-link-text);
+    }
+    a[disabled] {
+      pointer-events: none;
+      text-decoration: none;
+    }
+    a[disabled]:hover {
+      color : var(--tcolor-link-text);
+    }
+  </style>
+  <div class=container>
+    <div class="icon-container"><iron-icon icon="group-work"></iron-icon></div>
+    <div class="text-container">
+        ${this._renderNameLink()}
+    </div>
+  </div>
+
+  `}class n extends r.a{static get properties(){return{data:{type:Object},href:{type:String},organizationPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.organizationPath="/organization/",this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=a.bind(this)}_renderNameLink(){let e="";if(this.href)e=this.href;else try{let t=this.data["@id"].split(this.jsonldContext+":g-")[1];e=this.organizationPath+t}catch(e){console.warn("Unable to construct org href.")}return r.b`<a class="name" href="${e}" ?disabled="${!e}">${this.data.label}</a>`}}customElements.define("rp-organization-preview",n)},103:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
   <style>
     :host {
       display: block;
@@ -52,7 +173,7 @@
     </div>
   </div>
 
-  `}class n extends r.a{static get properties(){return{data:{type:Object},href:{type:String},workPath:{type:String},grpsWithLinks:{type:String},authorPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.workPath="/work/",this.authorPath="/individual/",this.grpsWithLinks=["vivo:FacultyMember"],this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=a.bind(this)}_renderTitleLink(){let e="";if(this.href)e=this.href;else try{let t=this.data["@id"].split(this.jsonldContext+":publication")[1];e=this.workPath+t}catch(e){console.warn("Unable to construct work href.")}return r.b`<a class="title" href="${e}" ?disabled="${!e}">${this.data.label}</a>`}_renderAuthors(){let e=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let t=this.data.Authorship;Array.isArray(t)||(t=[t]);for(let i of t)if(i.hasName){i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),i.href="";try{"object"!=typeof i.identifiers||Array.isArray(i.identifiers)||(i.identifiers=[i.identifiers]);for(let e of i.identifiers)this.grpsWithLinks.includes(e["@type"])&&(i.href=this.authorPath+e["@id"].replace(this.jsonldContext+":",""))}catch(e){console.warn("Unable to construct author href.")}e.push(i)}e.sort((function(e,t){return e["vivo:rank"]-t["vivo:rank"]}))}return r.b`<div class="authors">${e.map(e=>r.b`<a class="author" href="${e.href}" ?disabled="${!e.href}">${e.nameLast}, ${e.nameFirst}</a>; `)}</div>`}}customElements.define("rp-work-preview",n)},101:function(e,t,i){"use strict";i.r(t),i.d(t,"AppPageComponents",(function(){return d}));var r=i(2),a=i(41),n=i.n(a),s=(i(98),i(33));function o(){return r.b`
+  `}class n extends r.a{static get properties(){return{data:{type:Object},href:{type:String},workPath:{type:String},grpsWithLinks:{type:String},authorPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.workPath="/work/",this.authorPath="/individual/",this.grpsWithLinks=["vivo:FacultyMember"],this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=a.bind(this)}_renderTitleLink(){let e="";if(this.href)e=this.href;else try{let t=this.data["@id"].split(this.jsonldContext+":publication")[1];e=this.workPath+t}catch(e){console.warn("Unable to construct work href.")}return r.b`<a class="title" href="${e}" ?disabled="${!e}">${this.data.label}</a>`}_renderAuthors(){let e=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let t=this.data.Authorship;Array.isArray(t)||(t=[t]);for(let i of t)if(i.hasName){i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),i.href="";try{"object"!=typeof i.identifiers||Array.isArray(i.identifiers)||(i.identifiers=[i.identifiers]);for(let e of i.identifiers)this.grpsWithLinks.includes(e["@type"])&&(i.href=this.authorPath+e["@id"].replace(this.jsonldContext+":",""))}catch(e){console.warn("Unable to construct author href.")}e.push(i)}e.sort((function(e,t){return e["vivo:rank"]-t["vivo:rank"]}))}return r.b`<div class="authors">${e.map(e=>r.b`<a class="author" href="${e.href}" ?disabled="${!e.href}">${e.nameLast}, ${e.nameFirst}</a>; `)}</div>`}}customElements.define("rp-work-preview",n)},104:function(e,t,i){"use strict";i.r(t),i.d(t,"AppPageComponents",(function(){return d}));var r=i(2),a=i(41),n=i.n(a),s=(i(101),i(33));function o(){return r.b`
   <style>
     :host {
       display: block;
@@ -96,7 +217,7 @@
       <slot></slot>
     </div>
   </div>
-  `}class l extends r.a{static get properties(){return{title:{type:String},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",l);i(86),i(88),i(89),i(97),i(58),i(92),i(57),i(90),i(95),i(99),i(94),i(87),i(59),i(96),i(91),i(100);function c(){return r.b`
+  `}class l extends r.a{static get properties(){return{title:{type:String},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",l);i(89),i(91),i(92),i(100),i(59),i(93),i(58),i(94),i(98),i(102),i(97),i(90),i(60),i(99),i(95),i(103);function c(){return r.b`
 
 <style>
   :host {
@@ -462,7 +583,7 @@ ${this.exampleOrgs.map(e=>r.b`
 `)}
 
 </section>
-`}class d extends(Mixin(r.a).with(LitCorkUtils)){static get properties(){return{exampleWorks:{type:Array},exampleOrgs:{type:Array},visible:{type:Boolean}}}constructor(){super(),this._injectModel("CollectionModel","AppStateModel"),this.visible=!1,this.exampleWorks=[],this.exampleOrgs=[],this.render=c.bind(this),this.AppStateModel.get().then(e=>this._onAppStateUpdate(e))}async _onAppStateUpdate(e){requestAnimationFrame(()=>this.doUpdate(e))}async doUpdate(e){await this.updateComplete,this.visible&&await Promise.all([this.getWorks(),this.getOrgs()])}async getWorks(){let e=await this.CollectionModel.query({filters:{"@type":{type:"keyword",op:"and",value:["ucdrp:publication"]}}});"loaded"==e.state&&(this.exampleWorks=e.payload.results)}async getOrgs(){let e=await this.CollectionModel.query({filters:{"@type":{type:"keyword",op:"and",value:["ucdrp:organization"]}}});"loaded"==e.state&&(this.exampleOrgs=e.payload.results,console.log(this.exampleOrgs))}}customElements.define("app-page-components",d)},86:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function n(){return r.b`
+`}class d extends(Mixin(r.a).with(LitCorkUtils)){static get properties(){return{exampleWorks:{type:Array},exampleOrgs:{type:Array},visible:{type:Boolean}}}constructor(){super(),this._injectModel("CollectionModel","AppStateModel"),this.visible=!1,this.exampleWorks=[],this.exampleOrgs=[],this.render=c.bind(this),this.AppStateModel.get().then(e=>this._onAppStateUpdate(e))}async _onAppStateUpdate(e){requestAnimationFrame(()=>this.doUpdate(e))}async doUpdate(e){await this.updateComplete,this.visible&&await Promise.all([this.getWorks(),this.getOrgs()])}async getWorks(){let e=await this.CollectionModel.query({filters:{"@type":{type:"keyword",op:"and",value:["ucdrp:publication"]}}});"loaded"==e.state&&(this.exampleWorks=e.payload.results)}async getOrgs(){let e=await this.CollectionModel.query({filters:{"@type":{type:"keyword",op:"and",value:["ucdrp:organization"]}}});"loaded"==e.state&&(this.exampleOrgs=e.payload.results,console.log(this.exampleOrgs))}}customElements.define("app-page-components",d)},89:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function n(){return r.b`
   <style>
     :host {
       display: inline-block;
@@ -492,7 +613,7 @@ ${this.exampleOrgs.map(e=>r.b`
     <iron-icon icon="warning"></iron-icon>
     <div id="content"><slot></slot></div>
   </div>
-  `}class s extends r.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=n.bind(this),this.themeColor="danger"}_constructClasses(){let e={};return e[this.themeColor]=!0,e}}customElements.define("rp-alert",s)},87:function(e,t,i){"use strict";var r=i(2),a=i(34);i(88);function n(){return r.b`
+  `}class s extends r.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=n.bind(this),this.themeColor="danger"}_constructClasses(){let e={};return e[this.themeColor]=!0,e}}customElements.define("rp-alert",s)},90:function(e,t,i){"use strict";var r=i(2),a=i(34);i(91);function n(){return r.b`
   <style>
     :host {
       display: block;
@@ -546,7 +667,7 @@ ${this.exampleOrgs.map(e=>r.b`
     </div>
   </div>
 
-  `}i(89);class s extends r.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=n.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(e){if("string"==typeof e)return r.b`<rp-badge>${e}</rp-badge>`;if("object"==typeof e){let t=e.text;if(!t)return r.b``;let i=e.href;return i?r.b`<rp-badge href="${i}">${t}</rp-badge>`:r.b`<rp-badge>${t}</rp-badge>`}return r.b``}}customElements.define("rp-person-preview",s)},88:function(e,t,i){"use strict";var r=i(2),a=i(33),n=i(34);function s(){return r.b`
+  `}i(92);class s extends r.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=n.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(e){if("string"==typeof e)return r.b`<rp-badge>${e}</rp-badge>`;if("object"==typeof e){let t=e.text;if(!t)return r.b``;let i=e.href;return i?r.b`<rp-badge href="${i}">${t}</rp-badge>`:r.b`<rp-badge>${t}</rp-badge>`}return r.b``}}customElements.define("rp-person-preview",s)},91:function(e,t,i){"use strict";var r=i(2),a=i(33),n=i(34);function s(){return r.b`
   <style>
     :host {
       display: inline-block;
@@ -582,7 +703,7 @@ ${this.exampleOrgs.map(e=>r.b`
   <div class="circle ${Object(a.a)(this.constructClasses())}" style="${Object(n.a)(this.constructStyles())}">
     ${this.renderFace()}
   </div>
-  `}class o extends r.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=s.bind(this)}constructClasses(){let e={};return this.size&&"undefined"!=this.size&&(e["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(e.photo=!0),e}constructStyles(){let e={};return this.src&&"undefined"!=this.src&&(e["background-image"]=`url(${this.src})`),e}renderFace(){if(!this.src||"undefined"==this.src)return r.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",o)},89:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
+  `}class o extends r.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=s.bind(this)}constructClasses(){let e={};return this.size&&"undefined"!=this.size&&(e["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(e.photo=!0),e}constructStyles(){let e={};return this.src&&"undefined"!=this.src&&(e["background-image"]=`url(${this.src})`),e}renderFace(){if(!this.src||"undefined"==this.src)return r.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",o)},92:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
 <style>
   :host {
     display: inline-block;
@@ -642,7 +763,43 @@ ${this.exampleOrgs.map(e=>r.b`
   ${this._renderBadge()}
 `}class s extends r.a{static get properties(){return{size:{type:String},href:{type:String},colorSequence:{type:Number,attribute:"color-sequence"}}}constructor(){super(),this.maxColor=6,this.render=n.bind(this)}constructClasses(){let e={};if(this.size&&(e["size-"+this.size]=!0),this.colorSequence){e["color-"+Math.floor(this.colorSequence).toString()]=!0}else{let t=[...this.parentNode.childNodes].filter(e=>e.tagName===this.tagName);if(t.length>0){e["color-"+(t.indexOf(this)%this.maxColor).toString()]=!0}else e["color-0"]=!0}return e}_renderBadge(){return this.href?r.b`<a href=${this.href}>${this._renderSpan()}</a>`:r.b`${this._renderSpan()}`}_renderSpan(){return r.b`<span class=${Object(a.a)(this.constructClasses())}>
       <slot></slot>
-    </span>`}}customElements.define("rp-badge",s)},90:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
+    </span>`}}customElements.define("rp-badge",s)},93:function(e,t,i){"use strict";var r=i(2),a=i(33),n=i(34);function s(){return r.b`
+  <style>
+    :host {
+      display: block;
+    }
+    .container {
+      width: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .slot {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    #top {
+      height: 30px;
+      padding-top: 10px;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+    #bottom {
+      height: 30px;
+      padding-bottom: 10px;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+  </style>
+  <div class="container ${Object(a.a)(this.constructClasses())}" style="${Object(n.a)(this.constructStyles())}">
+      <div class="slot" id="top"><slot name="top"></slot></div>
+      <div class="slot" id="main"><slot name="main"></slot></div>
+      <div class="slot" id="bottom"><slot name="bottom"></slot></div>
+
+  </div>
+  `}class o extends r.a{static get properties(){return{src:{type:String},assetFolder:{type:String,attribute:"asset-folder"},assetMax:{type:parseInt,attribute:"asset-max"},assetPick:{type:parseInt,attribute:"asset-pick",reflect:!0}}}constructor(){super(),this.render=s.bind(this),this.assetFolder="/images/profile-features/",this.assetMax=29,this.shuffle()}constructClasses(){return{}}constructStyles(){let e={};return this.src?e["background-image"]=`var(--tcolor-hero-film), url(${this.src})`:(this.assetPick<0&&(this.assetPick=1),this.assetPick>this.assetMax&&(this.assetPick=this.assetMax),e["background-image"]=`var(--tcolor-hero-film), url(${this.assetFolder+this.assetPick+".jpg"})`),e}shuffle(){this.src||(this.assetPick=Math.floor(Math.random()*this.assetMax+1))}}customElements.define("rp-hero-image",o)},94:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
   <style>
     :host {
       display: block;
@@ -698,7 +855,7 @@ ${this.exampleOrgs.map(e=>r.b`
   <div class=${Object(a.a)(this._containerClasses)}>
     ${this.links.map((e,t)=>this._renderLink(e,t))}
   </div>
-  `}class s extends r.a{static get properties(){return{links:{type:Array},currentLink:{converter:parseInt,attribute:"current-link",reflect:!0},direction:{type:String,attribute:"direction"},hasHeaderLink:{type:Boolean,attribute:"has-header-link"}}}constructor(){super(),this.render=n.bind(this),this.direction="v",this.currentLink=0,this._containerClasses={container:!0},this._containerClasses[this.direction]=!0,this._changedLink=new CustomEvent("changed-link",{detail:{message:"A new link has been selected."}})}attributeChangedCallback(e,t,i){"direction"==e&&i&&(this._containerClasses.v&&delete this._containerClasses.v,this._containerClasses[i.toLowerCase()[0]]=!0),super.attributeChangedCallback(e,t,i)}_renderLink(e,t){let i="",n="",s=!1,o={link:!0};return"string"==typeof e?i=e:"object"==typeof e&&(i=e.text,e.disabled&&(s=!0),e.href&&(n=e.href)),t==this.currentLink&&(o.selected=!0),this.hasHeaderLink&&0==t&&(o["link-header"]=!0),o.disabled=s,n?r.b`<a link="${t}" class="${Object(a.a)(o)}" href="${n}">${i}</a>`:i?r.b`<div @click="${this.handleClick}" link="${t}" class=${Object(a.a)(o)}>${i}</div>`:void 0}handleClick(e){let t=parseInt(e.target.getAttribute("link"));t==this.currentLink||e.target.classList.contains("disabled")||(this.currentLink=t,this.dispatchEvent(this._changedLink))}}customElements.define("rp-link-list",s)},91:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function n(){return r.b`
+  `}class s extends r.a{static get properties(){return{links:{type:Array},currentLink:{converter:parseInt,attribute:"current-link",reflect:!0},direction:{type:String,attribute:"direction"},hasHeaderLink:{type:Boolean,attribute:"has-header-link"}}}constructor(){super(),this.render=n.bind(this),this.direction="v",this.currentLink=0,this._containerClasses={container:!0},this._containerClasses[this.direction]=!0,this._changedLink=new CustomEvent("changed-link",{detail:{message:"A new link has been selected."}})}attributeChangedCallback(e,t,i){"direction"==e&&i&&(this._containerClasses.v&&delete this._containerClasses.v,this._containerClasses[i.toLowerCase()[0]]=!0),super.attributeChangedCallback(e,t,i)}_renderLink(e,t){let i="",n="",s=!1,o={link:!0};return"string"==typeof e?i=e:"object"==typeof e&&(i=e.text,e.disabled&&(s=!0),e.href&&(n=e.href)),t==this.currentLink&&(o.selected=!0),this.hasHeaderLink&&0==t&&(o["link-header"]=!0),o.disabled=s,n?r.b`<a link="${t}" class="${Object(a.a)(o)}" href="${n}">${i}</a>`:i?r.b`<div @click="${this.handleClick}" link="${t}" class=${Object(a.a)(o)}>${i}</div>`:void 0}handleClick(e){let t=parseInt(e.target.getAttribute("link"));t==this.currentLink||e.target.classList.contains("disabled")||(this.currentLink=t,this.dispatchEvent(this._changedLink))}}customElements.define("rp-link-list",s)},95:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function n(){return r.b`
   <style>
     :host {
       display: block;
@@ -754,43 +911,7 @@ ${this.exampleOrgs.map(e=>r.b`
       `}
 
   </div>
-  `}class s extends r.a{static get properties(){return{text:{type:String},href:{type:String},justify:{type:String}}}constructor(){super(),this.render=n.bind(this),this.text="View All",this.href=""}constructClasses(){let e={};return this.justify&&(e[this.justify]=!0),e}_renderInnerContent(){return r.b`<span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon>`}}customElements.define("rp-view-all",s)},92:function(e,t,i){"use strict";var r=i(2),a=i(33),n=i(34);function s(){return r.b`
-  <style>
-    :host {
-      display: block;
-    }
-    .container {
-      width: 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-    .slot {
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-    #top {
-      height: 30px;
-      padding-top: 10px;
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-    }
-    #bottom {
-      height: 30px;
-      padding-bottom: 10px;
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-    }
-  </style>
-  <div class="container ${Object(a.a)(this.constructClasses())}" style="${Object(n.a)(this.constructStyles())}">
-      <div class="slot" id="top"><slot name="top"></slot></div>
-      <div class="slot" id="main"><slot name="main"></slot></div>
-      <div class="slot" id="bottom"><slot name="bottom"></slot></div>
-
-  </div>
-  `}class o extends r.a{static get properties(){return{src:{type:String},assetFolder:{type:String,attribute:"asset-folder"},assetMax:{type:parseInt,attribute:"asset-max"},assetPick:{type:parseInt,attribute:"asset-pick",reflect:!0}}}constructor(){super(),this.render=s.bind(this),this.assetFolder="/images/profile-features/",this.assetMax=29,this.shuffle()}constructClasses(){return{}}constructStyles(){let e={};return this.src?e["background-image"]=`var(--tcolor-hero-film), url(${this.src})`:(this.assetPick<0&&(this.assetPick=1),this.assetPick>this.assetMax&&(this.assetPick=this.assetMax),e["background-image"]=`var(--tcolor-hero-film), url(${this.assetFolder+this.assetPick+".jpg"})`),e}shuffle(){this.src||(this.assetPick=Math.floor(Math.random()*this.assetMax+1))}}customElements.define("rp-hero-image",o)},94:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
+  `}class s extends r.a{static get properties(){return{text:{type:String},href:{type:String},justify:{type:String}}}constructor(){super(),this.render=n.bind(this),this.text="View All",this.href=""}constructClasses(){let e={};return this.justify&&(e[this.justify]=!0),e}_renderInnerContent(){return r.b`<span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon>`}}customElements.define("rp-view-all",s)},97:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
   <style>
     :host {
       display: block;
@@ -873,7 +994,7 @@ ${this.exampleOrgs.map(e=>r.b`
   </div>
   `}class s extends r.a{static get properties(){return{currentPage:{converter:parseInt,attribute:"current-page",reflect:!0},maxPage:{converter:parseInt,attribute:"max-page",reflect:!0},minPage:{converter:parseInt,attribute:"min-page",reflect:!0},pagesPerSide:{converter:parseInt,attribute:"pages-per-side"}}}constructor(){super(),this.render=n.bind(this),this.pagesPerSide=1,this.minPage=1,this.currentPage=this.minPage,this.maxPage=this.currentPage,this._changedPage=new CustomEvent("changed-page",{detail:{message:"A new page has been selected."}})}_hasValidLogic(){return!(this.maxPage<this.currentPage||this.maxPage<this.minPage)&&!(this.minPage>this.currentPage)}_renderEdge(e){if(!this._hasValidLogic())return r.b``;if("left"==e){if(this.currentPage-this.minPage>this.pagesPerSide+1)return r.b`<div @click="${this.handleClick}" class="page" page="${this.minPage}">${this.minPage}</div><div class="ellipsis">...</div>`}else if("right"==e&&this.maxPage-this.currentPage>this.pagesPerSide+1)return r.b`<div class="ellipsis">...</div><div @click="${this.handleClick}" class="page" page="${this.maxPage}">${this.maxPage}</div>`}_renderCenter(){if(!this._hasValidLogic())return r.b`<div class="${Object(a.a)({page:!0,selected:!0})}" page="${this.currentPage}">${this.currentPage}</div>`;let e=[{page:this.currentPage,selected:!0}],t=2*this.pagesPerSide,i=this;return n(this.pagesPerSide),n(t),e[0].page-this.minPage==1&&e.unshift({page:this.minPage,selected:!1}),this.maxPage-e.slice(-1)[0].page==1&&e.push({page:this.maxPage,selected:!1}),r.b`${e.map(e=>r.b`<div @click="${this.handleClick}"
                                               class="${Object(a.a)({page:!0,selected:e.selected})}"
-                                              page="${e.page}">${e.page}</div>`)}`;function n(r){let a=["left","right"];for(let n of a){if("left"===n)for(let a=0;a<r;a++){let r=e[0].page;r>i.minPage&&(e.unshift({page:r-1,selected:!1}),t-=1)}if("right"===n)for(let a=0;a<r;a++){let r=e.slice(-1)[0].page;r<i.maxPage&&(e.push({page:r+1,selected:!1}),t-=1)}}}}handleClick(e){let t=parseInt(e.target.getAttribute("page"));t!=this.currentPage&&(this.currentPage=t,this.dispatchEvent(this._changedPage))}}customElements.define("rp-pagination",s)},95:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
+                                              page="${e.page}">${e.page}</div>`)}`;function n(r){let a=["left","right"];for(let n of a){if("left"===n)for(let a=0;a<r;a++){let r=e[0].page;r>i.minPage&&(e.unshift({page:r-1,selected:!1}),t-=1)}if("right"===n)for(let a=0;a<r;a++){let r=e.slice(-1)[0].page;r<i.maxPage&&(e.push({page:r+1,selected:!1}),t-=1)}}}}handleClick(e){let t=parseInt(e.target.getAttribute("page"));t!=this.currentPage&&(this.currentPage=t,this.dispatchEvent(this._changedPage))}}customElements.define("rp-pagination",s)},98:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
   <style>
     :host {
       display: block;
@@ -930,7 +1051,7 @@ ${this.exampleOrgs.map(e=>r.b`
     ${this.links.map((e,t)=>this._renderLink(e,t))}
     ${this._renderViewAll()}
   </div>
-  `}i(33),i(91);class n extends r.a{static get properties(){return{links:{type:Array},viewAllLink:{type:Object,attribute:"view-all-link"},header:{type:Object,attribute:"header"}}}constructor(){super(),this.render=a.bind(this),this.links=[],this._linkClick=new CustomEvent("link-click",{detail:{message:"A new link has been clicked."}})}_renderHeader(){return this.header&&this.header.text?r.b`<div class="row header">
+  `}i(33),i(95);class n extends r.a{static get properties(){return{links:{type:Array},viewAllLink:{type:Object,attribute:"view-all-link"},header:{type:Object,attribute:"header"}}}constructor(){super(),this.render=a.bind(this),this.links=[],this._linkClick=new CustomEvent("link-click",{detail:{message:"A new link has been clicked."}})}_renderHeader(){return this.header&&this.header.text?r.b`<div class="row header">
                 <div class="count">${this.header.count}</div>
                 <div class="link-container"><span>${this.header.text}</span></div>
                 </div>`:r.b``}_renderLink(e,t){return e.text?e.href?r.b`<div class="row">
@@ -943,7 +1064,7 @@ ${this.exampleOrgs.map(e=>r.b`
       <div class="link-container">
         <span @click="${this.handleClick}" link-index="${t}" class="link">${e.text}</span>
       </div>
-    </div>`:r.b``}_renderViewAll(){return this.viewAllLink?(this.viewAllLink.text||(this.viewAllLink.text="View All"),this.viewAllLink.href?r.b`<div class="row view-all"><div class="count"></div><rp-view-all href="${this.viewAllLink.href}" text="${this.viewAllLink.text}"></rp-view-all></div>`:r.b`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`):r.b``}handleClick(e){e.target.classList.contains("link")?this.Clickedlink=this.links[parseInt(e.target.getAttribute("link-index"))]:this.Clickedlink=this.viewAllLink,this.dispatchEvent(this._linkClick)}}customElements.define("rp-link-list-counts",n)},96:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function n(){return r.b`
+    </div>`:r.b``}_renderViewAll(){return this.viewAllLink?(this.viewAllLink.text||(this.viewAllLink.text="View All"),this.viewAllLink.href?r.b`<div class="row view-all"><div class="count"></div><rp-view-all href="${this.viewAllLink.href}" text="${this.viewAllLink.text}"></rp-view-all></div>`:r.b`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`):r.b``}handleClick(e){e.target.classList.contains("link")?this.Clickedlink=this.links[parseInt(e.target.getAttribute("link-index"))]:this.Clickedlink=this.viewAllLink,this.dispatchEvent(this._linkClick)}}customElements.define("rp-link-list-counts",n)},99:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function n(){return r.b`
   <style>
     :host {
       display: inline-block;
@@ -998,125 +1119,4 @@ ${this.exampleOrgs.map(e=>r.b`
     </div>
 
   </div>
-  `}i(58),i(57);class s extends r.a{static get properties(){return{facets:{type:Array},inputValue:{type:String,attribute:"input-value",reflect:!0},placeholder:{type:String},activeFacet:{type:parseInt,attribute:"active-facet",reflect:!0}}}constructor(){super(),this.render=n.bind(this),this.facets=[{text:"PEOPLE"},{text:"ORGANIZATIONS"},{text:"WORKS"}],this.placeholder="Search the registry",this.activeFacet=0,this.inputValue="",this._newSearch=new CustomEvent("new-search",{detail:{message:"A new search has been triggered"}})}updated(e){(e.has("inputValue")||e.has("activeFacet"))&&(this.searchObject={search:this.inputValue,facet:this.facets[this.activeFacet]})}_constructClasses(){return{}}doSearch(){this.inputValue&&this.dispatchEvent(this._newSearch)}_handleKeyup(e){13===e.keyCode&&(e.preventDefault(),this.doSearch())}}customElements.define("rp-search",s)},97:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
-  <style>
-    :host {
-      display: block;
-      font-size: var(--font-size);
-    }
-    a {
-      color: var(--tcolor-link-text)
-    }
-  </style>
-  <div class="container ${Object(a.a)(this.constructClasses())}" ?hidden="${!this.data}">
-  <a href="#">${this.data.label}</a>
-  ${this.authors.map(e=>r.b`<span>${e.nameLast}, ${e.nameFirst}</span>; `)}.
-  </div>
-  `}class s extends r.a{static get properties(){return{data:{type:Object},citationStyle:{type:String,attribute:"citation-style"},authors:{type:Array}}}constructor(){super(),this.render=n.bind(this),this.citationStyle="MLA",this.data={},this.authors=[]}constructClasses(){return{}}updated(e){e.has("data")&&this.parseData()}parseData(){if(0==Object.keys(this.data).length)return;let e=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let t=this.data.Authorship;Array.isArray(t)||(t=[t]);for(let i of t)i.hasName&&(i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),e.push(i));e.sort((function(e,t){return e["vivo:rank"]-t["vivo:rank"]})),this.authors=e}}}customElements.define("rp-citation",s)},98:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
-  <style>
-    :host {
-      display: block;
-      font-size: var(--font-size-small);
-    }
-    .container {
-      display: flex;
-      flex-flow: row wrap;
-      align-items: center;
-    }
-    .letter {
-      color: var(--tcolor-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 22px;
-      min-height: 22px;
-      transition: 0.3s;
-      cursor: pointer;
-    }
-    .letter:hover {
-      color: var(--tcolor-link-hover-text);
-    }
-    .letter[disabled] {
-      pointer-events: none;
-      cursor: auto;
-      color: var(--tcolor-link-disabled-text);
-    }
-    .letter.selected {
-      font-weight: var(--font-weight-bold);
-      pointer-events: none;
-      cursor: auto;
-      z-index: 1;
-    }
-    .letter.selected::before {
-      content: "";
-      border-radius: 50%;
-      background-color: var(--tcolor-secondary);
-      min-width: 30px;
-      min-height: 30px;
-      position: absolute;
-      z-index: -1;
-    }
-    .letter.selected:hover {
-      color: var(--tcolor-primary);
-    }
-  </style>
-  <div class=container>
-    ${this.azlist.map(e=>this._renderAz(e))}
-  </div>
-  `}class n extends r.a{static get properties(){return{hideAll:{type:Boolean,attribute:"hide-all"},disabledLetters:{type:Array},disabledLettersFmt:{type:Array},selectedLetter:{type:String,attribute:"selected-letter"}}}constructor(){super(),this.render=a.bind(this),this.azlist=[..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"],this.disabledLetters=[],this.disabledLettersFmt=[],this.selectedLetter="All",this._changedLetter=new CustomEvent("changed-letter",{detail:{message:"A new letter has been selected."}})}updated(e){e.has("disabledLetters")&&(this.disabledLettersFmt=this.disabledLetters.map(e=>e.toUpperCase()))}_renderAz(e){let t="";return this.selectedLetter&&this.selectedLetter.toLowerCase()===e.toLowerCase()&&(t="selected"),r.b`<div @click="${this.handleClick}"
-                     ?disabled="${this.disabledLettersFmt.includes(e)}"
-                     class="letter ${t}"
-                     letter="${e}">${e}</div>`}handleClick(e){let t=e.target.getAttribute("letter").toLowerCase();t==this.selectedLetter||e.target.hasAttribute("disabled")||(this.selectedLetter=t,this.dispatchEvent(this._changedLetter))}firstUpdated(e){this.hideAll||(this.azlist.unshift("All"),this.requestUpdate())}}customElements.define("rp-a-z",n)},99:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
-  <style>
-    :host {
-      display: block;
-    }
-    .container {
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-    }
-    .icon-container {
-      background-color: var(--tcolor-bg-primary);
-      height: 70px;
-      width: 70px;
-      min-height: 70px;
-      min-width: 70px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    iron-icon {
-      color: var(--tcolor-primary);
-      height: 50%;
-      width: 50%;
-    }
-    .text-container {
-      margin-left: 12px;
-      flex-grow: 1;
-    }
-    .name {
-      font-size: var(--font-size);
-      color : var(--tcolor-link-text);
-      font-weight : var(--font-weight-bold);
-    }
-    .author {
-      color : var(--tcolor-link-text);
-    }
-    a[disabled] {
-      pointer-events: none;
-      text-decoration: none;
-    }
-    a[disabled]:hover {
-      color : var(--tcolor-link-text);
-    }
-  </style>
-  <div class=container>
-    <div class="icon-container"><iron-icon icon="group-work"></iron-icon></div>
-    <div class="text-container">
-        ${this._renderNameLink()}
-    </div>
-  </div>
-
-  `}class n extends r.a{static get properties(){return{data:{type:Object},href:{type:String},organizationPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.organizationPath="/organizations/",this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=a.bind(this)}_renderNameLink(){let e="";if(this.href)e=this.href;else try{let t=this.data["@id"].split(this.jsonldContext+":")[1];e=this.organizationPath+t}catch(e){console.warn("Unable to construct org href.")}return r.b`<a class="name" href="${e}" ?disabled="${!e}">${this.data.label}</a>`}}customElements.define("rp-organization-preview",n)}}]);
+  `}i(59),i(58);class s extends r.a{static get properties(){return{facets:{type:Array},inputValue:{type:String,attribute:"input-value",reflect:!0},placeholder:{type:String},activeFacet:{type:parseInt,attribute:"active-facet",reflect:!0}}}constructor(){super(),this.render=n.bind(this),this.facets=[{text:"PEOPLE"},{text:"ORGANIZATIONS"},{text:"WORKS"}],this.placeholder="Search the registry",this.activeFacet=0,this.inputValue="",this._newSearch=new CustomEvent("new-search",{detail:{message:"A new search has been triggered"}})}updated(e){(e.has("inputValue")||e.has("activeFacet"))&&(this.searchObject={search:this.inputValue,facet:this.facets[this.activeFacet]})}_constructClasses(){return{}}doSearch(){this.inputValue&&this.dispatchEvent(this._newSearch)}_handleKeyup(e){13===e.keyCode&&(e.preventDefault(),this.doSearch())}}customElements.define("rp-search",s)}}]);

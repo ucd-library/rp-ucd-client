@@ -51,6 +51,7 @@ export default class RpPageWork extends Mixin(LitElement)
     }
     this.workId = path[1];
     if (!this.workId) return;
+    this.shadowRoot.getElementById('hero').shuffle();
     await Promise.all([this._doMainQuery(this.workId)]);
 
   }

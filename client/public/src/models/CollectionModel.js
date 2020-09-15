@@ -42,7 +42,8 @@ class CollectionModel extends BaseModel {
         'hasContactInfo.givenName.text^8', 
         "label.text^6", 
         "hasSubjectArea.label.text^5",
-        "abstract^5"], 
+        "abstract^5",
+        'hasContactInfo.title.text'], 
       people : [
         'hasContactInfo.familyName.text^9', 
         'hasContactInfo.givenName.text^8', 
@@ -50,7 +51,8 @@ class CollectionModel extends BaseModel {
       works: [
         "doi^10", 
         "label.text^9", 
-        "abstract^8"], 
+        "abstract^8", 
+        "hasSubjectArea.label.text"], 
       organizations: [
         "label.text^10"]}
 
@@ -445,7 +447,7 @@ class CollectionModel extends BaseModel {
       path += "/search";
     }
 
-    if (elementQuery.mainFacet == "none") {
+    if (elementQuery.mainFacet == "none" || !elementQuery.mainFacet) {
     }
     else if (elementQuery.mainFacet) {
       path += `/${elementQuery.mainFacet}`

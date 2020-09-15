@@ -74,6 +74,12 @@ export default class RpPageIndividual extends Mixin(LitElement)
 
   }
 
+  updated(props){
+    if (props.has('individualId') && this.individualId) {
+      this.shadowRoot.getElementById('hero').shuffle();
+    }
+  }
+
   async _loadMorePubs(){
     await this._doPubQuery(this.individualId);
   }

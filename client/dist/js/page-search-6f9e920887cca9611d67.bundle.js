@@ -1,4 +1,4 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[7],{108:function(t,e,a){"use strict";a.r(e),a.d(e,"default",(function(){return l}));var s=a(2),i=a(41),n=a.n(i);function d(){return s.b`
+(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{113:function(t,e,a){"use strict";a.r(e),a.d(e,"default",(function(){return l}));var s=a(2),i=a(41),n=a.n(i);function d(){return s.b`
 
 <style>
   :host {
@@ -41,4 +41,4 @@
 </div>
 </div>
 
-`}var r=a(93);a(86),a(90),a(94);class l extends r.a{static get properties(){return{}}constructor(){super(),this.render=d.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}updated(t){if(this.doUpdated(t),t.has("mainFacet")&&"none"!=this.mainFacet){let t=!1,e=0;for(let a of this.CollectionModel.mainFacets)if(e++,a.id.toLowerCase()==this.mainFacet.toLowerCase()){t=!0,this.mainFacetIndex=e;break}t||(this.mainFacet="none",this.mainFacetIndex=0)}}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getSearchAggs()]))}}customElements.define("rp-page-search",l)}}]);
+`}var r=a(96);a(89),a(94),a(97);class l extends r.a{static get properties(){return{}}constructor(){super(),this.render=d.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}updated(t){if(this.doUpdated(t),t.has("mainFacet")&&"none"!=this.mainFacet){let t=!1,e=0;for(let a of this.CollectionModel.mainFacets)if(e++,a.id.toLowerCase()==this.mainFacet.toLowerCase()){t=!0,this.mainFacetIndex=e;break}t||(this.mainFacet="none",this.mainFacetIndex=0)}}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getSearchAggs()]))}}customElements.define("rp-page-search",l)}}]);

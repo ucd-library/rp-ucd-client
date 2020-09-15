@@ -14,7 +14,7 @@ export class RpOrganizationPreview extends LitElement {
 
   constructor() {
     super();
-    this.organizationPath = "/organizations/";
+    this.organizationPath = "/organization/";
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.render = render.bind(this);
   }
@@ -26,7 +26,7 @@ export class RpOrganizationPreview extends LitElement {
     }
     else {
       try {
-          let id = this.data['@id'].split(`${this.jsonldContext}:`)[1];
+          let id = this.data['@id'].split(`${this.jsonldContext}:g-`)[1];
           href = this.organizationPath + id;
       } catch (error) {
           console.warn("Unable to construct org href.");

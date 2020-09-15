@@ -1,4 +1,4 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{105:function(t,e,s){"use strict";s.r(e),s.d(e,"default",(function(){return o}));var a=s(2),i=s(41),d=s.n(i);function r(){return a.b`
+(window.webpackJsonp=window.webpackJsonp||[]).push([[11],{108:function(t,e,s){"use strict";s.r(e),s.d(e,"default",(function(){return o}));var a=s(2),i=s(41),d=s.n(i);function r(){return a.b`
 
 <style>
   :host {
@@ -32,4 +32,4 @@
   </div>
 
 </div>
-`}var n=s(93);s(86),s(87);class o extends n.a{static get properties(){return{}}constructor(){super(),this.render=r.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getFacets(),this._getAzAgg()]))}async _getFacets(){let t=await this.CollectionModel.overview("worksAggs");this.subFacetStatus=t.state,"loaded"==t.state&&(this.subFacets=this.CollectionModel._getSubFacets("works",t.payload,this.currentQuery))}}customElements.define("rp-page-works",o)}}]);
+`}var n=s(96);s(89),s(90);class o extends n.a{static get properties(){return{}}constructor(){super(),this.render=r.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getFacets(),this._getAzAgg()]))}async _getFacets(){let t=await this.CollectionModel.overview("worksAggs");this.subFacetStatus=t.state,"loaded"==t.state&&(this.subFacets=this.CollectionModel._getSubFacets("works",t.payload,this.currentQuery))}}customElements.define("rp-page-works",o)}}]);
