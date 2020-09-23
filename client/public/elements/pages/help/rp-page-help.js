@@ -1,6 +1,8 @@
 import { LitElement } from 'lit-element';
 import render from "./rp-page-help.tpl.js"
 
+import "../../components/accordian";
+
 
 export default class RpPageHelp extends Mixin(LitElement)
 .with(LitCorkUtils) {
