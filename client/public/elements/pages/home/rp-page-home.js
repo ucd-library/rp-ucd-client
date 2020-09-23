@@ -93,7 +93,12 @@ export default class RpPageHome extends Mixin(LitElement)
   _onSearch(e){
     let url = "/search";
     if (e.target.nodeName == 'RP-SEARCH') {
-      url = `/search/${e.target.searchObject.facet.id}?s=${encodeURIComponent(e.target.inputValue)}`
+      if (e.target.searchObject.facet.id == 'all') {
+        url = `/search?s=${encodeURIComponent(e.target.inputValue)}`
+      }
+      else {
+        url = `/search/${e.target.searchObject.facet.id}?s=${encodeURIComponent(e.target.inputValue)}`
+      }
     }
     //console.log(url);
     this.AppStateModel.setLocation(url);

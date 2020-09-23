@@ -7,9 +7,11 @@ export class RpSearch extends LitElement {
   static get properties() {
   return {
     facets: {type: Array},
+    includeAllOption: {type: Boolean, attribute: 'include-all-option'},
+    allOption: {type: Object},
     inputValue: {type: String, attribute: "input-value", reflect: true},
     placeholder: {type: String},
-    activeFacet: {type: parseInt, attribute: 'active-facet', reflect: true}
+    activeFacet: {type: Number, attribute: 'active-facet', reflect: true}
   };
   }
 
@@ -20,6 +22,9 @@ export class RpSearch extends LitElement {
     this.placeholder = "Search the registry";
     this.activeFacet = 0;
     this.inputValue = "";
+    this.includeAllOption = false;
+    this.allOption = {text: 'ALL', id: 'all'}
+
 
     this._newSearch = new CustomEvent('new-search', {
       detail: {
@@ -31,7 +36,7 @@ export class RpSearch extends LitElement {
   updated(changedProperties) {
 
     if (changedProperties.has('inputValue') || changedProperties.has('activeFacet')) {
-      this.searchObject = {search: this.inputValue, facet: this.facets[this.activeFacet]};
+      this.searchObject = {search: this.inputValue, facet: this.getDropdownOptions()[this.activeFacet]};
     }
   }
 
@@ -39,6 +44,11 @@ export class RpSearch extends LitElement {
     let classes = {};
 
     return classes;
+  }
+
+  getDropdownOptions(){
+    if (this.includeAllOption) return [this.allOption, ...this.facets];
+    return this.facets;
   }
 
   doSearch() {
