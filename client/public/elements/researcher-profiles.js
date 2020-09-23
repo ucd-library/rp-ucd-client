@@ -52,7 +52,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.textQuery = "";
     this.isSearch = false;
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
-                     {text: 'Organizations', page: 'organizations', href: '/organizations'},
+                     //{text: 'Organizations', page: 'organizations', href: '/organizations'},
                      {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '#'}];
 
