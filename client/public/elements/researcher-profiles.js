@@ -22,6 +22,9 @@ import "../src"
 import "./components/quick-search"
 import "./components/dropdown"
 
+// default pages
+import './pages/terms-of-use/rp-page-tou'
+
 import "@polymer/iron-pages"
 
 export default class ResearcherProfiles extends Mixin(LitElement)
@@ -74,13 +77,18 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       this.textQuery="";
       this.isSearch = false;
     }
+
     let page = e.page;
+    if( this.page === page ) return;
+
     if (!this.loadedPages[page]) {
       this.page = 'loading';
       this.loadedPages[page] = this.loadPage(page);
     }
     await this.loadedPages[page];
     this.page = page;
+
+    window.scrollTo(0, 0);
   }
 
   /**

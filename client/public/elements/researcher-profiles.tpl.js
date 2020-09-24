@@ -72,7 +72,26 @@ return html`
     height: var(--masthead-logo-height);
   }
   #app-header-content {
+    position: relative;
+    /* box-shadow: 0 2px 1px rgba(0,40,85,0.15); */
+  }
+  #app-header-content:after {
+    content: "";
+    height: 2px;
+
+    /* Expand element */
+    position: absolute;
+    left: 0px;
+    /* top: 0px; */
+    right: 0px;
+    bottom: 0px;
+
+    -moz-box-shadow: inset 0 2px 1px rgba(0,40,85,0.15);
+    -webkit-box-shadow: inset 0 2px 1px rgba(0,40,85,0.15);
     box-shadow: 0 2px 1px rgba(0,40,85,0.15);
+
+    /* Disable click events */
+    pointer-events: none;
   }
   #nav-left a {
     padding: 15px 20px;
@@ -221,6 +240,7 @@ return html`
   <rp-page-organization id="organization"></rp-page-organization>
   <rp-page-help id="help"></rp-page-help>
   <rp-page-search id="search"></rp-page-search>
+  <rp-page-tou id="termsofuse"></rp-page-tou>
 </iron-pages>
 <div id="app-footer">
   <div class="container">
