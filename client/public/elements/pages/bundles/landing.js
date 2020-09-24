@@ -1,3 +1,3 @@
 import '../individual/rp-page-individual'
-import '../works/rp-page-works'
+import '../work/rp-page-work'
 import '../organization/rp-page-organization'
