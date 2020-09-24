@@ -121,10 +121,12 @@ return html`
         </div>
       </div>
       <div class="subjects">
+        <!-- 
         <h2>
           <span class="bold mr-2">${this.subjectsTotal}</span>
           <span class="weight-regular">Research Subjects</span>
         </h2>
+        -->
       </div>
     </div>
   </div>
