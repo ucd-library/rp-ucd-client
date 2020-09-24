@@ -1,8 +1,48 @@
-import { html } from 'lit-element';
-import styles from "../../styles/site.html";
-
-export default function render() { 
-return html`
+(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{100:function(e,t,i){"use strict";var a=i(2),o=i(33);function r(){return a.b`
+  <style>
+    :host {
+      display: block;
+    }
+    [hidden] {
+      display: none !important;
+    }
+    iron-icon {
+      color: var(--tcolor-secondary);
+      width: 24px;
+      height: 24px;
+      transition: .3s;
+    }
+    iron-icon[rotated] {
+      transform: rotate(-90deg);
+    }
+    #container-title {
+      cursor: pointer;
+      display: flex;
+    }
+    #title:hover {
+      color: var(--tcolor-link-hover-text);
+    }
+    #title {
+      color: var(--tcolor-link-text);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size);
+    }
+    #content {
+      padding-left: 24px;
+      font-size: var(--font-size);
+      margin-top: 14px;
+    }
+  </style>
+  <div class="container ${Object(o.a)(this.constructClasses())}" ?hidden="${!this.title}">
+    <div id="container-title" @click="${this.toggle}">
+      <iron-icon icon="arrow-drop-down" ?rotated="${!this.expanded}"></iron-icon>
+      <span id="title">${this.title}</span>
+    </div>
+    <div id="content" ?hidden="${!this.expanded}">
+      <slot></slot>
+    </div>
+  </div>
+  `}class n extends a.a{static get properties(){return{title:{type:String},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=r.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",n)},110:function(e,t,i){"use strict";i.r(t),i.d(t,"default",(function(){return s}));var a=i(2),o=i(34),r=i.n(o);function n(){return a.b`
 
 <style>
   :host {
@@ -11,7 +51,7 @@ return html`
   rp-accordian {
     margin-bottom: 22px;
   }
-  ${styles}
+  ${r.a}
 </style> 
 <div class="help container top">
   <div class="section">
@@ -77,4 +117,4 @@ return html`
 
 </div>
 
-`;}
+`}i(100);class s extends(Mixin(a.a).with(LitCorkUtils)){static get properties(){return{visible:{type:Boolean}}}constructor(){super(),this.render=n.bind(this),this._injectModel("AppStateModel"),this.boolean=!1,this.AppStateModel.get().then(e=>this._onAppStateUpdate(e))}async _onAppStateUpdate(e){requestAnimationFrame(()=>this.doUpdate(e))}async doUpdate(e){await this.updateComplete,this.visible}}customElements.define("rp-page-help",s)}}]);
