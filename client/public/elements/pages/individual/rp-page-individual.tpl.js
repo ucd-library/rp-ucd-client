@@ -69,6 +69,12 @@ return html`
     background-color: var(--tcolor-hover-bg);
     color: var(--tcolor-text);
   }
+  .site .logo {
+    vertical-align: middle;
+    height: 16px;
+    width: 16px;
+    margin-right: 4px;
+  }
   ${styles}
 </style>
 
@@ -121,7 +127,10 @@ return html`
       </div>
       <div>
         <h3 class="mb-2">Websites</h3>
-        ${this.getWebsites().map(site => html`<div><a href="${site.href}">${site.text}</a></div>`)}
+        ${this.getWebsites().map(site => html`
+        <div class="site">
+          <a href="${site.href}">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
+        </div>`)}
       </div>
     </div>
   </section>

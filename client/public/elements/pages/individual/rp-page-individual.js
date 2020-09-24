@@ -180,7 +180,7 @@ export default class RpPageIndividual extends Mixin(LitElement)
       return out;
     }
     if (this.individual.orcidId) {
-      out.push({'text': 'Orcid', 'href': this.individual.orcidId['@id']})
+      out.push({'text': this.individual.orcidId['@id'], 'href': this.individual.orcidId['@id'], 'icon': '/images/orcid_16x16.png'})
     }
     if (this.individual.scopusId) {
       out.push({'text': 'Scopus', 'href': `https://www.scopus.com/authid/detail.uri?authorId=${this.individual.scopusId}`})
