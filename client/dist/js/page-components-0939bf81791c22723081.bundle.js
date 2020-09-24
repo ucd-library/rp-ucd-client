@@ -2,17 +2,47 @@
   <style>
     :host {
       display: block;
+    }
+    [hidden] {
+      display: none !important;
+    }
+    iron-icon {
+      color: var(--tcolor-secondary);
+      width: 24px;
+      height: 24px;
+      transition: .3s;
+    }
+    iron-icon[rotated] {
+      transform: rotate(-90deg);
+    }
+    #container-title {
+      cursor: pointer;
+      display: flex;
+    }
+    #title:hover {
+      color: var(--tcolor-link-hover-text);
+    }
+    #title {
+      color: var(--tcolor-link-text);
+      font-weight: var(--font-weight-bold);
       font-size: var(--font-size);
     }
-    a {
-      color: var(--tcolor-link-text)
+    #content {
+      padding-left: 24px;
+      font-size: var(--font-size);
+      margin-top: 14px;
     }
   </style>
-  <div class="container ${Object(a.a)(this.constructClasses())}" ?hidden="${!this.data}">
-  <a href="#">${this.data.label}</a>
-  ${this.authors.map(e=>r.b`<span>${e.nameLast}, ${e.nameFirst}</span>; `)}.
+  <div class="container ${Object(a.a)(this.constructClasses())}" ?hidden="${!this.title}">
+    <div id="container-title" @click="${this.toggle}">
+      <iron-icon icon="arrow-drop-down" ?rotated="${!this.expanded}"></iron-icon>
+      <span id="title">${this.title}</span>
+    </div>
+    <div id="content" ?hidden="${!this.expanded}">
+      <slot></slot>
+    </div>
   </div>
-  `}class s extends r.a{static get properties(){return{data:{type:Object},citationStyle:{type:String,attribute:"citation-style"},authors:{type:Array}}}constructor(){super(),this.render=n.bind(this),this.citationStyle="MLA",this.data={},this.authors=[]}constructClasses(){return{}}updated(e){e.has("data")&&this.parseData()}parseData(){if(0==Object.keys(this.data).length)return;let e=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let t=this.data.Authorship;Array.isArray(t)||(t=[t]);for(let i of t)i.hasName&&(i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),e.push(i));e.sort((function(e,t){return e["vivo:rank"]-t["vivo:rank"]})),this.authors=e}}}customElements.define("rp-citation",s)},101:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
+  `}class o extends r.a{static get properties(){return{title:{type:String},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=n.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",o)},101:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
   <style>
     :host {
       display: block;
@@ -173,51 +203,21 @@
     </div>
   </div>
 
-  `}class n extends r.a{static get properties(){return{data:{type:Object},href:{type:String},workPath:{type:String},grpsWithLinks:{type:String},authorPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.workPath="/work/",this.authorPath="/individual/",this.grpsWithLinks=["vivo:FacultyMember"],this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=a.bind(this)}_renderTitleLink(){let e="";if(this.href)e=this.href;else try{let t=this.data["@id"].split(this.jsonldContext+":publication")[1];e=this.workPath+t}catch(e){console.warn("Unable to construct work href.")}return r.b`<a class="title" href="${e}" ?disabled="${!e}">${this.data.label}</a>`}_renderAuthors(){let e=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let t=this.data.Authorship;Array.isArray(t)||(t=[t]);for(let i of t)if(i.hasName){i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),i.href="";try{"object"!=typeof i.identifiers||Array.isArray(i.identifiers)||(i.identifiers=[i.identifiers]);for(let e of i.identifiers)this.grpsWithLinks.includes(e["@type"])&&(i.href=this.authorPath+e["@id"].replace(this.jsonldContext+":",""))}catch(e){console.warn("Unable to construct author href.")}e.push(i)}e.sort((function(e,t){return e["vivo:rank"]-t["vivo:rank"]}))}return r.b`<div class="authors">${e.map(e=>r.b`<a class="author" href="${e.href}" ?disabled="${!e.href}">${e.nameLast}, ${e.nameFirst}</a>; `)}</div>`}}customElements.define("rp-work-preview",n)},104:function(e,t,i){"use strict";i.r(t),i.d(t,"AppPageComponents",(function(){return d}));var r=i(2),a=i(41),n=i.n(a),s=(i(101),i(33));function o(){return r.b`
+  `}class n extends r.a{static get properties(){return{data:{type:Object},href:{type:String},workPath:{type:String},grpsWithLinks:{type:String},authorPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.workPath="/work/",this.authorPath="/individual/",this.grpsWithLinks=["vivo:FacultyMember"],this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=a.bind(this)}_renderTitleLink(){let e="";if(this.href)e=this.href;else try{let t=this.data["@id"].split(this.jsonldContext+":publication")[1];e=this.workPath+t}catch(e){console.warn("Unable to construct work href.")}return r.b`<a class="title" href="${e}" ?disabled="${!e}">${this.data.label}</a>`}_renderAuthors(){let e=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let t=this.data.Authorship;Array.isArray(t)||(t=[t]);for(let i of t)if(i.hasName){i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),i.href="";try{"object"!=typeof i.identifiers||Array.isArray(i.identifiers)||(i.identifiers=[i.identifiers]);for(let e of i.identifiers)this.grpsWithLinks.includes(e["@type"])&&(i.href=this.authorPath+e["@id"].replace(this.jsonldContext+":",""))}catch(e){console.warn("Unable to construct author href.")}e.push(i)}e.sort((function(e,t){return e["vivo:rank"]-t["vivo:rank"]}))}return r.b`<div class="authors">${e.map(e=>r.b`<a class="author" href="${e.href}" ?disabled="${!e.href}">${e.nameLast}, ${e.nameFirst}</a>; `)}</div>`}}customElements.define("rp-work-preview",n)},104:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
   <style>
     :host {
       display: block;
-    }
-    [hidden] {
-      display: none !important;
-    }
-    iron-icon {
-      color: var(--tcolor-secondary);
-      width: 24px;
-      height: 24px;
-      transition: .3s;
-    }
-    iron-icon[rotated] {
-      transform: rotate(-90deg);
-    }
-    #container-title {
-      cursor: pointer;
-      display: flex;
-    }
-    #title:hover {
-      color: var(--tcolor-link-hover-text);
-    }
-    #title {
-      color: var(--tcolor-link-text);
-      font-weight: var(--font-weight-bold);
       font-size: var(--font-size);
     }
-    #content {
-      padding-left: 24px;
-      font-size: var(--font-size);
-      margin-top: 14px;
+    a {
+      color: var(--tcolor-link-text)
     }
   </style>
-  <div class="container ${Object(s.a)(this.constructClasses())}" ?hidden="${!this.title}">
-    <div id="container-title" @click="${this.toggle}">
-      <iron-icon icon="arrow-drop-down" ?rotated="${!this.expanded}"></iron-icon>
-      <span id="title">${this.title}</span>
-    </div>
-    <div id="content" ?hidden="${!this.expanded}">
-      <slot></slot>
-    </div>
+  <div class="container ${Object(a.a)(this.constructClasses())}" ?hidden="${!this.data}">
+  <a href="#">${this.data.label}</a>
+  ${this.authors.map(e=>r.b`<span>${e.nameLast}, ${e.nameFirst}</span>; `)}.
   </div>
-  `}class l extends r.a{static get properties(){return{title:{type:String},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",l);i(89),i(91),i(92),i(100),i(59),i(93),i(58),i(94),i(98),i(102),i(97),i(90),i(60),i(99),i(95),i(103);function c(){return r.b`
+  `}class o extends r.a{static get properties(){return{data:{type:Object},citationStyle:{type:String,attribute:"citation-style"},authors:{type:Array}}}constructor(){super(),this.render=n.bind(this),this.citationStyle="MLA",this.data={},this.authors=[]}constructClasses(){return{}}updated(e){e.has("data")&&this.parseData()}parseData(){if(0==Object.keys(this.data).length)return;let e=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let t=this.data.Authorship;Array.isArray(t)||(t=[t]);for(let i of t)i.hasName&&(i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),e.push(i));e.sort((function(e,t){return e["vivo:rank"]-t["vivo:rank"]})),this.authors=e}}}customElements.define("rp-citation",o)},109:function(e,t,i){"use strict";i.r(t),i.d(t,"AppPageComponents",(function(){return s}));var r=i(2),a=i(34),n=i.n(a);i(101),i(100),i(89),i(91),i(92),i(104),i(59),i(97),i(58),i(94),i(98),i(102),i(96),i(90),i(60),i(99),i(93),i(103);function o(){return r.b`
 
 <style>
   :host {
@@ -583,7 +583,7 @@ ${this.exampleOrgs.map(e=>r.b`
 `)}
 
 </section>
-`}class d extends(Mixin(r.a).with(LitCorkUtils)){static get properties(){return{exampleWorks:{type:Array},exampleOrgs:{type:Array},visible:{type:Boolean}}}constructor(){super(),this._injectModel("CollectionModel","AppStateModel"),this.visible=!1,this.exampleWorks=[],this.exampleOrgs=[],this.render=c.bind(this),this.AppStateModel.get().then(e=>this._onAppStateUpdate(e))}async _onAppStateUpdate(e){requestAnimationFrame(()=>this.doUpdate(e))}async doUpdate(e){await this.updateComplete,this.visible&&await Promise.all([this.getWorks(),this.getOrgs()])}async getWorks(){let e=await this.CollectionModel.query({filters:{"@type":{type:"keyword",op:"and",value:["ucdrp:publication"]}}});"loaded"==e.state&&(this.exampleWorks=e.payload.results)}async getOrgs(){let e=await this.CollectionModel.query({filters:{"@type":{type:"keyword",op:"and",value:["ucdrp:organization"]}}});"loaded"==e.state&&(this.exampleOrgs=e.payload.results,console.log(this.exampleOrgs))}}customElements.define("app-page-components",d)},89:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function n(){return r.b`
+`}class s extends(Mixin(r.a).with(LitCorkUtils)){static get properties(){return{exampleWorks:{type:Array},exampleOrgs:{type:Array},visible:{type:Boolean}}}constructor(){super(),this._injectModel("CollectionModel","AppStateModel"),this.visible=!1,this.exampleWorks=[],this.exampleOrgs=[],this.render=o.bind(this),this.AppStateModel.get().then(e=>this._onAppStateUpdate(e))}async _onAppStateUpdate(e){requestAnimationFrame(()=>this.doUpdate(e))}async doUpdate(e){await this.updateComplete,this.visible&&await Promise.all([this.getWorks(),this.getOrgs()])}async getWorks(){let e=await this.CollectionModel.query({filters:{"@type":{type:"keyword",op:"and",value:["ucdrp:publication"]}}});"loaded"==e.state&&(this.exampleWorks=e.payload.results)}async getOrgs(){let e=await this.CollectionModel.query({filters:{"@type":{type:"keyword",op:"and",value:["ucdrp:organization"]}}});"loaded"==e.state&&(this.exampleOrgs=e.payload.results,console.log(this.exampleOrgs))}}customElements.define("app-page-components",s)},89:function(e,t,i){"use strict";var r=i(2),a=i(33);i(35);function n(){return r.b`
   <style>
     :host {
       display: inline-block;
@@ -613,7 +613,7 @@ ${this.exampleOrgs.map(e=>r.b`
     <iron-icon icon="warning"></iron-icon>
     <div id="content"><slot></slot></div>
   </div>
-  `}class s extends r.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=n.bind(this),this.themeColor="danger"}_constructClasses(){let e={};return e[this.themeColor]=!0,e}}customElements.define("rp-alert",s)},90:function(e,t,i){"use strict";var r=i(2),a=i(34);i(91);function n(){return r.b`
+  `}class o extends r.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=n.bind(this),this.themeColor="danger"}_constructClasses(){let e={};return e[this.themeColor]=!0,e}}customElements.define("rp-alert",o)},90:function(e,t,i){"use strict";var r=i(2),a=i(35);i(91);function n(){return r.b`
   <style>
     :host {
       display: block;
@@ -667,7 +667,7 @@ ${this.exampleOrgs.map(e=>r.b`
     </div>
   </div>
 
-  `}i(92);class s extends r.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=n.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(e){if("string"==typeof e)return r.b`<rp-badge>${e}</rp-badge>`;if("object"==typeof e){let t=e.text;if(!t)return r.b``;let i=e.href;return i?r.b`<rp-badge href="${i}">${t}</rp-badge>`:r.b`<rp-badge>${t}</rp-badge>`}return r.b``}}customElements.define("rp-person-preview",s)},91:function(e,t,i){"use strict";var r=i(2),a=i(33),n=i(34);function s(){return r.b`
+  `}i(92);class o extends r.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=n.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(e){if("string"==typeof e)return r.b`<rp-badge>${e}</rp-badge>`;if("object"==typeof e){let t=e.text;if(!t)return r.b``;let i=e.href;return i?r.b`<rp-badge href="${i}">${t}</rp-badge>`:r.b`<rp-badge>${t}</rp-badge>`}return r.b``}}customElements.define("rp-person-preview",o)},91:function(e,t,i){"use strict";var r=i(2),a=i(33),n=i(35);function o(){return r.b`
   <style>
     :host {
       display: inline-block;
@@ -703,7 +703,7 @@ ${this.exampleOrgs.map(e=>r.b`
   <div class="circle ${Object(a.a)(this.constructClasses())}" style="${Object(n.a)(this.constructStyles())}">
     ${this.renderFace()}
   </div>
-  `}class o extends r.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=s.bind(this)}constructClasses(){let e={};return this.size&&"undefined"!=this.size&&(e["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(e.photo=!0),e}constructStyles(){let e={};return this.src&&"undefined"!=this.src&&(e["background-image"]=`url(${this.src})`),e}renderFace(){if(!this.src||"undefined"==this.src)return r.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",o)},92:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
+  `}class s extends r.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=o.bind(this)}constructClasses(){let e={};return this.size&&"undefined"!=this.size&&(e["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(e.photo=!0),e}constructStyles(){let e={};return this.src&&"undefined"!=this.src&&(e["background-image"]=`url(${this.src})`),e}renderFace(){if(!this.src||"undefined"==this.src)return r.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",s)},92:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
 <style>
   :host {
     display: inline-block;
@@ -761,101 +761,9 @@ ${this.exampleOrgs.map(e=>r.b`
 
 </style>
   ${this._renderBadge()}
-`}class s extends r.a{static get properties(){return{size:{type:String},href:{type:String},colorSequence:{type:Number,attribute:"color-sequence"}}}constructor(){super(),this.maxColor=6,this.render=n.bind(this)}constructClasses(){let e={};if(this.size&&(e["size-"+this.size]=!0),this.colorSequence){e["color-"+Math.floor(this.colorSequence).toString()]=!0}else{let t=[...this.parentNode.childNodes].filter(e=>e.tagName===this.tagName);if(t.length>0){e["color-"+(t.indexOf(this)%this.maxColor).toString()]=!0}else e["color-0"]=!0}return e}_renderBadge(){return this.href?r.b`<a href=${this.href}>${this._renderSpan()}</a>`:r.b`${this._renderSpan()}`}_renderSpan(){return r.b`<span class=${Object(a.a)(this.constructClasses())}>
+`}class o extends r.a{static get properties(){return{size:{type:String},href:{type:String},colorSequence:{type:Number,attribute:"color-sequence"}}}constructor(){super(),this.maxColor=6,this.render=n.bind(this)}constructClasses(){let e={};if(this.size&&(e["size-"+this.size]=!0),this.colorSequence){e["color-"+Math.floor(this.colorSequence).toString()]=!0}else{let t=[...this.parentNode.childNodes].filter(e=>e.tagName===this.tagName);if(t.length>0){e["color-"+(t.indexOf(this)%this.maxColor).toString()]=!0}else e["color-0"]=!0}return e}_renderBadge(){return this.href?r.b`<a href=${this.href}>${this._renderSpan()}</a>`:r.b`${this._renderSpan()}`}_renderSpan(){return r.b`<span class=${Object(a.a)(this.constructClasses())}>
       <slot></slot>
-    </span>`}}customElements.define("rp-badge",s)},93:function(e,t,i){"use strict";var r=i(2),a=i(33),n=i(34);function s(){return r.b`
-  <style>
-    :host {
-      display: block;
-    }
-    .container {
-      width: 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-    .slot {
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-    #top {
-      height: 30px;
-      padding-top: 10px;
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-    }
-    #bottom {
-      height: 30px;
-      padding-bottom: 10px;
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-    }
-  </style>
-  <div class="container ${Object(a.a)(this.constructClasses())}" style="${Object(n.a)(this.constructStyles())}">
-      <div class="slot" id="top"><slot name="top"></slot></div>
-      <div class="slot" id="main"><slot name="main"></slot></div>
-      <div class="slot" id="bottom"><slot name="bottom"></slot></div>
-
-  </div>
-  `}class o extends r.a{static get properties(){return{src:{type:String},assetFolder:{type:String,attribute:"asset-folder"},assetMax:{type:parseInt,attribute:"asset-max"},assetPick:{type:parseInt,attribute:"asset-pick",reflect:!0}}}constructor(){super(),this.render=s.bind(this),this.assetFolder="/images/profile-features/",this.assetMax=29,this.shuffle()}constructClasses(){return{}}constructStyles(){let e={};return this.src?e["background-image"]=`var(--tcolor-hero-film), url(${this.src})`:(this.assetPick<0&&(this.assetPick=1),this.assetPick>this.assetMax&&(this.assetPick=this.assetMax),e["background-image"]=`var(--tcolor-hero-film), url(${this.assetFolder+this.assetPick+".jpg"})`),e}shuffle(){this.src||(this.assetPick=Math.floor(Math.random()*this.assetMax+1))}}customElements.define("rp-hero-image",o)},94:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
-  <style>
-    :host {
-      display: block;
-      color: var(--tcolor-link-text);
-    }
-    .container {
-      display: flex;
-    }
-    .container.h {
-      flex-flow: row nowrap;
-      justify-content: center;
-    }
-    .container.h .link {
-      margin-left: 1em;
-      margin-right: 1em;
-    }
-    .container.v {
-      flex-flow: column nowrap;
-      align-items: flex-end;
-    }
-    .container.v .link {
-      margin-bottom: 1.5em;
-    }
-    .link {
-      cursor: pointer;
-    }
-    a {
-      text-decoration: none;
-      color: var(--tcolor-link-text);
-    }
-    .link:hover, a.link:hover {
-      color: var(--tcolor-link-hover-text);
-    }
-    .link.selected, a.link.selected {
-      pointer-events: none;
-      color: var(--tcolor-text);
-      font-weight: var(--font-weight-bold);
-      cursor: auto;
-      border-bottom: 2px solid var(--tcolor-secondary);
-    }
-    .link.disabled, a.link.disabled {
-      color: var(--tcolor-link-disabled-text);
-      pointer-events: none;
-      cursor: auto;
-    }
-    link.disabeld:hover, a.link.disabled:hover {
-      color: var(--tcolor-link-disabled-text);
-    }
-    .link.selected:hover, a.link.selected:hover {
-      color: var(--tcolor-text);
-    }
-  </style>
-  <div class=${Object(a.a)(this._containerClasses)}>
-    ${this.links.map((e,t)=>this._renderLink(e,t))}
-  </div>
-  `}class s extends r.a{static get properties(){return{links:{type:Array},currentLink:{converter:parseInt,attribute:"current-link",reflect:!0},direction:{type:String,attribute:"direction"},hasHeaderLink:{type:Boolean,attribute:"has-header-link"}}}constructor(){super(),this.render=n.bind(this),this.direction="v",this.currentLink=0,this._containerClasses={container:!0},this._containerClasses[this.direction]=!0,this._changedLink=new CustomEvent("changed-link",{detail:{message:"A new link has been selected."}})}attributeChangedCallback(e,t,i){"direction"==e&&i&&(this._containerClasses.v&&delete this._containerClasses.v,this._containerClasses[i.toLowerCase()[0]]=!0),super.attributeChangedCallback(e,t,i)}_renderLink(e,t){let i="",n="",s=!1,o={link:!0};return"string"==typeof e?i=e:"object"==typeof e&&(i=e.text,e.disabled&&(s=!0),e.href&&(n=e.href)),t==this.currentLink&&(o.selected=!0),this.hasHeaderLink&&0==t&&(o["link-header"]=!0),o.disabled=s,n?r.b`<a link="${t}" class="${Object(a.a)(o)}" href="${n}">${i}</a>`:i?r.b`<div @click="${this.handleClick}" link="${t}" class=${Object(a.a)(o)}>${i}</div>`:void 0}handleClick(e){let t=parseInt(e.target.getAttribute("link"));t==this.currentLink||e.target.classList.contains("disabled")||(this.currentLink=t,this.dispatchEvent(this._changedLink))}}customElements.define("rp-link-list",s)},95:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function n(){return r.b`
+    </span>`}}customElements.define("rp-badge",o)},93:function(e,t,i){"use strict";var r=i(2),a=i(33);i(35);function n(){return r.b`
   <style>
     :host {
       display: block;
@@ -911,7 +819,63 @@ ${this.exampleOrgs.map(e=>r.b`
       `}
 
   </div>
-  `}class s extends r.a{static get properties(){return{text:{type:String},href:{type:String},justify:{type:String}}}constructor(){super(),this.render=n.bind(this),this.text="View All",this.href=""}constructClasses(){let e={};return this.justify&&(e[this.justify]=!0),e}_renderInnerContent(){return r.b`<span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon>`}}customElements.define("rp-view-all",s)},97:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
+  `}class o extends r.a{static get properties(){return{text:{type:String},href:{type:String},justify:{type:String}}}constructor(){super(),this.render=n.bind(this),this.text="View All",this.href=""}constructClasses(){let e={};return this.justify&&(e[this.justify]=!0),e}_renderInnerContent(){return r.b`<span class="text">${this.text}</span><iron-icon icon="av:play-arrow"></iron-icon>`}}customElements.define("rp-view-all",o)},94:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
+  <style>
+    :host {
+      display: block;
+      color: var(--tcolor-link-text);
+    }
+    .container {
+      display: flex;
+    }
+    .container.h {
+      flex-flow: row nowrap;
+      justify-content: center;
+    }
+    .container.h .link {
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+    .container.v {
+      flex-flow: column nowrap;
+      align-items: flex-end;
+    }
+    .container.v .link {
+      margin-bottom: 1.5em;
+    }
+    .link {
+      cursor: pointer;
+    }
+    a {
+      text-decoration: none;
+      color: var(--tcolor-link-text);
+    }
+    .link:hover, a.link:hover {
+      color: var(--tcolor-link-hover-text);
+    }
+    .link.selected, a.link.selected {
+      pointer-events: none;
+      color: var(--tcolor-text);
+      font-weight: var(--font-weight-bold);
+      cursor: auto;
+      border-bottom: 2px solid var(--tcolor-secondary);
+    }
+    .link.disabled, a.link.disabled {
+      color: var(--tcolor-link-disabled-text);
+      pointer-events: none;
+      cursor: auto;
+    }
+    link.disabeld:hover, a.link.disabled:hover {
+      color: var(--tcolor-link-disabled-text);
+    }
+    .link.selected:hover, a.link.selected:hover {
+      color: var(--tcolor-text);
+    }
+  </style>
+  <div class=${Object(a.a)(this._containerClasses)}>
+    ${this.links.map((e,t)=>this._renderLink(e,t))}
+  </div>
+  `}class o extends r.a{static get properties(){return{links:{type:Array},currentLink:{converter:parseInt,attribute:"current-link",reflect:!0},direction:{type:String,attribute:"direction"},hasHeaderLink:{type:Boolean,attribute:"has-header-link"}}}constructor(){super(),this.render=n.bind(this),this.direction="v",this.currentLink=0,this._containerClasses={container:!0},this._containerClasses[this.direction]=!0,this._changedLink=new CustomEvent("changed-link",{detail:{message:"A new link has been selected."}})}attributeChangedCallback(e,t,i){"direction"==e&&i&&(this._containerClasses.v&&delete this._containerClasses.v,this._containerClasses[i.toLowerCase()[0]]=!0),super.attributeChangedCallback(e,t,i)}_renderLink(e,t){let i="",n="",o=!1,s={link:!0};return"string"==typeof e?i=e:"object"==typeof e&&(i=e.text,e.disabled&&(o=!0),e.href&&(n=e.href)),t==this.currentLink&&(s.selected=!0),this.hasHeaderLink&&0==t&&(s["link-header"]=!0),s.disabled=o,n?r.b`<a link="${t}" class="${Object(a.a)(s)}" href="${n}">${i}</a>`:i?r.b`<div @click="${this.handleClick}" link="${t}" class=${Object(a.a)(s)}>${i}</div>`:void 0}handleClick(e){let t=parseInt(e.target.getAttribute("link"));t==this.currentLink||e.target.classList.contains("disabled")||(this.currentLink=t,this.dispatchEvent(this._changedLink))}}customElements.define("rp-link-list",o)},96:function(e,t,i){"use strict";var r=i(2),a=i(33);function n(){return r.b`
   <style>
     :host {
       display: block;
@@ -992,9 +956,45 @@ ${this.exampleOrgs.map(e=>r.b`
                icon="arrow-forward">
     </iron-icon>
   </div>
-  `}class s extends r.a{static get properties(){return{currentPage:{converter:parseInt,attribute:"current-page",reflect:!0},maxPage:{converter:parseInt,attribute:"max-page",reflect:!0},minPage:{converter:parseInt,attribute:"min-page",reflect:!0},pagesPerSide:{converter:parseInt,attribute:"pages-per-side"}}}constructor(){super(),this.render=n.bind(this),this.pagesPerSide=1,this.minPage=1,this.currentPage=this.minPage,this.maxPage=this.currentPage,this._changedPage=new CustomEvent("changed-page",{detail:{message:"A new page has been selected."}})}_hasValidLogic(){return!(this.maxPage<this.currentPage||this.maxPage<this.minPage)&&!(this.minPage>this.currentPage)}_renderEdge(e){if(!this._hasValidLogic())return r.b``;if("left"==e){if(this.currentPage-this.minPage>this.pagesPerSide+1)return r.b`<div @click="${this.handleClick}" class="page" page="${this.minPage}">${this.minPage}</div><div class="ellipsis">...</div>`}else if("right"==e&&this.maxPage-this.currentPage>this.pagesPerSide+1)return r.b`<div class="ellipsis">...</div><div @click="${this.handleClick}" class="page" page="${this.maxPage}">${this.maxPage}</div>`}_renderCenter(){if(!this._hasValidLogic())return r.b`<div class="${Object(a.a)({page:!0,selected:!0})}" page="${this.currentPage}">${this.currentPage}</div>`;let e=[{page:this.currentPage,selected:!0}],t=2*this.pagesPerSide,i=this;return n(this.pagesPerSide),n(t),e[0].page-this.minPage==1&&e.unshift({page:this.minPage,selected:!1}),this.maxPage-e.slice(-1)[0].page==1&&e.push({page:this.maxPage,selected:!1}),r.b`${e.map(e=>r.b`<div @click="${this.handleClick}"
+  `}class o extends r.a{static get properties(){return{currentPage:{converter:parseInt,attribute:"current-page",reflect:!0},maxPage:{converter:parseInt,attribute:"max-page",reflect:!0},minPage:{converter:parseInt,attribute:"min-page",reflect:!0},pagesPerSide:{converter:parseInt,attribute:"pages-per-side"}}}constructor(){super(),this.render=n.bind(this),this.pagesPerSide=1,this.minPage=1,this.currentPage=this.minPage,this.maxPage=this.currentPage,this._changedPage=new CustomEvent("changed-page",{detail:{message:"A new page has been selected."}})}_hasValidLogic(){return!(this.maxPage<this.currentPage||this.maxPage<this.minPage)&&!(this.minPage>this.currentPage)}_renderEdge(e){if(!this._hasValidLogic())return r.b``;if("left"==e){if(this.currentPage-this.minPage>this.pagesPerSide+1)return r.b`<div @click="${this.handleClick}" class="page" page="${this.minPage}">${this.minPage}</div><div class="ellipsis">...</div>`}else if("right"==e&&this.maxPage-this.currentPage>this.pagesPerSide+1)return r.b`<div class="ellipsis">...</div><div @click="${this.handleClick}" class="page" page="${this.maxPage}">${this.maxPage}</div>`}_renderCenter(){if(!this._hasValidLogic())return r.b`<div class="${Object(a.a)({page:!0,selected:!0})}" page="${this.currentPage}">${this.currentPage}</div>`;let e=[{page:this.currentPage,selected:!0}],t=2*this.pagesPerSide,i=this;return n(this.pagesPerSide),n(t),e[0].page-this.minPage==1&&e.unshift({page:this.minPage,selected:!1}),this.maxPage-e.slice(-1)[0].page==1&&e.push({page:this.maxPage,selected:!1}),r.b`${e.map(e=>r.b`<div @click="${this.handleClick}"
                                               class="${Object(a.a)({page:!0,selected:e.selected})}"
-                                              page="${e.page}">${e.page}</div>`)}`;function n(r){let a=["left","right"];for(let n of a){if("left"===n)for(let a=0;a<r;a++){let r=e[0].page;r>i.minPage&&(e.unshift({page:r-1,selected:!1}),t-=1)}if("right"===n)for(let a=0;a<r;a++){let r=e.slice(-1)[0].page;r<i.maxPage&&(e.push({page:r+1,selected:!1}),t-=1)}}}}handleClick(e){let t=parseInt(e.target.getAttribute("page"));t!=this.currentPage&&(this.currentPage=t,this.dispatchEvent(this._changedPage))}}customElements.define("rp-pagination",s)},98:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
+                                              page="${e.page}">${e.page}</div>`)}`;function n(r){let a=["left","right"];for(let n of a){if("left"===n)for(let a=0;a<r;a++){let r=e[0].page;r>i.minPage&&(e.unshift({page:r-1,selected:!1}),t-=1)}if("right"===n)for(let a=0;a<r;a++){let r=e.slice(-1)[0].page;r<i.maxPage&&(e.push({page:r+1,selected:!1}),t-=1)}}}}handleClick(e){let t=parseInt(e.target.getAttribute("page"));t!=this.currentPage&&(this.currentPage=t,this.dispatchEvent(this._changedPage))}}customElements.define("rp-pagination",o)},97:function(e,t,i){"use strict";var r=i(2),a=i(33),n=i(35);function o(){return r.b`
+  <style>
+    :host {
+      display: block;
+    }
+    .container {
+      width: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .slot {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    #top {
+      height: 30px;
+      padding-top: 10px;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+    #bottom {
+      height: 30px;
+      padding-bottom: 10px;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+  </style>
+  <div class="container ${Object(a.a)(this.constructClasses())}" style="${Object(n.a)(this.constructStyles())}">
+      <div class="slot" id="top"><slot name="top"></slot></div>
+      <div class="slot" id="main"><slot name="main"></slot></div>
+      <div class="slot" id="bottom"><slot name="bottom"></slot></div>
+
+  </div>
+  `}class s extends r.a{static get properties(){return{src:{type:String},assetFolder:{type:String,attribute:"asset-folder"},assetMax:{type:parseInt,attribute:"asset-max"},assetPick:{type:parseInt,attribute:"asset-pick",reflect:!0}}}constructor(){super(),this.render=o.bind(this),this.assetFolder="/images/profile-features/",this.assetMax=29,this.shuffle()}constructClasses(){return{}}constructStyles(){let e={};return this.src?e["background-image"]=`var(--tcolor-hero-film), url(${this.src})`:(this.assetPick<0&&(this.assetPick=1),this.assetPick>this.assetMax&&(this.assetPick=this.assetMax),e["background-image"]=`var(--tcolor-hero-film), url(${this.assetFolder+this.assetPick+".jpg"})`),e}shuffle(){this.src||(this.assetPick=Math.floor(Math.random()*this.assetMax+1))}}customElements.define("rp-hero-image",s)},98:function(e,t,i){"use strict";var r=i(2);function a(){return r.b`
   <style>
     :host {
       display: block;
@@ -1051,7 +1051,7 @@ ${this.exampleOrgs.map(e=>r.b`
     ${this.links.map((e,t)=>this._renderLink(e,t))}
     ${this._renderViewAll()}
   </div>
-  `}i(33),i(95);class n extends r.a{static get properties(){return{links:{type:Array},viewAllLink:{type:Object,attribute:"view-all-link"},header:{type:Object,attribute:"header"}}}constructor(){super(),this.render=a.bind(this),this.links=[],this._linkClick=new CustomEvent("link-click",{detail:{message:"A new link has been clicked."}})}_renderHeader(){return this.header&&this.header.text?r.b`<div class="row header">
+  `}i(33),i(93);class n extends r.a{static get properties(){return{links:{type:Array},viewAllLink:{type:Object,attribute:"view-all-link"},header:{type:Object,attribute:"header"}}}constructor(){super(),this.render=a.bind(this),this.links=[],this._linkClick=new CustomEvent("link-click",{detail:{message:"A new link has been clicked."}})}_renderHeader(){return this.header&&this.header.text?r.b`<div class="row header">
                 <div class="count">${this.header.count}</div>
                 <div class="link-container"><span>${this.header.text}</span></div>
                 </div>`:r.b``}_renderLink(e,t){return e.text?e.href?r.b`<div class="row">
@@ -1064,7 +1064,7 @@ ${this.exampleOrgs.map(e=>r.b`
       <div class="link-container">
         <span @click="${this.handleClick}" link-index="${t}" class="link">${e.text}</span>
       </div>
-    </div>`:r.b``}_renderViewAll(){return this.viewAllLink?(this.viewAllLink.text||(this.viewAllLink.text="View All"),this.viewAllLink.href?r.b`<div class="row view-all"><div class="count"></div><rp-view-all href="${this.viewAllLink.href}" text="${this.viewAllLink.text}"></rp-view-all></div>`:r.b`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`):r.b``}handleClick(e){e.target.classList.contains("link")?this.Clickedlink=this.links[parseInt(e.target.getAttribute("link-index"))]:this.Clickedlink=this.viewAllLink,this.dispatchEvent(this._linkClick)}}customElements.define("rp-link-list-counts",n)},99:function(e,t,i){"use strict";var r=i(2),a=i(33);i(34);function n(){return r.b`
+    </div>`:r.b``}_renderViewAll(){return this.viewAllLink?(this.viewAllLink.text||(this.viewAllLink.text="View All"),this.viewAllLink.href?r.b`<div class="row view-all"><div class="count"></div><rp-view-all href="${this.viewAllLink.href}" text="${this.viewAllLink.text}"></rp-view-all></div>`:r.b`<div class="row view-all"><div class="count"></div><rp-view-all @click="${this.handleClick}" text="${this.viewAllLink.text}"></rp-view-all></div>`):r.b``}handleClick(e){e.target.classList.contains("link")?this.Clickedlink=this.links[parseInt(e.target.getAttribute("link-index"))]:this.Clickedlink=this.viewAllLink,this.dispatchEvent(this._linkClick)}}customElements.define("rp-link-list-counts",n)},99:function(e,t,i){"use strict";var r=i(2),a=i(33);i(35);function n(){return r.b`
   <style>
     :host {
       display: inline-block;
@@ -1102,7 +1102,7 @@ ${this.exampleOrgs.map(e=>r.b`
     }
   </style>
   <div class="container ${Object(a.a)(this._constructClasses())}">
-    <rp-dropdown .choices="${this.facets}"
+    <rp-dropdown .choices="${this.getDropdownOptions()}"
                  to-upper-case
                  chosen="${this.activeFacet}"
                  @new-selection="${e=>this.activeFacet=e.target.chosen}">
@@ -1119,4 +1119,4 @@ ${this.exampleOrgs.map(e=>r.b`
     </div>
 
   </div>
-  `}i(59),i(58);class s extends r.a{static get properties(){return{facets:{type:Array},inputValue:{type:String,attribute:"input-value",reflect:!0},placeholder:{type:String},activeFacet:{type:parseInt,attribute:"active-facet",reflect:!0}}}constructor(){super(),this.render=n.bind(this),this.facets=[{text:"PEOPLE"},{text:"ORGANIZATIONS"},{text:"WORKS"}],this.placeholder="Search the registry",this.activeFacet=0,this.inputValue="",this._newSearch=new CustomEvent("new-search",{detail:{message:"A new search has been triggered"}})}updated(e){(e.has("inputValue")||e.has("activeFacet"))&&(this.searchObject={search:this.inputValue,facet:this.facets[this.activeFacet]})}_constructClasses(){return{}}doSearch(){this.inputValue&&this.dispatchEvent(this._newSearch)}_handleKeyup(e){13===e.keyCode&&(e.preventDefault(),this.doSearch())}}customElements.define("rp-search",s)}}]);
+  `}i(59),i(58);class o extends r.a{static get properties(){return{facets:{type:Array},includeAllOption:{type:Boolean,attribute:"include-all-option"},allOption:{type:Object},inputValue:{type:String,attribute:"input-value",reflect:!0},placeholder:{type:String},activeFacet:{type:Number,attribute:"active-facet",reflect:!0}}}constructor(){super(),this.render=n.bind(this),this.facets=[{text:"PEOPLE"},{text:"ORGANIZATIONS"},{text:"WORKS"}],this.placeholder="Search the registry",this.activeFacet=0,this.inputValue="",this.includeAllOption=!1,this.allOption={text:"ALL",id:"all"},this._newSearch=new CustomEvent("new-search",{detail:{message:"A new search has been triggered"}})}updated(e){(e.has("inputValue")||e.has("activeFacet"))&&(this.searchObject={search:this.inputValue,facet:this.getDropdownOptions()[this.activeFacet]})}_constructClasses(){return{}}getDropdownOptions(){return this.includeAllOption?[this.allOption,...this.facets]:this.facets}doSearch(){this.inputValue&&this.dispatchEvent(this._newSearch)}_handleKeyup(e){13===e.keyCode&&(e.preventDefault(),this.doSearch())}}customElements.define("rp-search",o)}}]);
