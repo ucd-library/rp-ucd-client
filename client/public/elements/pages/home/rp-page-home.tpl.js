@@ -85,7 +85,9 @@ return html`
   </div>
 </div>
 <div class="search bg-primary">
-  <div class="container flex justify-content-center"><rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}"></rp-search></div>
+  <div class="container flex justify-content-center">
+    <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
+  </div>
 </div>
 <div class="data bg-light">
   <div class="container flex">
@@ -119,10 +121,12 @@ return html`
         </div>
       </div>
       <div class="subjects">
+        <!-- 
         <h2>
           <span class="bold mr-2">${this.subjectsTotal}</span>
           <span class="weight-regular">Research Subjects</span>
         </h2>
+        -->
       </div>
     </div>
   </div>

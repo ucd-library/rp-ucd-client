@@ -21,6 +21,7 @@ import "../src"
 // app elements
 import "./components/quick-search"
 import "./components/dropdown"
+import bundles from "./pages/bundles"
 
 // default pages
 import './pages/terms-of-use/rp-page-tou'
@@ -54,7 +55,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.textQuery = "";
     this.isSearch = false;
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
-                     {text: 'Organizations', page: 'organizations', href: '/organizations'},
+                     //{text: 'Organizations', page: 'organizations', href: '/organizations'},
                      {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '#'}];
 
@@ -98,26 +99,16 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @param {String} page page to load
    */
   loadPage(page) {
-    if( page === 'home' ) {
+    if( bundles.search.includes(page) ) {
+      return import(/* webpackChunkName: "page-search" */ "./pages/bundles/search")
+    } else if( bundles.landing.includes(page) ) {
+      return import(/* webpackChunkName: "page-landing" */ "./pages/bundles/landing")
+    } else if( page === 'home' ) {
       return import(/* webpackChunkName: "page-home" */ "./pages/home/rp-page-home")
     } else if( page === 'components' ) {
       return import(/* webpackChunkName: "page-components" */ "./pages/components/app-components")
-    } else if( page === 'people' ) {
-      return import(/* webpackChunkName: "page-people" */ "./pages/people/rp-page-people")
-    } else if( page === 'individual' ) {
-      return import(/* webpackChunkName: "page-individual" */ "./pages/individual/rp-page-individual")
-    } else if( page === 'works' ) {
-      return import(/* webpackChunkName: "page-works" */ "./pages/works/rp-page-works")
-    } else if( page === 'work' ) {
-      return import(/* webpackChunkName: "page-work" */ "./pages/work/rp-page-work")
-    } else if( page === 'organizations' ) {
-      return import(/* webpackChunkName: "page-organizations" */ "./pages/organizations/rp-page-organizations")
-    } else if( page === 'organization' ) {
-      return import(/* webpackChunkName: "page-organization" */ "./pages/organization/rp-page-organization")
     } else if( page === 'help' ) {
       return import(/* webpackChunkName: "page-help" */ "./pages/help/rp-page-help")
-    } else if( page === 'search' ) {
-      return import(/* webpackChunkName: "page-search" */ "./pages/search/rp-page-search")
     }
   }
 

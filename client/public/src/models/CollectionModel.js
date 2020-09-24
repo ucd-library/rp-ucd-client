@@ -12,10 +12,13 @@ class CollectionModel extends BaseModel {
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.mainFacets = [{id: 'people', text: 'People', es: `${this.jsonldContext}:person`,
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
+                      /*
                        {id: 'organizations', text: 'Organizations', es: 'ucdrp:organization', 
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":organization"]}}},
+                      */
                        {id: 'works', text: 'Works', es: `${this.jsonldContext}:publication`, 
-                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":publication"]}}}];
+                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":publication"]}}}
+                      ];
     this.currentQuery = {};
     this.subFacets = {
       people: [
