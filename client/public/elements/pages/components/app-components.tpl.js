@@ -7,6 +7,7 @@ import "../../components/alert"
 import "../../components/avatar"
 import "../../components/badge"
 import "../../components/citation"
+import "../../components/download-list"
 import "../../components/dropdown"
 import "../../components/hero-image"
 import "../../components/icon"
@@ -174,6 +175,15 @@ and have hover styles.
 <rp-citation title="Examining the Effects of Dogs on Cats"
              journal="Behavioral Science" pages="4:9-13">
 </rp-citation>
+</section>
+
+<section>
+<h2>Download List</h2>
+<p>Presents a list of download options as a dropdown opened from an icon.</p>
+<rp-download-list 
+  title="Download Publications List"
+  .choices=${[{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)"}]}>
+</rp-download-list>
 </section>
 
 <section>
