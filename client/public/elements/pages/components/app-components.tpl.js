@@ -179,11 +179,17 @@ and have hover styles.
 
 <section>
 <h2>Download List</h2>
-<p>Presents a list of download options as a dropdown opened from an icon.</p>
+<p>Presents a list of download options as a dropdown opened from an icon. 
+Pass an href property to an object within the <code>.choices</code> array property to make the option an <code>a</code> element. 
+Otherwise, a <code>new-selection</code> event will fire when an option is clicked.</p>
+<div>
 <rp-download-list 
   title="Download Publications List"
-  .choices=${[{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)"}]}>
+  .choices=${[{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:"/api/miv/ramram"}, {text: 'BiBTex', subtext: "(imports to LaTEX)"}, {text: 'Plain Text'}, {text: 'HTML'}]}
+  @new-selection="${e => console.log(e.target.choices[e.target.selected])}"
+  >
 </rp-download-list>
+</div>
 </section>
 
 <section>

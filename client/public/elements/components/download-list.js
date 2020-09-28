@@ -9,6 +9,7 @@ export class RpDownloadList extends LitElement {
       opened: {type: Boolean},
       title: {type: String},
       choices: {type: Array},
+      dropOnLeft: {Type: Boolean},
       selected: {type: Number}
   };
   }
@@ -21,6 +22,7 @@ export class RpDownloadList extends LitElement {
     this.opened = false;
     this.choices = [];
     this.title = "Downloads";
+    this.dropOnLeft = false;
     this.selected = 0;
 
     this._newSelection = new CustomEvent('new-selection', {
@@ -64,11 +66,12 @@ export class RpDownloadList extends LitElement {
 
   _onMainClick(){
     if (this.opened) {
-        this.opened = false;
+      this.opened = false;
     }
     else {
-        this.opened = true;
-        this.shadowRoot.getElementById('dropdown').open();
+      this.dropOnLeft = (this.offsetLeft / window.innerWidth) < .5 ? true : false;
+      this.opened = true;
+      this.shadowRoot.getElementById('dropdown').open();
     }
   }
 

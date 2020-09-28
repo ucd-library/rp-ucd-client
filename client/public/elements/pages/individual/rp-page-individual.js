@@ -5,6 +5,7 @@ import "../../components/alert";
 import "../../components/avatar";
 import "../../components/badge";
 import "../../components/citation";
+import "../../components/download-list";
 import "../../components/hero-image";
 import "../../components/icon";
 import "../../components/link-list";
@@ -187,6 +188,10 @@ export default class RpPageIndividual extends Mixin(LitElement)
     }
 
     return out;
+  }
+
+  getPubExports() {
+    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/${this.individualId}`}];
   }
 
   formatSubjectsObject(subjects){

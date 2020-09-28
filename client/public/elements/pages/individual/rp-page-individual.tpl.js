@@ -56,30 +56,49 @@ return html`
   .load-more:hover {
     background-color: var(--tcolor-hover-bg);
   }
-  a.export {
-    text-decoration: none;
-    display: block;
-    background-color: var(--tcolor-primary20);
-    font-size: var(--font-size);
-    color: var(--tcolor-text) !important;
-    font-weight: var(--font-weight);
-    padding: 10px 15px;
-  }
-  a.export:hover {
-    background-color: var(--tcolor-hover-bg);
-    color: var(--tcolor-text);
-  }
   .site .logo {
     vertical-align: middle;
     height: 16px;
     width: 16px;
     margin-right: 4px;
   }
+  .pub-icons {
+    margin-right: 10px;
+  }
+  .box-title {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
+  .own-profile .box-title {
+    flex-flow: column nowrap;
+  }
+  .box-title-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .own-profile .box-title-icons {
+    order: -1;
+  }
+  @media (min-width: 800px){
+    .own-profile .box-title {
+      flex-flow: row nowrap;
+      justify-content: space-between;
+  }
+    .own-profile .box-title-icons { 
+      justify-content: unset;
+    }
+    .own-profile .box-title-icons {
+      order: 2;
+    }
+
+  }
   ${styles}
 </style>
 
 
-<div class="individual container top">
+<div class="individual container top ${this.isOwnProfile ? "own-profile" : ""}">
   <div ?hidden="${this.individualStatus == 'error' || this.individualStatus == 'loaded' }" class="flex align-items-center justify-content-center">
     <div class="loading1">loading</div>
   </div>
@@ -136,14 +155,16 @@ return html`
   </section>
 
   <section id="publications" class="bg-light mt-3" ?hidden="${this.hideSection('publications')}">
-    <div class="flex justify-content-between">
+    <div class="box-title">
       <h1 class="weight-regular mt-0">Publications</h1>
-      <div class="flex align-items-center">${this.isOwnProfile ? html`
-        <a class="export mr-3" href="${`/api/miv/${this.individualId}`}">Export</a>
-      ` : html``}
-        <div class="pub-count">${this.totalPublications}</div>
+      <div class="box-title-icons">
+        ${this.isOwnProfile ? html`
+          <div class="pub-icons">
+            <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
+          </div>
+          ` : html``}
+          <div class="pub-count">${this.totalPublications}</div>
       </div>
-
     </div>
     <h2>Selected Publications</h2>
       <div ?hidden="${this.publicationStatus == 'error' || this.publicationStatus == 'loaded' }" class="flex align-items-center justify-content-center">
@@ -169,6 +190,8 @@ return html`
     <h2>Keywords</h2>
       <p>lorem, ipsum, dolor sit amit</p>
   </section>
+
+
   <section id="contact" class="bg-light mt-3" hidden>
     <h1 class="weight-regular">Contact</h1>
   </section>

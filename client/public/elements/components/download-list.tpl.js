@@ -41,9 +41,10 @@ export default function render() {
     #dropdown-content {
       background-color: var(--tcolor-light);
       box-shadow: 0 0 3px 5px rgba(0, 0, 0, .1);
+      padding-bottom: 10px;
     }
     .title {
-      padding: 15px;
+      padding: 15px 15px 5px 15px;
       font-weight: var(--font-weight-bold);
       color: var(--tcolor-text);
     }
@@ -65,7 +66,12 @@ export default function render() {
       font-weight: var(--font-weight-bold);
     }
     .choice {
-      padding: 15px;
+      padding: 5px 15px;
+      transition: 0.3s;
+    }
+    a {
+      color: var(--tcolor-primary);
+      text-decoration: none;
       transition: 0.3s;
     }
     .choice:hover {
@@ -87,7 +93,7 @@ export default function render() {
         <iron-icon icon="file-download"></iron-icon>
       </div>
 
-      <iron-dropdown id="dropdown" scroll-action="cancel" vertical-align="top" vertical-offset="${this.pixels}">
+      <iron-dropdown id="dropdown" scroll-action="cancel" vertical-align="top" vertical-offset="${this.pixels}" horizontal-align="${this.dropOnLeft ? 'left' : 'right'}">
         <div slot="dropdown-content" id="dropdown-content">
           <div class="title">${this.title}</div>
           <ul>${this.choices.map((choice, i) => this._renderChoices(choice, i))}</ul>
