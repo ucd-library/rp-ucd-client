@@ -13,6 +13,7 @@ import "../../components/hero-image"
 import "../../components/icon"
 import "../../components/link-list"
 import "../../components/link-list-counts"
+import "../../components/modal"
 import "../../components/organization-preview"
 import "../../components/pagination"
 import "../../components/person-preview"
@@ -283,6 +284,17 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
                       >
 </rp-link-list-counts>
 </section>
+
+<section>
+  <h2>Modal</h2>
+  <p>Launches a full-window modal. Use <code>content-title</code> attribute and a slot to customize content.
+  <code>show</code>, <code>hide</code>, and <code>toggle</code> methods control visibility.</p>
+  <p @click="${e => this.shadowRoot.getElementById('modal').toggle()}">Click me to launch modal</p>
+  <rp-modal content-title='Edit "Publications"' id="modal">
+    Publication information is managed via the <a href="https://oapolicy.universityofcalifornia.edu/">UC Publication Management System</a>. Any changes made there will be reflected on your Aggie Experts profile.
+  </rp-modal>
+
+</section> 
 
 <section>
 <h2>Pagination</h2>

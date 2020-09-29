@@ -25,16 +25,18 @@ export default function render() {
     }
     .container.circle {
       border-radius: 50%;
-      background-color: var(--tcolor-primary-disabled);
+      background-color: var(--tcolor-bg-primary);
     }
     .container.noicon {
       display: none;
     }
     .container.link {
       cursor: pointer;
+      transition: 0.3s;
     }
     .container.link:hover {
-      color: var(--tcolor-link-hover-text);
+      background-color: var(--tcolor-hover-bg);
+      color: var(--tcolor-light);
     }
     .container.secondary {
       color: var(--tcolor-light);

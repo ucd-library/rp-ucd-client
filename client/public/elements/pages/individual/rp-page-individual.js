@@ -9,6 +9,7 @@ import "../../components/download-list";
 import "../../components/hero-image";
 import "../../components/icon";
 import "../../components/link-list";
+import "../../components/modal";
 
 
 

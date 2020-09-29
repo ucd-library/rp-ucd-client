@@ -63,6 +63,10 @@ return html`
     margin-right: 4px;
   }
   .pub-icons {
+    display: flex;
+    align-items: center;
+  }
+  .pub-icons > * {
     margin-right: 10px;
   }
   .box-title {
@@ -160,8 +164,12 @@ return html`
       <div class="box-title-icons">
         ${this.isOwnProfile ? html`
           <div class="pub-icons">
+            <rp-icon icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}"></rp-icon>
             <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
           </div>
+          <rp-modal content-title='Edit "Publications"' id="modal-pub-edit">
+    Publication information is managed via the <a href="https://oapolicy.universityofcalifornia.edu/">UC Publication Management System</a>. Any changes made there will be reflected on your Aggie Experts profile.
+          </rp-modal>
           ` : html``}
           <div class="pub-count">${this.totalPublications}</div>
       </div>

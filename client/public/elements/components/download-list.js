@@ -17,7 +17,7 @@ export class RpDownloadList extends LitElement {
   constructor() {
     super();
     this.render = render.bind(this);
-    this.pixels = 40;
+    this.pixels = 35;
     this.size = String(this.pixels) + "px";
     this.opened = false;
     this.choices = [];

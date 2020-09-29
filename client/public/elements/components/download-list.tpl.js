@@ -49,10 +49,10 @@ export default function render() {
       color: var(--tcolor-text);
     }
     iron-icon {
-      width: 50%;
-      height: 50%;
-      min-width: 50%;
-      min-height: 50%;
+      width: 60%;
+      height: 60%;
+      min-width: 60%;
+      min-height: 60%;
     }
     ul {
       list-style-type: none;
