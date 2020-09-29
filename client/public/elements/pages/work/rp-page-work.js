@@ -1,21 +1,23 @@
 import { LitElement, html } from 'lit-element';
-import render from "./rp-page-work.tpl.js"
+import render from "./rp-page-work.tpl.js";
+
+import RpUtilsLanding from "../../utils/rp-utils-landing";
 
 import "../../components/alert";
-import "../../components/hero-image";
+import "../../components/link-list";
 
 
-export default class RpPageWork extends Mixin(LitElement)
-.with(LitCorkUtils) {
+export default class RpPageWork extends RpUtilsLanding {
 
   static get properties() {
     return {
-      visible: {type: Boolean},
-      workId : {type: String},
-      work : {type: Object},
-      workStatus : {type: String},
+      work: {type: Object},
+      workStatus: {type: String},
       grpsWithLinks: {type: String},
-      authorPath: {type: String}
+      authorPath: {type: String},
+      authors: {type: Array},
+      hasOtherAuthors: {tyoe: Boolean},
+      workType: {type: String}
     }
   }
 
@@ -24,12 +26,14 @@ export default class RpPageWork extends Mixin(LitElement)
     this.render = render.bind(this);
     this._injectModel('AppStateModel', 'WorkModel');
 
-    this.visible = false;
-    this.workId = "";
+    this.assetType = "work";
     this.work = {};
     this.workStatus = 'loading';
     this.authorPath = "/individual/";
     this.grpsWithLinks = ["vivo:FacultyMember"];
+    this.authors = [];
+    this.hasOtherAuthors = false;
+    this.workType = "";
 
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
@@ -49,10 +53,21 @@ export default class RpPageWork extends Mixin(LitElement)
       this.AppStateModel.setLocation('/works');
       return;
     }
-    this.workId = path[1];
-    if (!this.workId) return;
-    this.shadowRoot.getElementById('hero').shuffle();
-    await Promise.all([this._doMainQuery(this.workId)]);
+    this.assetId = path[1];
+    if (!this.assetId) return;
+
+    let sections = this.getPageSections();
+    this.activeSection = sections[0]
+    if (path.length >= 3) {
+      for (let section of sections) {
+        if (section.id == path[2]) {
+          this.activeSection = section;
+          break;
+        }
+      }
+    }
+
+    await Promise.all([this._doMainQuery(this.assetId)]);
 
   }
 
@@ -64,6 +79,9 @@ export default class RpPageWork extends Mixin(LitElement)
     }
     this.work = data.payload;
     if (APP_CONFIG.verbose) console.log("work payload:", data);
+
+    this.authors = this._parseAuthors();
+    this.workType = this._getWorkType();
   }
 
   _hideStatusSection(section, statusProperty="workStatus") {
@@ -73,15 +91,22 @@ export default class RpPageWork extends Mixin(LitElement)
     return true;
   }
 
-  _hideSection(section) {
-    if (section == 'abstract' && this.work.abstract) {
-      return false;
+  _getWorkType() {
+    try {
+      for (let t of this.work['@type']) {
+        if (t == 'bibo:AcademicArticle') {
+          return "Academic Article";
+        }
+      }
+    } catch (error) {
+      
     }
-    return true;
+    return "";
   }
 
-  _renderAuthors(){
+  _parseAuthors(){
     let authors = [];
+    this.hasOtherAuthors = false;
     if (this.work.Authorship && typeof this.work.Authorship === 'object') {
       let auths = this.work.Authorship;
       if (!Array.isArray(auths)) {
@@ -97,6 +122,7 @@ export default class RpPageWork extends Mixin(LitElement)
           author['vivo:rank'] = Infinity;
         }
         author.href = "";
+        author.isOtherUniversity = true;
         try {
             if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
                 author.identifiers = [author.identifiers]
@@ -104,11 +130,16 @@ export default class RpPageWork extends Mixin(LitElement)
             for (let id of author.identifiers) {
                 if (this.grpsWithLinks.includes(id['@type'])) {
                     author.href = this.authorPath + id['@id'].replace(this.WorkModel.service.jsonContext + ":", "");
+                    author.isOtherUniversity = false;
                 }
             }
 
         } catch (error) {
             console.warn("Unable to construct author href.");
+        }
+        if (author.isOtherUniversity) {
+          this.hasOtherAuthors = true;
+          
         }
         authors.push(author);
       }
@@ -116,7 +147,8 @@ export default class RpPageWork extends Mixin(LitElement)
         return a['vivo:rank'] - b['vivo:rank'];
       });
     }
-return html`<div class="authors">${authors.map(author => html`<a class="author" href="${author.href}" ?disabled="${!author.href}">${author.nameLast}, ${author.nameFirst}</a>; `)}</div>`;
+    return authors;
+
   }
 
 }
