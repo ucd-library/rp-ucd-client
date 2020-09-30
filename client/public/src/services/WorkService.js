@@ -27,6 +27,22 @@ class WorkService extends BaseService {
     });
   }
 
+  async getAuthors(workId, authorArray) {
+    return this.request({
+      url : `${this.baseUrl}/${authorArray.join(',')}`,
+      fetchOptions : {
+        method : 'GET',
+        headers : {
+          'Content-Type' : 'application/json'
+        }
+      },
+      checkCached : () => this.store.data.workAuthors[workId],
+      onLoading : request => this.store.setAuthorLoading(workId, request),
+      onLoad : result => this.store.setAuthorLoaded(workId, result.body),
+      onError : e => this.store.setAuthorError(workId, e)
+    });
+  }
+
 }
 
 module.exports = new WorkService();

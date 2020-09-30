@@ -23,6 +23,16 @@ class WorkModel extends BaseModel {
     return this.store.data.byWork[id];
   }
 
+  async getAuthors(workId, authors) {
+    let state = {state : WorkStore.STATE.INIT};
+    if( state.state === 'init' ) {
+      await this.service.getAuthors(workId, authors);
+    } else if( state.state === 'loading' ) {
+      await state.request;
+    }
+    return this.store.data.workAuthors[workId];
+  }
+
 
 }
 
