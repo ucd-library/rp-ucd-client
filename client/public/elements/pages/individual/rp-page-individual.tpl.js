@@ -119,22 +119,17 @@ return html`
       <rp-avatar size="lg"></rp-avatar>
       <h2 class="name text-secondary h1 bold mb-0 text-center">${this.individual.label}</h2>
       <p class="text-light h3 mb-2 mt-1 text-center">${this.getIndividualTitles().join(", ")}</p>
-      ${this.researchSubjects.length > 0 ? html `
-        <p class="bold text-light h3 mt-1 mb-0 text-center">My research areas include: </p>
-        <p class="text-light mt-2 mb-0">
-        ${this.researchSubjects.splice(0, this.researchSubjectsToShow).map(subject => html`<rp-badge>${subject.label}</rp-badge>`)}
-        </p>
-        ` : html``}
+
       <div></div>
     </div>
   </rp-hero-image>
   <rp-link-list class="bg-light p-3"
                 direction="horizontal"
-                .links="${this.PersonModel.getSections()}"
+                .links="${this.getPageSections()}"
                 current-link="${this.activeSection.index}">
   </rp-link-list>
 
-  <section id="about" class="bg-light mt-3" ?hidden="${this.hideSection('about')}">
+  <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
     <h1 class="weight-regular mt-0">About</h1>
     <h2 hidden>Overview</h2>
     <p hidden>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
@@ -158,7 +153,7 @@ return html`
     </div>
   </section>
 
-  <section id="publications" class="bg-light mt-3" ?hidden="${this.hideSection('publications')}">
+  <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
     <div class="box-title">
       <h1 class="weight-regular mt-0">Publications</h1>
       <div class="box-title-icons">
@@ -188,20 +183,6 @@ return html`
       </div>
       ${this.retrievedPublications.length < this.totalPublications ? html`
         <button type="button" @click="${this._loadMorePubs}" class="load-more">Load more articles</button>` : html``}
-  </section>
-
-  <section id="research" class="bg-light mt-3" hidden>
-    <h1 class="weight-regular">Research</h1>
-    <h2>Overview</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-      et dolore magna aliqua.<p>
-    <h2>Keywords</h2>
-      <p>lorem, ipsum, dolor sit amit</p>
-  </section>
-
-
-  <section id="contact" class="bg-light mt-3" hidden>
-    <h1 class="weight-regular">Contact</h1>
   </section>
   </div>
 </div>

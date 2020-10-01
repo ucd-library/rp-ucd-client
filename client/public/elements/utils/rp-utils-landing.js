@@ -35,6 +35,12 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         {id: 'authors', text: 'Authors'}
       );
     }
+    if (this.assetType == 'individual') {
+      sections.push(
+        {id: 'about', text: 'About'},
+        {id: 'publications', text: 'Publications'}
+      );
+    }
 
     let i = 0;
     for (let section of sections) {
@@ -56,6 +62,20 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     }
 
     return true;
+  }
+
+  _setActiveSection(path, pathIndex=2){
+    let sections = this.getPageSections();
+    this.activeSection = sections[0]
+    if (path.length >= pathIndex + 1) {
+      for (let section of sections) {
+        if (section.id == path[pathIndex]) {
+          this.activeSection = section;
+          break;
+        }
+      }
+    }
+
   }
 
 }

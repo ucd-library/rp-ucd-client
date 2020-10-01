@@ -1,6 +1,8 @@
 import { LitElement } from 'lit-element';
 import render from "./rp-page-individual.tpl.js";
 
+import RpUtilsLanding from "../../utils/rp-utils-landing";
+
 import "../../components/alert";
 import "../../components/avatar";
 import "../../components/badge";
@@ -13,21 +15,17 @@ import "../../components/modal";
 
 
 
-export default class RpPageIndividual extends Mixin(LitElement)
-  .with(LitCorkUtils) {
+export default class RpPageIndividual extends RpUtilsLanding {
 
   static get properties() {
     return {
       individual: {type: Object},
-      individualId: {type: String},
       individualStatus: {type: String},
       publicationStatus: {type: String},
+      publicationOverview: {type: Object},
+      hasMultiplePubTypes: {type: Boolean},
       retrievedPublications: {type: Array},
       totalPublications: {type: Number},
-      researchSubjects: {type: Array},
-      researchSubjectsToShow: {type: Number},
-      activeSection: {type: Object},
-      visible: {type: Boolean},
       isOwnProfile: {type: Boolean}
     }
   }
@@ -37,17 +35,15 @@ export default class RpPageIndividual extends Mixin(LitElement)
     this.render = render.bind(this);
 
     this._injectModel('PersonModel', 'AppStateModel');
+    this.assetType = "individual";
     this.individual = {};
-    this.individualId = '';
     this.individualStatus = 'loading';
     this.publicationStatus = 'loading';
-    this.visible = false;
     this.retrievedPublications = [];
     this.totalPublications = 0;
-    this.researchSubjects = [];
-    this.researchSubjectsToShow = 4;
-    this.activeSection = {index: 0};
     this.isOwnProfile = false;
+    this.publicationOverview = {};
+    this.hasMultiplePubTypes = false;
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
@@ -63,27 +59,28 @@ export default class RpPageIndividual extends Mixin(LitElement)
     }
     let path = state.location.path;
     if (path.length >= 2) {
-      this.individualId = path[1];
-      this.PersonModel.individualId = this.individualId;
+      this.assetId = path[1];
+      this.PersonModel.individualId = this.assetId;
     }
-    this.activeSection = this.PersonModel.getActiveSection(path[2])
-    if (!this.individualId) return;
+    let sections = this.getPageSections();
+    if (!this.assetId) return;
+    this._setActiveSection(path);
 
     this.totalPublications = 0;
-    await Promise.all([this._doMainQuery(this.individualId),
-                        this._doPubQuery(this.individualId)]);
+    await Promise.all([this._doMainQuery(this.assetId),
+                        this._doPubOverviewQuery(this.assetId)]);
     this.isOwnProfile = this._isOwnProfile();
 
   }
 
   updated(props){
-    if (props.has('individualId') && this.individualId) {
+    if (props.has('assetId') && this.assetId) {
       this.shadowRoot.getElementById('hero').shuffle();
     }
   }
 
   async _loadMorePubs(){
-    await this._doPubQuery(this.individualId);
+    await this._doPubQuery(this.assetId);
   }
 
   async _doMainQuery(id){
@@ -96,11 +93,44 @@ export default class RpPageIndividual extends Mixin(LitElement)
     if (APP_CONFIG.verbose) console.log(data);
   }
 
-  async _doPubQuery(id){
-    let offset = 0;
-    if (!id) {
-      id = this.individualId;
+  async _doPubOverviewQuery(id) {
+    let data = await this.PersonModel.getPubOverview(id);
+    if (data.state != 'loaded') {
+      return;
     }
+    if (APP_CONFIG.verbose) console.log('pub overview:', data);
+
+    let totalPubs = 0;
+    let pubTypes = {};
+    for (let possiblePubType of this.PersonModel.getPublicationTypes()) {
+      let ct = data.payload.aggregations.facets['@type'][possiblePubType.es]
+      if (ct) {
+        totalPubs += ct;
+        pubTypes[possiblePubType.id] = {...possiblePubType, ct: ct, displayedOffset: 0}
+      }
+    }
+    this.hasMultiplePubTypes = Object.keys(pubTypes).length > 1;
+    this.totalPublications = totalPubs;
+    this.publicationOverview  = pubTypes;
+
+    Object.values(pubTypes).map(pt => this._doPubQuery(pt));
+
+  }
+
+  async _doPubQuery(pubTypeObject, offset=0){
+
+    let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
+    //this.publicationStatus = data.state;
+    /*
+    if (data.state != 'loaded') {
+      return;
+    }
+    if (APP_CONFIG.verbose) console.log(`${pubTypeObject.id} pubs:`, data);
+    */
+
+
+
+    /*
     if ( this.retrievedPublications.length < this.totalPublications ) {
       offset = this.retrievedPublications.length;
     }
@@ -114,35 +144,17 @@ export default class RpPageIndividual extends Mixin(LitElement)
     this.retrievedPublications = data.payload.results;
     if (data.payload.results.length > 0) {
       this.totalPublications = data.payload.total;
-
-      let researchSubjects = data.payload.aggregations.facets["hasSubjectArea.label"];
-      if (researchSubjects && Object.keys(researchSubjects).length > 0) {
-        //this.researchSubjects = this.formatSubjectsObject(researchSubjects);
-      }
     }
-    if (APP_CONFIG.verbose) console.log("research subjects", this.researchSubjects);
-
+    */
   }
 
   _isOwnProfile() {
     try {
-      if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === this.individualId.toLowerCase()) {
+      if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === this.assetId.toLowerCase()) {
         return true;
       }
     } catch (error) {}
     return false;
-  }
-
-  hideSection(section){
-    if (this.activeSection.index == 0) {
-      return false;
-    }
-
-    if (section == this.activeSection.id) {
-      return false;
-    }
-
-    return true;
   }
 
   getIndividualTitles(){
@@ -192,7 +204,7 @@ export default class RpPageIndividual extends Mixin(LitElement)
   }
 
   getPubExports() {
-    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/${this.individualId}`}];
+    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/${this.assetId}`}];
   }
 
   formatSubjectsObject(subjects){

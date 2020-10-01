@@ -142,15 +142,23 @@ return html`
 
      <section id="authors" class="bg-light mt-3" ?hidden="${this._hidePageSection('authors')}">
         <h1 class="weight-regular mt-0">${APP_CONFIG.theme.universityName} Authors</h1>
-        ${this.authors.filter(author => author.isOtherUniversity == false).map(author => html`
-          <rp-person-preview
-            name="${author.nameLast + ', ' + author.nameFirst}"
-            href="${author.href}"
-            title="${author.title}"
-            text-width="${this.peopleWidth}"
-            class="my-3">
-          </rp-person-preview>
-        `)}
+        <div ?hidden="${this._hideStatusSection('loading', 'universityAuthorsStatus')}" class="flex align-items-center justify-content-center">
+          <div class="loading1">loading</div>
+        </div>
+        <div ?hidden="${this._hideStatusSection('error', 'universityAuthorsStatus')}" class="flex align-items-center justify-content-center">
+          <rp-alert>Error loading authors.</rp-alert>
+        </div>
+        <div class="data" ?hidden="${this._hideStatusSection('loaded', 'universityAuthorsStatus')}">
+          ${this.universityAuthors.map(author => html`
+            <rp-person-preview
+              name="${author.label}"
+              href="${author.href}"
+              title="${author.title}"
+              text-width="${this.peopleWidth}"
+              class="my-3">
+            </rp-person-preview>
+          `)}
+        </div>
         ${this.hasOtherAuthors ? html`
           <h1 class="weight-regular">Other Authors</h1>
           ${this.authors.filter(author => author.isOtherUniversity).map(author => html`

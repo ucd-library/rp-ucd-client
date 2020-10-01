@@ -89,16 +89,7 @@ export default class RpPageWork extends RpUtilsLanding {
     this.assetId = path[1];
     if (!this.assetId) return;
 
-    let sections = this.getPageSections();
-    this.activeSection = sections[0]
-    if (path.length >= 3) {
-      for (let section of sections) {
-        if (section.id == path[2]) {
-          this.activeSection = section;
-          break;
-        }
-      }
-    }
+    this._setActiveSection(path);
 
     await Promise.all([this._doMainQuery(this.assetId)]);
 
@@ -122,13 +113,32 @@ export default class RpPageWork extends RpUtilsLanding {
   }
 
   async _doAuthorQuery(id, authors) {
-    this.universityAuthorsStatus = 'loading';
+    this.universityAuthors = [];
     let universityAuthors = authors.filter(author => author.isOtherUniversity == false).map(a => a.apiEndpoint);
     let data = await this.WorkModel.getAuthors(id, universityAuthors);
-    if (data.state != 'loaded') {
-      return;
-    }
+    this.universityAuthorsStatus = data.state;
+    if (data.state != 'loaded') return;
     if (APP_CONFIG.verbose) console.log("university authors:", data);
+    if (Array.isArray(data.payload)) {
+      universityAuthors = data.payload;
+    }
+    else {
+      universityAuthors = [data.payload];
+    }
+
+    for (let author of universityAuthors) {
+      if (author.hasContactInfo && author.hasContactInfo.title) {
+        if (Array.isArray(author.hasContactInfo.title)) {
+          author.title = author.hasContactInfo.title.join(", ");
+        }
+        else {
+          author.title = author.hasContactInfo.title;
+        }
+      }
+      author.href = this.authorPath + author['@id'].replace(this.WorkModel.service.jsonContext + ":", "");
+    }
+
+    this.universityAuthors = universityAuthors;
   }
 
   setPeopleWidth(w) {
@@ -198,14 +208,6 @@ export default class RpPageWork extends RpUtilsLanding {
         }
         author.nameFirst = author.hasName.givenName;
         author.nameLast = author.hasName.familyName;
-        if (author.hasContactInfo && author.hasContactInfo.title) {
-          if (Array.isArray(author.hasContactInfo.title)) {
-            author.title = author.hasContactInfo.title.join(", ");
-          }
-          else {
-            author.title = author.hasContactInfo.title;
-          }
-        }
         if (!author['vivo:rank']) {
           author['vivo:rank'] = Infinity;
         }

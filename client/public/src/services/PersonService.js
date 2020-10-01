@@ -27,24 +27,14 @@ class PersonService extends BaseService {
     });
   }
 
-  async getPublications(personid, searchObject={}, storeid="") {
-    if (!searchObject.filters) {
-      searchObject.filters = {};
-    }
-    if (!storeid) {
-      storeid = personid
-    }
-    searchObject.filters['Authorship.identifiers.@id'] = {
-      "type": "keyword",
-      "op" : "and",
-      "value": [`${this.jsonContext}:${personid}`]
-    }
-    if (!searchObject.offset) {
-      searchObject.offset = 0;
-    }
-    if (!searchObject.limit) {
-      searchObject.limit = 10;
-    }
+  async getPubsOverview(personid) {
+    let searchObject = {
+      offset: 0,
+      limit: 0,
+      sort: [],
+      filters: {'Authorship.identifiers.@id': {"type": "keyword", "op" : "and", "value": [`${this.jsonContext}:${personid}`]}},
+      facets: {"@type": {"type" : "facet"}}
+    };
 
     return this.request({
       url : `${this.baseUrl}/search`,
@@ -55,10 +45,27 @@ class PersonService extends BaseService {
         },
         body : JSON.stringify(searchObject)
       },
-      checkCached : () => this.store.data.pubsByIndividual[storeid],
-      onLoading : request => this.store.setPubsLoading(storeid, request),
-      onLoad : result => this.store.setPubsLoaded(storeid, result.body),
-      onError : e => this.store.setPubsError(storeid, e)
+      checkCached : () => this.store.data.pubsOverview[personid],
+      onLoading : request => this.store.setPubsOverviewLoading(personid, request),
+      onLoad : result => this.store.setPubsOverviewLoaded(personid, result.body),
+      onError : e => this.store.setPubsOverviewError(personid, e)
+    });
+  }
+
+  async getPublications(id, searchObject) {
+    return this.request({
+      url : `${this.baseUrl}/search`,
+      fetchOptions : {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(searchObject)
+      },
+      checkCached : () => this.store.data.pubsByRequest[id],
+      onLoading : request => this.store.setPubsLoading(id, request),
+      onLoad : result => this.store.setPubsLoaded(id, result.body),
+      onError : e => this.store.setPubsError(id, e)
     });
   }
 

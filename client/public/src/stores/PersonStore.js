@@ -7,7 +7,9 @@ class PersonStore extends BaseStore {
 
     this.data = {
       byIndividual: {},
-      pubsByIndividual: {}
+      pubsByIndividual: {},
+      pubsByRequest: {},
+      pubsOverview: {}
     };
     this.events = {};
   }
@@ -38,6 +40,32 @@ class PersonStore extends BaseStore {
     this.data.byIndividual[state.id] = state;
   }
 
+  setPubsOverviewLoading(id, request) {
+    this._setPubsOverviewState({
+      state: this.STATE.LOADING,
+      id, request
+    });
+  }
+
+  setPubsOverviewLoaded(id, payload) {
+    this._setPubsOverviewState({
+      state: this.STATE.LOADED,
+      id, payload
+    });
+  }
+
+  setPubsOverviewError(id, error) {
+    this._setPubsOverviewState({
+      state: this.STATE.ERROR,
+      id, error
+    });
+  }
+
+  _setPubsOverviewState(state) {
+    //if( !this.stateChanged(this.data.overview[id], state) ) return;
+    this.data.pubsOverview[state.id] = state;
+  }
+
   setPubsLoading(id, request) {
     this._setPubsState({
       state: this.STATE.LOADING,
@@ -61,7 +89,7 @@ class PersonStore extends BaseStore {
 
   _setPubsState(state) {
     //if( !this.stateChanged(this.data.overview[id], state) ) return;
-    this.data.pubsByIndividual[state.id] = state;
+    this.data.pubsByRequest[state.id] = state;
   }
 
 }
