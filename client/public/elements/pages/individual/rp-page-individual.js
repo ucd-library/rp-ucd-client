@@ -21,10 +21,10 @@ export default class RpPageIndividual extends RpUtilsLanding {
     return {
       individual: {type: Object},
       individualStatus: {type: String},
-      publicationStatus: {type: String},
+      publicationOverviewStatus: {type: String},
       publicationOverview: {type: Object},
       hasMultiplePubTypes: {type: Boolean},
-      retrievedPublications: {type: Array},
+      retrievedPublications: {type: Object},
       totalPublications: {type: Number},
       isOwnProfile: {type: Boolean}
     }
@@ -36,14 +36,9 @@ export default class RpPageIndividual extends RpUtilsLanding {
 
     this._injectModel('PersonModel', 'AppStateModel');
     this.assetType = "individual";
-    this.individual = {};
-    this.individualStatus = 'loading';
-    this.publicationStatus = 'loading';
-    this.retrievedPublications = [];
-    this.totalPublications = 0;
-    this.isOwnProfile = false;
-    this.publicationOverview = {};
-    this.hasMultiplePubTypes = false;
+  
+    this._resetEleProps();
+
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
@@ -53,12 +48,14 @@ export default class RpPageIndividual extends RpUtilsLanding {
   }
 
   async doUpdate(state) {
+    let updateData = true;
     await this.updateComplete;
     if (!this.visible) {
       return;
     }
     let path = state.location.path;
     if (path.length >= 2) {
+      if (this.assetId == path[1]) updateData = false;
       this.assetId = path[1];
       this.PersonModel.individualId = this.assetId;
     }
@@ -66,7 +63,8 @@ export default class RpPageIndividual extends RpUtilsLanding {
     if (!this.assetId) return;
     this._setActiveSection(path);
 
-    this.totalPublications = 0;
+    if (!updateData) return;
+    this._resetEleProps()
     await Promise.all([this._doMainQuery(this.assetId),
                         this._doPubOverviewQuery(this.assetId)]);
     this.isOwnProfile = this._isOwnProfile();
@@ -79,8 +77,28 @@ export default class RpPageIndividual extends RpUtilsLanding {
     }
   }
 
-  async _loadMorePubs(){
-    await this._doPubQuery(this.assetId);
+  _resetEleProps() {
+    this.individual = {};
+    this.individualStatus = 'loading';
+    this.retrievedPublications = {};
+    this.totalPublications = 0;
+    this.isOwnProfile = false;
+    this.publicationOverview = {};
+    this.hasMultiplePubTypes = false;
+    this.publicationOverviewStatus = 'loading';
+  }
+
+  async _loadPubs(pubType, getMore=true){
+    let offset = this.publicationOverview[pubType].displayedOffset;
+    if (offset < 10) {
+      offset = 10;
+    }
+    else if (!getMore) {
+      offset -= 10;
+    }
+    this.publicationOverview[pubType].displayedOffset = getMore ? offset + 10 : offset;
+    await this._doPubQuery(this.publicationOverview[pubType], offset=offset);
+    
   }
 
   async _doMainQuery(id){
@@ -106,10 +124,14 @@ export default class RpPageIndividual extends RpUtilsLanding {
       let ct = data.payload.aggregations.facets['@type'][possiblePubType.es]
       if (ct) {
         totalPubs += ct;
-        pubTypes[possiblePubType.id] = {...possiblePubType, ct: ct, displayedOffset: 0}
+        pubTypes[possiblePubType.id] = {...possiblePubType, ct: ct, displayedOffset: 0, dataStatus: 'loading'}
       }
     }
     this.hasMultiplePubTypes = Object.keys(pubTypes).length > 1;
+    for (let pubType in pubTypes) {
+      pubTypes[pubType].displayedOffset = this.hasMultiplePubTypes ? 5 : 10;
+        
+    }
     this.totalPublications = totalPubs;
     this.publicationOverview  = pubTypes;
 
@@ -120,13 +142,12 @@ export default class RpPageIndividual extends RpUtilsLanding {
   async _doPubQuery(pubTypeObject, offset=0){
 
     let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
-    //this.publicationStatus = data.state;
-    /*
-    if (data.state != 'loaded') {
-      return;
-    }
+    this.publicationOverview[pubTypeObject.id].dataStatus = data.request.state;
+    if (data.request.state != 'loaded') return;
     if (APP_CONFIG.verbose) console.log(`${pubTypeObject.id} pubs:`, data);
-    */
+    this.retrievedPublications[pubTypeObject.id] = data.masterStore;
+    this.requestUpdate();
+
 
 
 
@@ -155,6 +176,33 @@ export default class RpPageIndividual extends RpUtilsLanding {
       }
     } catch (error) {}
     return false;
+  }
+
+  getPubsByYear(pubType){
+    let output = [];
+    if (!this.publicationOverview[pubType] || !this.retrievedPublications[pubType]) return output;
+    let minToShow = this.hasMultiplePubTypes ? 5 : 10;
+    let nToShow = this.publicationOverview[pubType].displayedOffset;
+    if (nToShow < minToShow) nToShow = minToShow;
+    let pubs = this.retrievedPublications[pubType].slice(0, nToShow);
+    let pubObj = {};
+    let yrs = [];
+    for (let pub of pubs) {
+      if (!pub.publicationDate) continue;
+      let dt = new Date(pub.publicationDate);
+      let yr = dt.getFullYear();
+      if (!yrs.includes(yr)) {
+        yrs.push(yr);
+        pubObj[yr] = [];
+      }
+      pubObj[yr].push(pub);
+    }
+    yrs.sort((a, b) => b - a );
+    for (let yr of yrs) {
+      output.push({year: yr, pubs: pubObj[yr]});
+    }
+
+    return output;
   }
 
   getIndividualTitles(){

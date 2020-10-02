@@ -43,18 +43,28 @@ return html`
   rp-badge:first-child {
     margin-left: 0;
   }
-  .load-more {
-    height: 44px;
-    background-color: var(--tcolor-primary20);
+  .load-pubs {
+    height: 42px;
     font-size: var(--font-size);
     color: var(--tcolor-text);
     font-weight: var(--font-weight);
-    border: none;
+    border: 2px solid var(--tcolor-primary10);
     padding: 0 15px;
     cursor: pointer;
+    transition: .3s;
+    color: var(--tcolor-primary);
   }
-  .load-more:hover {
+  .load-pubs.more {
+    background-color: var(--tcolor-primary10);
+  }
+  .load-pubs.less {
+    background-color: var(--tcolor-light);
+    margin-right: 8px;
+  }
+  .load-pubs:hover {
     background-color: var(--tcolor-hover-bg);
+    border: 2px solid var(--tcolor-hover-bg);
+    color: var(--tcolor-light);
   }
   .site .logo {
     vertical-align: middle;
@@ -84,6 +94,36 @@ return html`
   }
   .own-profile .box-title-icons {
     order: -1;
+  }
+  #publications h3 {
+    font-weight: var(--font-weight);
+    font-style: italic;
+
+  }
+  .box-pubsyear {
+    display: flex;
+  }
+  .box-pubsyear .year {
+    font-weight: var(--font-weight-bold);
+    width: 60px;
+    min-width: 60px;
+  }
+  .box-pubsyear .pubs {
+    flex-grow: 1;
+  }
+  .box-pubsyear .pubs rp-citation {
+    margin-bottom: 8px;
+  }
+  .box-pub-buttons {
+    display: flex;
+  }
+  .box-pub-buttons .padding {
+    width: 60px;
+    min-width: 60px;
+  }
+  .box-pub-buttons .buttons {
+    display: flex;
+    flex-grow: 1;
   }
   @media (min-width: 800px){
     .own-profile .box-title {
@@ -169,20 +209,34 @@ return html`
           <div class="pub-count">${this.totalPublications}</div>
       </div>
     </div>
-    <h2>Selected Publications</h2>
-      <div ?hidden="${this.publicationStatus == 'error' || this.publicationStatus == 'loaded' }" class="flex align-items-center justify-content-center">
-        <div class="loading1">loading</div>
-      </div>
-      <div ?hidden="${this.publicationStatus == 'loading' || this.publicationStatus == 'loaded' }" class="flex align-items-center justify-content-center">
-        <rp-alert>Error loading publications.</rp-alert>
-      </div>
-      <div class="data" ?hidden="${this.publicationStatus == 'loading' || this.publicationStatus == 'error' }">
-        ${ this.retrievedPublications.map(pub => html`
-          <rp-citation class="mb-3" .data="${pub}"></rp-citation>
+    <h2 class="mb-0">Selected Publications</h2>
+      <div class="data">
+        ${ Object.values(this.publicationOverview).map(pubType => html`
+          <h3>${pubType.label} (${pubType.ct})</h3>
+          ${this.getPubsByYear(pubType.id).map(yr => html`
+            <div class="box-pubsyear">
+              <div class="year">${yr.year}</div>
+              <div class="pubs">${yr.pubs.map(pub => html`
+                <rp-citation .data="${pub}"></rp-citation>
+              `)}</div>
+            </div>
           `)}
+          ${pubType.displayedOffset > 10 || pubType.displayedOffset + 10 <= Math.ceil(pubType.ct / 10) * 10 ? html`
+            <div class="box-pub-buttons">
+              <div class="padding"></div>
+              <div class="buttons">
+                ${pubType.displayedOffset > 10 ? html`
+                  <button type="button" @click="${e => this._loadPubs(pubType.id, false)}" class="load-pubs less">Show ${pubType.displayedOffset > pubType.ct ? pubType.ct - (pubType.displayedOffset - 10) : 10} less</button>
+                  ` : html``}
+                ${pubType.displayedOffset + 10 <= Math.ceil(pubType.ct / 10) * 10 ? html`
+                  <button type="button" @click="${e => this._loadPubs(pubType.id, true)}" class="load-pubs more">Show ${pubType.ct - pubType.displayedOffset < 10 ? pubType.ct - pubType.displayedOffset : 10} more</button>
+                ` : html``}
+              </div>
+            </div>
+          ` : html``}
+        `)}
       </div>
-      ${this.retrievedPublications.length < this.totalPublications ? html`
-        <button type="button" @click="${this._loadMorePubs}" class="load-more">Load more articles</button>` : html``}
+      
   </section>
   </div>
 </div>

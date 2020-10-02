@@ -61,31 +61,14 @@ class PersonModel extends BaseModel {
       await state.request;
     }
 
-    console.log(this.store.data.pubsByRequest[cacheId]);
-
-    
-
-    
-    /*
-    let searchObject = {};
-    if (offset > 0) {
-      id += `-o${offset}`;
-      searchObject.offset = offset;
+    // link current request to master store and retrieve all pubs in master store
+    if (!this.store.data.pubsByIndividual[personid][pubTypeObject.id].includes(cacheId)) {
+      this.store.data.pubsByIndividual[personid][pubTypeObject.id].push(cacheId);
     }
-    let state = {state : PersonStore.STATE.INIT};
-    if( state.state === 'init' ) {
-      await this.service.getPublications(personid, searchObject, id);
-    } else if( state.state === 'loading' ) {
-      await state.request;
-    }
-
-    // Add to individual's master pub cache if getting more...
-    if (offset > 0) {
-      this.store.data.pubsByIndividual[personid].payload.results = [...this.store.data.pubsByIndividual[personid].payload.results,
-                                                                    ...this.store.data.pubsByIndividual[id].payload.results]
-    }
-    return this.store.data.pubsByIndividual[personid];
-    */
+    let masterStore = this.store.data.pubsByIndividual[personid][pubTypeObject.id];
+    masterStore = masterStore.map(id => JSON.parse(id)).sort(function(a,b){return a.offset - b.offset});
+    masterStore = masterStore.map(obj => this.store.data.pubsByRequest[JSON.stringify(obj)].payload.results).flat();
+    return {masterStore: masterStore, request: this.store.data.pubsByRequest[cacheId]};
   }
 
   getPublicationTypes(){
