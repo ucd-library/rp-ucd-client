@@ -68,7 +68,7 @@ return html`
       </rp-accordian>
       <rp-accordian title="How do I delete my profile?">
         <div>
-        Please, <a href="mailto:lib-experts@ou.ad3.ucdavis.edu">contact us.</a>
+        Please, <a href="mailto:experts@library.ucdavis.edu">contact us.</a>
         </div>
       </rp-accordian>
     </div>
