@@ -108,7 +108,7 @@ export default class RpPageIndividual extends Mixin(LitElement)
       return;
     }
     if (APP_CONFIG.verbose) console.log("pubs", data);
-    
+
     this.retrievedPublications = data.payload.results;
     if (data.payload.results.length > 0) {
       this.totalPublications = data.payload.total;
@@ -159,6 +159,18 @@ export default class RpPageIndividual extends Mixin(LitElement)
 
     return [];
   }
+    getBestLabel() {
+    if (this.individual && this.individual.label) {
+      if (Array.isArray(this.individual.label)) {
+        // Prefer the shortest one? This prefers fname lname over lname, fname
+        return this.individual.label.sort((a,b)=> a.length - b.length)[0]
+      }
+      return this.individual.label
+    }
+
+    return "";
+
+    }
 
   getEmailAddresses(){
     if (!this.individual) {

@@ -94,7 +94,7 @@ return html`
     </div>
     <div slot="main" class="heromain">
       <rp-avatar size="lg"></rp-avatar>
-      <h2 class="name text-secondary h1 bold mb-0 text-center">${this.individual.label}</h2>
+      <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
       <p class="text-light h3 mb-2 mt-1 text-center">${this.getIndividualTitles().join(", ")}</p>
       ${this.researchSubjects.length > 0 ? html `
         <p class="bold text-light h3 mt-1 mb-0 text-center">My research areas include: </p>
