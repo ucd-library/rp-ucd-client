@@ -9,11 +9,8 @@ class PersonModel extends BaseModel {
 
     this.store = PersonStore;
     this.service = PersonService;
-    this.sections = [{text: 'About', id: 'about', disabled: false},
-                     {text: 'Publications', id: 'publications', disabled: false}
-                    ];
     this.individualId = "";
-
+    this.jsonContext = APP_CONFIG.data.jsonldContext;
     this.register('PersonModel');
   }
 
@@ -27,49 +24,57 @@ class PersonModel extends BaseModel {
     return this.store.data.byIndividual[id];
   }
 
-  async getPublications(id, offset=0) {
-    let searchObject = {};
-    let personid = id;
-    if (offset > 0) {
-      id += `-o${offset}`;
-      searchObject.offset = offset;
-    }
-    searchObject.facets = {"hasSubjectArea.label": {"type": "facet"}};
+  async getPubOverview(personid) {
     let state = {state : PersonStore.STATE.INIT};
     if( state.state === 'init' ) {
-      await this.service.getPublications(personid, searchObject, id);
+      await this.service.getPubsOverview(personid);
+    } else if( state.state === 'loading' ) {
+      await state.request;
+    }
+    return this.store.data.pubsOverview[personid];
+  }
+
+  async getPublications(personid, pubTypeObject, offset) {
+
+    // make sure master cache is set
+    if (!this.store.data.pubsByIndividual[personid]) this.store.data.pubsByIndividual[personid] = {};
+    if (!this.store.data.pubsByIndividual[personid][pubTypeObject.id]) this.store.data.pubsByIndividual[personid][pubTypeObject.id] = [];
+
+    // make request for specified args
+    let cacheObject = {personid: personid, pubType: pubTypeObject.id, offset: offset};
+    let cacheId = JSON.stringify(cacheObject)
+    let searchObject = {
+      offset: offset,
+      limit: 10,
+      sort: [{"publicationDate": {"order" : "desc"}}],
+      filters: {
+        'Authorship.identifiers.@id': {"type": "keyword", "op" : "and", "value": [`${this.jsonContext}:${personid}`]},
+        "@type": {"type": "keyword", "op": "and", "value": [`${pubTypeObject.es}`]}
+      },
+      facets: {}
+    };
+
+    let state = {state : PersonStore.STATE.INIT};
+    if( state.state === 'init' ) {
+      await this.service.getPublications(cacheId, searchObject);
     } else if( state.state === 'loading' ) {
       await state.request;
     }
 
-    // Add to individual's master pub cache if getting more...
-    if (offset > 0) {
-      this.store.data.pubsByIndividual[personid].payload.results = [...this.store.data.pubsByIndividual[personid].payload.results,
-                                                                    ...this.store.data.pubsByIndividual[id].payload.results]
+    // link current request to master store and retrieve all pubs in master store
+    if (!this.store.data.pubsByIndividual[personid][pubTypeObject.id].includes(cacheId)) {
+      this.store.data.pubsByIndividual[personid][pubTypeObject.id].push(cacheId);
     }
-    return this.store.data.pubsByIndividual[personid];
+    let masterStore = this.store.data.pubsByIndividual[personid][pubTypeObject.id];
+    masterStore = masterStore.map(id => JSON.parse(id)).sort(function(a,b){return a.offset - b.offset});
+    masterStore = masterStore.map(obj => this.store.data.pubsByRequest[JSON.stringify(obj)].payload.results).flat();
+    return {masterStore: masterStore, request: this.store.data.pubsByRequest[cacheId]};
   }
 
-  getSections() {
-    let sections = [{id:"all", text: "All Info", href: `/individual/${this.individualId}`, index: 0}];
-    for (let section of this.sections) {
-      section.href = `/individual/${this.individualId}/${section.id}`
-      sections.push(section);
-    }
-    return sections;
-  }
-
-  getActiveSection(id) {
-    let i = 0;
-    let sections = this.getSections();
-    for (let section of sections) {
-      section.index = i;
-      if (id == section.id) {
-        return section;
-      }
-      i++
-    }
-    return sections[0];
+  getPublicationTypes(){
+    return [
+      {id: 'article', es: 'bibo:AcademicArticle', label: 'Academic Articles'}
+    ]
   }
 
 }

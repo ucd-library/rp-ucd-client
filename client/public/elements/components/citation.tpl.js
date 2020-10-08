@@ -11,10 +11,28 @@ export default function render() {
     a {
       color: var(--tcolor-link-text)
     }
+    .venue {
+      text-transform: capitalize;
+    }
+    [hidden] {
+      display: none !important;
+    }
   </style>
-  <div class="container ${classMap(this.constructClasses())}" ?hidden="${!this.data}">
-  <a href="#">${this.data.label}</a>
-  ${this.authors.map(author => html`<span>${author.nameLast}, ${author.nameFirst}</span>; `)}.
+  <div class="container" ?hidden="${!this.data}">
+  ${this.citationStyle == 'rp' ? html`
+    <a href="${this.href}">${this.title}</a>
+    <span class="authors">
+      ${this.authors.map((author, i) => html`
+      <span class="author">${author.text}</span>${i + 1 < this.authors.length ? html`<span>, </span>` : html`<span>.</span>`}
+      `)}
+    </span>
+    ${this.venue ? html`
+      <span class="venue">${this.venue}.</span>
+    ` : html``}
+    ${this.venueLocation ? html`
+      <span class="venue-location">${this.venueLocation}.</span>
+    ` : html``}
+  ` : html``}
   </div>
   `;
 }

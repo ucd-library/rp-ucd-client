@@ -1,4 +1,4 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{100:function(t,e,i){"use strict";var s=i(2);function r(){return s.b`
+(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{101:function(t,e,i){"use strict";var s=i(2);function r(){return s.b`
   <style>
     :host {
       display: block;
@@ -52,7 +52,7 @@
   `}class a extends s.a{static get properties(){return{hideAll:{type:Boolean,attribute:"hide-all"},disabledLetters:{type:Array},disabledLettersFmt:{type:Array},selectedLetter:{type:String,attribute:"selected-letter"}}}constructor(){super(),this.render=r.bind(this),this.azlist=[..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"],this.disabledLetters=[],this.disabledLettersFmt=[],this.selectedLetter="All",this._changedLetter=new CustomEvent("changed-letter",{detail:{message:"A new letter has been selected."}})}updated(t){t.has("disabledLetters")&&(this.disabledLettersFmt=this.disabledLetters.map(t=>t.toUpperCase()))}_renderAz(t){let e="";return this.selectedLetter&&this.selectedLetter.toLowerCase()===t.toLowerCase()&&(e="selected"),s.b`<div @click="${this.handleClick}"
                      ?disabled="${this.disabledLettersFmt.includes(t)}"
                      class="letter ${e}"
-                     letter="${t}">${t}</div>`}handleClick(t){let e=t.target.getAttribute("letter").toLowerCase();e==this.selectedLetter||t.target.hasAttribute("disabled")||(this.selectedLetter=e,this.dispatchEvent(this._changedLetter))}firstUpdated(t){this.hideAll||(this.azlist.unshift("All"),this.requestUpdate())}}customElements.define("rp-a-z",a)},101:function(t,e,i){"use strict";var s=i(2);function r(){return s.b`
+                     letter="${t}">${t}</div>`}handleClick(t){let e=t.target.getAttribute("letter").toLowerCase();e==this.selectedLetter||t.target.hasAttribute("disabled")||(this.selectedLetter=e,this.dispatchEvent(this._changedLetter))}firstUpdated(t){this.hideAll||(this.azlist.unshift("All"),this.requestUpdate())}}customElements.define("rp-a-z",a)},102:function(t,e,i){"use strict";var s=i(2);function r(){return s.b`
   <style>
     :host {
       display: block;
@@ -105,7 +105,7 @@
     </div>
   </div>
 
-  `}class a extends s.a{static get properties(){return{data:{type:Object},href:{type:String},organizationPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.organizationPath="/organization/",this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=r.bind(this)}_renderNameLink(){let t="";if(this.href)t=this.href;else try{let e=this.data["@id"].split(this.jsonldContext+":g-")[1];t=this.organizationPath+e}catch(t){console.warn("Unable to construct org href.")}return s.b`<a class="name" href="${t}" ?disabled="${!t}">${this.data.label}</a>`}}customElements.define("rp-organization-preview",a)},102:function(t,e,i){"use strict";var s=i(2);function r(){return s.b`
+  `}class a extends s.a{static get properties(){return{data:{type:Object},href:{type:String},organizationPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.organizationPath="/organization/",this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=r.bind(this)}_renderNameLink(){let t="";if(this.href)t=this.href;else try{let e=this.data["@id"].split(this.jsonldContext+":g-")[1];t=this.organizationPath+e}catch(t){console.warn("Unable to construct org href.")}return s.b`<a class="name" href="${t}" ?disabled="${!t}">${this.data.label}</a>`}}customElements.define("rp-organization-preview",a)},103:function(t,e,i){"use strict";var s=i(2);function r(){return s.b`
   <style>
     :host {
       display: block;
@@ -159,7 +159,7 @@
     </div>
   </div>
 
-  `}class a extends s.a{static get properties(){return{data:{type:Object},href:{type:String},workPath:{type:String},grpsWithLinks:{type:String},authorPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.workPath="/work/",this.authorPath="/individual/",this.grpsWithLinks=["vivo:FacultyMember"],this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=r.bind(this)}_renderTitleLink(){let t="";if(this.href)t=this.href;else try{let e=this.data["@id"].split(this.jsonldContext+":publication")[1];t=this.workPath+e}catch(t){console.warn("Unable to construct work href.")}return s.b`<a class="title" href="${t}" ?disabled="${!t}">${this.data.label}</a>`}_renderAuthors(){let t=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let e=this.data.Authorship;Array.isArray(e)||(e=[e]);for(let i of e)if(i.hasName){i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),i.href="";try{"object"!=typeof i.identifiers||Array.isArray(i.identifiers)||(i.identifiers=[i.identifiers]);for(let t of i.identifiers)this.grpsWithLinks.includes(t["@type"])&&(i.href=this.authorPath+t["@id"].replace(this.jsonldContext+":",""))}catch(t){console.warn("Unable to construct author href.")}t.push(i)}t.sort((function(t,e){return t["vivo:rank"]-e["vivo:rank"]}))}return s.b`<div class="authors">${t.map(t=>s.b`<a class="author" href="${t.href}" ?disabled="${!t.href}">${t.nameLast}, ${t.nameFirst}</a>; `)}</div>`}}customElements.define("rp-work-preview",a)},104:function(t,e,i){"use strict";i.r(e);var s=i(2),r=i(34),a=i.n(r);function n(){return s.b`
+  `}class a extends s.a{static get properties(){return{data:{type:Object},href:{type:String},workPath:{type:String},grpsWithLinks:{type:String},authorPath:{type:String},jsonldContext:{type:String}}}constructor(){super(),this.workPath="/work/",this.authorPath="/individual/",this.grpsWithLinks=["vivo:FacultyMember"],this.jsonldContext=APP_CONFIG.data.jsonldContext,this.render=r.bind(this)}_renderTitleLink(){let t="";if(this.href)t=this.href;else try{let e=this.data["@id"].split(this.jsonldContext+":publication")[1];t=this.workPath+e}catch(t){console.warn("Unable to construct work href.")}return s.b`<a class="title" href="${t}" ?disabled="${!t}">${this.data.label}</a>`}_renderAuthors(){let t=[];if(this.data.Authorship&&"object"==typeof this.data.Authorship){let e=this.data.Authorship;Array.isArray(e)||(e=[e]);for(let i of e)if(i.hasName){i.nameFirst=i.hasName.givenName,i.nameLast=i.hasName.familyName,i["vivo:rank"]||(i["vivo:rank"]=1/0),i.href="";try{"object"!=typeof i.identifiers||Array.isArray(i.identifiers)||(i.identifiers=[i.identifiers]);for(let t of i.identifiers)this.grpsWithLinks.includes(t["@type"])&&(i.href=this.authorPath+t["@id"].replace(this.jsonldContext+":",""))}catch(t){console.warn("Unable to construct author href.")}t.push(i)}t.sort((function(t,e){return t["vivo:rank"]-e["vivo:rank"]}))}return s.b`<div class="authors">${t.map(t=>s.b`<a class="author" href="${t.href}" ?disabled="${!t.href}">${t.nameLast}, ${t.nameFirst}</a>; `)}</div>`}}customElements.define("rp-work-preview",a)},107:function(t,e,i){"use strict";i.r(e);var s=i(2),r=i(34),a=i.n(r);function n(){return s.b`
 
 <style>
   :host {
@@ -193,7 +193,7 @@
   </div>
 
 </div>
-`}i(100),i(93),i(101),i(96),i(90),i(102);class o extends(Mixin(s.a).with(LitCorkUtils)){static get properties(){return{hasAz:{type:Boolean},hasPagination:{type:Boolean},azSelected:{type:String},azStatus:{type:String},azDisabled:{type:Array},azOptions:{type:Set},urlQuery:{type:Object},jsonldContext:{type:String},peopleWidth:{type:Number},visible:{type:Boolean},currentQuery:{type:Object},mainFacet:{type:String},mainFacets:{type:Array},pgPer:{type:Number},pgCurrent:{type:Number},textQuery:{type:String},dataFilters:{type:Array},data:{type:Array},dataStatus:{type:String},dataTotal:{type:Number},mainFacetIndex:{type:Number},subFacet:{type:String},subFacetIndex:{type:Number},subFacetStatus:{type:String}}}constructor(){super(),this._injectModel("CollectionModel","AppStateModel"),this.azOptions=new Set(["all",..."abcdefghijklmnopqrstuvwxyz"]),this.hasPagination=!1,this.visible=!1,this.urlQuery={},this.jsonldContext=APP_CONFIG.data.jsonldContext,this._resetQueryProperties(),this.setPeopleWidth(window.innerWidth),this._handleResize=this._handleResize.bind(this)}_resetQueryProperties(){this.data=[],this.dataStatus="loading",this.dataTotal=0,this.currentQuery={},this.dataFilters=[],this.pgPer=8,this.pgCurrent=1,this.mainFacet="none",this.mainFacets=[],this.mainFacetIndex=0,this.subFacet="none",this.subFacetIndex=0,this.subFacets=[],this.subFacetStatus="loading",this.textQuery="",this.hasAz=!1,this.azSelected="All",this.azDisabled=[],this.azStatus="loading"}updated(t){this.doUpdated(t)}doUpdated(t){t.has("visible")&&this.visible&&requestAnimationFrame(()=>this._handleResize())}connectedCallback(){super.connectedCallback(),window.addEventListener("resize",this._handleResize)}disconnectedCallback(){window.removeEventListener("resize",this._handleResize),super.disconnectedCallback()}async _doMainQuery(){let t=this.currentQuery,e=await this.CollectionModel.query(t),i=!1;this.textQuery&&"none"==this.mainFacet&&"none"==this.subFacet&&(this.subFacetStatus=e.state,i=!0),this.dataStatus=e.state,"loaded"==e.state&&("object"==typeof e.payload.total?this.dataTotal=0:this.dataTotal=e.payload.total,i?(this.CollectionModel.store.setSearchAggsLoaded(this.textQuery,e.payload),this.mainFacets=this.CollectionModel._getMainFacets(e.payload,this.currentQuery),this.subFacets=this.CollectionModel._getSubFacets(this.mainFacet,e.payload,this.currentQuery)):this.hasAz=!0,this.data=e.payload.results,console.log("main query result:",e))}async _getSearchAggs(){if(!this.textQuery)return;if("none"==this.mainFacet&&"none"==this.subFacet)return;let t=await this.CollectionModel.searchAggQuery(this.textQuery,this.mainFacet);this.subFacetStatus=t.state,"loaded"==t.state&&(this.mainFacets=this.CollectionModel._getMainFacets(t.payload,this.currentQuery),this.subFacets=this.CollectionModel._getSubFacets(this.mainFacet,t.payload,this.currentQuery))}async _getAzAgg(){let t=await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet,this.currentQuery.subFacet);if(this.azStatus=t.state,"loaded"!=t.state)return;let e=this.CollectionModel.getAzBaseFilter(this.currentQuery.mainFacet);e&&e.key?this.azDisabled=[...this._setDifference(this.azOptions,Object.keys(t.payload.aggregations.facets[e.key]))].filter(t=>"all"!=t):this.azStatus="error",console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`,t)}_parseUrlQuery(t){t||(t=this.AppStateModel.store.data);let e=t.location.path,i=t.location.query;if(this._resetQueryProperties(),e.length<1)return;let s="";s="search"==e[0]&&e.length>1?e[1].toLowerCase():e[0].toLowerCase();for(let t of this.CollectionModel.mainFacets)if(s==t.id.toLowerCase()){this.mainFacet=s,this.dataFilters.push(t.baseFilter);break}let r="";if("search"==e[0]&&e.length>2?r=e[2].toLowerCase():"search"!=e[0]&&e.length>1&&(r=e[1].toLowerCase()),this.CollectionModel.subFacets[this.mainFacet]){let t=1;for(let e of this.CollectionModel.subFacets[this.mainFacet]){if(e.id==r){this.subFacet=r,this.subFacetIndex=t,this.dataFilters.push(e.baseFilter);break}t+=1}}for(let t in i)"s"==t?this.textQuery=i.s:"filters"==t||("page"!=t||isNaN(i[t])?"az"==t&&this.azOptions.has(i[t])&&(this.azSelected=i[t]):this.pgCurrent=i[t]);this.currentQuery=this._constructQuery(),console.log("element query:",this.currentQuery)}_constructQuery(){let t={};return this.textQuery&&(t.textQuery=this.textQuery),this.pgCurrent&&(t.pgCurrent=this.pgCurrent),this.pgPer&&(t.pgPer=this.pgPer),this.azSelected&&(t.azSelected=this.azSelected),this.dataFilters&&(t.filters=this.dataFilters),this.mainFacet&&"none"!=this.mainFacet&&(t.mainFacet=this.mainFacet),this.subFacet&&"none"!=this.subFacet&&(t.subFacet=this.subFacet),t}_handleResize(){if(!this.visible)return;let t=window.innerWidth;this.setPeopleWidth(t)}setPeopleWidth(t){let e=250;e=.7*(t-30)-82-40,this.peopleWidth=Math.floor(e)}_onUserAction(t,...e){if(!t)return;let i="",s={...this.currentQuery};"pagination"==t&&this.hasPagination?(s.pgCurrent=e[0],i=this.CollectionModel.constructUrl(s)):"az"==t&&(s.azSelected=e[0],i=this.CollectionModel.constructUrl(s,["page"])),i&&this.AppStateModel.setLocation(i)}_setDifference(t,e){let i=new Set(t);for(let t of e)i.delete(t);return i}_getAssetType(t){if(t["@type"]&&("string"==typeof t["@type"]&&(t["@type"]=[t["@type"]]),Array.isArray(t["@type"])))return t["@type"].includes(this.jsonldContext+":person")?"person":t["@type"].includes(this.jsonldContext+":publication")?"work":t["@type"].includes(this.jsonldContext+":organization")?"organization":void 0}_urlEncode(t){let e=[];for(let i in t)if(t.hasOwnProperty(i)){if("offset"==i&&0==t[i])continue;if("filters"==i&&0==Object.keys(t[i]).length)continue;if("limit"==i)continue;e.push(encodeURIComponent(i)+"="+encodeURIComponent(JSON.stringify(t[i])))}return e.length?"?"+e.join("&"):""}_renderBrowseHeader(t,e){return this.hasAz=!0,e&&(this.azSelected=e),s.b`
+`}i(101),i(94),i(102),i(96),i(91),i(103);class o extends(Mixin(s.a).with(LitCorkUtils)){static get properties(){return{hasAz:{type:Boolean},hasPagination:{type:Boolean},azSelected:{type:String},azStatus:{type:String},azDisabled:{type:Array},azOptions:{type:Set},urlQuery:{type:Object},jsonldContext:{type:String},peopleWidth:{type:Number},visible:{type:Boolean},currentQuery:{type:Object},mainFacet:{type:String},mainFacets:{type:Array},pgPer:{type:Number},pgCurrent:{type:Number},textQuery:{type:String},dataFilters:{type:Array},data:{type:Array},dataStatus:{type:String},dataTotal:{type:Number},mainFacetIndex:{type:Number},subFacet:{type:String},subFacetIndex:{type:Number},subFacetStatus:{type:String}}}constructor(){super(),this._injectModel("CollectionModel","AppStateModel"),this.azOptions=new Set(["all",..."abcdefghijklmnopqrstuvwxyz"]),this.hasPagination=!1,this.visible=!1,this.urlQuery={},this.jsonldContext=APP_CONFIG.data.jsonldContext,this._resetQueryProperties(),this.setPeopleWidth(window.innerWidth),this._handleResize=this._handleResize.bind(this)}_resetQueryProperties(){this.data=[],this.dataStatus="loading",this.dataTotal=0,this.currentQuery={},this.dataFilters=[],this.pgPer=8,this.pgCurrent=1,this.mainFacet="none",this.mainFacets=[],this.mainFacetIndex=0,this.subFacet="none",this.subFacetIndex=0,this.subFacets=[],this.subFacetStatus="loading",this.textQuery="",this.hasAz=!1,this.azSelected="All",this.azDisabled=[],this.azStatus="loading"}updated(t){this.doUpdated(t)}doUpdated(t){t.has("visible")&&this.visible&&requestAnimationFrame(()=>this._handleResize())}connectedCallback(){super.connectedCallback(),window.addEventListener("resize",this._handleResize)}disconnectedCallback(){window.removeEventListener("resize",this._handleResize),super.disconnectedCallback()}async _doMainQuery(){let t=this.currentQuery,e=await this.CollectionModel.query(t),i=!1;this.textQuery&&"none"==this.mainFacet&&"none"==this.subFacet&&(this.subFacetStatus=e.state,i=!0),this.dataStatus=e.state,"loaded"==e.state&&("object"==typeof e.payload.total?this.dataTotal=0:this.dataTotal=e.payload.total,i?(this.CollectionModel.store.setSearchAggsLoaded(this.textQuery,e.payload),this.mainFacets=this.CollectionModel._getMainFacets(e.payload,this.currentQuery),this.subFacets=this.CollectionModel._getSubFacets(this.mainFacet,e.payload,this.currentQuery)):this.hasAz=!0,this.data=e.payload.results,console.log("main query result:",e))}async _getSearchAggs(){if(!this.textQuery)return;if("none"==this.mainFacet&&"none"==this.subFacet)return;let t=await this.CollectionModel.searchAggQuery(this.textQuery,this.mainFacet);this.subFacetStatus=t.state,"loaded"==t.state&&(this.mainFacets=this.CollectionModel._getMainFacets(t.payload,this.currentQuery),this.subFacets=this.CollectionModel._getSubFacets(this.mainFacet,t.payload,this.currentQuery))}async _getAzAgg(){let t=await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet,this.currentQuery.subFacet);if(this.azStatus=t.state,"loaded"!=t.state)return;let e=this.CollectionModel.getAzBaseFilter(this.currentQuery.mainFacet);e&&e.key?this.azDisabled=[...this._setDifference(this.azOptions,Object.keys(t.payload.aggregations.facets[e.key]))].filter(t=>"all"!=t):this.azStatus="error",console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`,t)}_parseUrlQuery(t){t||(t=this.AppStateModel.store.data);let e=t.location.path,i=t.location.query;if(this._resetQueryProperties(),e.length<1)return;let s="";s="search"==e[0]&&e.length>1?e[1].toLowerCase():e[0].toLowerCase();for(let t of this.CollectionModel.mainFacets)if(s==t.id.toLowerCase()){this.mainFacet=s,this.dataFilters.push(t.baseFilter);break}let r="";if("search"==e[0]&&e.length>2?r=e[2].toLowerCase():"search"!=e[0]&&e.length>1&&(r=e[1].toLowerCase()),this.CollectionModel.subFacets[this.mainFacet]){let t=1;for(let e of this.CollectionModel.subFacets[this.mainFacet]){if(e.id==r){this.subFacet=r,this.subFacetIndex=t,this.dataFilters.push(e.baseFilter);break}t+=1}}for(let t in i)"s"==t?this.textQuery=i.s:"filters"==t||("page"!=t||isNaN(i[t])?"az"==t&&this.azOptions.has(i[t])&&(this.azSelected=i[t]):this.pgCurrent=i[t]);this.currentQuery=this._constructQuery(),console.log("element query:",this.currentQuery)}_constructQuery(){let t={};return this.textQuery&&(t.textQuery=this.textQuery),this.pgCurrent&&(t.pgCurrent=this.pgCurrent),this.pgPer&&(t.pgPer=this.pgPer),this.azSelected&&(t.azSelected=this.azSelected),this.dataFilters&&(t.filters=this.dataFilters),this.mainFacet&&"none"!=this.mainFacet&&(t.mainFacet=this.mainFacet),this.subFacet&&"none"!=this.subFacet&&(t.subFacet=this.subFacet),t}_handleResize(){if(!this.visible)return;let t=window.innerWidth;this.setPeopleWidth(t)}setPeopleWidth(t){let e=250;e=.7*(t-30)-82-40,this.peopleWidth=Math.floor(e)}_onUserAction(t,...e){if(!t)return;let i="",s={...this.currentQuery};"pagination"==t&&this.hasPagination?(s.pgCurrent=e[0],i=this.CollectionModel.constructUrl(s)):"az"==t&&(s.azSelected=e[0],i=this.CollectionModel.constructUrl(s,["page"])),i&&this.AppStateModel.setLocation(i)}_setDifference(t,e){let i=new Set(t);for(let t of e)i.delete(t);return i}_getAssetType(t){if(t["@type"]&&("string"==typeof t["@type"]&&(t["@type"]=[t["@type"]]),Array.isArray(t["@type"])))return t["@type"].includes(this.jsonldContext+":person")?"person":t["@type"].includes(this.jsonldContext+":publication")?"work":t["@type"].includes(this.jsonldContext+":organization")?"organization":void 0}_urlEncode(t){let e=[];for(let i in t)if(t.hasOwnProperty(i)){if("offset"==i&&0==t[i])continue;if("filters"==i&&0==Object.keys(t[i]).length)continue;if("limit"==i)continue;e.push(encodeURIComponent(i)+"="+encodeURIComponent(JSON.stringify(t[i])))}return e.length?"?"+e.join("&"):""}_renderBrowseHeader(t,e){return this.hasAz=!0,e&&(this.azSelected=e),s.b`
     <div class="header flex align-items-center">
       <div class="col-facets">
         <h1>${t}</h1>
@@ -233,7 +233,7 @@
                    @changed-page="${t=>this._onUserAction("pagination",t.target.currentPage)}"
                    class="mt-3"
     ></rp-pagination>
-    `}}customElements.define("rp-utils-collection",o);i(89);function l(){return s.b`
+    `}}customElements.define("rp-utils-collection",o);i(90);function l(){return s.b`
 
 <style>
   :host {
@@ -344,7 +344,7 @@
 </div>
 </div>
 
-`}customElements.define("rp-page-organizations",class extends o{static get properties(){return{}}constructor(){super(),this.render=c.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getFacets(),this._getAzAgg()]))}async _getFacets(){let t=await this.CollectionModel.overview("organizationsAggs");this.subFacetStatus=t.state,"loaded"==t.state&&(this.subFacets=this.CollectionModel._getSubFacets("organizations",t.payload,this.currentQuery))}});customElements.define("rp-page-search",class extends o{static get properties(){return{}}constructor(){super(),this.render=d.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}updated(t){if(this.doUpdated(t),t.has("mainFacet")&&"none"!=this.mainFacet){let t=!1,e=0;for(let i of this.CollectionModel.mainFacets)if(e++,i.id.toLowerCase()==this.mainFacet.toLowerCase()){t=!0,this.mainFacetIndex=e;break}t||(this.mainFacet="none",this.mainFacetIndex=0)}}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getSearchAggs()]))}})},89:function(t,e,i){"use strict";var s=i(2),r=i(33);i(35);function a(){return s.b`
+`}customElements.define("rp-page-organizations",class extends o{static get properties(){return{}}constructor(){super(),this.render=c.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getFacets(),this._getAzAgg()]))}async _getFacets(){let t=await this.CollectionModel.overview("organizationsAggs");this.subFacetStatus=t.state,"loaded"==t.state&&(this.subFacets=this.CollectionModel._getSubFacets("organizations",t.payload,this.currentQuery))}});customElements.define("rp-page-search",class extends o{static get properties(){return{}}constructor(){super(),this.render=d.bind(this),this.AppStateModel.get().then(t=>this._onAppStateUpdate(t))}updated(t){if(this.doUpdated(t),t.has("mainFacet")&&"none"!=this.mainFacet){let t=!1,e=0;for(let i of this.CollectionModel.mainFacets)if(e++,i.id.toLowerCase()==this.mainFacet.toLowerCase()){t=!0,this.mainFacetIndex=e;break}t||(this.mainFacet="none",this.mainFacetIndex=0)}}async _onAppStateUpdate(t){requestAnimationFrame(()=>this.doUpdate(t))}async doUpdate(t){await this.updateComplete,this.visible&&(this._parseUrlQuery(t),await Promise.all([this._doMainQuery(),this._getSearchAggs()]))}})},90:function(t,e,i){"use strict";var s=i(2),r=i(33);i(35);function a(){return s.b`
   <style>
     :host {
       display: inline-block;
@@ -374,7 +374,7 @@
     <iron-icon icon="warning"></iron-icon>
     <div id="content"><slot></slot></div>
   </div>
-  `}class n extends s.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=a.bind(this),this.themeColor="danger"}_constructClasses(){let t={};return t[this.themeColor]=!0,t}}customElements.define("rp-alert",n)},90:function(t,e,i){"use strict";var s=i(2),r=i(35);i(91);function a(){return s.b`
+  `}class n extends s.a{static get properties(){return{themeColor:{type:String,attribute:"theme-color"}}}constructor(){super(),this.render=a.bind(this),this.themeColor="danger"}_constructClasses(){let t={};return t[this.themeColor]=!0,t}}customElements.define("rp-alert",n)},91:function(t,e,i){"use strict";var s=i(2),r=i(35);i(93);function a(){return s.b`
   <style>
     :host {
       display: block;
@@ -428,43 +428,7 @@
     </div>
   </div>
 
-  `}i(92);class n extends s.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=a.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(t){if("string"==typeof t)return s.b`<rp-badge>${t}</rp-badge>`;if("object"==typeof t){let e=t.text;if(!e)return s.b``;let i=t.href;return i?s.b`<rp-badge href="${i}">${e}</rp-badge>`:s.b`<rp-badge>${e}</rp-badge>`}return s.b``}}customElements.define("rp-person-preview",n)},91:function(t,e,i){"use strict";var s=i(2),r=i(33),a=i(35);function n(){return s.b`
-  <style>
-    :host {
-      display: inline-block;
-    }
-    iron-icon {
-      color: var(--tcolor-primary);
-      height: 50%;
-      width: 50%;
-    }
-    .circle {
-      background-color: var(--tcolor-bg-primary);
-      height: 70px;
-      width: 70px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .circle.size-lg {
-      height: 150px;
-      width: 150px;
-    }
-    .circle.size-sm {
-      height: 60px;
-      width: 60px;
-    }
-    .photo {
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-  </style>
-  <div class="circle ${Object(r.a)(this.constructClasses())}" style="${Object(a.a)(this.constructStyles())}">
-    ${this.renderFace()}
-  </div>
-  `}class o extends s.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=n.bind(this)}constructClasses(){let t={};return this.size&&"undefined"!=this.size&&(t["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(t.photo=!0),t}constructStyles(){let t={};return this.src&&"undefined"!=this.src&&(t["background-image"]=`url(${this.src})`),t}renderFace(){if(!this.src||"undefined"==this.src)return s.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",o)},92:function(t,e,i){"use strict";var s=i(2),r=i(33);function a(){return s.b`
+  `}i(92);class n extends s.a{static get properties(){return{name:{type:String},href:{type:String},title:{type:String},badges:{type:Array},avatarSize:{type:String,attribute:"avatar-size"},avatarSrc:{type:String,attribute:"avatar-src"},textWidth:{type:String,attribute:"text-width"}}}constructor(){super(),this.render=a.bind(this),this.badges=[],this.textWidth=window.innerWidth.toString()-70+"px"}_renderBadge(t){if("string"==typeof t)return s.b`<rp-badge>${t}</rp-badge>`;if("object"==typeof t){let e=t.text;if(!e)return s.b``;let i=t.href;return i?s.b`<rp-badge href="${i}">${e}</rp-badge>`:s.b`<rp-badge>${e}</rp-badge>`}return s.b``}}customElements.define("rp-person-preview",n)},92:function(t,e,i){"use strict";var s=i(2),r=i(33);function a(){return s.b`
 <style>
   :host {
     display: inline-block;
@@ -524,7 +488,43 @@
   ${this._renderBadge()}
 `}class n extends s.a{static get properties(){return{size:{type:String},href:{type:String},colorSequence:{type:Number,attribute:"color-sequence"}}}constructor(){super(),this.maxColor=6,this.render=a.bind(this)}constructClasses(){let t={};if(this.size&&(t["size-"+this.size]=!0),this.colorSequence){t["color-"+Math.floor(this.colorSequence).toString()]=!0}else{let e=[...this.parentNode.childNodes].filter(t=>t.tagName===this.tagName);if(e.length>0){t["color-"+(e.indexOf(this)%this.maxColor).toString()]=!0}else t["color-0"]=!0}return t}_renderBadge(){return this.href?s.b`<a href=${this.href}>${this._renderSpan()}</a>`:s.b`${this._renderSpan()}`}_renderSpan(){return s.b`<span class=${Object(r.a)(this.constructClasses())}>
       <slot></slot>
-    </span>`}}customElements.define("rp-badge",n)},93:function(t,e,i){"use strict";var s=i(2),r=i(33);function a(){return s.b`
+    </span>`}}customElements.define("rp-badge",n)},93:function(t,e,i){"use strict";var s=i(2),r=i(33),a=i(35);function n(){return s.b`
+  <style>
+    :host {
+      display: inline-block;
+    }
+    iron-icon {
+      color: var(--tcolor-primary);
+      height: 50%;
+      width: 50%;
+    }
+    .circle {
+      background-color: var(--tcolor-bg-primary);
+      height: 70px;
+      width: 70px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .circle.size-lg {
+      height: 150px;
+      width: 150px;
+    }
+    .circle.size-sm {
+      height: 60px;
+      width: 60px;
+    }
+    .photo {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  </style>
+  <div class="circle ${Object(r.a)(this.constructClasses())}" style="${Object(a.a)(this.constructStyles())}">
+    ${this.renderFace()}
+  </div>
+  `}class o extends s.a{static get properties(){return{size:{type:String},src:{type:String}}}constructor(){super(),this.render=n.bind(this)}constructClasses(){let t={};return this.size&&"undefined"!=this.size&&(t["size-"+this.size]=!0),this.src&&"undefined"!=this.src&&(t.photo=!0),t}constructStyles(){let t={};return this.src&&"undefined"!=this.src&&(t["background-image"]=`url(${this.src})`),t}renderFace(){if(!this.src||"undefined"==this.src)return s.b`<iron-icon icon='face'></iron-icon>`}}customElements.define("rp-avatar",o)},94:function(t,e,i){"use strict";var s=i(2),r=i(33);function a(){return s.b`
   <style>
     :host {
       display: block;

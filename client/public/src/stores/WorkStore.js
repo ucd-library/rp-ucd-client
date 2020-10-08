@@ -6,7 +6,8 @@ class WorkStore extends BaseStore {
     super();
 
     this.data = {
-      byWork : {}
+      byWork : {},
+      workAuthors: {}
     };
     this.events = {};
   }
@@ -35,6 +36,32 @@ class WorkStore extends BaseStore {
   _setWorkState(state) {
     //if( !this.stateChanged(this.data.overview[id], state) ) return;
     this.data.byWork[state.id] = state;
+  }
+
+  setAuthorLoading(id, request) {
+    this._setAuthorState({
+      state: this.STATE.LOADING,
+      id, request
+    });
+  }
+
+  setAuthorLoaded(id, payload) {
+    this._setAuthorState({
+      state: this.STATE.LOADED,
+      id, payload
+    });
+  }
+
+  setAuthorError(id, error) {
+    this._setAuthorState({
+      state: this.STATE.ERROR,
+      id, error
+    });
+  }
+
+  _setAuthorState(state) {
+    //if( !this.stateChanged(this.data.overview[id], state) ) return;
+    this.data.workAuthors[state.id] = state;
   }
 
 }

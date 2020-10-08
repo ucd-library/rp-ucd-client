@@ -1,31 +1,31 @@
 import { LitElement } from 'lit-element';
 import render from "./rp-page-individual.tpl.js";
 
+import RpUtilsLanding from "../../utils/rp-utils-landing";
+
 import "../../components/alert";
 import "../../components/avatar";
 import "../../components/badge";
 import "../../components/citation";
+import "../../components/download-list";
 import "../../components/hero-image";
 import "../../components/icon";
 import "../../components/link-list";
+import "../../components/modal";
 
 
 
-export default class RpPageIndividual extends Mixin(LitElement)
-  .with(LitCorkUtils) {
+export default class RpPageIndividual extends RpUtilsLanding {
 
   static get properties() {
     return {
       individual: {type: Object},
-      individualId: {type: String},
       individualStatus: {type: String},
-      publicationStatus: {type: String},
-      retrievedPublications: {type: Array},
+      publicationOverviewStatus: {type: String},
+      publicationOverview: {type: Object},
+      hasMultiplePubTypes: {type: Boolean},
+      retrievedPublications: {type: Object},
       totalPublications: {type: Number},
-      researchSubjects: {type: Array},
-      researchSubjectsToShow: {type: Number},
-      activeSection: {type: Object},
-      visible: {type: Boolean},
       isOwnProfile: {type: Boolean}
     }
   }
@@ -35,17 +35,10 @@ export default class RpPageIndividual extends Mixin(LitElement)
     this.render = render.bind(this);
 
     this._injectModel('PersonModel', 'AppStateModel');
-    this.individual = {};
-    this.individualId = '';
-    this.individualStatus = 'loading';
-    this.publicationStatus = 'loading';
-    this.visible = false;
-    this.retrievedPublications = [];
-    this.totalPublications = 0;
-    this.researchSubjects = [];
-    this.researchSubjectsToShow = 4;
-    this.activeSection = {index: 0};
-    this.isOwnProfile = false;
+    this.assetType = "individual";
+  
+    this._resetEleProps();
+
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
@@ -55,33 +48,57 @@ export default class RpPageIndividual extends Mixin(LitElement)
   }
 
   async doUpdate(state) {
+    let updateData = true;
     await this.updateComplete;
     if (!this.visible) {
       return;
     }
     let path = state.location.path;
     if (path.length >= 2) {
-      this.individualId = path[1];
-      this.PersonModel.individualId = this.individualId;
+      if (this.assetId == path[1]) updateData = false;
+      this.assetId = path[1];
+      this.PersonModel.individualId = this.assetId;
     }
-    this.activeSection = this.PersonModel.getActiveSection(path[2])
-    if (!this.individualId) return;
+    let sections = this.getPageSections();
+    if (!this.assetId) return;
+    this._setActiveSection(path);
 
-    this.totalPublications = 0;
-    await Promise.all([this._doMainQuery(this.individualId),
-                        this._doPubQuery(this.individualId)]);
+    if (!updateData) return;
+    this._resetEleProps()
+    await Promise.all([this._doMainQuery(this.assetId),
+                        this._doPubOverviewQuery(this.assetId)]);
     this.isOwnProfile = this._isOwnProfile();
 
   }
 
   updated(props){
-    if (props.has('individualId') && this.individualId) {
+    if (props.has('assetId') && this.assetId) {
       this.shadowRoot.getElementById('hero').shuffle();
     }
   }
 
-  async _loadMorePubs(){
-    await this._doPubQuery(this.individualId);
+  _resetEleProps() {
+    this.individual = {};
+    this.individualStatus = 'loading';
+    this.retrievedPublications = {};
+    this.totalPublications = 0;
+    this.isOwnProfile = false;
+    this.publicationOverview = {};
+    this.hasMultiplePubTypes = false;
+    this.publicationOverviewStatus = 'loading';
+  }
+
+  async _loadPubs(pubType, getMore=true){
+    let offset = this.publicationOverview[pubType].displayedOffset;
+    if (offset < 10) {
+      offset = 10;
+    }
+    else if (!getMore) {
+      offset -= 10;
+    }
+    this.publicationOverview[pubType].displayedOffset = getMore ? offset + 10 : offset;
+    await this._doPubQuery(this.publicationOverview[pubType], offset=offset);
+    
   }
 
   async _doMainQuery(id){
@@ -94,11 +111,47 @@ export default class RpPageIndividual extends Mixin(LitElement)
     if (APP_CONFIG.verbose) console.log(data);
   }
 
-  async _doPubQuery(id){
-    let offset = 0;
-    if (!id) {
-      id = this.individualId;
+  async _doPubOverviewQuery(id) {
+    let data = await this.PersonModel.getPubOverview(id);
+    if (data.state != 'loaded') {
+      return;
     }
+    if (APP_CONFIG.verbose) console.log('pub overview:', data);
+
+    let totalPubs = 0;
+    let pubTypes = {};
+    for (let possiblePubType of this.PersonModel.getPublicationTypes()) {
+      let ct = data.payload.aggregations.facets['@type'][possiblePubType.es]
+      if (ct) {
+        totalPubs += ct;
+        pubTypes[possiblePubType.id] = {...possiblePubType, ct: ct, displayedOffset: 0, dataStatus: 'loading'}
+      }
+    }
+    this.hasMultiplePubTypes = Object.keys(pubTypes).length > 1;
+    for (let pubType in pubTypes) {
+      pubTypes[pubType].displayedOffset = this.hasMultiplePubTypes ? 5 : 10;
+        
+    }
+    this.totalPublications = totalPubs;
+    this.publicationOverview  = pubTypes;
+
+    Object.values(pubTypes).map(pt => this._doPubQuery(pt));
+
+  }
+
+  async _doPubQuery(pubTypeObject, offset=0){
+
+    let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
+    this.publicationOverview[pubTypeObject.id].dataStatus = data.request.state;
+    if (data.request.state != 'loaded') return;
+    if (APP_CONFIG.verbose) console.log(`${pubTypeObject.id} pubs:`, data);
+    this.retrievedPublications[pubTypeObject.id] = data.masterStore;
+    this.requestUpdate();
+
+
+
+
+    /*
     if ( this.retrievedPublications.length < this.totalPublications ) {
       offset = this.retrievedPublications.length;
     }
@@ -112,35 +165,44 @@ export default class RpPageIndividual extends Mixin(LitElement)
     this.retrievedPublications = data.payload.results;
     if (data.payload.results.length > 0) {
       this.totalPublications = data.payload.total;
-
-      let researchSubjects = data.payload.aggregations.facets["hasSubjectArea.label"];
-      if (researchSubjects && Object.keys(researchSubjects).length > 0) {
-        //this.researchSubjects = this.formatSubjectsObject(researchSubjects);
-      }
     }
-    if (APP_CONFIG.verbose) console.log("research subjects", this.researchSubjects);
-
+    */
   }
 
   _isOwnProfile() {
     try {
-      if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === this.individualId.toLowerCase()) {
+      if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === this.assetId.toLowerCase()) {
         return true;
       }
     } catch (error) {}
     return false;
   }
 
-  hideSection(section){
-    if (this.activeSection.index == 0) {
-      return false;
+  getPubsByYear(pubType){
+    let output = [];
+    if (!this.publicationOverview[pubType] || !this.retrievedPublications[pubType]) return output;
+    let minToShow = this.hasMultiplePubTypes ? 5 : 10;
+    let nToShow = this.publicationOverview[pubType].displayedOffset;
+    if (nToShow < minToShow) nToShow = minToShow;
+    let pubs = this.retrievedPublications[pubType].slice(0, nToShow);
+    let pubObj = {};
+    let yrs = [];
+    for (let pub of pubs) {
+      if (!pub.publicationDate) continue;
+      let dt = new Date(pub.publicationDate);
+      let yr = dt.getFullYear();
+      if (!yrs.includes(yr)) {
+        yrs.push(yr);
+        pubObj[yr] = [];
+      }
+      pubObj[yr].push(pub);
+    }
+    yrs.sort((a, b) => b - a );
+    for (let yr of yrs) {
+      output.push({year: yr, pubs: pubObj[yr]});
     }
 
-    if (section == this.activeSection.id) {
-      return false;
-    }
-
-    return true;
+    return output;
   }
 
   getIndividualTitles(){
@@ -199,6 +261,10 @@ export default class RpPageIndividual extends Mixin(LitElement)
     }
 
     return out;
+  }
+
+  getPubExports() {
+    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/${this.assetId}`}];
   }
 
   formatSubjectsObject(subjects){

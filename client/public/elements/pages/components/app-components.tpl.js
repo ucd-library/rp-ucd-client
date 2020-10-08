@@ -7,11 +7,13 @@ import "../../components/alert"
 import "../../components/avatar"
 import "../../components/badge"
 import "../../components/citation"
+import "../../components/download-list"
 import "../../components/dropdown"
 import "../../components/hero-image"
 import "../../components/icon"
 import "../../components/link-list"
 import "../../components/link-list-counts"
+import "../../components/modal"
 import "../../components/organization-preview"
 import "../../components/pagination"
 import "../../components/person-preview"
@@ -177,6 +179,21 @@ and have hover styles.
 </section>
 
 <section>
+<h2>Download List</h2>
+<p>Presents a list of download options as a dropdown opened from an icon. 
+Pass an href property to an object within the <code>.choices</code> array property to make the option an <code>a</code> element. 
+Otherwise, a <code>new-selection</code> event will fire when an option is clicked.</p>
+<div>
+<rp-download-list 
+  title="Download Publications List"
+  .choices=${[{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:"/api/miv/ramram"}, {text: 'BiBTex', subtext: "(imports to LaTEX)"}, {text: 'Plain Text'}, {text: 'HTML'}]}
+  @new-selection="${e => console.log(e.target.choices[e.target.selected])}"
+  >
+</rp-download-list>
+</div>
+</section>
+
+<section>
 <h2>Dropdown</h2>
 <p>A stylized dropdown. Listen with <code>@new-selection="\${e => console.log(e.target.choices[e.target.chosen])}</code></p>
 <rp-dropdown choices='["People",
@@ -267,6 +284,17 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
                       >
 </rp-link-list-counts>
 </section>
+
+<section>
+  <h2>Modal</h2>
+  <p>Launches a full-window modal. Use <code>content-title</code> attribute and a slot to customize content.
+  <code>show</code>, <code>hide</code>, and <code>toggle</code> methods control visibility.</p>
+  <p @click="${e => this.shadowRoot.getElementById('modal').toggle()}">Click me to launch modal</p>
+  <rp-modal content-title='Edit "Publications"' id="modal">
+    Publication information is managed via the <a href="https://oapolicy.universityofcalifornia.edu/">UC Publication Management System</a>. Any changes made there will be reflected on your Aggie Experts profile.
+  </rp-modal>
+
+</section> 
 
 <section>
 <h2>Pagination</h2>
