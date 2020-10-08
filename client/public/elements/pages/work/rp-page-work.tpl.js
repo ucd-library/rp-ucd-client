@@ -103,6 +103,9 @@ return html`
         <h2>Full Text</h2>
         ${this.fullTextLinks ? html`
           <ul class="pub-links">
+            ${this.WorkModel.getAdditionalLinks(this.work).map(link => html`
+            <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
+            `)}
             ${this.fullTextLinks.map(link => html`
             <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
             `)}
