@@ -206,20 +206,29 @@ export default class RpPageIndividual extends RpUtilsLanding {
   }
 
   getIndividualTitles(){
+    let titles = [];
     if (!this.individual) {
-      return [];
+      return titles;
     }
-    if (this.individual.hasContactInfo && this.individual.hasContactInfo.title) {
-      if (Array.isArray(this.individual.hasContactInfo.title)) {
-        return this.individual.hasContactInfo.title;
+    if (typeof this.individual.hasContactInfo === 'object') {
+      let contactInfo = [];
+      if (Array.isArray(this.individual.hasContactInfo)) {
+        contactInfo = [...this.individual.hasContactInfo].sort((a,b)=>(a.rank?a.rank:100)-(b.rank?b.rank:100));
       }
       else {
-        return [this.individual.hasContactInfo.title];
+        contactInfo = [this.individual.hasContactInfo];
       }
-
+      for (let c of contactInfo) {
+        if (!c.title) continue;
+        if (Array.isArray(c.title)) {
+          titles.push(...c.title);
+        } else {
+          titles.push(c.title);
+        }
+      }
+      
     }
-
-    return [];
+    return titles;
   }
     getBestLabel() {
     if (this.individual && this.individual.label) {

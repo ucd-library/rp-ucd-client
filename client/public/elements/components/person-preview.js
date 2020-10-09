@@ -77,8 +77,14 @@ export class RpPersonPreview extends LitElement {
   _parseTitle(){
     if (this.title) return this.title;
     try {
-      let title = this.data.hasContactInfo.title;
+      let title = "";
+      if (Array.isArray(this.data.hasContactInfo)) {
+        title = [...this.data.hasContactInfo].sort((a,b)=>(a.rank?a.rank:100)-(b.rank?b.rank:100))[0].title;
+      } else{
+        title = this.data.hasContactInfo.title;
+      }
       if (Array.isArray(title)) return title.join(", ");
+      if (!title) return "";
       return title;
     } catch (error) {
       return "";

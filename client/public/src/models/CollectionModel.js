@@ -512,12 +512,24 @@ class CollectionModel extends BaseModel {
       p.name=p.name.sort((a,b)=> a.length - b.length)
       p.name=p.name[0]
     }
-    if (person.hasContactInfo && person.hasContactInfo.title) {
-      if (Array.isArray(person.hasContactInfo.title)) {
-        p.title = person.hasContactInfo.title.join(", ");
+    if (typeof person.hasContactInfo === 'object') {
+
+      let title = "";
+      if (Array.isArray(person.hasContactInfo)) {
+        title = [...person.hasContactInfo].sort((a,b)=>(a.rank?a.rank:100)-(b.rank?b.rank:100))[0].title;
       }
       else {
-        p.title = person.hasContactInfo.title;
+        title = person.hasContactInfo.title;
+      }
+
+      if (Array.isArray(title)) {
+        p.title = title.join(", ");
+      }
+      else if (!title) {
+        p.title = "";
+      }
+      else {
+        p.title = title;
       }
     }
     p['id'] = person['@id'].replace(this.jsonldContext + ":", "");
