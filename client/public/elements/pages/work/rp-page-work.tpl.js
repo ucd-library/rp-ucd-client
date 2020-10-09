@@ -136,7 +136,7 @@ return html`
           <h2>Subjects</h2>
           <div>
           ${this.subjects.map(subject => html`
-            <rp-badge size="lg">${subject.label}</rp-badge>
+            <rp-badge size="lg" class="my-1">${subject.label}</rp-badge>
           `)}
           </div>
         ` : html``}
@@ -154,9 +154,7 @@ return html`
         <div class="data" ?hidden="${this._hideStatusSection('loaded', 'universityAuthorsStatus')}">
           ${this.universityAuthors.map(author => html`
             <rp-person-preview
-              name="${author.label}"
-              href="${author.href}"
-              title="${author.title}"
+              .data="${author}"
               text-width="${this.peopleWidth}"
               class="my-3">
             </rp-person-preview>

@@ -126,18 +126,6 @@ export default class RpPageWork extends RpUtilsLanding {
       universityAuthors = [data.payload];
     }
 
-    for (let author of universityAuthors) {
-      if (author.hasContactInfo && author.hasContactInfo.title) {
-        if (Array.isArray(author.hasContactInfo.title)) {
-          author.title = author.hasContactInfo.title.join(", ");
-        }
-        else {
-          author.title = author.hasContactInfo.title;
-        }
-      }
-      author.href = this.authorPath + author['@id'].replace(this.WorkModel.service.jsonContext + ":", "");
-    }
-
     this.universityAuthors = universityAuthors;
   }
 
