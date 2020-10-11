@@ -36,7 +36,7 @@ export default class RpPageIndividual extends RpUtilsLanding {
 
     this._injectModel('PersonModel', 'AppStateModel');
     this.assetType = "individual";
-  
+
     this._resetEleProps();
 
 
@@ -98,7 +98,7 @@ export default class RpPageIndividual extends RpUtilsLanding {
     }
     this.publicationOverview[pubType].displayedOffset = getMore ? offset + 10 : offset;
     await this._doPubQuery(this.publicationOverview[pubType], offset=offset);
-    
+
   }
 
   async _doMainQuery(id){
@@ -130,7 +130,7 @@ export default class RpPageIndividual extends RpUtilsLanding {
     this.hasMultiplePubTypes = Object.keys(pubTypes).length > 1;
     for (let pubType in pubTypes) {
       pubTypes[pubType].displayedOffset = this.hasMultiplePubTypes ? 5 : 10;
-        
+
     }
     this.totalPublications = totalPubs;
     this.publicationOverview  = pubTypes;
@@ -205,6 +205,8 @@ export default class RpPageIndividual extends RpUtilsLanding {
     return output;
   }
 
+  // All these machinations are particular to the UI, and won't be  changed in
+  // database IMO.  Joining contacts is pretty much a PPS thing.
   getIndividualTitles(){
     let titles = [];
     if (!this.individual) {
@@ -218,19 +220,59 @@ export default class RpPageIndividual extends RpUtilsLanding {
       else {
         contactInfo = [this.individual.hasContactInfo];
       }
+      // If first contact is odr, than only use odr,
+      let identifier_match=null
+      if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^odr/)) {
+        identifier_match=/^odr/
+      } else if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^pps/)) {
+        identifier_match=/^pps/    // If first is pps only include pps
+      } else {                 // Otherwise include them all
+        identifier_match=null
+      }
+      // Next join every organization with a common title, where titles are organized
+      // by rank.
       for (let c of contactInfo) {
-        if (!c.title) continue;
-        if (Array.isArray(c.title)) {
-          titles.push(...c.title);
-        } else {
-          titles.push(c.title);
+        if (!(c.title && (! identifier_match || (c.identifier && c.identifier.match(identifier_match)))))
+          continue;
+        if (! Array.isArray(c.title)) { c.title=[c.title] }
+        for (const t of c.title) {
+          let ind=titles.findIndex((have)=>have.title===t)
+          if (ind > -1) {
+            if (c.organization) {
+              if (! Array.isArray(c.organization))
+                c.organization=[c.organization]
+              for (const o of c.organization) {
+                if (titles[ind].orgs.findIndex((have)=>have===o) === -1)
+                  titles[ind].orgs.push(o)
+              }
+            }
+          } else {
+            let new_title={title:t,orgs:[]}
+            if (c.organization) {
+              if (Array.isArray(c.organization)) {
+                new_title.orgs.push(...c.organization)
+              } else {
+                new_title.orgs.push(c.organization)
+              }
+            }
+            titles.push(new_title);
+          }
         }
       }
-      
     }
+    // titles are objects; {title:string,orgs:["string"]}
     return titles;
   }
-    getBestLabel() {
+  getHeadlineTitle() {
+    let title=""
+    let best=this.getIndividualTitles()[0];
+    if (best && best.title)
+      title=best.title;
+    if (best && best.orgs[0])
+      title+=`, ${best.orgs[0]}`
+    return title;
+  }
+  getBestLabel() {
     if (this.individual && this.individual.label) {
       if (Array.isArray(this.individual.label)) {
         // Prefer the shortest one? This prefers fname lname over lname, fname
