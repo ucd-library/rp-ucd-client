@@ -75,7 +75,8 @@ class PersonModel extends BaseModel {
     return [
       {id: 'article', es: 'bibo:AcademicArticle', label: 'Academic Articles'},
       {id: 'book', es: 'bibo:Book', label: 'Books'},
-      {id: 'chapter', es: 'bibo:Chapter', label: 'Chapters'}
+      {id: 'chapter', es: 'bibo:Chapter', label: 'Chapters'},
+      {id: 'conferencepaper', es: 'vivo:ConferencePaper', label: 'Conference Papers'}
     ]
   }
 
