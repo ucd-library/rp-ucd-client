@@ -117,7 +117,7 @@ return html`
         </div>
       </rp-accordian>
       <rp-accordian title-text="Can I export data ${this.isLoggedIn && false ? "for import into MIV": ""}?">
-        ${this.isLoggedIn && false ? "Currently only publications can be exported for MyInfoVault, but we are planning to expand the options to include other data, such as grants. You must be logged into your profile to access the download functionality. In the Publications section of your profile, you will find a download button located to the left of your publication count in the upper right-hand corner. One of the available format options is RIS. This file can be imported into MIV." : "Currently we only allow downloads for each users' own publications.  Once logged into the system, the Publications section of your profile includes a download button located to the left of your publication count in the upper right-hand corner." }
+        ${this.isLoggedIn && false ? "Currently only publications can be exported for MyInfoVault, but we are planning to expand the options to include other data, such as grants. You must be logged into your profile to access the download functionality. In the Publications section of your profile, you will find a download button located to the left of your publication count in the upper right-hand corner. One of the available format options is RIS. This file can be imported into MIV." : "We only allow downloads for each user's own publications.  Once logged into the system, the Publications section of your profile includes a download button located to the left of your publication count in the upper right-hand corner." }
       </rp-accordian>
       <rp-accordian title-text="How do I delete my profile?">
         <div>
