@@ -1,6 +1,7 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const CollectionService = require('../services/CollectionService');
 const CollectionStore = require('../stores/CollectionStore');
+const PersonModel = require('./PersonModel');
 
 class CollectionModel extends BaseModel {
 
@@ -9,6 +10,7 @@ class CollectionModel extends BaseModel {
 
     this.store = CollectionStore;
     this.service = CollectionService;
+    this.personModel = PersonModel;
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.mainFacets = [{id: 'people', text: 'People', es: `${this.jsonldContext}:person`,
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
@@ -507,31 +509,8 @@ class CollectionModel extends BaseModel {
 
   _formatPerson(person) {
     let p = {name: person.label ? person.label : "", title: "", "@id": person['@id']};
-    if (Array.isArray(p.name)) {
-      // Prefer the shortest one? This prefers fname lname over lname, fname
-      p.name=p.name.sort((a,b)=> a.length - b.length)
-      p.name=p.name[0]
-    }
-    if (typeof person.hasContactInfo === 'object') {
-
-      let title = "";
-      if (Array.isArray(person.hasContactInfo)) {
-        title = [...person.hasContactInfo].sort((a,b)=>(a.rank?a.rank:100)-(b.rank?b.rank:100))[0].title;
-      }
-      else {
-        title = person.hasContactInfo.title;
-      }
-
-      if (Array.isArray(title)) {
-        p.title = title.join(", ");
-      }
-      else if (!title) {
-        p.title = "";
-      }
-      else {
-        p.title = title;
-      }
-    }
+    p.name=this.personModel.getBestLabel(person);
+    p.title=this.personModel.getHeadlineTitle(person);
     p['id'] = person['@id'].replace(this.jsonldContext + ":", "");
     return p;
 

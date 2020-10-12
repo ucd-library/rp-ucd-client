@@ -9,7 +9,7 @@ class WorkModel extends BaseModel {
 
     this.store = WorkStore;
     this.service = WorkService;
-      
+
     this.register('WorkModel');
   }
 
@@ -42,12 +42,12 @@ class WorkModel extends BaseModel {
       let label = "UCD-eLinks";
       let url = 'https://ucelinks.cdlib.org/sfx_local?';
       if (work.doi) {
-        output.push({label, url: `${url}id=${work.doi}`});
+        output.push({label, url: `${url}id=doi:${work.doi}`});
       }
       else if (work.hasPublicationVenue) {
         output.push({label, url: `${url}issn=${work.hasPublicationVenue.issn}&spage=${work.pageStart}&volume=${work.volume}&issue=${work.issue}&date=${work.publicationDate}`});
       }
-      
+
     } catch (error) {}
 
     // publisher page

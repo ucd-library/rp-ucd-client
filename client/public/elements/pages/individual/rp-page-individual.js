@@ -36,9 +36,8 @@ export default class RpPageIndividual extends RpUtilsLanding {
 
     this._injectModel('PersonModel', 'AppStateModel');
     this.assetType = "individual";
-  
-    this._resetEleProps();
 
+    this._resetEleProps();
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
@@ -98,7 +97,7 @@ export default class RpPageIndividual extends RpUtilsLanding {
     }
     this.publicationOverview[pubType].displayedOffset = getMore ? offset + 10 : offset;
     await this._doPubQuery(this.publicationOverview[pubType], offset=offset);
-    
+
   }
 
   async _doMainQuery(id){
@@ -130,7 +129,7 @@ export default class RpPageIndividual extends RpUtilsLanding {
     this.hasMultiplePubTypes = Object.keys(pubTypes).length > 1;
     for (let pubType in pubTypes) {
       pubTypes[pubType].displayedOffset = this.hasMultiplePubTypes ? 5 : 10;
-        
+
     }
     this.totalPublications = totalPubs;
     this.publicationOverview  = pubTypes;
@@ -206,42 +205,14 @@ export default class RpPageIndividual extends RpUtilsLanding {
   }
 
   getIndividualTitles(){
-    let titles = [];
-    if (!this.individual) {
-      return titles;
-    }
-    if (typeof this.individual.hasContactInfo === 'object') {
-      let contactInfo = [];
-      if (Array.isArray(this.individual.hasContactInfo)) {
-        contactInfo = [...this.individual.hasContactInfo].sort((a,b)=>(a.rank?a.rank:100)-(b.rank?b.rank:100));
-      }
-      else {
-        contactInfo = [this.individual.hasContactInfo];
-      }
-      for (let c of contactInfo) {
-        if (!c.title) continue;
-        if (Array.isArray(c.title)) {
-          titles.push(...c.title);
-        } else {
-          titles.push(c.title);
-        }
-      }
-      
-    }
-    return titles;
+    return this.PersonModel.getIndividualTitles(this.individual)
   }
-    getBestLabel() {
-    if (this.individual && this.individual.label) {
-      if (Array.isArray(this.individual.label)) {
-        // Prefer the shortest one? This prefers fname lname over lname, fname
-        return this.individual.label.sort((a,b)=> a.length - b.length)[0]
-      }
-      return this.individual.label
-    }
-
-    return "";
-
-    }
+  getHeadlineTitle() {
+    return this.PersonModel.getHeadlineTitle(this.individual)
+  }
+  getBestLabel() {
+    return this.PersonModel.getBestLabel(this.individual)
+  }
 
   getEmailAddresses(){
     if (!this.individual) {

@@ -82,7 +82,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.azSelected = 'All';
     this.azDisabled = [];
     this.azStatus = 'loading';
-    
+
   }
 
   updated(props) {
@@ -223,7 +223,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
         }
         i += 1;
       }
-      
+
     }
 
     // get any query arguments
@@ -311,7 +311,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
 
     if (path) this.AppStateModel.setLocation(path);
-    
+
 
     /*
     let q = {...this.urlQuery};
@@ -449,7 +449,7 @@ _urlEncode(obj) {
       return html``;
     }
     return html`
-    <rp-link-list 
+    <rp-link-list
       has-header-link
       .links='${this.subFacets}'
       current-link='${this.subFacetIndex}'
@@ -475,7 +475,7 @@ _urlEncode(obj) {
       <rp-person-preview
         name="${person.name}"
         href="${"/individual/" + person.id}"
-        title="${person.title}"
+        title=${person.title}
         text-width="${this.peopleWidth}"
         class="my-3">
       </rp-person-preview>

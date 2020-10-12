@@ -1,7 +1,7 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
 
-export default function render() { 
+export default function render() {
 return html`
 
 <style>
@@ -16,22 +16,19 @@ return html`
     margin: 15px 0;
   }
   ${styles}
-</style> 
+</style>
 <div class="help container top">
   <div class="section">
     <h1>Help</h1>
     <hr class="light">
 
     <div>
-      <rp-accordian title-text="How do I export data ${this.isLoggedIn ? "for import into MIV": ""}?">
-        ${this.isLoggedIn ? "Currently only publications can be exported for MyInfoVault, but we are planning to expand the options to include other data, such as grants. You must be logged into your profile to access the download functionality. In the Publications section of your profile, you will find a download button located to the left of your publication count in the upper right-hand corner. One of the available format options is RIS. This file can be imported into MIV." : "You must be logged in to view this information."}
-      </rp-accordian>
       <rp-accordian title-text="What is Aggie Experts?">
         <div>
-        Aggie Experts is a joint pilot project between the Office of the Provost and the UC Davis Library. 
-        Its purpose is to create a central registry of UC Davis faculty, researchers, experts and creators and showcase the scholarship created at the university. 
-        Aggie Experts can be used as an expertise discovery platform for finding collaborators, mentors and expert opinions. 
-        In the course of two years we will be expanding the registry by adding faculty from the College of Engineering and adjusting its functionality based on user feedback. 
+        Aggie Experts is a joint pilot project between the Office of the Provost and the UC Davis Library.
+        Its purpose is to create a central registry of UC Davis faculty, researchers, experts and creators and showcase the scholarship created at the university.
+        Aggie Experts can be used as an expertise discovery platform for finding collaborators, mentors and expert opinions.
+        In the course of two years we will be expanding the registry by adding faculty from the College of Engineering and adjusting its functionality based on user feedback.
         If you have any recommendations, you can contact us by <a href="mailto:lib-experts@ou.ad3.ucdavis.edu">email</a> or submit a request <a href="https://github.com/ucd-library/aggie-experts-public-issues/issues/new/choose">here</a>.
         </div>
       </rp-accordian>
@@ -42,12 +39,12 @@ return html`
       </rp-accordian>
       <rp-accordian title-text="Why are there so few profiles in the registry?">
         <div>
-        We are currently piloting Aggie Experts, and incrementally adding departments from the College of Engineering. After each deployment we solicit feedback, conduct a review and improve the system. 
+        We are currently piloting Aggie Experts, and incrementally adding departments from the College of Engineering. After each deployment we solicit feedback, conduct a review and improve the system.
         </div>
       </rp-accordian>
       <rp-accordian title-text="How often do you update the data in the registry?">
         <div>
-        We plan to update the data in the registry from our sources nightly. 
+        We plan to update the data in the registry from our sources nightly.
         </div>
       </rp-accordian>
 
@@ -119,6 +116,9 @@ return html`
           <img class="fw" src="${this.imgPath}faq-hide-publication.jpg" alt="Hide publication screenshot">
         </div>
       </rp-accordian>
+      <rp-accordian title-text="Can I export data ${this.isLoggedIn && false ? "for import into MIV": ""}?">
+        ${this.isLoggedIn && false ? "Currently only publications can be exported for MyInfoVault, but we are planning to expand the options to include other data, such as grants. You must be logged into your profile to access the download functionality. In the Publications section of your profile, you will find a download button located to the left of your publication count in the upper right-hand corner. One of the available format options is RIS. This file can be imported into MIV." : "Currently we only allow downloads for each users' own publications.  Once logged into the system, the Publications section of your profile includes a download button located to the left of your publication count in the upper right-hand corner." }
+      </rp-accordian>
       <rp-accordian title-text="How do I delete my profile?">
         <div>
         Please, <a href="mailto:experts@library.ucdavis.edu">contact us.</a>
@@ -126,7 +126,7 @@ return html`
       </rp-accordian>
     </div>
   </div>
-  
+
 
 </div>
 
