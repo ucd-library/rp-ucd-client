@@ -166,6 +166,42 @@ class PersonModel extends BaseModel {
     return "";
     }
 
+  getEmailAddresses(individual){
+    let out = []
+    if (!individual) {
+      return out;
+    }
+    if (individual.hasContactInfo && individual.hasContactInfo.hasEmail) {
+      if (Array.isArray(individual.hasContactInfo.hasEmail)) {
+        return individual.hasContactInfo.hasEmail.map(e => e.email);
+      }
+      return [individual.hasContactInfo.hasEmail.email]
+    }
+    if (Array.isArray(individual.hasContactInfo)) {
+      for (const contact of individual.hasContactInfo) {
+        if (contact.hasEmail && contact.hasEmail.email && !out.includes(contact.hasEmail.email)) out.push(contact.hasEmail.email);
+      }
+      
+    }
+
+    return out;
+  }
+
+  getWebsites(individual) {
+    let out = [];
+    if (!individual) {
+      return out;
+    }
+    if (individual.orcidId) {
+      out.push({'text': individual.orcidId['@id'], 'href': individual.orcidId['@id'], 'icon': '/images/orcid_16x16.png'})
+    }
+    if (individual.scopusId) {
+      out.push({'text': 'Scopus', 'href': `https://www.scopus.com/authid/detail.uri?authorId=${individual.scopusId}`})
+    }
+
+    return out;
+  }
+
 }
 
 module.exports = new PersonModel();

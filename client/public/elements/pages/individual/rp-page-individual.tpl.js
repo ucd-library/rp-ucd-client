@@ -179,16 +179,25 @@ return html`
       <div>
         <div>
           <h3 class="mb-2">Positions</h3>
-          ${this.getIndividualTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}`)}</ul></div>`)}
+          ${this.getIndividualTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
         </div>
-        <div><h3 class="mb-2">Contact</h3>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}</div>
+        ${this._showSubSection('contact') ? html`
+          <div
+            ><h3 class="mb-2">Contact</h3>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
+          </div>
+        ` : html``}
+        
       </div>
       <div>
-        <h3 class="mb-2">Websites</h3>
-        ${this.getWebsites().map(site => html`
-        <div class="site">
-          <a href="${site.href}">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
-        </div>`)}
+        ${this._showSubSection('websites') ? html`
+          <div>
+            <h3 class="mb-2">Websites</h3>
+            ${this.getWebsites().map(site => html`
+              <div class="site">
+                <a href="${site.href}">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
+              </div>`)}
+          </div>
+        ` : html``}
       </div>
     </div>
   </section>

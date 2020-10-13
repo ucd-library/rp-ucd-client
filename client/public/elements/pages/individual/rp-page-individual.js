@@ -26,7 +26,9 @@ export default class RpPageIndividual extends RpUtilsLanding {
       hasMultiplePubTypes: {type: Boolean},
       retrievedPublications: {type: Object},
       totalPublications: {type: Number},
-      isOwnProfile: {type: Boolean}
+      isOwnProfile: {type: Boolean},
+      emailArray: {type: Array},
+      websitesArray: {type: Array}
     }
   }
 
@@ -84,6 +86,8 @@ export default class RpPageIndividual extends RpUtilsLanding {
     this.isOwnProfile = false;
     this.publicationOverview = {};
     this.hasMultiplePubTypes = false;
+    this.emailArray = [];
+    this.websitesArray = [];
     this.publicationOverviewStatus = 'loading';
   }
 
@@ -215,32 +219,26 @@ export default class RpPageIndividual extends RpUtilsLanding {
   }
 
   getEmailAddresses(){
-    if (!this.individual) {
-      return [];
-    }
-    if (this.individual.hasContactInfo && this.individual.hasContactInfo.hasEmail) {
-      if (Array.isArray(this.individual.hasContactInfo.hasEmail)) {
-        return this.individual.hasContactInfo.hasEmail.map(e => e.email);
-      }
-      return [this.individual.hasContactInfo.hasEmail.email]
-    }
-
-    return [];
+    if (this.emailArray.length > 0) return this.emailArray;
+    return this.PersonModel.getEmailAddresses(this.individual)
   }
 
   getWebsites() {
-    let out = [];
-    if (!this.individual) {
-      return out;
-    }
-    if (this.individual.orcidId) {
-      out.push({'text': this.individual.orcidId['@id'], 'href': this.individual.orcidId['@id'], 'icon': '/images/orcid_16x16.png'})
-    }
-    if (this.individual.scopusId) {
-      out.push({'text': 'Scopus', 'href': `https://www.scopus.com/authid/detail.uri?authorId=${this.individual.scopusId}`})
+    if (this.websitesArray.length > 0) return this.websitesArray;
+    return this.PersonModel.getWebsites(this.individual)
+  }
+
+  _showSubSection(subsection) {
+    if (!subsection) return false;
+
+    if (subsection == 'contact') {
+      if (this.getEmailAddresses().length > 0) return true;
+   
+    } else if (subsection == 'websites') {
+      if (this.getWebsites().length > 0) return true;
     }
 
-    return out;
+    return false;
   }
 
   getPubExports() {
