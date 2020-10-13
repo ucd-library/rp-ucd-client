@@ -49,7 +49,9 @@ class PersonModel extends BaseModel {
       sort: [{"publicationDate": {"order" : "desc"}}],
       filters: {
         'Authorship.identifiers.@id': {"type": "keyword", "op" : "and", "value": [`${this.jsonContext}:${personid}`]},
-        "@type": {"type": "keyword", "op": "and", "value": [`${pubTypeObject.es}`]}
+        "@type": {"type": "keyword", "op": "and", "value": [`${pubTypeObject.es}`],
+        'publicationDate': {"type": "exists"}
+      }
       },
       facets: {}
     };
