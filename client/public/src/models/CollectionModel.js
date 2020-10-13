@@ -28,7 +28,10 @@ class CollectionModel extends BaseModel {
         {id: 'non-academics', es: 'vivo:NonAcademic', text: 'Non Academic', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:NonAcademic"]}}}
       ],
       works: [
-        {id: 'articles', es: "bibo:AcademicArticle", text: 'Academic Article', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:AcademicArticle"]}}}
+        {id: 'articles', es: "bibo:AcademicArticle", text: 'Academic Article', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:AcademicArticle"]}}},
+        {id: 'books', es: "bibo:Book", text: 'Book', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Book"]}}},
+        {id: 'chapters', es: "bibo:Chapter", text: 'Chapter', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Chapter"]}}},
+        {id: 'conference-papers', es: "vivo:ConferencePaper", text: 'Conference Paper', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:ConferencePaper"]}}}
       ],
       organizations: [
         {id: 'universities', es: 'vivo:University', text: 'University', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:University"]}}},

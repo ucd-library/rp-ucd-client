@@ -2,6 +2,8 @@ const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const WorkService = require('../services/WorkService');
 const WorkStore = require('../stores/WorkStore');
 
+const CollectionModel = require('./CollectionModel');
+
 class WorkModel extends BaseModel {
 
   constructor() {
@@ -9,6 +11,7 @@ class WorkModel extends BaseModel {
 
     this.store = WorkStore;
     this.service = WorkService;
+    this.CollectionModel = CollectionModel;
 
     this.register('WorkModel');
   }
@@ -58,6 +61,10 @@ class WorkModel extends BaseModel {
     } catch (error) {}
 
     return output
+  }
+
+  getWorkTypes(){
+    return this.CollectionModel.subFacets.works;
   }
 
 

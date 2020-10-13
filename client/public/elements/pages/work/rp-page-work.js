@@ -171,8 +171,8 @@ export default class RpPageWork extends RpUtilsLanding {
   _getWorkType() {
     try {
       for (let t of this.work['@type']) {
-        if (t == 'bibo:AcademicArticle') {
-          return "Academic Article";
+        for (const possibleType of this.WorkModel.getWorkTypes()) {
+          if (possibleType.es == t) return possibleType.text;
         }
       }
     } catch (error) {
