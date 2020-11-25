@@ -54,12 +54,14 @@ class CollectionModel extends BaseModel {
         'hasContactInfo.title.text',
         'hasResearchArea.label.text',
         'hasPublicationVenue.issn',
-        "hasPublicationVenue.label.text"],
+        "hasPublicationVenue.label.text",
+        'citation.label'],
       people : [
         'hasContactInfo.familyName.text^9',
         'hasContactInfo.givenName.text^8',
         'hasContactInfo.title.text^7',
-        'hasResearchArea.label.text^6'],
+        'hasResearchArea.label.text^6',
+        'citation.label'],
       works: [
         "doi^10",
         "label.text^9",
