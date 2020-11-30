@@ -37,10 +37,10 @@ export default function render() {
       margin-top: 14px;
     }
   </style>
-  <div class="container ${classMap(this.constructClasses())}" ?hidden="${!this.title}">
+  <div class="container ${classMap(this.constructClasses())}" ?hidden="${!this.titleText}">
     <div id="container-title" @click="${this.toggle}">
       <iron-icon icon="arrow-drop-down" ?rotated="${!this.expanded}"></iron-icon>
-      <span id="title">${this.title}</span>
+      <span id="title">${this.titleText}</span>
     </div>
     <div id="content" ?hidden="${!this.expanded}">
       <slot></slot>

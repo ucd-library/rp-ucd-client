@@ -4,7 +4,7 @@ import render from './accordian.tpl.js';
 export class RpAccordian extends LitElement {
   static get properties() {
   return {
-    title: {type: String},
+    titleText: {type: String, attribute: "title-text"},
     expanded: {type: Boolean, reflect: true}
   };
   }

@@ -142,7 +142,7 @@ return html`
       flex-flow: row nowrap;
       justify-content: space-between;
   }
-    .own-profile .box-title-icons { 
+    .own-profile .box-title-icons {
       justify-content: unset;
     }
     .own-profile .box-title-icons {
@@ -169,8 +169,8 @@ return html`
     </div>
     <div slot="main" class="heromain">
       <rp-avatar size="lg"></rp-avatar>
-      <h2 class="name text-secondary h1 bold mb-0 text-center">${this.individual.label}</h2>
-      <p class="text-light h3 mb-2 mt-1 text-center">${this.getIndividualTitles().join(", ")}</p>
+      <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
+      <p class="text-light h3 mb-2 mt-1 text-center">${this.getHeadlineTitle()}</p>
 
       <div></div>
     </div>
@@ -191,16 +191,25 @@ return html`
       <div>
         <div>
           <h3 class="mb-2">Positions</h3>
-          ${this.getIndividualTitles().map(title => html`<div>${title}</div>`)}
+          ${this.getIndividualTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
         </div>
-        <div><h3 class="mb-2">Contact</h3>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}</div>
+        ${this._showSubSection('contact') ? html`
+          <div
+            ><h3 class="mb-2">Contact</h3>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
+          </div>
+        ` : html``}
+        
       </div>
       <div>
-        <h3 class="mb-2">Websites</h3>
-        ${this.getWebsites().map(site => html`
-        <div class="site">
-          <a href="${site.href}">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
-        </div>`)}
+        ${this._showSubSection('websites') ? html`
+          <div>
+            <h3 class="mb-2">Websites</h3>
+            ${this.getWebsites().map(site => html`
+              <div class="site">
+                <a href="${site.href}">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
+              </div>`)}
+          </div>
+        ` : html``}
       </div>
     </div>
   </section>
@@ -256,7 +265,7 @@ return html`
           ` : html``}
         `)}
       </div>
-      
+
   </section>
   </div>
 </div>

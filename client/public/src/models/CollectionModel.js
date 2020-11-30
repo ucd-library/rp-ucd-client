@@ -1,6 +1,7 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const CollectionService = require('../services/CollectionService');
 const CollectionStore = require('../stores/CollectionStore');
+const PersonModel = require('./PersonModel');
 
 class CollectionModel extends BaseModel {
 
@@ -9,60 +10,66 @@ class CollectionModel extends BaseModel {
 
     this.store = CollectionStore;
     this.service = CollectionService;
+    this.personModel = PersonModel;
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.mainFacets = [{id: 'people', text: 'People', es: `${this.jsonldContext}:person`,
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
                       /*
-                       {id: 'organizations', text: 'Organizations', es: 'ucdrp:organization', 
+                       {id: 'organizations', text: 'Organizations', es: 'ucdrp:organization',
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":organization"]}}},
                       */
-                       {id: 'works', text: 'Works', es: `${this.jsonldContext}:publication`, 
+                       {id: 'works', text: 'Works', es: `${this.jsonldContext}:publication`,
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":publication"]}}}
                       ];
     this.currentQuery = {};
     this.subFacets = {
       people: [
-        {id: 'faculty', es: 'vivo:FacultyMember', text: 'Faculty Member', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:FacultyMember"]}}}, 
+        {id: 'faculty', es: 'vivo:FacultyMember', text: 'Faculty Member', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:FacultyMember"]}}},
         {id: 'non-academics', es: 'vivo:NonAcademic', text: 'Non Academic', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:NonAcademic"]}}}
       ],
       works: [
-        {id: 'articles', es: "bibo:AcademicArticle", text: 'Academic Article', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:AcademicArticle"]}}}
+        {id: 'articles', es: "bibo:AcademicArticle", text: 'Academic Article', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:AcademicArticle"]}}},
+        {id: 'books', es: "bibo:Book", text: 'Book', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Book"]}}},
+        {id: 'chapters', es: "bibo:Chapter", text: 'Chapter', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Chapter"]}}},
+        {id: 'conference-papers', es: "vivo:ConferencePaper", text: 'Conference Paper', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:ConferencePaper"]}}}
       ],
       organizations: [
-        {id: 'universities', es: 'vivo:University', text: 'University', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:University"]}}}, 
+        {id: 'universities', es: 'vivo:University', text: 'University', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:University"]}}},
         {id: 'departments', es: 'vivo:AcademicDepartment', text: 'Department', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:AcademicDepartment"]}}}
       ]
     }
-    this.aggs = {people : {"@type": {"type" : "facet"}}, 
-                 works : {"@type": {"type" : "facet"}}, 
+    this.aggs = {people : {"@type": {"type" : "facet"}},
+                 works : {"@type": {"type" : "facet"}},
                  organizations : {"@type": {"type" : "facet"}}};
     this.pgPer = 8;
     this.defaultIndices = ["label.text"];
     this.searchFields = {
       all: [
         "doi^10",
-        'hasContactInfo.familyName.text^9', 
-        'hasContactInfo.givenName.text^8', 
-        "label.text^6", 
+        'hasContactInfo.familyName.text^9',
+        'hasContactInfo.givenName.text^8',
+        "label.text^6",
         "hasSubjectArea.label.text^5",
         "abstract^5",
-        'hasContactInfo.title.text', 
+        'hasContactInfo.title.text',
         'hasResearchArea.label.text',
-        'hasPublicationVenue.issn', 
-        "hasPublicationVenue.label.text"], 
+        'hasPublicationVenue.issn',
+        "hasPublicationVenue.label.text",
+        'citation.label'],
       people : [
-        'hasContactInfo.familyName.text^9', 
-        'hasContactInfo.givenName.text^8', 
-        'hasContactInfo.title.text^7', 
-        'hasResearchArea.label.text^6'], 
+        'hasContactInfo.familyName.text^9',
+        'hasContactInfo.givenName.text^8',
+        'hasContactInfo.title.text^7',
+        'hasResearchArea.label.text^6',
+        'citation.label'],
       works: [
-        "doi^10", 
-        "label.text^9", 
-        "abstract^8", 
+        "doi^10",
+        "label.text^9",
+        "abstract^8",
         "hasPublicationVenue.label.text^7",
         "hasPublicationVenue.issn^5",
-        "hasSubjectArea.label.text" 
-        ], 
+        "hasSubjectArea.label.text"
+        ],
       organizations: [
         "label.text^10"]}
 
@@ -172,7 +179,7 @@ class CollectionModel extends BaseModel {
     if (f) {
       q.facets[f.key] = {"type": "facet"};
     }
-    
+
     if( state.state === 'init' ) {
       await this.service.azAgg(id, q);
     } else if( state.state === 'loading' ) {
@@ -380,7 +387,7 @@ class CollectionModel extends BaseModel {
         azFilter.value.value = [userQuery.azSelected];
         queryObject.filters[azFilter.key]= azFilter.value;
       }
-      
+
     }
 
     // handle search query
@@ -507,14 +514,8 @@ class CollectionModel extends BaseModel {
 
   _formatPerson(person) {
     let p = {name: person.label ? person.label : "", title: "", "@id": person['@id']};
-    if (person.hasContactInfo && person.hasContactInfo.title) {
-      if (Array.isArray(person.hasContactInfo.title)) {
-        p.title = person.hasContactInfo.title.join(", ");
-      }
-      else {
-        p.title = person.hasContactInfo.title;
-      }
-    }
+    p.name=this.personModel.getBestLabel(person);
+    p.title=this.personModel.getHeadlineTitle(person);
     p['id'] = person['@id'].replace(this.jsonldContext + ":", "");
     return p;
 

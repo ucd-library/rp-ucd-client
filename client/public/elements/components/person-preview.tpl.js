@@ -49,10 +49,10 @@ export default function render() {
     }
   </style>
   <div class=container>
-    <rp-avatar size="${this.avatarSize}" src="${this.avatarSrc}"></rp-avatar>
+    <rp-avatar size="${this._parsedData.avatarSize}" src="${this._parsedData.avatarSrc}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth})}">
-      <a class="name" href="${this.href}" ?disabled="${!this.href}">${this.name}</a>
-      <small>${this.title}</small>
+      <a class="name" href="${this._parsedData.href}" ?disabled="${!this._parsedData.href}">${this._parsedData.name}</a>
+      <small>${this._parsedData.title}</small>
       <small class="badges">${this.badges.map(b => this._renderBadge(b))}</small>
     </div>
   </div>
