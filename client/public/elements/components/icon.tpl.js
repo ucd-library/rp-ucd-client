@@ -11,6 +11,7 @@ export default function render() {
       height: 24px;
       width: 24px;
     }
+
     .icon.rp {
       fill: currentColor;
     }
@@ -23,6 +24,23 @@ export default function render() {
       align-items: center;
       transition: 0.2s;
     }
+
+
+    .container.link .tooltiptext{
+      margin-top: -100px;
+      visibility: hidden;
+      width: 150px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      border-radius: 25px;
+      padding: 5px 5px;
+      
+      /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+    }
+
     .container.circle {
       border-radius: 50%;
       background-color: var(--tcolor-bg-primary);
@@ -38,6 +56,10 @@ export default function render() {
       background-color: var(--tcolor-hover-bg);
       color: var(--tcolor-light);
     }
+    .container.link:hover .tooltiptext{
+      visibility: visible;
+    }
+
     .container.secondary {
       color: var(--tcolor-light);
     }
@@ -54,7 +76,7 @@ export default function render() {
     }
   </style>
   <div class="container ${classMap(this.constructClasses())}">
-    ${this.renderIcon()}
+    ${this.renderIcon()} <span class="tooltiptext"><slot name="tooltip"></slot></span>  
   </div>
   `;
 }

@@ -9,7 +9,7 @@ export default function render() {
       display: inline-block;
     }
     .container {
-      width: 100vw;
+      width: auto;
       height: 100vh;
       position: fixed;
       left: 0;
@@ -65,6 +65,7 @@ export default function render() {
         align-items: center;
         justify-content: center;
         height: 100px;
+        
     }
     .button {
         color: var(--tcolor-primary);
@@ -72,6 +73,7 @@ export default function render() {
         background-color: var(--tcolor-bg-primary);
         cursor: pointer;
         transition: .3s;
+        margin: 5px;
     }
     .button:hover {
         background-color: var(--tcolor-hover-bg);
@@ -89,7 +91,8 @@ export default function render() {
         <div class="body-content"><slot></slot></div>
         <hr>
         <div class="footer">
-            <div class="button" @click="${e => this.hide()}">${this.dismissText}</div>
+        <slot name="confirmButton"></slot>
+        <div class="button" @click="${e => this.hide()}">${this.dismissText}</div>
         </div>
     </div>
       

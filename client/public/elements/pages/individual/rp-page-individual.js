@@ -26,13 +26,16 @@ export default class RpPageIndividual extends RpUtilsLanding {
       hasMultiplePubTypes: {type: Boolean},
       retrievedPublications: {type: Object},
       totalPublications: {type: Number},
-      isOwnProfile: {type: Boolean}
+      isOwnProfile: {type: Boolean},
+      submitText: {type: String, attribute: 'submitText'}
+
     }
   }
 
   constructor() {
     super();
     this.render = render.bind(this);
+    this.submitText = "Edit Publication";
 
     this._injectModel('PersonModel', 'AppStateModel');
     this.assetType = "individual";
@@ -75,6 +78,10 @@ export default class RpPageIndividual extends RpUtilsLanding {
     if (props.has('assetId') && this.assetId) {
       this.shadowRoot.getElementById('hero').shuffle();
     }
+  }
+
+  _handleClick(e) {
+    window.location.href = 'https://oapolicy.universityofcalifornia.edu/objects.html?as=3&am=false&cid=1&ipr=false&iqf=true';
   }
 
   _resetEleProps() {

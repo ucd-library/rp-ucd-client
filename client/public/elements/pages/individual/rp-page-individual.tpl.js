@@ -37,6 +37,18 @@ return html`
     align-items: center;
     justify-content: center;
   }
+  .button {
+        color: var(--tcolor-primary);
+        padding: 10px;
+        background-color: var(--tcolor-bg-primary);
+        cursor: pointer;
+        transition: .3s;
+        margin: 5px;
+    }
+  .button:hover {
+        background-color: var(--tcolor-hover-bg);
+        color: var(--tcolor-hover-text);
+  }
   rp-badge {
     margin-left: 8px;
   }
@@ -198,15 +210,23 @@ return html`
       <h1 class="weight-regular mt-0">Publications</h1>
       <div class="box-title-icons">
         ${this.isOwnProfile ? html`
+          
+          ` : html``}
           <div class="pub-icons">
-            <rp-icon icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}"></rp-icon>
+            <rp-icon icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
+            <div slot="tooltip">Edit Publications</div>
+            </rp-icon>
             <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
           </div>
-          <rp-modal content-title='Edit "Publications"' id="modal-pub-edit">
-    Publication information is managed via the <a href="https://oapolicy.universityofcalifornia.edu/">UC Publication Management System</a>. Any changes made there will be reflected on your Aggie Experts profile.
-          </rp-modal>
-          ` : html``}
+
           <div class="pub-count">${this.totalPublications}</div>
+          
+          <rp-modal content-title='Edit "Publications"' id="modal-pub-edit">
+    Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
+    redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
+    <div slot="confirmButton"><div class="button" @click="${this._handleClick}">Edit Publications</div></div> 
+
+          </rp-modal>
       </div>
     </div>
     <h2 class="mb-0">Selected Publications</h2>
