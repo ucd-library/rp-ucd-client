@@ -19,6 +19,7 @@ import "../../components/pagination"
 import "../../components/person-preview"
 import "../../components/quick-search"
 import "../../components/search"
+import "../../components/text-field"
 import "../../components/view-all"
 import "../../components/work-preview"
 
@@ -100,6 +101,58 @@ return html`
     align-items: center;
     height: 100px;
   }
+  .wrapper {
+    display: grid;
+    grid-template-columns: 45% 45% 5% 5%;
+    grid-gap: .2%;
+    background-color: #fff;
+    color: #444;
+  }
+  
+#rearrange{
+    text-align: center;
+}
+  
+#delete{
+    vertical-align: center
+}
+  
+label{
+    text-align: left;
+    vertical-align: middle;
+}
+
+  
+#c2{
+    width: 100%;
+    margin: 3% 0 3%;
+}
+  
+#textbox {
+    padding: 2% 0 2%;
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+}
+  
+#radiobox {
+    padding: 2% 0 2%;
+    box-sizing: border-box;
+    display: flex;
+}
+  
+#flexible-width {
+    flex: 1; /* my goal is that the width always fills up independent of browser width */
+    border: 5px;
+}
+#flexible-width-radio { 
+    border: 5px;
+    flex: 1;    
+}     
+input[type=text]{
+    box-shadow: inset 0 0 1.5px black, 0 0 2px grey;
+    padding: 1.5%;
+}      
   ${styles}
 </style>
 
@@ -284,6 +337,13 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
                       >
 </rp-link-list-counts>
 </section>
+
+<section>
+<h2>Text Field</h2>
+
+<rp-text-field></rp-text-field>
+</section> 
+
 
 <section>
   <h2>Modal</h2>

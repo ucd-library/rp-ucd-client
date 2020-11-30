@@ -6,7 +6,8 @@ export class RpModal extends LitElement {
   return {
       visible: {type: Boolean},
       contentTitle: {type: String, attribute: "content-title"},
-      dismissText: {type: String, attribute: 'dismiss-text'}
+      dismissText: {type: String, attribute: 'dismiss-text'},
+
   };
   }
 
@@ -15,7 +16,7 @@ export class RpModal extends LitElement {
     this.render = render.bind(this);
     this.visible = false;
     this.contentTitle = "";
-    this.dismissText = "Okay";
+    this.dismissText = "Cancel";
   }
 
   updated(props) {

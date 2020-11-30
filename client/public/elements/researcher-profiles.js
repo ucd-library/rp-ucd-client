@@ -40,27 +40,37 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       navLinks: {type: Array},
       user: {type: Object},
       textQuery: {type: String},
-      isSearch: {type: Boolean}
+      isSearch: {type: Boolean},
+      hasProfile: {type: Boolean},
+      dropdownOptions:{type:Array},
     }
   }
 
   constructor() {
     super();
     this.render = render.bind(this);
-
     this.appRoutes = APP_CONFIG.appRoutes;
     this.theme = APP_CONFIG.theme;
     this.page = 'loading';
     this.loadedPages = {};
     this.user = APP_CONFIG.user;
+    this.eSearch = APP_CONFIG.client;
     this.textQuery = "";
+    this.userName = this.user && new String(this.user.username.split('@')[0]);
+
     this.isSearch = false;
+    this.hasProfile = this.user && this.user.hasProfile;
+    this.dropdownOptions = JSON.stringify([{text: "Logout", href: "/auth/logout"}]);
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
                      //{text: 'Organizations', page: 'organizations', href: '/organizations'},
                      {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '/help'}];
 
     this._injectModel('AppStateModel');
+    if( this.hasProfile ){
+      this.dropdownOptions = JSON.stringify([{"text": "My Profile", "href": "individual/" + this.userName}, {"text": "Logout", "href": "/auth/logout"}]);
+    }
+    //
   }
 
   /**
@@ -79,6 +89,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       this.textQuery="";
       this.isSearch = false;
     }
+
 
     let page = e.page;
     if( this.page === page ) return;

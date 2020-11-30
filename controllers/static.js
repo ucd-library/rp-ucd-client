@@ -6,6 +6,8 @@ import config from '../lib/config.js';
 import esmUtils from '../lib/esm-utils.js';
 import rpNodeUtils from '@ucd-lib/rp-node-utils';
 
+
+const {elasticSearch, config} = require('@ucd-lib/rp-node-utils');
 const {logger, auth} = rpNodeUtils;
 const {__dirname} = esmUtils.moduleLocation(import.meta);
 const assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
@@ -17,6 +19,12 @@ if( fs.existsSync(loaderPath) ) {
 } else {
   logger.warn(`JS loaded not found on disk! ${loaderPath}`);
 }
+
+
+let esClient; 
+(async function (){
+  esClient = await elasticSearch.connect();
+})();
 
 const bundle = `
   <script>
@@ -53,8 +61,13 @@ export default (app) => {
       if( token ) {
         try {
           user = await auth.verifyToken(token);
+          try{
+            user.hasProfile = await esClient.exists({index: token})//await esClient.exist -wrap in try/catch (set to true false)
+          }catch(e){
+            console.log("error")
+          }
         } catch(e) {
-          console.log('error', e);
+          console.log("error")
         }
       }
 

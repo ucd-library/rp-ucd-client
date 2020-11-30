@@ -15,6 +15,7 @@
     "@ucd-lib/cork-app-load": "^0.3.2",
     "@ucd-lib/cork-app-state": "^1.0.4",
     "@ucd-lib/cork-app-utils": "^4.4.0",
-    "lit-element": "^2.3.1"
+    "lit-element": "^2.3.1",
+    "sortablejs": "^1.12.0"
   }
 }
