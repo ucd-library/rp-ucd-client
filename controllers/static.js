@@ -6,9 +6,7 @@ import config from '../lib/config.js';
 import esmUtils from '../lib/esm-utils.js';
 import rpNodeUtils from '@ucd-lib/rp-node-utils';
 
-
-const {elasticSearch, config} = require('@ucd-lib/rp-node-utils');
-const {logger, auth} = rpNodeUtils;
+const {logger, auth, elasticSearch} = rpNodeUtils;
 const {__dirname} = esmUtils.moduleLocation(import.meta);
 const assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
 const loaderPath = path.join(assetsDir, 'loader', 'loader.js');
