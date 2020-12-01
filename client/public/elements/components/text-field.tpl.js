@@ -22,6 +22,10 @@ export default function render() {
       min-height: 24px;
       margin-right: 8px;
     } */
+    .icon-container {
+      align-items: center;
+      display: inline-flex;
+    }
     .wrapper {
         display: grid;
         grid-template-columns: 45% 45% 5% 5%;
@@ -83,7 +87,7 @@ export default function render() {
 </style>
 
     <div id= "c2">
-    <div class="wrapper"><h3>Websites</h3></div>
+    <div class="wrapper"><h3>&nbsp;&nbsp;Websites</h3></div>
     <div class="wrapper"><label>Site Name</label><label>URL</label></div>
     <div class="wrapper">
     <div id="textbox"><input type=text id="flexible-width" /></div>
@@ -103,11 +107,13 @@ export default function render() {
     <p id="delete">&#x2715;</p>
     </div>
     <br />
-    <rp-icon icon="iron-arrow-forward" circle-bg></rp-icon>  Add Website
+    <div class="icon-container">
+      <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Website 
+    </div>     
     </div>
 
     <div id= "c2">
-    <div class="wrapper"><h3>Contact</h3></div>
+    <div class="wrapper"><h3>&nbsp;&nbsp;Contact</h3></div>
     <div class="wrapper"><label>Email</label></div>
     <div class="wrapper">
     <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""></div>
@@ -116,13 +122,18 @@ export default function render() {
       <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""> </div>
     </div> 
     <br />
-    <rp-icon icon="iron-arrow-forward" circle-bg></rp-icon>  Add Email
+    <div class="icon-container">
+      <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Email Address 
+    </div>    
     </div>
+
     <div id= "c2">
-    <div class="wrapper"><h3>Phone</h3></div>
+    <div class="wrapper"><h3>&nbsp;&nbsp;Phone</h3></div>
     <div class="wrapper"><div id="radiobox"><input type=text id="flexible-width-radio" /></div></div>
     <br />
-    <rp-icon icon="iron-arrow-forward" circle-bg></rp-icon>  Add Phone Number
+    <div class="icon-container">
+      <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Phone Number 
+    </div>
     </div>
   `;
 }
