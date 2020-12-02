@@ -25,8 +25,16 @@ export default function render() {
     .icon-container {
       align-items: center;
       display: inline-flex;
+      padding: 1%;
     }
-    .wrapper {
+
+    .icon-container:hover {
+      cursor:default;
+      background-color: var(--tcolor-hover-bg);
+      color: white;
+    }
+
+    .wrapper, .websites-wrapper, .contact-wrapper, .phone-wrapper {
         display: grid;
         grid-template-columns: 45% 45% 5% 5%;
         grid-gap: .25%;
@@ -37,11 +45,22 @@ export default function render() {
     #rearrange{
         text-align: center;
     }
-      
+    #rearrange:hover{
+        text-align: center;
+        color: var(--tcolor-hover-bg);
+        cursor:default;
+    }
+
     #delete{
         vertical-align: center
     }
-      
+    #delete:hover{
+        vertical-align: center;
+        color: var(--tcolor-hover-bg);
+        cursor:default;
+
+    }    
+
     label{
         text-align: left;
         vertical-align: middle;
@@ -82,32 +101,31 @@ export default function render() {
     input[type=text]{
         margin: 0 0 0 5%;
         box-shadow: inset 0 0 1.5px black, 0 0 2px grey;
-        padding: 1.5%;
+        padding: 2.5%;
     }      
 </style>
 
     <div id= "c2">
     <div class="wrapper"><h3>&nbsp;&nbsp;Websites</h3></div>
     <div class="wrapper"><label>Site Name</label><label>URL</label></div>
-    <div class="wrapper">
-    <div id="textbox"><input type=text id="flexible-width" /></div>
-    <div id="textbox"><input type=text id="flexible-width" /></div>
-    <p id="rearrange">&#8593;&#8595;</p>
-    </div> 
-    <div class="wrapper">
-    <div id="textbox"><input type=text id="flexible-width" /></div>
-    <div id="textbox"><input type=text id="flexible-width" /></div>
-    <p id="rearrange">&#8593;&#8595;</p>
-    <p id="delete">&#x2715;</p>
+
+    <div id="website-field">
+      <div class="websites-wrapper">
+      <div id="textbox"><input type=text id="flexible-width" /></div>
+      <div id="textbox"><input type=text id="flexible-width" /></div>
+      <p id="rearrange">&#8593;&#8595;</p>
+      </div> 
+
+      <div class="websites-wrapper">
+      <div id="textbox"><input type=text id="flexible-width" /></div>
+      <div id="textbox"><input type=text id="flexible-width" /></div>
+      <p id="rearrange">&#8593;&#8595;</p>
+      <p @click=${this.deleteCell} id="delete">&#x2715;</p>
+      </div>
     </div>
-    <div class="wrapper">
-    <div id="textbox"><input type=text id="flexible-width" /></div>
-    <div id="textbox"><input type=text id="flexible-width" /></div>
-    <p id="rearrange">&#8593;&#8595;</p>
-    <p id="delete">&#x2715;</p>
-    </div>
+
     <br />
-    <div class="icon-container">
+    <div @click=${this.handleWebsiteField} class="icon-container">
       <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Website 
     </div>     
     </div>
@@ -115,23 +133,27 @@ export default function render() {
     <div id= "c2">
     <div class="wrapper"><h3>&nbsp;&nbsp;Contact</h3></div>
     <div class="wrapper"><label>Email</label></div>
-    <div class="wrapper">
-    <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""></div>
+    <div id="contact-field">
+      <div class="contact-wrapper">
+      <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""></div>
+      </div>
+      <div class="contact-wrapper">
+        <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""> </div>
+      </div> 
     </div>
-    <div class="wrapper">
-      <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""> </div>
-    </div> 
     <br />
-    <div class="icon-container">
+    <div @click=${this.handleEmailField} class="icon-container">
       <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Email Address 
     </div>    
     </div>
 
     <div id= "c2">
     <div class="wrapper"><h3>&nbsp;&nbsp;Phone</h3></div>
-    <div class="wrapper"><div id="radiobox"><input type=text id="flexible-width-radio" /></div></div>
+    <div id="phone-field">
+      <div class="phone-wrapper"><div id="radiobox"><input type=text id="flexible-width-radio" /></div></div>
+    </div>
     <br />
-    <div class="icon-container">
+    <div @click=${this.handlePhoneField} class="icon-container">
       <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Phone Number 
     </div>
     </div>

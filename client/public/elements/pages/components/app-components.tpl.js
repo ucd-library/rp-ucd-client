@@ -286,6 +286,9 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 
 <section>
 <h2>Icons</h2>
+<p>Can add text bubbles to <code>icon</code> by applying <code>has-text</code> that signals that this icon has text added:</p>
+<rp-icon icon="iron-face" circle-bg is-link has-text><div slot="tooltip">Sample 1</div></rp-icon>
+<rp-icon icon="iron-link" circle-bg is-link has-text theme-color='secondary' size="lg"> <div slot="tooltip">Sample 2</div> </rp-icon>
 <p>Use the <code>icon</code> attribute to specify your icon. Use the prefix "iron-" to call an iron icon:</p>
 <rp-icon icon="iron-link" circle-bg></rp-icon>
 <rp-icon icon="iron-arrow-forward" circle-bg></rp-icon>

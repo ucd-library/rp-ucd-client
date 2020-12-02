@@ -40,6 +40,9 @@ export default function render() {
       position: absolute;
       z-index: 1;
     }
+    /* .tooltiptext{
+      display: none;
+    } */
 
     .container.circle {
       border-radius: 50%;
@@ -76,7 +79,8 @@ export default function render() {
     }
   </style>
   <div class="container ${classMap(this.constructClasses())}">
-    ${this.renderIcon()} <span class="tooltiptext"><slot name="tooltip"></slot></span>  
+    ${this.renderIcon()} ${this.hasText ? html `<span class="tooltiptext"><slot name="tooltip"></slot></span>` :
+                                          html `` } 
   </div>
   `;
 }
