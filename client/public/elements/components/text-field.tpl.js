@@ -61,7 +61,7 @@ export default function render() {
     }
       
     #container{
-        width: 100%;
+        width: 70%;
         margin: 3% 0 3%;
     }
       
