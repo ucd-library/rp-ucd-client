@@ -342,13 +342,6 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 </section>
 
 <section>
-<h2>Text Field</h2>
-
-<rp-text-field></rp-text-field>
-</section> 
-
-
-<section>
   <h2>Modal</h2>
   <p>Launches a full-window modal. Use <code>content-title</code> attribute and a slot to customize content.
   <code>show</code>, <code>hide</code>, and <code>toggle</code> methods control visibility.</p>
@@ -450,8 +443,12 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
     <rp-search style="width:75%" @new-search="${(e) => console.log(e.target.searchObject)}"></rp-search>
   </div>
 </div>
-
 </section>
+
+<section>
+<h2>Text Field</h2>
+<rp-text-field></rp-text-field>
+</section> 
 
 <section>
 <h1>View All</h1>
