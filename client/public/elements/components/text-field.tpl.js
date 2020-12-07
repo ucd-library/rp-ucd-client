@@ -5,23 +5,11 @@ import { styleMap } from 'lit-html/directives/style-map';
 export default function render() {
   return html`
   <style>
-    /* :host {
-      display: inline-block;
-    } */
-    /* .container {
-      display: flex;
-      align-items: center;
-      padding: 8px;
-      font-size: var(--font-size-small);
+    .delete {
+      background-color: Transparent;
+      background-repeat:no-repeat;
+      border: none;
     }
-
-    .container iron-icon {
-      width: 24px;
-      height: 24px;
-      min-width: 24px;
-      min-height: 24px;
-      margin-right: 8px;
-    } */
     .icon-container {
       align-items: center;
       display: inline-flex;
@@ -72,7 +60,7 @@ export default function render() {
         margin-left: 5%;
     }
       
-    #c2{
+    #container{
         width: 100%;
         margin: 3% 0 3%;
     }
@@ -91,7 +79,7 @@ export default function render() {
     }
       
     #flexible-width {
-        flex: 1; /* my goal is that the width always fills up independent of browser width */
+        flex: 1;
         border: 5px;
     }
     #flexible-width-radio { 
@@ -103,60 +91,51 @@ export default function render() {
         box-shadow: inset 0 0 1.5px black, 0 0 2px grey;
         padding: 2.5%;
     }      
-</style>
+  </style>
 
-    <div id= "c2">
+  <div id= "container">
     <div class="wrapper"><h3>&nbsp;&nbsp;Websites</h3></div>
     <div class="wrapper"><label>Site Name</label><label>URL</label></div>
 
     <div id="website-field">
       <div class="websites-wrapper">
-      <div id="textbox"><input type=text id="flexible-width" /></div>
-      <div id="textbox"><input type=text id="flexible-width" /></div>
-      <p id="rearrange">&#8593;&#8595;</p>
+        <div id="textbox"><input type=text id="flexible-width" /></div>
+        <div id="textbox"><input type=text id="flexible-width" /></div>
+        <p id="rearrange">&#8593;&#8595;</p>
       </div> 
-
-      <div class="websites-wrapper">
-      <div id="textbox"><input type=text id="flexible-width" /></div>
-      <div id="textbox"><input type=text id="flexible-width" /></div>
-      <p id="rearrange">&#8593;&#8595;</p>
-      <p @click=${this.deleteCell} id="delete">&#x2715;</p>
-      </div>
     </div>
 
     <br />
-    <div @click=${this.handleWebsiteField} class="icon-container">
+    <div @click=${this._handleWebsiteField} id="website-add" class="icon-container">
       <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Website 
     </div>     
-    </div>
+  </div>
 
-    <div id= "c2">
+  <div id= "container">
     <div class="wrapper"><h3>&nbsp;&nbsp;Contact</h3></div>
     <div class="wrapper"><label>Email</label></div>
     <div id="contact-field">
       <div class="contact-wrapper">
-      <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""></div>
+        <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""></div>
       </div>
-      <div class="contact-wrapper">
-        <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""> </div>
-      </div> 
     </div>
     <br />
-    <div @click=${this.handleEmailField} class="icon-container">
+    <div @click=${this._handleEmailField} class="icon-container">
       <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Email Address 
     </div>    
-    </div>
+  </div>
 
-    <div id= "c2">
+  <div id= "container">
     <div class="wrapper"><h3>&nbsp;&nbsp;Phone</h3></div>
     <div id="phone-field">
       <div class="phone-wrapper"><div id="radiobox"><input type=text id="flexible-width-radio" /></div></div>
     </div>
     <br />
-    <div @click=${this.handlePhoneField} class="icon-container">
+    <div @click=${this._handlePhoneField} class="icon-container">
       <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Phone Number 
     </div>
-    </div>
+  </div>
+
   `;
 }
  
