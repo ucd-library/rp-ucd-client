@@ -48,8 +48,7 @@ export class RpProfileAboutEditor extends LitElement {
     this.phoneField = this.shadowRoot.getElementById('phone-field');
 
     Sortable.create(this.webField, { /* options */ });
-    Sortable.create(this.contactField, { /* options */ });
-    Sortable.create(this.phoneField, { /* options */ });
+
 
 
   }

@@ -111,15 +111,12 @@ export default function render() {
     <div class="wrapper"><label>Site Name</label><label>URL</label></div>
 
     <div id="website-field">
-    <div class="websites-wrapper">
-        <div id="textbox"><input type=text id="flexible-width" /></div>
-        <div id="textbox"><input type=text id="flexible-width" /></div>
-      </div> 
       ${this.webTextField.map(item => 
         html`
       <div class="websites-wrapper">
         <div id="textbox"><input type=text id="flexible-width" /></div>
         <div id="textbox"><input type=text id="flexible-width" /></div>
+        <p id="rearrange">&#8593;&#8595;</p>
         <button @click=${() => this._delete(this.webTextField)}  class='delete' >&#x2715;</button>
       </div> 
       `)}
@@ -137,7 +134,7 @@ export default function render() {
     <div id="contact-field">
     <div class="contact-wrapper">
     <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value="" checked> </div>
-        <p id="primary">Primary</p>
+        <!-- <p id="primary">Primary</p> -->
     </div>
     ${this.emailTextField.map(item => 
         html`
@@ -165,7 +162,6 @@ export default function render() {
         html`
       <div class="phone-wrapper">
         <div id="radiobox"><input type=text id="flexible-width-radio" /></div>
-        <p id="rearrange">&#8593;&#8595;</p>
         <button @click=${() => this._delete(this.phoneTextField)} class='delete' >&#x2715;</button>
       </div>
       `)}
