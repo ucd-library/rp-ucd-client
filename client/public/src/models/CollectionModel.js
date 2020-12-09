@@ -55,7 +55,7 @@ class CollectionModel extends BaseModel {
         'hasResearchArea.label.text',
         'hasPublicationVenue.issn',
         "hasPublicationVenue.label.text",
-        'citation.label'],
+        'citation.label^10'],
       people : [
         'hasContactInfo.familyName.text^9',
         'hasContactInfo.givenName.text^8',
