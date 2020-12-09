@@ -29,6 +29,7 @@ export class RpTextField extends LitElement {
     this.webTextField = [0];
     this.emailTextField = [0];
     this.phoneTextField = [0];
+    
   }
 
 
@@ -43,10 +44,8 @@ export class RpTextField extends LitElement {
 
   firstUpdated(){
     this.webField = this.shadowRoot.getElementById('website-field');
-    this.contactField= this.shadowRoot.getElementById('contact-field');
+    this.contactField = this.shadowRoot.getElementById('contact-field');
     this.phoneField = this.shadowRoot.getElementById('phone-field');
-
-
 
     Sortable.create(this.webField, { /* options */ });
     Sortable.create(this.contactField, { /* options */ });

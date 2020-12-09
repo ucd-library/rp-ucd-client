@@ -38,8 +38,13 @@ export default function render() {
         color: #444;
       }
 
+    #primary{
+      margin-left: .5em;
+    }
+
     #rearrange{
         text-align: center;
+        vertical-align: center;
     }
     #rearrange:hover{
         text-align: center;
@@ -127,6 +132,10 @@ export default function render() {
     <div class="wrapper"><h3>&nbsp;&nbsp;Contact</h3></div>
     <div class="wrapper"><label>Email</label></div>
     <div id="contact-field">
+    <div class="contact-wrapper">
+    <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value="" checked> </div>
+        <p id="primary">Primary</p>
+    </div>
     ${this.emailTextField.map(item => 
         html`
       <div class="contact-wrapper">
@@ -146,6 +155,10 @@ export default function render() {
   <div id= "container">
     <div class="wrapper"><h3>&nbsp;&nbsp;Phone</h3></div>
     <div id="phone-field">
+    <div class="phone-wrapper">
+        <div id="radiobox"><input type=text id="flexible-width-radio" /></div>
+        <p id="primary">Primary</p>
+    </div>
     ${this.phoneTextField.map(item => 
         html`
       <div class="phone-wrapper">
