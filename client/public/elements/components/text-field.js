@@ -28,7 +28,6 @@ export class RpProfileAboutEditor extends LitElement {
     this.idNum = 1
     this.webTextField = [0];
     this.emailTextField = [0];
-    this.phoneTextField = [0];
     
   }
 
@@ -44,9 +43,6 @@ export class RpProfileAboutEditor extends LitElement {
 
   firstUpdated(){
     this.webField = this.shadowRoot.getElementById('website-field');
-    this.contactField = this.shadowRoot.getElementById('contact-field');
-    this.phoneField = this.shadowRoot.getElementById('phone-field');
-
     Sortable.create(this.webField, { /* options */ });
 
 

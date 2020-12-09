@@ -38,8 +38,21 @@ export default function render() {
         color: #444;
       }
 
-    #primary{
+    /* #primary{
       margin-left: .5em;
+      display:none;
+    } */
+
+    .reveal-if-active {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+    }
+
+    input[type="radio"]:checked ~ .reveal-if-active,
+    input[type="checkbox"]:checked ~ .reveal-if-active {
+      opacity: 1;
+      overflow: visible;
     }
 
     #rearrange{
@@ -133,14 +146,16 @@ export default function render() {
     <div class="wrapper"><label>Email</label></div>
     <div id="contact-field">
     <div class="contact-wrapper">
-    <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value="" checked> </div>
-        <!-- <p id="primary">Primary</p> -->
+    <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""> </div>
+        <div class="reveal-if-active">Primary</div>
     </div>
+
     ${this.emailTextField.map(item => 
         html`
       <div class="contact-wrapper">
         <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""></div>
-        <button @click=${() => this._delete(this.emailTextField)} class='delete' >&#x2715;</button>
+        <div class="reveal-if-active" >Primary</div>
+        <!-- <button @click=${() => this._delete(this.emailTextField)} class='delete' >&#x2715;</button> -->
       </div>
       `)}
     </div>
@@ -156,20 +171,6 @@ export default function render() {
     <div id="phone-field">
     <div class="phone-wrapper">
         <div id="radiobox"><input type=text id="flexible-width-radio" /></div>
-        <p id="primary">Primary</p>
-    </div>
-    ${this.phoneTextField.map(item => 
-        html`
-      <div class="phone-wrapper">
-        <div id="radiobox"><input type=text id="flexible-width-radio" /></div>
-        <button @click=${() => this._delete(this.phoneTextField)} class='delete' >&#x2715;</button>
-      </div>
-      `)}
-    </div>
-
-    <br />
-    <div @click=${() => this._add(this.phoneTextField)} class="icon-container">
-      <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Phone Number 
     </div>
   </div>
 
