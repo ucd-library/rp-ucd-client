@@ -22,14 +22,22 @@ export default function render() {
       color: white;
     }
 
-    .wrapper, .websites-wrapper, .contact-wrapper, .phone-wrapper {
+    .wrapper, .websites-wrapper {
         display: grid;
         grid-template-columns: 45% 45% 5% 5%;
         grid-gap: .25%;
         background-color: #fff;
         color: #444;
       }
-      
+
+    .contact-wrapper, .phone-wrapper {
+        display: grid;
+        grid-template-columns: 45% 5% 5% 45%;
+        grid-gap: .25%;
+        background-color: #fff;
+        color: #444;
+      }
+
     #rearrange{
         text-align: center;
     }
@@ -73,7 +81,7 @@ export default function render() {
     }
       
     #radiobox {
-        padding: 2% 0 2%;
+        padding: 3% 0 3%;
         box-sizing: border-box;
         display: flex;
     }
@@ -98,15 +106,19 @@ export default function render() {
     <div class="wrapper"><label>Site Name</label><label>URL</label></div>
 
     <div id="website-field">
+      ${this.webTextField.map(item => 
+        html`
       <div class="websites-wrapper">
         <div id="textbox"><input type=text id="flexible-width" /></div>
         <div id="textbox"><input type=text id="flexible-width" /></div>
         <p id="rearrange">&#8593;&#8595;</p>
+        <button @click=${() => this._delete(this.webTextField)}  class='delete' >&#x2715;</button>
       </div> 
+      `)}
     </div>
 
     <br />
-    <div @click=${this._handleWebsiteField} id="website-add" class="icon-container">
+    <div @click=${() => this._add(this.webTextField)} id="website-add" class="icon-container">
       <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Website 
     </div>     
   </div>
@@ -115,12 +127,18 @@ export default function render() {
     <div class="wrapper"><h3>&nbsp;&nbsp;Contact</h3></div>
     <div class="wrapper"><label>Email</label></div>
     <div id="contact-field">
+    ${this.emailTextField.map(item => 
+        html`
       <div class="contact-wrapper">
         <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""></div>
+        <p id="rearrange">&#8593;&#8595;</p>
+        <button @click=${() => this._delete(this.emailTextField)} class='delete' >&#x2715;</button>
       </div>
+      `)}
     </div>
+
     <br />
-    <div @click=${this._handleEmailField} class="icon-container">
+    <div @click=${() => this._add(this.emailTextField)} class="icon-container">
       <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Email Address 
     </div>    
   </div>
@@ -128,10 +146,18 @@ export default function render() {
   <div id= "container">
     <div class="wrapper"><h3>&nbsp;&nbsp;Phone</h3></div>
     <div id="phone-field">
-      <div class="phone-wrapper"><div id="radiobox"><input type=text id="flexible-width-radio" /></div></div>
+    ${this.phoneTextField.map(item => 
+        html`
+      <div class="phone-wrapper">
+        <div id="radiobox"><input type=text id="flexible-width-radio" /></div>
+        <p id="rearrange">&#8593;&#8595;</p>
+        <button @click=${() => this._delete(this.phoneTextField)} class='delete' >&#x2715;</button>
+      </div>
+      `)}
     </div>
+
     <br />
-    <div @click=${this._handlePhoneField} class="icon-container">
+    <div @click=${() => this._add(this.phoneTextField)} class="icon-container">
       <rp-icon icon="iron-arrow-forward" circle-bg is-link></rp-icon> &nbsp;Add Phone Number 
     </div>
   </div>

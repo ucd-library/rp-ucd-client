@@ -7,52 +7,28 @@ export class RpTextField extends LitElement {
     return {
       text: {type: String},
       sort: {type: HTMLElement},
+      webTextField: { type: Array},
+      emailTextField: { type: Array},
+      phoneTextField: { type: Array},
     };
   }
-  
 
-  _handleWebsiteField(){
-    let newWebdiv = document.createElement("div");
-    
-    newWebdiv.classList.add("website-wrapper" + this.idNum);
-    newWebdiv.innerHTML = "<div id='textbox'><input type=text id='flexible-width' /></div><div id='textbox'><input type=text id='flexible-width' /></div><p id='rearrange'>&#8593;&#8595;</p><button class='delete' id='delete" + this.idNum + "'>&#x2715;</button>";
-    newWebdiv.style.cssText ="display: grid;grid-template-columns: 45% 45% 5% 5%;grid-gap: .25%;background-color: #fff;color: #444;"
-    this.shadowRoot.getElementById("website-field").appendChild(newWebdiv);
-    this.shadowRoot.getElementById("delete" + this.idNum).addEventListener("click",function(){this.parentNode.remove();}, false);
-    this.idNum++;
+  _add(element){
+    element.push(element.length+1);
+    this.requestUpdate();
   }
-
-  _handleEmailField(){  
-    let newEmaildiv = document.createElement("div");
-    
-    newEmaildiv.classList.add("email-wrapper" + this.idNum);
-    newEmaildiv.style.cssText ="display: grid;grid-template-columns: 45% 5% 45% 5%;grid-gap: .25%;background-color: #fff;color: #444;"
-
-    newEmaildiv.innerHTML = "<div id='radiobox'><input type=text id='flexible-width-radio' /><input type='radio' name='reason' value=''></div><button class='delete' id='delete" + this.idNum + "'>&#x2715;</button>";
-
-    this.shadowRoot.getElementById("contact-field").appendChild(newEmaildiv);
-    this.shadowRoot.getElementById("delete" + this.idNum).addEventListener("click",function(){this.parentNode.remove();}, false);
-    this.idNum++;
-  }
-
-  _handlePhoneField(){
-
-    let newPhonediv = document.createElement("div");
-    
-    newPhonediv.classList.add("contact-wrapper" + this.idNum);
-    newPhonediv.style.cssText ="display: grid;grid-template-columns: 45% 5% 45% 5%;grid-gap: .25%;background-color: #fff;color: #444;"
-
-    newPhonediv.innerHTML ="<div id='radiobox'><input type=text id='flexible-width-radio' /></div><button class='delete' id='delete" + this.idNum + "'>&#x2715;</button>";
-
-    this.shadowRoot.getElementById("phone-field").appendChild(newPhonediv);
-    this.shadowRoot.getElementById("delete" + this.idNum).addEventListener("click",function(){this.parentNode.remove();}, false);
-    this.idNum++;
-  }
+  _delete(element){
+    element.splice(element.length-1, 1);
+    this.requestUpdate();
+  }  
 
   constructor() {
     super();
     this.render = render.bind(this);
     this.idNum = 1
+    this.webTextField = [0];
+    this.emailTextField = [0];
+    this.phoneTextField = [0];
   }
 
 
@@ -65,9 +41,17 @@ export class RpTextField extends LitElement {
   }
 
 
-  updated(){
-    this.sort = this.shadowRoot.getElementById('website-field');
-    Sortable.create(this.sort, { /* options */ });
+  firstUpdated(){
+    this.webField = this.shadowRoot.getElementById('website-field');
+    this.contactField= this.shadowRoot.getElementById('contact-field');
+    this.phoneField = this.shadowRoot.getElementById('phone-field');
+
+
+
+    Sortable.create(this.webField, { /* options */ });
+    Sortable.create(this.contactField, { /* options */ });
+    Sortable.create(this.phoneField, { /* options */ });
+
 
   }
 
