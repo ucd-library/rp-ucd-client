@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit-element';
 import render from './text-field.tpl.js';
 import Sortable from "sortablejs";
 
-export class RpTextField extends LitElement {
+export class RpProfileAboutEditor extends LitElement {
   static get properties() {
     return {
       text: {type: String},
@@ -56,4 +56,4 @@ export class RpTextField extends LitElement {
 
 }
 
-customElements.define('rp-text-field', RpTextField);
+customElements.define('rp-profile-about-editor', RpProfileAboutEditor);
