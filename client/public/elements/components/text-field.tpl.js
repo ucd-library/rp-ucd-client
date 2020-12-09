@@ -111,6 +111,10 @@ export default function render() {
     <div class="wrapper"><label>Site Name</label><label>URL</label></div>
 
     <div id="website-field">
+    <div class="websites-wrapper">
+        <div id="textbox"><input type=text id="flexible-width" /></div>
+        <div id="textbox"><input type=text id="flexible-width" /></div>
+      </div> 
       ${this.webTextField.map(item => 
         html`
       <div class="websites-wrapper">
