@@ -24,7 +24,7 @@ export default function render() {
 
     .wrapper, .websites-wrapper {
         display: grid;
-        grid-template-columns: 45% 45% 5% 5%;
+        grid-template-columns: 45% 45% 2% 2%;
         grid-gap: .25%;
         background-color: #fff;
         color: #444;
@@ -32,16 +32,12 @@ export default function render() {
 
     .contact-wrapper, .phone-wrapper {
         display: grid;
-        grid-template-columns: 45% 5% 5% 45%;
+        grid-template-columns: 45% 1.5% 1.5% 1%;
         grid-gap: .25%;
         background-color: #fff;
         color: #444;
+        margin-top: .25%;
       }
-
-    /* #primary{
-      margin-left: .5em;
-      display:none;
-    } */
 
     .reveal-if-active {
       opacity: 0;
@@ -53,6 +49,7 @@ export default function render() {
     input[type="checkbox"]:checked ~ .reveal-if-active {
       opacity: 1;
       overflow: visible;
+      font-size: 16px;
     }
 
     #rearrange{
@@ -97,7 +94,15 @@ export default function render() {
         width: 100%;
         box-sizing: border-box;
     }
-      
+    
+    textarea{
+      margin-left:1.75%;
+      box-shadow: inset 0 0 1.5px black, 0 0 3px lightgrey;
+      padding: .75%;
+      font-family: "Proxima Nova";
+      font-size: 16px;
+    }
+
     #radiobox {
         padding: 3% 0 3%;
         box-sizing: border-box;
@@ -116,12 +121,19 @@ export default function render() {
         margin: 0 0 0 5%;
         box-shadow: inset 0 0 1.5px black, 0 0 2px grey;
         padding: 2.5%;
+        font-family: "Proxima Nova";
+        font-size: 16px;
     }      
   </style>
-
+  <div id= "container"></div>
+  <div class="wrapper"><h3>&nbsp;&nbsp;Overview</h3></div>
+  <textarea rows=15% cols=100%></textarea>
+  </div>
   <div id= "container">
     <div class="wrapper"><h3>&nbsp;&nbsp;Websites</h3></div>
     <div class="wrapper"><label>Site Name</label><label>URL</label></div>
+
+    
 
     <div id="website-field">
       ${this.webTextField.map(item => 
@@ -145,17 +157,12 @@ export default function render() {
     <div class="wrapper"><h3>&nbsp;&nbsp;Contact</h3></div>
     <div class="wrapper"><label>Email</label></div>
     <div id="contact-field">
-    <div class="contact-wrapper">
-    <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""> </div>
-        <div class="reveal-if-active">Primary</div>
-    </div>
 
     ${this.emailTextField.map(item => 
         html`
       <div class="contact-wrapper">
-        <div id="radiobox"><input type=text id="flexible-width-radio" /><input type="radio" name="reason" value=""></div>
-        <div class="reveal-if-active" >Primary</div>
-        <!-- <button @click=${() => this._delete(this.emailTextField)} class='delete' >&#x2715;</button> -->
+        <input type=text id="flexible-width-radio" /><input type="radio" name="reason" value="">
+        <div class="reveal-if-active">Primary</div>
       </div>
       `)}
     </div>
@@ -173,6 +180,8 @@ export default function render() {
         <div id="radiobox"><input type=text id="flexible-width-radio" /></div>
     </div>
   </div>
+
+
 
   `;
 }
