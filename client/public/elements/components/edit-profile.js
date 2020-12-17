@@ -11,7 +11,6 @@ export class RpProfileAboutEditor extends LitElement {
       webTextField: { type: Array},
       emailTextField: { type: Array},
       phoneTextField: { type: Array},
-      formData: { type: Object},
     };
   }
 
@@ -48,11 +47,23 @@ export class RpProfileAboutEditor extends LitElement {
     this.idNum = 1
     this.webTextField = [1];
     this.emailTextField = [1];
+
+    this.FormResults = {
+      "overview": [],
+      "siteName": [],
+      "url": [],
+      "email": [],
+      "emailChecked": [],
+      "phone": []
+    };
+
     this.formDataOverview = {};
     this.formDataSiteName = {};
     this.formDataURL = {};
-    this.formDataEmail = {};
+    this.formDataEmail = [];
     this.formDataPhone = {};
+
+
 
   }
 
@@ -67,23 +78,22 @@ export class RpProfileAboutEditor extends LitElement {
 /**
  * @method _submitted
  * 
- * @description After the form is filled out, the button leads to submit function
+ * @description After the form is filled out, the button leads to submit function, and parses that info given.
  * 
- * @return {Boolean} false for non-refeshing
+ * @return {Boolean} false for non-refeshing but this in in the form itself
  */
 
 _submitted(){
-  // this.formDataSiteName = this.shadowRoot.querySelectorAll('input[name="site-name"]');
-  // this.formDataURL = this.shadowRoot.querySelectorAll('input[name="url"]');
-  // this.formDataEmail = this.shadowRoot.querySelectorAll('input[name="email"]');
-  // this.formDataPhone = this.shadowRoot.querySelectorAll('input[name="phone"]');
-  // this.formDataOverview = this.shadowRoot.querySelectorAll('input[name="overview"]');
+  // this.shadowRoot.querySelector('#ProfileEditForm').submit();
+  this.shadowRoot.querySelectorAll('input[name="email"]').forEach(element => this.FormResults["email"].push(element.value));
+  this.shadowRoot.querySelectorAll('input[name="site-name"]').forEach(element => this.FormResults["siteName"].push(element.value));
+  this.shadowRoot.querySelectorAll('input[name="url"]').forEach(element => this.FormResults["url"].push(element.value));
+  this.shadowRoot.querySelectorAll('input[name="phone"]').forEach(element => this.FormResults["phone"].push(element.value));
+  this.shadowRoot.querySelectorAll('[name="overview"]').forEach(element => this.FormResults["overview"].push(element.value));
+  this.shadowRoot.querySelectorAll('input[name="primary"]').forEach(element => this.FormResults["emailChecked"].push(element.checked));
+  
+  alert("Form is Submitted.");
 
-  this.shadowRoot.querySelector('#ProfileEditForm').submit();
-  console.log("Form is Submitted");
-
-
-  return false;
 }
 
 /**

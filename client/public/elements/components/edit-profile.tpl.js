@@ -151,8 +151,7 @@ export default function render() {
     .dotted {border: 3px dashed #B3C1D1; border-style: none none dashed; width:98%;}
 
   </style>
-  <form method="post" name="profile_edit" id="ProfileEditForm" >
-
+  <form method="post" name="profile_edit" id="ProfileEditForm" onsubmit="return false;">
     <div id="container"></div>
     <hr class='dotted' />
 
@@ -187,7 +186,7 @@ export default function render() {
       ${this.emailTextField.map(item => 
           html`
         <div class="contact-wrapper">
-        <input type=text class="flexible-width-radio" name="email" id="email" + item/><input type="radio" name="primary" id="primary" + item>
+        <input type=text for="email" class="flexible-width-radio" name="email" id="email" + item/><input for="email" type="radio" name="primary" id="primary" + item>
           <div class="reveal-if-active">Primary</div>
           <button type='button' @click=${() => this._delete(this.emailTextField, item)}  class='delete' id='delete'><rp-icon icon="iron-close" circle-bg is-link></rp-icon> </button>
         </div>
