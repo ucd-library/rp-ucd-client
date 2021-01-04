@@ -395,8 +395,8 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 </section>
 
 <section>
-<h1>Profile About Editor</h1>
-<rp-profile-about-editor></rp-profile-about-editor>
+  <h1>Profile About Editor</h1>
+  <rp-profile-about-editor></rp-profile-about-editor>
 </section> 
 
 <section>
