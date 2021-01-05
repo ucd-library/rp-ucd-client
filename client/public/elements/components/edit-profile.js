@@ -5,68 +5,63 @@ import Sortable from "sortablejs";
 export class RpProfileAboutEditor extends LitElement {
   static get properties() {
     return {
-      text: {type: String},
-      emailSamp: {type: String},
-      sort: {type: HTMLElement},
-      webTextField: { type: Array},
-      emailTextField: { type: Array},
-      phoneTextField: { type: Array},
+      overviewText: { type: Text } ,
+      webTextField: { type: Array },
+      emailTextField: { type: Array },
+      phoneTextField: { type: Array },
     };
   }
-
-/**
- * @method _add
- * 
- * @description adds another iteration of the element to the DOM and List
- * 
- * @param {Object} element 
- * 
- */  
-  _add(element){
-    element.push(element.length+1);
-    this.requestUpdate();
-  }
-
-/**
- * @method _delete
- * 
- * @description deletes specifically sent iteration of the element from the DOM and List
- * 
- * @param {Object} element 
- * @param {Array.<Number>} element 
- */ 
-
-  _delete(element, item){
-    delete element[item - 1];
-    this.requestUpdate();
-  }  
 
   constructor() {
     super();
     this.render = render.bind(this);
-    this.idNum = 1
-    this.webTextField = [1];
-    this.emailTextField = [1];
-
-    this.FormResults = {
-      "overview": [],
-      "siteName": [],
-      "url": [],
-      "email": [],
-      "emailChecked": [],
-      "phone": []
-    };
-
-    this.formDataOverview = {};
-    this.formDataSiteName = {};
-    this.formDataURL = {};
-    this.formDataEmail = [];
-    this.formDataPhone = {};
-
-
-
+  
+    this.webTextField = [{url: '', label: ''}];
+    this.emailTextField = [{value: '', default: true}];
+    this.phoneTextField = '';
+    this.overviewText = '';
   }
 
+  /**
+   * @method _addWebsite
+   * 
+   * @description Bound to click event on website add button.  adds another 
+   * iteration of the element to the DOM and List
+   * 
+   * @param {Object} element 
+   * 
+   */  
+  _addWebsite(){
+    this.webTextField.push({url: '', label: ''});
+    this.requestUpdate();
+  }
+
+  /**
+   * @method _addEmail
+   * 
+   * @description Bound to click event of add email button.
+   * adds another iteration of the element to the DOM and List
+   * 
+   * @param {Object} element 
+   * 
+   */  
+  _addEmail(){
+    this.emailTextField.push({value: '', default: false});
+    this.requestUpdate();
+  }
+
+  /**
+  * @method _delete
+  * 
+  * @description deletes specifically sent iteration of the element from the DOM and List
+  * 
+  * @param {Array} Array 
+  * @param {Number} index 
+  */ 
+  _delete(arr, index){
+    arr.splice(index, 1);
+    this.requestUpdate();
+  }  
 
   _constructClasses() {
     let classes = {};
@@ -75,37 +70,57 @@ export class RpProfileAboutEditor extends LitElement {
     return classes;
   }
 
-/**
- * @method _submitted
- * 
- * @description After the form is filled out, the button leads to submit function, and parses that info given.
- * 
- * @return {Boolean} false for non-refeshing but this in in the form itself
- */
+  setData(data) {
+    this.emailTextField = data.email || [{value: '', default: true}];
+    this.phoneTextField = data.phone || '';
+    this.webTextField = data.websites || [{url: '', label: ''}];
+    this.overviewText = data.overview || '';
+  }
 
-_submitted(){
-  // this.shadowRoot.querySelector('#ProfileEditForm').submit();
-  this.shadowRoot.querySelectorAll('input[name="email"]').forEach(element => this.FormResults["email"].push(element.value));
-  this.shadowRoot.querySelectorAll('input[name="site-name"]').forEach(element => this.FormResults["siteName"].push(element.value));
-  this.shadowRoot.querySelectorAll('input[name="url"]').forEach(element => this.FormResults["url"].push(element.value));
-  this.shadowRoot.querySelectorAll('input[name="phone"]').forEach(element => this.FormResults["phone"].push(element.value));
-  this.shadowRoot.querySelectorAll('[name="overview"]').forEach(element => this.FormResults["overview"].push(element.value));
-  this.shadowRoot.querySelectorAll('input[name="primary"]').forEach(element => this.FormResults["emailChecked"].push(element.checked));
-  
-  alert("Form is Submitted.");
+  getData() {
+    return {
+      email : this.emailTextField || [],
+      phone : this.phoneTextField || '',
+      website : this.webTextField || [],
+      overview : this.overviewText || ''
+    }
+  }
 
-}
+  /**
+   * @method _onArrayValueChange
+   * 
+   * @description bound to array input fields, splits out id and sets
+   * element properties, object property to new value.
+   * 
+   * @param {*} e 
+   */
+  _onArrayValueChange(e) {
+    let ele = e.currentTarget;
+    let [eleProp, itemProp, index] = ele.id.split('-');
+    this[eleProp][parseInt(index)][itemProp] = ele.value;
+  }
 
-/**
- * @method firstUpdated
- * 
- * @description occurs when DOM is first updated
- * 
- */
-
-firstUpdated(){
+  /**
+   * @method firstUpdated
+   * 
+   * @description occurs when DOM is first updated
+   * 
+   */
+  firstUpdated(){
     this.webField = this.shadowRoot.getElementById('website-field');
     Sortable.create(this.webField, { /* options */ });
+  }
+
+  /**
+   * @method _onSaveClicked
+   * 
+   * @description bound to save button clicked event.  Dispatch custom
+   * save event with current data
+   */
+  _onSaveClicked() {
+    this.dispatchEvent(
+      new CustomEvent('save', {detail: this.getData()})
+    );
   }
 
   
