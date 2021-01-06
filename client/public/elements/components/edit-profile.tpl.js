@@ -32,9 +32,11 @@ export default function render() {
 
     .textbox {
       flex: 1;
-      padding: 3px;
     }
 
+    h3 {
+      margin-bottom: 7px;
+    }
     .wrapper .textbox input[type="text"] {
       width: 100%;
       box-sizing: border-box;
@@ -110,10 +112,6 @@ export default function render() {
         flex: 1;
         border: 5px;
     }
-    /* .flexible-width-radio { 
-        border: 5px;
-        flex: 1;    
-    } */
 
     input[type=text] {
       border: 1px solid var(--tcolor-primary20);
@@ -166,14 +164,18 @@ export default function render() {
 
   </style>
     <div id="container"></div>
-    <div class="dotted-break" ></div>
+    <div class="dotted-break"></div>
 
-    <div class="wrapper"><h3>Overview</h3></div>
+    <h3>Overview</h3>
       <textarea name="overview" .value="${this.overviewText}"></textarea>
     </div>
 
+    <h3>Positions</h3>
+    Position information is managed via <a style="color:#355B85" href=""><b>UC Path / HR</b></a>. Any changes made there will be reflected
+       on your registry profile.
+
     <div class="container">
-      <div class="wrapper"><h3>Contact</h3></div>
+      <h3>Contact</h3>
       <div class="wrapper">
         <label for="email" >Email</label>
       </div>
@@ -208,8 +210,8 @@ export default function render() {
     <div class="container">
       <div class="wrapper"><label for="phone" >Phone</label></div>
       <div id="phone-field">
-      <div class="phone-wrapper">
-          <div id="radiobox"><input type=text name="phone" class="flexible-width-radio" id="phone" /></div>
+      <div class="wrapper">
+          <div class="textbox maxwidth"><input type=text name="phone" class="flexible-width-radio" id="phone" /></div>
       </div>
     </div>
 
@@ -235,7 +237,7 @@ export default function render() {
               @change="${this._onArrayValueChange}" />
           </div>
           
-          <div class="textbox">
+          <div style="padding: 5px;" class="textbox">
             <input type=text 
               class="flexible-width" 
               name="url" 
@@ -244,22 +246,23 @@ export default function render() {
               @change="${this._onArrayValueChange}" />
           </div>
 
-          <button type='button' class='delete'>
+          <button type='button' type='button' class='delete'>
             <rp-icon class="sort" icon="iron-swap-vert" is-link></rp-icon>
           </button>
 
-          <button type='button' @click=${() => this._delete(this.webTextField, index)}  class='delete' >
+          <button @click=${() => this._delete(this.webTextField, index)}  class='delete' >
             <rp-icon icon="iron-close" circle-bg is-link></rp-icon>
           </button>
         </div> 
         `)}
       </div>
-      <button type='button' @click=${this._addWebsite} id="website-add" class="icon-container">
-        <rp-icon icon="iron-add" circle-bg is-link></rp-icon> &nbsp;Add Website 
-      </button>      
+      <button type="button" class="icon-button" @click="${this._addWebsite}" style="margin-top: 5px" >
+        <iron-icon icon="add-circle" circle-bg ></iron-icon> <span>Add Website</span> 
+      </button>     
     </div>
-    
-    <hr class='dotted' />
+    <br />
+
+    <div class="dotted-break"></div>
 
     <button class="icon-container" @click="${this._onSaveClicked}">Save Changes to Profile</button>
   `;
