@@ -12,11 +12,17 @@ export default function render() {
     .icon-container {
       align-items: center;
       display: inline-flex;
-      padding: 1%;
-      background-color: Transparent;
+      padding: 1.5%;
+      background-color: #B3C1D1;
+      font-family      : proxima-nova,"Lucida Grande","Lucida Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+      font-size        : var(--font-size);
+      font-weight      : var(--font-weight);
+      color: #355B85;
       border: none;
       font-family: "Proxima Nova";
       font-size: 16px;
+      margin-left: 350px;
+      margin-top: 15px;
     }
 
     .icon-container:hover {
@@ -50,13 +56,17 @@ export default function render() {
       width: 350px;
     }
 
+    .wrapper .textbox.maxwidth.website input[type="text"] {
+      width: 425px;
+    }
+
     .reveal-if-active {
       display: none;
     }
 
     input[type="radio"]:checked ~ .reveal-if-active,
     input[type="checkbox"]:checked ~ .reveal-if-active {
-      display: block
+      display: block;
     }
 
     #rearrange{
@@ -97,7 +107,7 @@ export default function render() {
       font-weight      : var(--font-weight);
       line-height      : calc(var(--font-size) * 1.625);
       padding: 10px 15px;
-      width: 100%;
+      width: 850px;
       min-height: 100px;
       box-sizing: border-box;
     }
@@ -138,7 +148,9 @@ export default function render() {
     }
 
     .dotted-break {
+      width:950px;
       border-bottom: 1px dashed var(--hr-color-light);
+      border-width: 3px;
     }
 
     button {
@@ -171,7 +183,7 @@ export default function render() {
     </div>
 
     <h3>Positions</h3>
-    Position information is managed via <a style="color:#355B85" href=""><b>UC Path / HR</b></a>. Any changes made there will be reflected
+    Position information is managed via <a style="color:#355B85" href=""><b>UC Path/HR</b></a>. Any changes made there will be reflected
        on your registry profile.
 
     <div class="container">
@@ -184,7 +196,7 @@ export default function render() {
       ${this.emailTextField.map((item, index) => 
           html`
         <div class="wrapper">
-          <div class="textbox maxwidth">
+          <div style="padding-bottom: 5px;"  class="textbox maxwidth">
           <input type=text 
             class="flexible-width-radio" 
             name="email" 
@@ -203,9 +215,11 @@ export default function render() {
 
       </div>
       <button type="button" class="icon-button" @click="${this._addEmail}" style="margin-top: 5px" >
-        <iron-icon icon="add-circle" circle-bg ></iron-icon> <span>Add Email</span> 
+        <iron-icon icon="add-circle" circle-bg ></iron-icon> <span style="color: #355B85">Add Email</span> 
       </button>  
     </div>
+
+    <br />
 
     <div class="container">
       <div class="wrapper"><label for="phone" >Phone</label></div>
@@ -220,15 +234,15 @@ export default function render() {
         <h3>Websites</h3>
       </div>
       <div class="wrapper">
-        <div style="flex:1">Site Name</div>
-        <div style="flex:1">URL</div>
+        <div style="display: inline-block;">Site Name</div>
+        <div style="margin-left:352px;display: inline-block;">URL</div>
         <div style="width:42px"></div>
       </div>
       <div id="website-field">
         ${this.webTextField.map((item, index) => 
           html`
         <div class="wrapper">
-          <div class="textbox">
+          <div class="textbox maxwidth website">
             <input type=text 
               class="flexible-width" 
               name=site-name 
@@ -237,7 +251,7 @@ export default function render() {
               @change="${this._onArrayValueChange}" />
           </div>
           
-          <div style="padding: 5px;" class="textbox">
+          <div style="padding: 5px;" class="textbox maxwidth website">
             <input type=text 
               class="flexible-width" 
               name="url" 
@@ -257,7 +271,7 @@ export default function render() {
         `)}
       </div>
       <button type="button" class="icon-button" @click="${this._addWebsite}" style="margin-top: 5px" >
-        <iron-icon icon="add-circle" circle-bg ></iron-icon> <span>Add Website</span> 
+        <iron-icon icon="add-circle" circle-bg ></iron-icon> <span style="color: #355B85">Add Website</span> 
       </button>     
     </div>
     <br />
