@@ -8,7 +8,8 @@ export class RpIcon extends LitElement {
     icon: {type: String},
     themeColor: {type: String, attribute: 'theme-color'},
     isLink: {type: Boolean, attribute: 'is-link'},
-    circleBg: {type: Boolean, attribute: 'circle-bg'}
+    circleBg: {type: Boolean, attribute: 'circle-bg'},
+    hasText: {type: Boolean, attribute: 'has-text'}
   };
   }
 
@@ -38,6 +39,9 @@ export class RpIcon extends LitElement {
     }
     if (this.size) {
       classes[this.size] = true;
+    }
+    if(this.hasText){
+      classes.text = true;
     }
     return classes;
   }

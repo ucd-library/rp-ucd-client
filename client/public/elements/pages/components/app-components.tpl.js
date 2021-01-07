@@ -19,7 +19,7 @@ import "../../components/pagination"
 import "../../components/person-preview"
 import "../../components/quick-search"
 import "../../components/search"
-import "../../components/text-field"
+import "../../components/edit-profile"
 import "../../components/view-all"
 import "../../components/work-preview"
 
@@ -101,58 +101,7 @@ return html`
     align-items: center;
     height: 100px;
   }
-  .wrapper {
-    display: grid;
-    grid-template-columns: 45% 45% 5% 5%;
-    grid-gap: .2%;
-    background-color: #fff;
-    color: #444;
-  }
   
-#rearrange{
-    text-align: center;
-}
-  
-#delete{
-    vertical-align: center
-}
-  
-label{
-    text-align: left;
-    vertical-align: middle;
-}
-
-  
-#c2{
-    width: 100%;
-    margin: 3% 0 3%;
-}
-  
-#textbox {
-    padding: 2% 0 2%;
-    display: flex;
-    width: 100%;
-    box-sizing: border-box;
-}
-  
-#radiobox {
-    padding: 2% 0 2%;
-    box-sizing: border-box;
-    display: flex;
-}
-  
-#flexible-width {
-    flex: 1; /* my goal is that the width always fills up independent of browser width */
-    border: 5px;
-}
-#flexible-width-radio { 
-    border: 5px;
-    flex: 1;    
-}     
-input[type=text]{
-    box-shadow: inset 0 0 1.5px black, 0 0 2px grey;
-    padding: 1.5%;
-}      
   ${styles}
 </style>
 
@@ -286,6 +235,9 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 
 <section>
 <h2>Icons</h2>
+<p>Can add text bubbles to <code>icon</code> by applying <code>has-text</code> that signals that this icon has text added:</p>
+<rp-icon icon="iron-face" circle-bg is-link has-text><div slot="tooltip">Sample 1</div></rp-icon>
+<rp-icon icon="iron-link" circle-bg is-link has-text theme-color='secondary' size="lg"> <div slot="tooltip">Sample 2</div> </rp-icon>
 <p>Use the <code>icon</code> attribute to specify your icon. Use the prefix "iron-" to call an iron icon:</p>
 <rp-icon icon="iron-link" circle-bg></rp-icon>
 <rp-icon icon="iron-arrow-forward" circle-bg></rp-icon>
@@ -337,13 +289,6 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
                       >
 </rp-link-list-counts>
 </section>
-
-<section>
-<h2>Text Field</h2>
-
-<rp-text-field></rp-text-field>
-</section> 
-
 
 <section>
   <h2>Modal</h2>
@@ -447,8 +392,12 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
     <rp-search style="width:75%" @new-search="${(e) => console.log(e.target.searchObject)}"></rp-search>
   </div>
 </div>
-
 </section>
+
+<section>
+  <h1>Edit "About"</h1>
+  <rp-profile-about-editor></rp-profile-about-editor>
+</section> 
 
 <section>
 <h1>View All</h1>

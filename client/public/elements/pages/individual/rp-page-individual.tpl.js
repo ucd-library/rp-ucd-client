@@ -222,7 +222,7 @@ return html`
           
           ` : html``}
           <div class="pub-icons">
-            <rp-icon icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
+            <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
             <div slot="tooltip">Edit Publications</div>
             </rp-icon>
             <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
@@ -230,12 +230,16 @@ return html`
 
           <div class="pub-count">${this.totalPublications}</div>
           
-          <rp-modal content-title='Edit "Publications"' id="modal-pub-edit">
+    <rp-modal content-title='Edit "Publications"' id="modal-pub-edit">
     Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
     redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
-    <div slot="confirmButton"><div class="button" @click="${this._handleClick}">Edit Publications</div></div> 
+    <div slot="confirmButton">
+      <a style = "text-decoration:none;" href='https://oapolicy.universityofcalifornia.edu/objects.html?as=3&am=false&cid=1&ipr=false&iqf=true'>
+      <div class="button">Edit Publications</div>
+      </a>
+    </div> 
 
-          </rp-modal>
+    </rp-modal>
       </div>
     </div>
     <h2 class="mb-0">Selected Publications</h2>
