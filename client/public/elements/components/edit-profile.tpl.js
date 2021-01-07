@@ -70,13 +70,13 @@ export default function render() {
     }
 
     #rearrange{
-        text-align: center;
-        vertical-align: center;
+      text-align: center;
+      vertical-align: center;
     }
     #rearrange:hover{
-        text-align: center;
-        color: var(--tcolor-hover-bg);
-        cursor:default;
+      text-align: center;
+      color: var(--tcolor-hover-bg);
+      cursor:default;
     }
 
 
@@ -84,20 +84,20 @@ export default function render() {
       vertical-align: center
     }
     #delete:hover{
-        vertical-align: center;
-        color: var(--tcolor-hover-bg);
-        cursor:default;
+      vertical-align: center;
+      color: var(--tcolor-hover-bg);
+      cursor:default;
 
     }    
 
     label{
-        text-align: left;
-        display: grid;
-        grid-template-columns: 3fr 3fr .15fr .15fr;
+      text-align: left;
+      display: grid;
+      grid-template-columns: 3fr 3fr .15fr .15fr;
     }
       
     .container{
-        width: 100%;
+      width: 100%;
     }
     
     textarea {
@@ -113,14 +113,14 @@ export default function render() {
     }
 
     #radiobox {
-        padding: 2% 0 2%;
-        box-sizing: border-box;
-        display: flex;
+      padding: 2% 0 2%;
+      box-sizing: border-box;
+      display: flex;
     }
       
     .flexible-width {
-        flex: 1;
-        border: 5px;
+      flex: 1;
+      border: 5px;
     }
 
     input[type=text] {
@@ -183,7 +183,7 @@ export default function render() {
     </div>
 
     <h3>Positions</h3>
-    Position information is managed via <a style="color:#355B85" href=""><b>UC Path/HR</b></a>. Any changes made there will be reflected
+    Position information is managed via <a style="color:#355B85" href=""><strong>UC Path/HR</strong></a>. Any changes made there will be reflected
        on your registry profile.
 
     <div class="container">
