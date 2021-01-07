@@ -7,7 +7,8 @@ return html`
 
 <style>
   :host {
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
 
   #loading {

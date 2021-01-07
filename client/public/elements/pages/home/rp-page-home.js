@@ -4,10 +4,8 @@ import render from "./rp-page-home.tpl.js"
 import "@ucd-lib/cork-app-utils";
 
 import "../../components/alert";
-import "../../components/link-list-counts";
 import "../../components/person-preview";
 import "../../components/search";
-import "../../components/view-all";
 
 export default class RpPageHome extends Mixin(LitElement)
   .with(LitCorkUtils) {
@@ -18,12 +16,12 @@ export default class RpPageHome extends Mixin(LitElement)
       facetsStatus: {type: String},
       facets: {type: Object},
       academicWorks: {type: Array},
-      academicWorksTotal: {type: parseInt},
+      academicWorksTotal: {type: Number},
       peopleStatus: {type: String},
       people: {type: Array},
-      peopleTotal: {type: parseInt},
-      peopleWidth: {type: parseInt},
-      subjectsTotal: {type: parseInt},
+      peopleTotal: {type: Number},
+      peopleWidth: {type: Number},
+      subjectsTotal: {type: Number},
       context: {type: String},
       visible: {type: Boolean}
     }
@@ -36,6 +34,7 @@ export default class RpPageHome extends Mixin(LitElement)
     this._injectModel('CollectionModel', 'AppStateModel');
     this.reset_properties();
     this.facets = {};
+    this.visible = false;
     this.academicWorksTotal = 0;
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
@@ -51,7 +50,6 @@ export default class RpPageHome extends Mixin(LitElement)
   reset_properties(){
     this.people = [];
     this.academicWorks = [];
-    this.visible = false;
     this.facetsStatus = 'loading';
     this.peopleStatus = 'loading';
 
@@ -110,16 +108,32 @@ export default class RpPageHome extends Mixin(LitElement)
     this.setPeopleWidth(w);
   }
 
+  /**
+   * Sets the text-width property of the rp-person-preview elements on this page.
+   * It's the only way to get the ellipsis overflow on their titles. 
+   * 
+   * @param {Number} w - Window width (pixels)
+   */
   setPeopleWidth(w) {
     let pw = 250;
     let avatarWidth = 72;
-    let screenPadding = 30;
-    if ( w < 576 ) {
-      pw = w - screenPadding - avatarWidth;
+    let peopleColumnCt = 1;
+    let peopleColumnGutters = 24;
+
+    // desktop
+    if (w >= 800) {
+      let rightColumnWidth = .7;
+      peopleColumnCt = 2;
+      pw = (740 * rightColumnWidth) / peopleColumnCt - peopleColumnGutters;
     }
-    else if (w < 768 ) {
-      pw = (w - screenPadding) * .7 - avatarWidth - 30;
+    // mobile
+    else {
+      let screenPadding = 40;
+      let grace = 10;
+      pw = w - screenPadding - grace;
     }
+
+    pw -= avatarWidth
     this.peopleWidth = Math.floor(pw);
   }
 
