@@ -515,7 +515,13 @@ class CollectionModel extends BaseModel {
   }
 
   _formatPerson(person) {
-    let p = {name: person.label ? person.label : "", title: "", "@id": person['@id']};
+    console.log(person)
+    let p = {
+      name: person.label ? person.label : "", 
+      title: "", 
+      "@id": person['@id'],
+      snippet: person._snippet
+    };
     p.name=this.personModel.getBestLabel(person);
     p.title=this.personModel.getHeadlineTitle(person);
     p['id'] = person['@id'].replace(this.jsonldContext + ":", "");

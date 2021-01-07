@@ -476,6 +476,7 @@ _urlEncode(obj) {
         name="${person.name}"
         href="${"/individual/" + person.id}"
         title=${person.title}
+        .snippet="${person.snippet}"
         text-width="${this.peopleWidth}"
         class="my-3">
       </rp-person-preview>

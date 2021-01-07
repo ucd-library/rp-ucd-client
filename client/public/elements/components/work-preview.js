@@ -10,7 +10,8 @@ export class RpWorkPreview extends LitElement {
     workPath: {type: String},
     grpsWithLinks: {type: String},
     authorPath: {type: String},
-    jsonldContext: {type: String}
+    jsonldContext: {type: String},
+    snippet : {type: String}
   };
   }
 

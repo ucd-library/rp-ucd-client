@@ -1,4 +1,5 @@
 import { html } from 'lit-element';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 //import { styleMap } from 'lit-html/directives/style-map';
 
 export default function render() {
@@ -47,12 +48,21 @@ export default function render() {
     a[disabled]:hover {
       color : var(--tcolor-link-text);
     }
+    .snippet {
+      font-size : var(--font-size-small);
+      color: var(--tcolor-link-disabled-text);
+    }
+    .snippet em {
+      font-weight: bold;
+      font-style: normal;
+    }
   </style>
   <div class=container>
     <div class="icon-container"><iron-icon icon="av:library-books"></iron-icon></div>
     <div class="text-container">
       ${this._renderTitleLink()}
       ${this._renderAuthors()}
+      <div class="snippet">${unsafeHTML(this.data._snippet.value)}</div>
     </div>
   </div>
 
