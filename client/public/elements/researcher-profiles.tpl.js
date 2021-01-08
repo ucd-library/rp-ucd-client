@@ -6,9 +6,10 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
-    display: flex;
-    flex-direction: column;
+    display: block;
+    min-width: 360px;
   }
 
   #loading {
@@ -94,9 +95,15 @@ return html`
     /* Disable click events */
     pointer-events: none;
   }
+  #desktop-menu {
+    display: none;
+  }
   #nav-left a {
     padding: 15px 20px;
     text-transform: uppercase;
+  }
+  #nav-left a:first-child {
+    padding-left: 0;
   }
   #nav-left a.selected {
     background-color: var(--tcolor-secondary);
@@ -151,7 +158,16 @@ return html`
   #app-footer .col-item {
     padding: 5px 0;
   }
-  #app-footer .footer-column {
+
+  @media (min-width: 480px) {
+    #desktop-menu {
+      display: flex;
+    }
+  }
+  @media (min-width: 800px) {
+    #nav-left a:first-child {
+      padding-left: 20px;
+    }
   }
 
   @media (min-width: 768px) {
@@ -168,8 +184,6 @@ return html`
     }
 
   }
-
-  ${styles}
 
 
 </style>
@@ -190,7 +204,7 @@ return html`
           ${this.theme.siteSubTitle? html`<span class="weight-regular italic text-primary50">${this.theme.siteSubTitle}</span>` : html``}
         </h1>
       </a>
-      <div class="small bold hlist">
+      <div class="small bold hlist" id="desktop-menu">
         <a class="no-decoration" href="/help">Help</a>
         ${this.user ? html`     
               <rp-dropdown no-padding
@@ -213,7 +227,7 @@ return html`
         ${this.navLinks.map(link => html`<a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration">${link.text}</a>`)}
       </div>
       <div id="nav-right" class="flex align-items-center">
-        <rp-quick-search @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}"></rp-quick-search>
+        <rp-quick-search @input-status="${e => console.log('this has changed.')}" @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}"></rp-quick-search>
       </div>
     </div>
   </div>

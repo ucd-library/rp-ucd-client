@@ -28,6 +28,12 @@ export class RpQuickSearch extends LitElement {
         message: 'A new search has been triggered'
       }
     });
+
+    this._inputStatus = new CustomEvent('input-status', {
+      detail: {
+        message: 'The input has either been expanded or collapsed.'
+      }
+    });
   }
 
   constructClasses() {
@@ -121,12 +127,16 @@ export class RpQuickSearch extends LitElement {
 
   updated(changedProperties) {
 
-    if (changedProperties.has('opened') && this.opened) {
-      let w = this.inputWidth;
-      this.inputWidth = 0;
-      this.inputWidth = w;
-      let i = this.shadowRoot.getElementById('search-input');
-      i.focus();
+    if (changedProperties.has('opened')) {
+      if (this.opened) {
+        let w = this.inputWidth;
+        this.inputWidth = 0;
+        this.inputWidth = w;
+        let i = this.shadowRoot.getElementById('search-input');
+        i.focus();
+      }
+      this.dispatchEvent(this._inputStatus);
+
     }
 
 }
