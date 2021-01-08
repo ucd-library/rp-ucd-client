@@ -58,6 +58,14 @@ export class RpQuickSearch extends LitElement {
     return styles;
   }
 
+  open(){
+    this.opened = true;
+  }
+
+  close() {
+    this._handleBlur();
+  }
+
   _validateSearchText(){
     if ( !this.inputValue.replace(/ /g,'') ) {
       return false;

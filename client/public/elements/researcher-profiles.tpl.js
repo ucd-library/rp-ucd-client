@@ -70,8 +70,16 @@ return html`
     background-repeat: no-repeat;
     background-size: cover;
   }
+  #masthead .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   #masthead .logo {
     height: var(--masthead-logo-height);
+  }
+  #masthead .hamburger {
+    color: var(--tcolor-primary)
   }
   #app-header-content {
     position: relative;
@@ -97,6 +105,9 @@ return html`
   }
   #desktop-menu {
     display: none;
+  }
+  #nav-container {
+    min-height: 56px;
   }
   #nav-left a {
     padding: 15px 20px;
@@ -223,11 +234,12 @@ return html`
     </div>
 
     <div id="nav-container" class="container flex flex-wrap align-items-center justify-content-between">
-      <div id="nav-left" class="flex align-items-center bold">
+      <rp-icon @click="${this.closeQuickSearch}" ?hidden="${!this.hideMainNav}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
+      <div id="nav-left" class="flex align-items-center bold" ?hidden="${this.hideMainNav}">
         ${this.navLinks.map(link => html`<a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration">${link.text}</a>`)}
       </div>
       <div id="nav-right" class="flex align-items-center">
-        <rp-quick-search @input-status="${e => console.log('this has changed.')}" @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}"></rp-quick-search>
+        <rp-quick-search id="quick-search" @input-status="${this._onQuickSearchClick}" @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}"></rp-quick-search>
       </div>
     </div>
   </div>

@@ -184,10 +184,6 @@
           margin-left: 20px;
           margin-right: 20px;
         }
-        .page-stripe {
-          display: flex;
-          justify-content: center;
-        }
         .container.top {
           margin-top: 2px;
         }
@@ -221,9 +217,19 @@
           margin-right: 70px;
         }
 
+        /* Tablet Styles */
+        @media (min-width: 480px) {
+          .hidden-tablet-up {
+            display: none !important;
+          }
+        }
+
 
         /* Desktop Styles */
         @media (min-width: 800px) {
+          .hidden-tablet-up {
+            display: none !important;
+          }
           .hidden-desktop {
             display: none !important;
           }
