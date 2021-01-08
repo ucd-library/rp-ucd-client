@@ -117,19 +117,31 @@ export default class RpPageHome extends Mixin(LitElement)
   setPeopleWidth(w) {
     let pw = 250;
     let avatarWidth = 72;
-    let peopleColumnCt = 1;
+    let peopleColumnCt = 2;
     let peopleColumnGutters = 24;
+    let rightColumnWidth = .7;
+    let screenPadding = 40;
+    let grace = 10;
+    let containerWidth = 970;
 
-    // desktop
-    if (w >= 800) {
-      let rightColumnWidth = .7;
-      peopleColumnCt = 2;
-      pw = (740 * rightColumnWidth) / peopleColumnCt - peopleColumnGutters;
+    // desktop max
+    if (w >= 1030) {
+      pw = (containerWidth * rightColumnWidth) / peopleColumnCt - peopleColumnGutters;
+    }
+
+    // desktop min
+    else if (w >= 800){
+      screenPadding = 60;
+      pw = (w - screenPadding) * rightColumnWidth / peopleColumnCt - peopleColumnGutters
+    }
+
+    // tablet max
+    else if (w >= 550 + 40){
+      containerWidth = 550;
+      pw = containerWidth - grace;
     }
     // mobile
     else {
-      let screenPadding = 40;
-      let grace = 10;
       pw = w - screenPadding - grace;
     }
 

@@ -6,6 +6,7 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
   }
@@ -66,17 +67,6 @@ return html`
     justify-content: flex-end;
   }
 
-  @media (min-width: 480px){
-    .container {
-      margin-right: auto;
-      margin-left: auto;
-      max-width: 550px; 
-    }
-    rp-search {
-      max-width: 500px;
-    }
-  }
-
   @media (min-width: 800px){
     .people-container {
       grid-template-columns: auto auto;
@@ -106,9 +96,22 @@ return html`
     }
   }
 
-  ${styles}
+  @media (min-width: 480px) and (max-width: 799px){
+    .container {
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 550px; 
+    }
+  }
+  @media (min-width: 480px) {
+    rp-search {
+      max-width: 500px;
+    }
+  }
+
+  
 </style>
-<div class="hero page-stripe">
+<div class="hero">
   <div class="container flex">
   <img src="${this.theme.homeHeroImage}">
   <div class="text flex flex-column">
@@ -121,13 +124,13 @@ return html`
   </div>
 </div>
 
-<div class="search bg-primary page-stripe">
+<div class="search bg-primary">
   <div class="container flex justify-content-center">
     <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
   </div>
 </div>
 
-<div class="data bg-light page-stripe">
+<div class="data bg-light">
   <div class="container flex">
     <div class="col-l">
       <div ?hidden="${this.facetsStatus == 'error' || this.facetsStatus == 'loaded' }" class="loading1">loading</div>
