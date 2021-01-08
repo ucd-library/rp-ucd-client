@@ -1,7 +1,7 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
 
-export default function render() { 
+export default function render() {
 return html`
 
 <style>
@@ -75,7 +75,7 @@ return html`
   }
 
   ${styles}
-</style>  
+</style>
 <div class="work container top">
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
@@ -100,14 +100,19 @@ return html`
 
       <section id="records" class="bg-light mt-3" ?hidden="${this._hidePageSection('records')}">
         <h1 class="weight-regular mt-0">Publication Records</h1>
+        ${ (this.WorkModel.getAdditionalLinks(this.work).length > 0 ||
+           this.fullTextLinks) ? html`
         <h2>Full Text</h2>
-        ${this.fullTextLinks ? html`
           <ul class="pub-links">
+            ${this.WorkModel.getAdditionalLinks(this.work).map(link => html`
+            <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
+            `)}
+        ${this.fullTextLinks && false ? html`
             ${this.fullTextLinks.map(link => html`
             <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
             `)}
-          </ul>
-        ` : html`<div>No known fulltext links exist.</div>`}
+        ` : html``}
+          </ul>`:html`<div>No known full text links exist.</div>`}
         ${this.isOwnWork ? html`
           <h2>Citation Data & Metrics</h2>
           <ul class="pub-links">
@@ -133,7 +138,7 @@ return html`
           <h2>Subjects</h2>
           <div>
           ${this.subjects.map(subject => html`
-            <rp-badge size="lg">${subject.label}</rp-badge>
+            <rp-badge size="lg" class="my-1">${subject.label}</rp-badge>
           `)}
           </div>
         ` : html``}
@@ -151,9 +156,7 @@ return html`
         <div class="data" ?hidden="${this._hideStatusSection('loaded', 'universityAuthorsStatus')}">
           ${this.universityAuthors.map(author => html`
             <rp-person-preview
-              name="${author.label}"
-              href="${author.href}"
-              title="${author.title}"
+              .data="${author}"
               text-width="${this.peopleWidth}"
               class="my-3">
             </rp-person-preview>

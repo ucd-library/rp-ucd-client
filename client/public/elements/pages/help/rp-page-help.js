@@ -9,7 +9,9 @@ export default class RpPageHelp extends Mixin(LitElement)
 
   static get properties() {
     return {
-      visible: {type: Boolean}
+      visible: {type: Boolean},
+      isLoggedIn: {type: Boolean},
+      imgPath: {type: String}
       
     }
   }
@@ -19,7 +21,9 @@ export default class RpPageHelp extends Mixin(LitElement)
     this.render = render.bind(this);
     this._injectModel('AppStateModel');
     
-    this.boolean = false;
+    this.visible = false;
+    this.isLoggedIn = false;
+    this.imgPath = '/images/faq/';
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
@@ -33,6 +37,12 @@ export default class RpPageHelp extends Mixin(LitElement)
     if (!this.visible) {
       return;
     }
+    this.isLoggedIn = APP_CONFIG.user ? true : false;
+    if (state.location.hash) {
+      let pos = this.shadowRoot.getElementById(state.location.hash);
+      if (pos) window.scrollTo(0, pos.getBoundingClientRect().top + window.pageYOffset);
+    }
+    
 
   }
 

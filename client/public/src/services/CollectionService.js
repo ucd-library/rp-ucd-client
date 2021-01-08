@@ -63,7 +63,7 @@ class CollectionService extends BaseService {
 
   async query(id, searchObject) {
   return this.request({
-    url : this.searchUrl,
+    url : this.searchUrl+'?debug=true',
     fetchOptions : {
       method : 'POST',
       headers : {

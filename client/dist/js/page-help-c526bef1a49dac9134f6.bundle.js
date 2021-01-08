@@ -1,8 +1,48 @@
-import { html } from 'lit-element';
-import styles from "../../styles/site.html";
-
-export default function render() {
-return html`
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{100:function(e,i,t){"use strict";var a=t(2),o=t(33);function n(){return a.b`
+  <style>
+    :host {
+      display: block;
+    }
+    [hidden] {
+      display: none !important;
+    }
+    iron-icon {
+      color: var(--tcolor-secondary);
+      width: 24px;
+      height: 24px;
+      transition: .3s;
+    }
+    iron-icon[rotated] {
+      transform: rotate(-90deg);
+    }
+    #container-title {
+      cursor: pointer;
+      display: flex;
+    }
+    #title:hover {
+      color: var(--tcolor-link-hover-text);
+    }
+    #title {
+      color: var(--tcolor-link-text);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size);
+    }
+    #content {
+      padding-left: 24px;
+      font-size: var(--font-size);
+      margin-top: 14px;
+    }
+  </style>
+  <div class="container ${Object(o.a)(this.constructClasses())}" ?hidden="${!this.titleText}">
+    <div id="container-title" @click="${this.toggle}">
+      <iron-icon icon="arrow-drop-down" ?rotated="${!this.expanded}"></iron-icon>
+      <span id="title">${this.titleText}</span>
+    </div>
+    <div id="content" ?hidden="${!this.expanded}">
+      <slot></slot>
+    </div>
+  </div>
+  `}class r extends a.a{static get properties(){return{titleText:{type:String,attribute:"title-text"},expanded:{type:Boolean,reflect:!0}}}constructor(){super(),this.render=n.bind(this),this.expanded=!1}constructClasses(){return{}}toggle(){this.expanded=!this.expanded}}customElements.define("rp-accordian",r)},111:function(e,i,t){"use strict";t.r(i),t.d(i,"default",(function(){return s}));var a=t(2),o=t(34),n=t.n(o);function r(){return a.b`
 
 <style>
   :host {
@@ -15,7 +55,7 @@ return html`
     width: 100%;
     margin: 15px 0;
   }
-  ${styles}
+  ${n.a}
 </style>
 <div class="help container top">
   <div class="section">
@@ -116,8 +156,8 @@ return html`
           <img class="fw" src="${this.imgPath}faq-hide-publication.jpg" alt="Hide publication screenshot">
         </div>
       </rp-accordian>
-      <rp-accordian title-text="Can I export data ${this.isLoggedIn && false ? "for import into MIV": ""}?">
-        ${this.isLoggedIn && false ? "Currently only publications can be exported for MyInfoVault, but we are planning to expand the options to include other data, such as grants. You must be logged into your profile to access the download functionality. In the Publications section of your profile, you will find a download button located to the left of your publication count in the upper right-hand corner. One of the available format options is RIS. This file can be imported into MIV." : "We only allow downloads for each user's own publications.  Once logged into the system, the Publications section of your profile includes a download button located to the left of your publication count in the upper right-hand corner." }
+      <rp-accordian title-text="Can I export data ${this.isLoggedIn,""}?">
+        ${this.isLoggedIn,"We only allow downloads for each user's own publications.  Once logged into the system, the Publications section of your profile includes a download button located to the left of your publication count in the upper right-hand corner."}
       </rp-accordian>
       <rp-accordian title-text="How do I delete my profile?">
         <div>
@@ -130,4 +170,4 @@ return html`
 
 </div>
 
-`;}
+`}t(100);class s extends(Mixin(a.a).with(LitCorkUtils)){static get properties(){return{visible:{type:Boolean},isLoggedIn:{type:Boolean},imgPath:{type:String}}}constructor(){super(),this.render=r.bind(this),this._injectModel("AppStateModel"),this.visible=!1,this.isLoggedIn=!1,this.imgPath="/images/faq/",this.AppStateModel.get().then(e=>this._onAppStateUpdate(e))}async _onAppStateUpdate(e){requestAnimationFrame(()=>this.doUpdate(e))}async doUpdate(e){if(await this.updateComplete,this.visible&&(this.isLoggedIn=!!APP_CONFIG.user,e.location.hash)){let i=this.shadowRoot.getElementById(e.location.hash);i&&window.scrollTo(0,i.getBoundingClientRect().top+window.pageYOffset)}}}customElements.define("rp-page-help",s)}}]);

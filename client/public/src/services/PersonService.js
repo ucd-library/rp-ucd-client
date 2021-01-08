@@ -32,7 +32,10 @@ class PersonService extends BaseService {
       offset: 0,
       limit: 0,
       sort: [],
-      filters: {'Authorship.identifiers.@id': {"type": "keyword", "op" : "and", "value": [`${this.jsonContext}:${personid}`]}},
+      filters: {
+        'Authorship.identifiers.@id': {"type": "keyword", "op" : "and", "value": [`${this.jsonContext}:${personid}`]},
+        'publicationDate': {"type": "exists"}
+      },
       facets: {"@type": {"type" : "facet"}}
     };
 
