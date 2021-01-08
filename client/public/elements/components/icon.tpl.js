@@ -14,7 +14,35 @@ export default function render() {
 
     .icon.rp {
       fill: currentColor;
+      width: 25px;
+      height: 25px;
     }
+
+    .icon.extralgSVGIcon {
+      fill: currentColor;
+      width: 45px;
+      height: 45px;
+    }
+    .lgIcon {
+      height: 24px;
+      width: 24px;
+    }
+
+    .extralgIconSubject {
+      height: 45px;
+      width: 45px;
+    }
+
+    .extralgIconPeople {
+      height: 35px;
+      width: 35px;
+    }
+
+    .extralgIconWorks {
+      height: 37px;
+      width: 37px;
+    }
+
     .container {
       color: var(--tcolor-primary);
       height: 30px;
@@ -40,9 +68,6 @@ export default function render() {
       position: absolute;
       z-index: 1;
     }
-    /* .tooltiptext{
-      display: none;
-    } */
 
     .container.circle {
       border-radius: 50%;
@@ -66,6 +91,22 @@ export default function render() {
     .container.secondary {
       color: var(--tcolor-light);
     }
+
+    .container.people {
+      background-color: var(--color-blue20);
+      color: var(--color-blue);
+    }
+
+    .container.work {
+      background-color: var(--color-farmers-market);
+      color: var(--color-blue);
+    }
+
+    .container.subject {
+      background-color: var(--color-rec-pool);
+      color: var(--color-blue);
+    }
+
     .container.circle.secondary {
       background-color: var(--tcolor-secondary);
     }
@@ -73,10 +114,15 @@ export default function render() {
       height: 35px;
       width: 35px;
     }
-    .lg .icon {
+    .container.extralg {
+      height: 70px;
+      width: 70px;
+    }
+    .lg.icon {
       height: 24px;
       width: 24px;
     }
+
   </style>
   <div class="container ${classMap(this.constructClasses())}">
     ${this.renderIcon()} ${this.hasText ? html `<span class="tooltiptext"><slot name="tooltip"></slot></span>` :
