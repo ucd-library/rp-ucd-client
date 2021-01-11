@@ -5,7 +5,7 @@ import "./icon"
 export class RpQuickSearch extends LitElement {
   static get properties() {
   return {
-    inputWidth: {type: parseInt, attribute: "input-width"},
+    inputWidth: {type: Number, attribute: "input-width"},
     inputValue: {type: String, attribute: "input-value", reflect: true},
     placeholder: {type: String},
     opened: {type: Boolean},
@@ -108,11 +108,12 @@ export class RpQuickSearch extends LitElement {
     }
     let i = this.shadowRoot.getElementById('search-input');
     if (!i.value) {
-      this.preventOpen = true;
-      //this.opened = false;
-      this.closing = true;
-      self = this;
-      setTimeout(function(){ self.preventOpen = false; }, 300);
+      
+      this.opened = false;
+      //this.preventOpen = true;
+      //this.closing = true;
+      //self = this;
+      //setTimeout(function(){ self.preventOpen = false; }, 300);
     }
   }
 

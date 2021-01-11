@@ -5,10 +5,11 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
   }
-  ${styles}
+  
 </style>
 <div class="collections container bg-light top">
   ${this._renderBrowseHeader('People')}

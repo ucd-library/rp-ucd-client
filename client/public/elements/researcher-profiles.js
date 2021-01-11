@@ -43,7 +43,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       isSearch: {type: Boolean},
       hideMainNav: {type: Boolean},
       hasProfile: {type: Boolean},
-      dropdownOptions:{type:Array},
+      dropdownOptions: {type:Array},
+      quickSearchWidth: {type: Number}
     }
   }
 
@@ -58,6 +59,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.eSearch = APP_CONFIG.client;
     this.hideMainNav = false;
     this.textQuery = "";
+    this.quickSearchWidth = 220;
     this.userName = this.user && new String(this.user.username.split('@')[0]);
 
     this.isSearch = false;
@@ -84,6 +86,11 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     window.removeEventListener('resize', this._onResize);
     super.disconnectedCallback();
   }
+
+  firstUpdated(props) {
+    this._resizeQuickSearch();
+  }
+
 
 
   /**
@@ -156,7 +163,25 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   }
 
   _onResize(){
+    let w = window.innerWidth;
     this._onQuickSearchClick();
+    this._resizeQuickSearch(w)
+  }
+
+  _resizeQuickSearch(w) {
+    if (!w) w = window.innerWidth;
+    
+    if (w > 540) {
+      this.quickSearchWidth = 220;
+    }
+    else if (w > 480) {
+      let navWidth = this.shadowRoot.getElementById('nav-left').offsetWidth;
+      this.quickSearchWidth = w - navWidth - 55;
+    }
+    else {
+      this.quickSearchWidth = w - 40 - 50;
+    }
+
   }
 
   _onSearch(e){
@@ -187,7 +212,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
         <div class="container content">
           ${this.theme.universityLogo? html`
           <a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html`<div></div>`}
-          <iron-icon icon="menu" class="hamburger hidden-tablet-up"></iron-icon>
+          <iron-icon icon="menu" class="hamburger hidden-tablet-up" @click="${e => console.log('TODO: mobile menu needs to be built')}"></iron-icon>
         </div>
         
       </div>`;

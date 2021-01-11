@@ -79,7 +79,22 @@ return html`
     height: var(--masthead-logo-height);
   }
   #masthead .hamburger {
-    color: var(--tcolor-primary)
+    color: var(--tcolor-primary);
+    left: 15px;
+    width: 24px;
+    height: 24px;
+    z-index: 1;
+  }
+  #masthead .hamburger::after{
+    content: "";
+    background-color: #fff;
+    opacity: .7;
+    z-index: -1;
+    height: var(--masthead-height);
+    left: -8px;
+    width: 39px;
+    position: absolute;
+    cursor: pointer;
   }
   #app-header-content {
     position: relative;
@@ -179,9 +194,6 @@ return html`
     #nav-left a:first-child {
       padding-left: 20px;
     }
-  }
-
-  @media (min-width: 768px) {
     #app-footer .footer-top {
       display: grid;
       grid-gap: 10px;
@@ -193,7 +205,6 @@ return html`
     #app-footer .title {
       margin-top: 0;
     }
-
   }
 
 
@@ -239,7 +250,7 @@ return html`
         ${this.navLinks.map(link => html`<a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration">${link.text}</a>`)}
       </div>
       <div id="nav-right" class="flex align-items-center">
-        <rp-quick-search id="quick-search" @input-status="${this._onQuickSearchClick}" @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}"></rp-quick-search>
+        <rp-quick-search id="quick-search" @input-status="${this._onQuickSearchClick}" @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}" input-width="${this.quickSearchWidth}"></rp-quick-search>
       </div>
     </div>
   </div>
@@ -286,7 +297,7 @@ return html`
       ${this.theme.universityLogo? html`<a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html``}
       <hr class="flex-grow-1">
     </div>
-    ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center justify-content-center mb-3">${unsafeHTML(line)}</div>`) : html``}
+    ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center flex-wrap justify-content-center mb-3">${unsafeHTML(line)}</div>`) : html``}
   </div>
 </div>
 `;}

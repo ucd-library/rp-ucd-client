@@ -5,6 +5,7 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
   }
@@ -73,8 +74,6 @@ return html`
   #authors .name {
     font-weight: var(--font-weight-bold);
   }
-
-  ${styles}
 </style>
 <div class="work container top">
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">

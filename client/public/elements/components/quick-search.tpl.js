@@ -33,21 +33,22 @@ export default function render() {
       width: 0;
       background-color: inherit;
     }
+    /**
     .container.opened input {
       animation-duration: .75s;
       animation-name: open;
-
-    }
-    input:focus {
-      outline: none;
-    }
-    input[hidden] {
-      display: none;
     }
     .container.closing input {
       animation-duration: .75s;
       animation-name: close;
       padding-right: 0 !important;
+    }
+     */
+    input:focus {
+      outline: none;
+    }
+    input[hidden] {
+      display: none;
     }
     .container.closing {
     }
@@ -60,12 +61,12 @@ export default function render() {
       }
 
       to {
-        width: 83%;
+        width: 100%;
         }
     }
     @keyframes close {
       from {
-        width: 90%;
+        width: 100%;
       }
 
       to {
