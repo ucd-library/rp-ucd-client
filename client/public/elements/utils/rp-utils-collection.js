@@ -448,6 +448,7 @@ _urlEncode(obj) {
     if (!this.subFacets) {
       return html``;
     }
+
     return html`
     <rp-link-list
       has-header-link

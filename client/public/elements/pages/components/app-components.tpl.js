@@ -248,9 +248,9 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <rp-icon icon="rp-search" circle-bg is-link theme-color='secondary' size="lg"></rp-icon>
 <rp-icon icon="rp-qr" circle-bg is-link></rp-icon>
 <p>Can also be used in different sizes for different types of information representation.</p>
-<rp-icon icon="iron-face" circle-bg theme-color='people' sizeIcon="extralgIconPeople" size="extralg"></rp-icon>
 <rp-icon icon="iron-description" theme-color='work' circle-bg sizeIcon="extralgIconWorks" size="extralg"></rp-icon>
 <rp-icon icon="rp-subject" circle-bg theme-color='subject' sizeIconSVG="extralgSVGIcon" size="extralg"></rp-icon>
+<rp-avatar></rp-avatar>
 
 </section>
 

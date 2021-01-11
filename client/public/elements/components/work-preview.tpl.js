@@ -49,7 +49,7 @@ export default function render() {
     }
   </style>
   <div class=container>
-    <div class="icon-container"><iron-icon icon="av:library-books"></iron-icon></div>
+    <div class="icon-container"><rp-icon icon="iron-description" theme-color='work' circle-bg sizeIcon="extralgIconWorks" size="extralg"></rp-icon></div>
     <div class="text-container">
       ${this._renderTitleLink()}
       ${this._renderAuthors()}

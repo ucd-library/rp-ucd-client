@@ -11,7 +11,7 @@ return html`
   ${styles}
 </style>
 <div class="search-header container bg-light top">
-  <div class="px-5 py-3 bg-primary text-light"><h1 class="weight-regular">Search results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
+  <div style="text-align:center;" class="px-5 py-3 bg-primary text-light"><h1 class="weight-regular">${this.dataTotal} results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
   <rp-link-list class="bg-light p-3"
                 direction="horizontal"
                 current-link="${this.mainFacetIndex}"
@@ -19,10 +19,13 @@ return html`
   </rp-link-list>
 </div>
 <div class="search container bg-light mt-3 pb-3">
-<div class="body flex">
-  <div class="col-facets mt-3">
+<div style="padding: 25px 50px;" class="body flex">
+${this.dataFilters.length == 0 ? html``: 
+  html`  
+  <div class="col-facets mt-3">  
     ${this._renderFacets()}
-  </div>
+  </div>`
+  }
   <div class="col-main">
     <div ?hidden="${this.dataStatus == 'error' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>

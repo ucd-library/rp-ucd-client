@@ -268,7 +268,7 @@ class CollectionModel extends BaseModel {
     }
 
     else if (mainFacet == 'people') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", text: `All People (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.people) {
         let facet = {...f};
@@ -286,7 +286,7 @@ class CollectionModel extends BaseModel {
     }
 
     else if (mainFacet == 'works') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", text: `All Works (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.works) {
         let facet = {...f};
@@ -304,7 +304,7 @@ class CollectionModel extends BaseModel {
     }
 
     else if (mainFacet == 'organizations') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", text: `All Organizations (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.organizations) {
         let facet = {...f};
