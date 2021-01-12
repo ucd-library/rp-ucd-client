@@ -11,6 +11,7 @@ export class RpPersonPreview extends LitElement {
     _parsedData: {type: Object},
     href: {type: String},
     title: {type: String},
+    snippet: {type: String},
     badges: {type: Array},
     avatarSize: {type: String, attribute: 'avatar-size'},
     avatarSrc: {type: String, attribute: 'avatar-src'},
@@ -30,7 +31,7 @@ export class RpPersonPreview extends LitElement {
     this.avatarSize = "";
     this.avatarSrc = "";
     this.data = {};
-    this._parsedData = {name: "", href: "", title: "", avatarSize: "", avatarSrc: ""};
+    this._parsedData = {name: "", href: "", title: "", avatarSize: "", avatarSrc: "", snippet: ""};
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
   }
 
@@ -57,14 +58,20 @@ export class RpPersonPreview extends LitElement {
       this._parsedData.avatarSrc = this.avatarSrc
       this.requestUpdate();
     }
+    if (props.has('snippet')) {
+      this._parsedData.snippet = this.snippet
+      this.requestUpdate();
+    }
     if (props.has('data') && Object.keys(this.data).includes('@id')) this._parseData();
     
   }
 
   _parseData() {
+    debugger;
     this._parsedData.name = this._parseName();
     this._parsedData.title = this._parseTitle();
     this._parsedData.href = this._parseHref();
+    this._parsedData.snippet = this.data.snippet;
   }
 
   _parseName(){

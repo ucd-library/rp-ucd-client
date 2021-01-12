@@ -1,5 +1,6 @@
 import { html } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import "./avatar"
 
 export default function render() {
@@ -47,12 +48,21 @@ export default function render() {
     small.badges {
       margin-top: 5px;
     }
+    .snippet {
+      font-size : var(--font-size-small);
+      color: var(--tcolor-link-disabled-text);
+    }
+    .snippet em {
+      font-weight: bold;
+      font-style: normal;
+    }
   </style>
   <div class=container>
     <rp-avatar size="${this._parsedData.avatarSize}" src="${this._parsedData.avatarSrc}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth})}">
       <a class="name" href="${this._parsedData.href}" ?disabled="${!this._parsedData.href}">${this._parsedData.name}</a>
       <small>${this._parsedData.title}</small>
+      <div class="snippet">${unsafeHTML(this._parsedData.snippet.value)}</div>
       <small class="badges">${this.badges.map(b => this._renderBadge(b))}</small>
     </div>
   </div>
