@@ -18,7 +18,7 @@ export default function render() {
     .row.header {
       color: var(--tcolor-text);
       font-size: var(--font-size-h2);
-      margin-bottom: 34px;
+      margin-bottom: 24px;
     }
     .row.view-all {
       padding-top: 10px;

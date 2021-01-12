@@ -5,6 +5,7 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
   }
@@ -21,9 +22,10 @@ return html`
   }
   #about .cols {
     display: flex;
+    flex-wrap: wrap;
   }
   #about .cols > div {
-    width: 50%;
+    width: 100%;
   }
   .pub-count {
     background-color: var(--tcolor-primary);
@@ -148,9 +150,10 @@ return html`
     .own-profile .box-title-icons {
       order: 2;
     }
-
+    #about .cols > div {
+      width: 50%;
+    }
   }
-  ${styles}
 </style>
 
 

@@ -6,8 +6,10 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
+    min-width: 360px;
   }
 
   #loading {
@@ -68,8 +70,31 @@ return html`
     background-repeat: no-repeat;
     background-size: cover;
   }
+  #masthead .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   #masthead .logo {
     height: var(--masthead-logo-height);
+  }
+  #masthead .hamburger {
+    color: var(--tcolor-primary);
+    left: 15px;
+    width: 24px;
+    height: 24px;
+    z-index: 1;
+  }
+  #masthead .hamburger::after{
+    content: "";
+    background-color: #fff;
+    opacity: .7;
+    z-index: -1;
+    height: var(--masthead-height);
+    left: -8px;
+    width: 39px;
+    position: absolute;
+    cursor: pointer;
   }
   #app-header-content {
     position: relative;
@@ -93,9 +118,18 @@ return html`
     /* Disable click events */
     pointer-events: none;
   }
+  #desktop-menu {
+    display: none;
+  }
+  #nav-container {
+    min-height: 56px;
+  }
   #nav-left a {
     padding: 15px 20px;
     text-transform: uppercase;
+  }
+  #nav-left a:first-child {
+    padding-left: 0;
   }
   #nav-left a.selected {
     background-color: var(--tcolor-secondary);
@@ -150,10 +184,16 @@ return html`
   #app-footer .col-item {
     padding: 5px 0;
   }
-  #app-footer .footer-column {
-  }
 
-  @media (min-width: 768px) {
+  @media (min-width: 480px) {
+    #desktop-menu {
+      display: flex;
+    }
+  }
+  @media (min-width: 800px) {
+    #nav-left a:first-child {
+      padding-left: 20px;
+    }
     #app-footer .footer-top {
       display: grid;
       grid-gap: 10px;
@@ -165,10 +205,7 @@ return html`
     #app-footer .title {
       margin-top: 0;
     }
-
   }
-
-  ${styles}
 
 
 </style>
@@ -189,7 +226,7 @@ return html`
           ${this.theme.siteSubTitle? html`<span class="weight-regular italic text-primary50">${this.theme.siteSubTitle}</span>` : html``}
         </h1>
       </a>
-      <div class="small bold hlist">
+      <div class="small bold hlist" id="desktop-menu">
         <a class="no-decoration" href="/help">Help</a>
         ${this.user ? html`     
               <rp-dropdown no-padding
@@ -208,11 +245,12 @@ return html`
     </div>
 
     <div id="nav-container" class="container flex flex-wrap align-items-center justify-content-between">
-      <div id="nav-left" class="flex align-items-center bold">
+      <rp-icon @click="${this.closeQuickSearch}" ?hidden="${!this.hideMainNav}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
+      <div id="nav-left" class="flex align-items-center bold" ?hidden="${this.hideMainNav}">
         ${this.navLinks.map(link => html`<a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration">${link.text}</a>`)}
       </div>
       <div id="nav-right" class="flex align-items-center">
-        <rp-quick-search @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}"></rp-quick-search>
+        <rp-quick-search id="quick-search" @input-status="${this._onQuickSearchClick}" @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}" input-width="${this.quickSearchWidth}"></rp-quick-search>
       </div>
     </div>
   </div>
@@ -259,7 +297,7 @@ return html`
       ${this.theme.universityLogo? html`<a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html``}
       <hr class="flex-grow-1">
     </div>
-    ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center justify-content-center mb-3">${unsafeHTML(line)}</div>`) : html``}
+    ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center flex-wrap justify-content-center mb-3">${unsafeHTML(line)}</div>`) : html``}
   </div>
 </div>
 `;}

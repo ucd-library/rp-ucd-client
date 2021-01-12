@@ -5,7 +5,7 @@ import "./icon"
 export class RpQuickSearch extends LitElement {
   static get properties() {
   return {
-    inputWidth: {type: parseInt, attribute: "input-width"},
+    inputWidth: {type: Number, attribute: "input-width"},
     inputValue: {type: String, attribute: "input-value", reflect: true},
     placeholder: {type: String},
     opened: {type: Boolean},
@@ -26,6 +26,12 @@ export class RpQuickSearch extends LitElement {
     this._newSearch = new CustomEvent('new-search', {
       detail: {
         message: 'A new search has been triggered'
+      }
+    });
+
+    this._inputStatus = new CustomEvent('input-status', {
+      detail: {
+        message: 'The input has either been expanded or collapsed.'
       }
     });
   }
@@ -50,6 +56,14 @@ export class RpQuickSearch extends LitElement {
       styles['width'] = (this.inputWidth - 20) + "px";
     }
     return styles;
+  }
+
+  open(){
+    this.opened = true;
+  }
+
+  close() {
+    this._handleBlur();
   }
 
   _validateSearchText(){
@@ -94,11 +108,12 @@ export class RpQuickSearch extends LitElement {
     }
     let i = this.shadowRoot.getElementById('search-input');
     if (!i.value) {
-      this.preventOpen = true;
-      //this.opened = false;
-      this.closing = true;
-      self = this;
-      setTimeout(function(){ self.preventOpen = false; }, 300);
+      
+      this.opened = false;
+      //this.preventOpen = true;
+      //this.closing = true;
+      //self = this;
+      //setTimeout(function(){ self.preventOpen = false; }, 300);
     }
   }
 
@@ -121,12 +136,16 @@ export class RpQuickSearch extends LitElement {
 
   updated(changedProperties) {
 
-    if (changedProperties.has('opened') && this.opened) {
-      let w = this.inputWidth;
-      this.inputWidth = 0;
-      this.inputWidth = w;
-      let i = this.shadowRoot.getElementById('search-input');
-      i.focus();
+    if (changedProperties.has('opened')) {
+      if (this.opened) {
+        let w = this.inputWidth;
+        this.inputWidth = 0;
+        this.inputWidth = w;
+        let i = this.shadowRoot.getElementById('search-input');
+        i.focus();
+      }
+      this.dispatchEvent(this._inputStatus);
+
     }
 
 }

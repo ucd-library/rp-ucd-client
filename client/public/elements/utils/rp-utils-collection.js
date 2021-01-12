@@ -286,8 +286,23 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   setPeopleWidth(w) {
     let pw = 250;
     let avatarWidth = 82;
-    let screenPadding = 30;
-    pw = (w - screenPadding) * .7 - avatarWidth - 40;
+    let screenPadding = 40;
+    let facetColumnWidth = 140;
+    let sectionPadding = 40;
+    let grace = 10;
+    if (w >= 800) {
+      screenPadding = 60;
+      sectionPadding = 180;
+      pw = w - screenPadding - sectionPadding - facetColumnWidth;
+    }
+    else if(w >= 480) {
+      sectionPadding = 60;
+      pw = w - screenPadding - sectionPadding - facetColumnWidth;
+    }
+    else {
+      pw = w - screenPadding - sectionPadding;
+    }
+    pw = pw - avatarWidth - grace;
     this.peopleWidth = Math.floor(pw);
   }
 
@@ -427,6 +442,7 @@ _urlEncode(obj) {
       this.azSelected = Azselected;
     }
     return html`
+    <h1 class="hidden-tablet-up mobile-browse-title">${title}</h1>
     <div class="header flex align-items-center">
       <div class="col-facets">
         <h1>${title}</h1>

@@ -5,13 +5,22 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
   }
-  ${styles}
+  #search-term-box {
+    padding: 24px 20px;
+    text-align: center;
+  }
+  @media (min-width: 480px) {
+    #search-term-box {
+      padding: 40px 30px;
+    }
+  }
 </style>
 <div class="search-header container bg-light top">
-  <div class="px-5 py-3 bg-primary text-light"><h1 class="weight-regular">Search results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
+  <div class="bg-primary text-light" id="search-term-box"><h1 class="weight-regular my-0">Search results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
   <rp-link-list class="bg-light p-3"
                 direction="horizontal"
                 current-link="${this.mainFacetIndex}"
