@@ -264,11 +264,11 @@ class CollectionModel extends BaseModel {
     }
 
     if (mainFacet == 'none') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", ct: dataTotal, text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
     }
 
     else if (mainFacet == 'people') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", ct: dataTotal, text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.people) {
         let facet = {...f};
@@ -276,9 +276,11 @@ class CollectionModel extends BaseModel {
         facet.href = this.constructUrl(elementQuery, ['page', 'az']);
         if (Object.keys(counts).includes(facet.es)){
           facet.text += ` (${counts[facet.es]})`;
+          facet.ct = counts[facet.es];
         }
         else {
           facet.text += " (0)";
+          facet.ct = 0;
           facet.disabled = true;
         }
         subFacets.push(facet);
@@ -286,7 +288,7 @@ class CollectionModel extends BaseModel {
     }
 
     else if (mainFacet == 'works') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", ct: dataTotal, text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.works) {
         let facet = {...f};
@@ -294,9 +296,11 @@ class CollectionModel extends BaseModel {
         facet.href = this.constructUrl(elementQuery, ['page', 'az']);
         if (Object.keys(counts).includes(facet.es)){
           facet.text += ` (${counts[facet.es]})`;
+          facet.ct = counts[facet.es];
         }
         else {
           facet.text += " (0)";
+          facet.ct = 0;
           facet.disabled = true;
         }
         subFacets.push(facet);
@@ -304,7 +308,7 @@ class CollectionModel extends BaseModel {
     }
 
     else if (mainFacet == 'organizations') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", ct: dataTotal, text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.organizations) {
         let facet = {...f};
@@ -312,9 +316,11 @@ class CollectionModel extends BaseModel {
         facet.href = this.constructUrl(elementQuery, ['page', 'az']);
         if (Object.keys(counts).includes(facet.es)){
           facet.text += ` (${counts[facet.es]})`;
+          facet.ct = counts[facet.es];
         }
         else {
           facet.text += " (0)";
+          facet.ct = 0;
           facet.disabled = true;
         }
         subFacets.push(facet);

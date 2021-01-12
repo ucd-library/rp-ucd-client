@@ -9,6 +9,9 @@ return html`
   :host {
     display: block;
   }
+  .search.container.no-results, .search.container.not-faceted {
+    margin-top: 20px;
+  }
   #search-term-box {
     padding: 24px 20px;
     text-align: center;
@@ -16,6 +19,9 @@ return html`
   @media (min-width: 480px) {
     #search-term-box {
       padding: 40px 30px;
+    }
+    .search.container {
+      margin-top: 20px;
     }
   }
 </style>
@@ -27,7 +33,8 @@ return html`
                 .links="${this.mainFacets}">
   </rp-link-list>
 </div>
-<div class="search container bg-light mt-3 pb-3">
+${this._renderMobileSubFacets()}
+<div class="search container bg-light pb-3 ${this.data.length > 0 ? 'has-results' : 'no-results'} ${this.mainFacet == 'none' ? 'not-faceted' : 'faceted'}" >
 <div class="body flex">
   <div class="col-facets mt-3">
     ${this._renderFacets()}
