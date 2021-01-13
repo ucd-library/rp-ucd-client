@@ -1,8 +1,9 @@
 import { LitElement, html } from 'lit-element';
 
 import "../components/a-z";
+import "../components/dropdown";
 import "../components/link-list";
-import "../components/organization-preview"
+import "../components/organization-preview";
 import "../components/pagination";
 import "../components/person-preview"
 import "../components/work-preview"
@@ -541,7 +542,7 @@ _urlEncode(obj) {
     <div class="container">
       <div class="hidden-tablet-up" id="mobile-subfacets">
         ${this.subFacetsWithResultsCt > 1 ? html`
-          <p>dropdown goes here</p>
+          <rp-dropdown .choices=${this.subFacets} .chosen=${this.subFacetIndex} filter-icon use-links></rp-dropdown>
         ` : html`
           <p class="bold">${singleFacetText}</p>
         `}
