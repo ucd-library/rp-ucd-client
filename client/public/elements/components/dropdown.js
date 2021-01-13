@@ -64,6 +64,9 @@ export class RpDropdown extends LitElement {
     if (this.filterIcon) {
       classes['has-filter-icon'] = true;
     }
+    if (this.themeColor == "bg-primary") {
+      classes['bg-primary'] = true;
+    }
 
     return classes;
   }

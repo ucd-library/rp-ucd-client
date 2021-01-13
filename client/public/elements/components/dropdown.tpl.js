@@ -16,8 +16,19 @@ export default function render() {
       display: flex;
       align-items: center;
     }
+    .container.bg-primary {
+      background-color: var(--tcolor-bg-primary);
+      color: var(--tcolor-text);
+    }
+    .container.outline-primary {
+      color: var(--tcolor-primary70);
+      background-color: var(--tcolor-light);
+    }
     rp-icon {
       padding-left: 10px;
+    }
+    .bg-primary .line {
+      background-color: #fff;
     }
     .line {
       background-color: var(--tcolor-primary10);
@@ -46,10 +57,6 @@ export default function render() {
     #input::placeholder {
       color: var(--tcolor-placeholder-text);
     }
-    .container.outline-primary {
-      color: var(--tcolor-primary70);
-      background-color: var(--tcolor-light);
-    }
     ul {
       list-style-type: none;
       margin: 0;
@@ -73,15 +80,13 @@ export default function render() {
     iron-icon {
       margin-top: 2px;
     }
-    .container.outline-primary li:hover {
-      background-color: var(--tcolor-primary10);
+    .outline-primary li:hover, .bg-primary li:hover {
+      background-color: var(--tcolor-primary10) !important;
     }
-    .container.outline-primary ul {
+    .outline-primary ul, .bg-primary ul{
       border-style: solid;
       border-width: 1px;
       border-color: var(--tcolor-primary70);
-    }
-    .container.outline-primary ul {
       background-color: var(--tcolor-light);
     }
     .container.upper {

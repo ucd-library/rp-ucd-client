@@ -451,7 +451,8 @@ _urlEncode(obj) {
       this.azSelected = Azselected;
     }
     return html`
-    <h1 class="hidden-tablet-up mobile-browse-title">${title}</h1>
+    <h1 class="hidden-tablet-up mobile-browse-title mb-0">${title}</h1>
+    ${this._renderMobileSubFacets(true)}
     <div class="header flex align-items-center">
       <div class="col-facets">
         <h1>${title}</h1>
@@ -524,7 +525,7 @@ _urlEncode(obj) {
 
   }
 
-  _renderMobileSubFacets(){
+  _renderMobileSubFacets(isBrowsePage=false){
     if (this.data.length == 0 || this.mainFacet == 'none') return html``;
 
     let singleFacetText = "";
@@ -540,9 +541,9 @@ _urlEncode(obj) {
 
     return html`
     <div class="container">
-      <div class="hidden-tablet-up" id="mobile-subfacets">
+      <div class="hidden-tablet-up ${isBrowsePage ? 'is-browse-page' : ''}" id="mobile-subfacets">
         ${this.subFacetsWithResultsCt > 1 ? html`
-          <rp-dropdown .choices=${this.subFacets} .chosen=${this.subFacetIndex} filter-icon use-links></rp-dropdown>
+          <rp-dropdown .choices=${this.subFacets} .chosen=${this.subFacetIndex} filter-icon use-links theme-color="${isBrowsePage ? 'bg-primary' : 'outline-primary'}"></rp-dropdown>
         ` : html`
           <p class="bold">${singleFacetText}</p>
         `}
