@@ -66,7 +66,7 @@ export class RpIcon extends LitElement {
     if (this._isCustomIcon(this.icon)) {
       let icon = this.icon.split("-").slice(1).join('-');
       return this.sizeIconSVG ? html`<svg class="icon ${this.sizeIconSVG}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">${this._renderCustomIcon(icon)}</svg>`:
-                                html`<svg class="icon rp" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">${this._renderCustomIcon(icon)}</svg>`;
+                                html`<svg class="icon rp" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">${this._renderCustomIcon(icon)}</svg>`;
     }
     return html``;
   }

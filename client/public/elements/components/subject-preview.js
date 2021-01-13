@@ -25,8 +25,9 @@ export class RpSubjectPreview extends LitElement {
     }
     else {
       try {
-        let id = this.data['@id'].split(`${this.jsonldContext}:subjectArea`)[1];
+        let id = this.data['@id'].split(':')[1];
         href = this.subjectPath + id;
+        console.log("HREF: ", href)
       } catch (error) {
         console.warn("Unable to construct subject href.");
       }

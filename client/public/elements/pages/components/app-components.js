@@ -35,7 +35,7 @@ export class AppPageComponents extends Mixin(LitElement)
     if (!this.visible) {
       return;
     }
-    await Promise.all([this.getWorks(), this.getOrgs()]);
+    await Promise.all([this.getWorks(), this.getSubjects() ,this.getOrgs()]);
   }
 
   async getWorks(){

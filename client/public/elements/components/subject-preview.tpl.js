@@ -53,6 +53,7 @@ export default function render() {
       <div class="icon-container"><rp-icon icon="rp-subject" circle-bg theme-color='subject' sizeIconSVG="extralgSVGIcon" size="extralg"></rp-icon></div>
       <div class="text-container">
         ${this._renderTitleLink()}
+
       </div>
     </div>
   `;

@@ -20,8 +20,8 @@ export default function render() {
 
     .icon.extralgSVGIcon {
       fill: currentColor;
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
     }
     .lgIcon {
       height: 24px;

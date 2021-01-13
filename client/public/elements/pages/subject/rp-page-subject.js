@@ -7,6 +7,8 @@ import "../../components/alert";
 import "../../components/badge";
 import "../../components/link-list";
 import "../../components/person-preview";
+import "../../components/subject-preview";
+
 
 export default class RpPageSubject extends RpUtilsLanding {
   static get properties() {
