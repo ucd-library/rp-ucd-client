@@ -32,6 +32,7 @@ export class RpWorkPreview extends LitElement {
         try {
             let id = this.data['@id'].split(`${this.jsonldContext}:publication`)[1];
             href = this.workPath + id;
+            console.log("Current href: ", href)
         } catch (error) {
             console.warn("Unable to construct work href.");
         }

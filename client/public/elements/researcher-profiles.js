@@ -62,7 +62,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.hasProfile = this.user && this.user.hasProfile;
     this.dropdownOptions = JSON.stringify([{text: "Logout", href: "/auth/logout"}]);
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
-                     //{text: 'Organizations', page: 'organizations', href: '/organizations'},
+                     {text: 'Subjects', page: 'subjects', href: '/subjects'},
                      {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '/help'}];
 

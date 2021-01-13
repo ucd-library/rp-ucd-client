@@ -10,6 +10,7 @@ export class AppPageComponents extends Mixin(LitElement)
     return {
       exampleWorks: {type: Array},
       exampleOrgs: {type: Array},
+      exampleSubjects : {type: Array},
       visible: {type: Boolean}
     };
     }
@@ -18,6 +19,7 @@ export class AppPageComponents extends Mixin(LitElement)
     this._injectModel('CollectionModel', 'AppStateModel');
     this.visible = false;
     this.exampleWorks = [];
+    this.exampleSubjects = [];
     this.exampleOrgs = [];
     this.render = render.bind(this);
 
@@ -44,6 +46,16 @@ export class AppPageComponents extends Mixin(LitElement)
     }
     this.exampleWorks = data.payload.results;
 
+  }
+
+  async getSubjects(){
+    let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["ucdrp:subjectArea"]}}};
+    let data = await this.CollectionModel.query(q);
+    if (data.state != 'loaded') {
+      return;
+    }
+    this.exampleSubjects = data.payload.results;
+    console.log(this.exampleSubjects);
   }
 
   async getOrgs(){

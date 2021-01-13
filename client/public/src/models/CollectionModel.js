@@ -14,6 +14,8 @@ class CollectionModel extends BaseModel {
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.mainFacets = [{id: 'people', text: 'People', es: `${this.jsonldContext}:person`,
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
+                       {id: 'subjects', text: 'Subjects', es: `${this.jsonldContext}:subjectArea`,
+                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":subjectArea"]}}},
                       /*
                        {id: 'organizations', text: 'Organizations', es: 'ucdrp:organization',
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":organization"]}}},
@@ -33,12 +35,16 @@ class CollectionModel extends BaseModel {
         {id: 'chapters', es: "bibo:Chapter", text: 'Chapter', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Chapter"]}}},
         {id: 'conference-papers', es: "vivo:ConferencePaper", text: 'Conference Paper', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:ConferencePaper"]}}}
       ],
+      subjects: [
+        // {id: 'concept', es: "skos:Concept", text: 'Concept', baseFilter:{"@type": {"type": "keyword", "op": "and", "value": ["skos:Concept"]}}},
+      ],
       organizations: [
         {id: 'universities', es: 'vivo:University', text: 'University', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:University"]}}},
         {id: 'departments', es: 'vivo:AcademicDepartment', text: 'Department', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:AcademicDepartment"]}}}
       ]
     }
     this.aggs = {people : {"@type": {"type" : "facet"}},
+                 subject : {"@type": {"type" : "facet"}},
                  works : {"@type": {"type" : "facet"}},
                  organizations : {"@type": {"type" : "facet"}}};
     this.pgPer = 8;
@@ -70,8 +76,11 @@ class CollectionModel extends BaseModel {
         "abstract^8",
         "hasPublicationVenue.label.text^7",
         "hasPublicationVenue.issn^5",
-        "hasSubjectArea.label.text"
         ],
+      subjects: [
+        "label.text^6",
+        "hasSubjectArea.label.text" //unsure if the subjectArea should be included since it seems to be apart of Works section
+      ],
       organizations: [
         "label.text^10"]}
 
@@ -104,6 +113,11 @@ class CollectionModel extends BaseModel {
     }
     else if (id == "worksAggs") {
       queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":publication"]};
+      queryObject.limit = 0;
+      queryObject.facets["@type"] = {"type" : "facet"};
+    }
+    else if (id == "subjectsAggs") {
+      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":subjectArea"]};
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
@@ -198,6 +212,9 @@ class CollectionModel extends BaseModel {
       return {key: "hasContactInfo.familyName.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
     }
     if (mainFacet == 'works') {
+      return {key: "label.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
+    }
+    if (mainFacet == 'subjects') {
       return {key: "label.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
     }
     if (mainFacet == 'organizations') {
@@ -302,6 +319,24 @@ class CollectionModel extends BaseModel {
         subFacets.push(facet);
       }
     }
+
+    else if (mainFacet == 'subjects') {
+      subFacets.push({id: "none", text: `All Subjects (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+
+      for (let f of this.subFacets.works) {
+        let facet = {...f};
+        elementQuery.subFacet = facet.id;
+        facet.href = this.constructUrl(elementQuery, ['page', 'az']);
+        if (Object.keys(counts).includes(facet.es)){
+          facet.text += ` (${counts[facet.es]})`;
+        }
+        else {
+          facet.text += " (0)";
+          facet.disabled = true;
+        }
+        subFacets.push(facet);
+      }
+    }    
 
     else if (mainFacet == 'organizations') {
       subFacets.push({id: "none", text: `All Organizations (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})

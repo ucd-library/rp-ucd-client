@@ -422,6 +422,15 @@ ${this.exampleWorks.map((work) => html`
 </section>
 
 <section>
+<h1>Asset Preview (Subjects)</h1>
+<p>Card for the Subject asset type - used in browse and search pages.</p>
+${this.exampleSubjects.map((subject) => html`
+  <rp-subject-preview .data="${subject}"></rp-subject-preview>
+`)}
+
+</section>
+
+<section>
 <h1>Asset Preview (Organization)</h1>
 <p>Card for the Organization asset type - used in browse and search pages.</p>
 ${this.exampleOrgs.map((org) => html`

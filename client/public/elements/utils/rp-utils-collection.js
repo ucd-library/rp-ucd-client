@@ -2,10 +2,11 @@ import { LitElement, html } from 'lit-element';
 
 import "../components/a-z";
 import "../components/link-list";
-import "../components/organization-preview"
+import "../components/organization-preview";
 import "../components/pagination";
-import "../components/person-preview"
-import "../components/work-preview"
+import "../components/person-preview";
+import "../components/work-preview";
+import "../components/subject-preview";
 
 export default class RpUtilsCollection extends Mixin(LitElement)
   .with(LitCorkUtils) {
@@ -384,6 +385,9 @@ _getAssetType(data) {
   if (data['@type'].includes(this.jsonldContext + ":person")) {
     return "person";
   }
+  if (data['@type'].includes(this.jsonldContext + ":subjectArea")) {
+    return "subject";
+  }  
   if (data['@type'].includes(this.jsonldContext + ":publication")) {
     return "work";
   }
@@ -480,6 +484,12 @@ _urlEncode(obj) {
         text-width="${this.peopleWidth}"
         class="my-3">
       </rp-person-preview>
+      `;
+    }
+
+    if (assetType == 'subject') {
+      return html`
+      <rp-subject-preview .data="${data}" class="my-3"></rp-subject-preview>
       `;
     }
 

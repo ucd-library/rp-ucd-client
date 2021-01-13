@@ -207,6 +207,7 @@ return html`
     <hr class="mb-0 mt-0 light dashed">
     </div>
 
+    
     <div id="nav-container" class="container flex flex-wrap align-items-center justify-content-between">
       <div id="nav-left" class="flex align-items-center bold">
         ${this.navLinks.map(link => html`<a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration">${link.text}</a>`)}

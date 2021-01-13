@@ -40,6 +40,11 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         {id: 'about', text: 'About'},
         {id: 'publications', text: 'Publications'}
       );
+    if (this.assetType == 'subject'){
+      sections.push(
+        {id: 'about', text:'About'}
+      );
+    }
     }
 
     let i = 0;
