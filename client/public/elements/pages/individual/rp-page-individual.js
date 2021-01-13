@@ -70,7 +70,6 @@ export default class RpPageIndividual extends RpUtilsLanding {
     await Promise.all([this._doMainQuery(this.assetId),
                         this._doPubOverviewQuery(this.assetId)]);
     this.isOwnProfile = this._isOwnProfile();
-
   }
 
   updated(props){

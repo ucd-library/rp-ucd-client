@@ -195,7 +195,7 @@ return html`
               <rp-dropdown no-padding
                           sticky-title="${this.user.username.split('@')[0]}"
                           @new-selection="${e => location.href = e.target.choices[e.target.chosen].href}"
-                          choices= ${this.dropdownOptions}>
+                          .choices=${this.dropdownOptions}>
               </rp-dropdown>
           ` : html`
           <a class="no-decoration" href="/auth/login">Login</a>

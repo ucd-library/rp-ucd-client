@@ -60,15 +60,16 @@ export default class ResearcherProfiles extends Mixin(LitElement)
 
     this.isSearch = false;
     this.hasProfile = this.user && this.user.hasProfile;
-    this.dropdownOptions = JSON.stringify([{text: "Logout", href: "/auth/logout"}]);
+    this.dropdownOptions = [{text: "Logout", href: "/auth/logout"}];
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
                      //{text: 'Organizations', page: 'organizations', href: '/organizations'},
                      {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '/help'}];
 
     this._injectModel('AppStateModel');
+
     if( this.hasProfile ){
-      this.dropdownOptions = JSON.stringify([{"text": "My Profile", "href": "individual/" + this.userName}, {"text": "Logout", "href": "/auth/logout"}]);
+      this.dropdownOptions.unshift({text: "My Profile", href: "individual/" + this.userName});
     }
     //
   }
