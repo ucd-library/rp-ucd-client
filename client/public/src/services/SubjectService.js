@@ -8,11 +8,12 @@ class SubjectService extends BaseService {
 
     this.baseUrl = APP_CONFIG.data.apiUrl;
     this.jsonContext = APP_CONFIG.data.jsonldContext;
+    console.log(this.jsonContext);
   }
 
   async getSubject(id){
     return this.request({
-      url : `${this.baseUrl}/${this.jsonContext}%3Apublication${id}`,
+      url : `${this.baseUrl}/${this.jsonContext}%3AsubjectArea${id}`,
       fetchOptions : {
         method : 'GET',
         headers : {

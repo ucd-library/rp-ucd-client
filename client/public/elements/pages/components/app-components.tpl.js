@@ -201,6 +201,7 @@ Otherwise, a <code>new-selection</code> event will fire when an option is clicke
 <h2>Dropdown</h2>
 <p>A stylized dropdown. Listen with <code>@new-selection="\${e => console.log(e.target.choices[e.target.chosen])}</code></p>
 <rp-dropdown choices='["People",
+                       {"text": "Subjects"}
                        {"text": "Organizations"},
                        {"text": "Works"}]'
              @new-selection="${e => console.log(e.target.choices[e.target.chosen])}">

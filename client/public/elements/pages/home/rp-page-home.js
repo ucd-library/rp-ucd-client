@@ -23,6 +23,7 @@ export default class RpPageHome extends Mixin(LitElement)
       people: {type: Array},
       peopleTotal: {type: parseInt},
       peopleWidth: {type: parseInt},
+      subjects: {type: Array},
       subjectsTotal: {type: parseInt},
       context: {type: String},
       visible: {type: Boolean}
@@ -51,6 +52,7 @@ export default class RpPageHome extends Mixin(LitElement)
   reset_properties(){
     this.people = [];
     this.academicWorks = [];
+    this.subjects = [];
     this.visible = false;
     this.facetsStatus = 'loading';
     this.peopleStatus = 'loading';
@@ -140,12 +142,16 @@ export default class RpPageHome extends Mixin(LitElement)
       return;
     }
     this.facets = facetList.payload.aggregations.facets['@type'];
+    console.log(this.facets);
     for (let facet in this.facets) {
       for (let recognizedFacet of this.CollectionModel.subFacets.works) {
         if (facet == recognizedFacet.es) {
           this.academicWorks.push({text: recognizedFacet.text, count: this.facets[facet], href: `/works/${recognizedFacet.id}`});
           break;
         }
+      }
+      if (facet == (this.context + ":subjectArea")) {
+        this.subjectsTotal = this.facets[facet];
       }
       if (facet == (this.context + ":publication")) {
         this.academicWorksTotal = this.facets[facet];

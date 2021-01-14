@@ -237,6 +237,8 @@ return html`
   <rp-page-individual id="individual"></rp-page-individual>
   <rp-page-works id="works"></rp-page-works>
   <rp-page-work id="work"></rp-page-work>
+  <rp-page-subjects id="subjects"></rp-page-subjects>
+  <rp-page-subject id="subject"></rp-page-subject>  
   <rp-page-organizations id="organizations"></rp-page-organizations>
   <rp-page-organization id="organization"></rp-page-organization>
   <rp-page-help id="help"></rp-page-help>

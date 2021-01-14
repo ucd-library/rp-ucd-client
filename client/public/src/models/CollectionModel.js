@@ -79,7 +79,7 @@ class CollectionModel extends BaseModel {
         ],
       subjects: [
         "label.text^6",
-        "hasSubjectArea.label.text" //unsure if the subjectArea should be included since it seems to be apart of Works section
+        //"hasSubjectArea.label.text" //unsure if the subjectArea should be included since it seems to be apart of Works section
       ],
       organizations: [
         "label.text^10"]}
@@ -323,7 +323,7 @@ class CollectionModel extends BaseModel {
     else if (mainFacet == 'subjects') {
       subFacets.push({id: "none", text: `All Subjects (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
-      for (let f of this.subFacets.works) {
+      for (let f of this.subFacets.subjects) {
         let facet = {...f};
         elementQuery.subFacet = facet.id;
         facet.href = this.constructUrl(elementQuery, ['page', 'az']);

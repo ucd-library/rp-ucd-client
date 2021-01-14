@@ -35,9 +35,9 @@ export default class RpPageSubject extends RpUtilsLanding {
     this._injectModel('AppStateModel', 'SubjectModel');
 
     this.assetType = "subject";
-    this.work = {};
+    this.subject = {};
     this.subjectStatus = 'loading';
-    this.authorPath = "/subject/";
+    this.authorPath = "/individual/";
     //this.grpsWithLinks = ["vivo:FacultyMember"];
     //this.authors = [];
     //this.hasOtherAuthors = false;
@@ -82,7 +82,7 @@ export default class RpPageSubject extends RpUtilsLanding {
     }
     let path = state.location.path;
     if (path.length == 1) {
-      this.AppStateModel.setLocation('/subject');
+      this.AppStateModel.setLocation('/subjects');
       return;
     }
     this.assetId = path[1];
@@ -101,7 +101,7 @@ export default class RpPageSubject extends RpUtilsLanding {
       return;
     }
     this.subject = data.payload;
-    if (APP_CONFIG.verbose) console.log("work payload:", data);
+    if (APP_CONFIG.verbose) console.log("subject payload:", data);
 
     //this.authors = this._parseAuthors();
     this.subjectType = this._getSubjectType();
@@ -168,7 +168,7 @@ export default class RpPageSubject extends RpUtilsLanding {
 
   _getSubjectType() {
     try {
-      for (let t of this.work['@type']) {
+      for (let t of this.subject['@type']) {
         for (const possibleType of this.SubjectModel.getSubjectTypes()) {
           if (possibleType.es == t) return possibleType.text;
         }

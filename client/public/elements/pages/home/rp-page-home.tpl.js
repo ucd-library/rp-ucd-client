@@ -120,14 +120,16 @@ return html`
             <rp-view-all text="View All People" href="/people" justify="start" style="margin-left:72px;"></rp-view-all>
         </div>
       </div>
-      <div class="subjects">
-        <!-- 
-        <h2>
-          <span class="bold mr-2">${this.subjectsTotal}</span>
-          <span class="weight-regular">Research Subjects</span>
-        </h2>
-        -->
+      <!-- <div class="subjects">
+        <div class="col-l">
+        <div ?hidden="${this.facetsStatus == 'error' || this.facetsStatus == 'loaded' }" class="loading1">loading</div>
+        <rp-alert ?hidden="${this.facetsStatus == 'loading' || this.facetsStatus == 'loaded' }">Error loading academic works</rp-alert>
+        <rp-link-list-counts ?hidden="${this.facetsStatus == 'loading' || this.facetsStatus == 'error' }"
+                              .viewAllLink='${{text: "View All Subjects", href: '/subjects'}}'
+                              .header="${{text: "Subjects", count: this.subjectsTotal}}">
+        </rp-link-list-counts>
       </div>
+      </div> -->
     </div>
   </div>
 </div>

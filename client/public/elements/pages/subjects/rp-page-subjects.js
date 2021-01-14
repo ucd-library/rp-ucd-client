@@ -10,7 +10,7 @@ export default class RpPageSubjects extends RpUtilsCollection {
 	static get properties(){
 		return {
 		}
-	}
+	} 
 
 	constructor(){
 		super();
