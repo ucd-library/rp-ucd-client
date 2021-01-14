@@ -63,7 +63,7 @@ export class RpQuickSearch extends LitElement {
   }
 
   close() {
-    this._handleBlur();
+    this.opened = false;
   }
 
   _validateSearchText(){

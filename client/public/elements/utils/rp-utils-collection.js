@@ -1,8 +1,9 @@
 import { LitElement, html } from 'lit-element';
 
 import "../components/a-z";
+import "../components/dropdown";
 import "../components/link-list";
-import "../components/organization-preview"
+import "../components/organization-preview";
 import "../components/pagination";
 import "../components/person-preview"
 import "../components/work-preview"
@@ -35,7 +36,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       mainFacetIndex: {type: Number},
       subFacet: {type: String},
       subFacetIndex: {type: Number},
-      subFacetStatus: {type: String}
+      subFacetStatus: {type: String},
+      subFacetsWithResultsCt: {type: Number}
 
     }
   }
@@ -75,6 +77,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.subFacetIndex = 0;
     this.subFacets = [];
     this.subFacetStatus = "loading";
+    this.subFacetsWithResultsCt = 0;
 
     this.textQuery = "";
 
@@ -86,12 +89,18 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   }
 
   updated(props) {
-    this.doUpdated(props);
-  }
-
-  doUpdated(props){
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
+    }
+
+    // check how many subfacets have results
+    if (props.has('subFacetStatus') && this.subFacetStatus == "loaded") {
+      let subfacetCt = 0;
+      for (const subfacet of this.subFacets) {
+        if (subfacet.id=='none') continue;
+        if (subfacet.ct > 0) subfacetCt += 1;
+      }
+      this.subFacetsWithResultsCt = subfacetCt;
     }
   }
 
@@ -442,7 +451,8 @@ _urlEncode(obj) {
       this.azSelected = Azselected;
     }
     return html`
-    <h1 class="hidden-tablet-up mobile-browse-title">${title}</h1>
+    <h1 class="hidden-tablet-up mobile-browse-title mb-0">${title}</h1>
+    ${this._renderMobileSubFacets(true)}
     <div class="header flex align-items-center">
       <div class="col-facets">
         <h1>${title}</h1>
@@ -513,6 +523,33 @@ _urlEncode(obj) {
 
     return html``
 
+  }
+
+  _renderMobileSubFacets(isBrowsePage=false){
+    if (this.data.length == 0 || this.mainFacet == 'none') return html``;
+
+    let singleFacetText = "";
+    if (this.subFacetsWithResultsCt == 1) {
+      for (const subfacet of this.subFacets) {
+        if (subfacet.id=='none') continue;
+        if (subfacet.ct > 0) {
+          singleFacetText = subfacet.text;
+          break;
+        }
+      }
+    }
+
+    return html`
+    <div class="container">
+      <div class="hidden-tablet-up ${isBrowsePage ? 'is-browse-page' : ''}" id="mobile-subfacets">
+        ${this.subFacetsWithResultsCt > 1 ? html`
+          <rp-dropdown .choices=${this.subFacets} .chosen=${this.subFacetIndex} filter-icon use-links theme-color="${isBrowsePage ? 'bg-primary' : 'outline-primary'}"></rp-dropdown>
+        ` : html`
+          <p class="bold">${singleFacetText}</p>
+        `}
+      </div>
+    </div>
+    `;
   }
 
   _renderPagination(totalResults) {

@@ -9,13 +9,20 @@ export class RpIcon extends LitElement {
     themeColor: {type: String, attribute: 'theme-color'},
     isLink: {type: Boolean, attribute: 'is-link'},
     circleBg: {type: Boolean, attribute: 'circle-bg'},
-    hasText: {type: Boolean, attribute: 'has-text'}
+    hasText: {type: Boolean, attribute: 'has-text'},
+    _customIcons: {type: Object}
   };
   }
 
   constructor() {
     super();
     this.render = render.bind(this);
+
+    this._customIcons = {
+      'search': svg`<path d="M21.55,19.4l-4.14-4.15a8.44,8.44,0,1,0-2.16,2.16l4.15,4.15a1.55,1.55,0,0,0,1.08.44,1.52,1.52,0,0,0,1.07-2.6ZM5.05,10.45a5.41,5.41,0,1,1,5.4,5.4A5.4,5.4,0,0,1,5.05,10.45Z"/>`,
+      'qr': svg`<path d="M3,3V8.25H8.25V3ZM6.75,6.75H4.5V4.5H6.75Z"/><path d="M3,15.75V21H8.25V15.75ZM6.75,19.5H4.5V17.25H6.75Z"/><path d="M15.75,3V8.25H21V3ZM19.5,6.75H17.25V4.5H19.5Z"/><polygon points="19.5 9.75 19.5 14.25 15.75 14.25 15.75 15.75 21 15.75 21 9.75 19.5 9.75"/><polygon points="15.75 17.25 15.75 21 17.25 21 17.25 18.75 19.5 18.75 19.5 21 21 21 21 17.25 15.75 17.25"/><polygon points="9.75 3 9.75 4.5 12.75 4.5 12.75 8.25 14.25 8.25 14.25 3 9.75 3"/><polygon points="12.75 9.75 12.75 12.75 9.75 12.75 9.75 17.25 12.75 17.25 12.75 21 14.25 21 14.25 15.75 11.25 15.75 11.25 14.25 14.25 14.25 14.25 11.25 15.75 11.25 15.75 12.75 17.25 12.75 17.25 9.75 12.75 9.75"/><rect x="9.75" y="18.75" width="1.5" height="2.25"/><rect x="6" y="12.75" width="2.25" height="1.5"/><polygon points="9.75 6 9.75 9.75 3 9.75 3 14.25 4.5 14.25 4.5 11.25 11.25 11.25 11.25 6 9.75 6"/>`,
+      'filter': svg`<path d="M22,1H2A1,1,0,0,0,1.3,2.76l8,8v8.85a1,1,0,0,0,.44.85l3.44,2.4A1,1,0,0,0,14.75,22V10.71l8-8A1,1,0,0,0,22,1Z"/>`
+    }
   }
 
   constructClasses() {
@@ -64,16 +71,12 @@ export class RpIcon extends LitElement {
   }
 
   _renderCustomIcon(icon) {
-    if (icon == 'search') {
-      return svg`<path d="M21.55,19.4l-4.14-4.15a8.44,8.44,0,1,0-2.16,2.16l4.15,4.15a1.55,1.55,0,0,0,1.08.44,1.52,1.52,0,0,0,1.07-2.6ZM5.05,10.45a5.41,5.41,0,1,1,5.4,5.4A5.4,5.4,0,0,1,5.05,10.45Z"/>`;
-    }
-    if (icon == 'qr') {
-      return svg`<path d="M3,3V8.25H8.25V3ZM6.75,6.75H4.5V4.5H6.75Z"/><path d="M3,15.75V21H8.25V15.75ZM6.75,19.5H4.5V17.25H6.75Z"/><path d="M15.75,3V8.25H21V3ZM19.5,6.75H17.25V4.5H19.5Z"/><polygon points="19.5 9.75 19.5 14.25 15.75 14.25 15.75 15.75 21 15.75 21 9.75 19.5 9.75"/><polygon points="15.75 17.25 15.75 21 17.25 21 17.25 18.75 19.5 18.75 19.5 21 21 21 21 17.25 15.75 17.25"/><polygon points="9.75 3 9.75 4.5 12.75 4.5 12.75 8.25 14.25 8.25 14.25 3 9.75 3"/><polygon points="12.75 9.75 12.75 12.75 9.75 12.75 9.75 17.25 12.75 17.25 12.75 21 14.25 21 14.25 15.75 11.25 15.75 11.25 14.25 14.25 14.25 14.25 11.25 15.75 11.25 15.75 12.75 17.25 12.75 17.25 9.75 12.75 9.75"/><rect x="9.75" y="18.75" width="1.5" height="2.25"/><rect x="6" y="12.75" width="2.25" height="1.5"/><polygon points="9.75 6 9.75 9.75 3 9.75 3 14.25 4.5 14.25 4.5 11.25 11.25 11.25 11.25 6 9.75 6"/>`;
-    }
+    return this._customIcons[icon];
   }
 
   _isCustomIcon(icon){
-    if (['rp-search', 'rp-qr'].includes(icon)) {
+    if (icon.startsWith('rp-')) icon = icon.split("-").slice(1).join('-');
+    if (Object.keys(this._customIcons).includes(icon)) {
       return true;
     }
     return false;
