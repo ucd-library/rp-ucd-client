@@ -161,11 +161,9 @@ return html`
           <span class="weight-regular">People</span>
         </h2>
         <div class="people-container">
-          ${this.CollectionModel._formatPeople(this.people).map(person => html`
+          ${this.people.map(person => html`
             <rp-person-preview
-              name="${person.name}"
-              href="${"/individual/" + person.id}"
-              title="${person.title}"
+              .data="${person}"
               avatar-size='sm'
               text-width=${this.peopleWidth}>
             </rp-person-preview>

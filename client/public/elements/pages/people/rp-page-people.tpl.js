@@ -27,7 +27,12 @@ return html`
       </div>
       <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
         ${this.data.map(person => html`
-          ${this._renderAssetPreview(person)}
+          <rp-person-preview
+            .data="${person}"
+            text-width="${this.peopleWidth}"
+            show-subjects
+            class="my-3">
+          </rp-person-preview>
           <hr class="dotted">
           `)}
         ${this._renderPagination(this.dataTotal)}

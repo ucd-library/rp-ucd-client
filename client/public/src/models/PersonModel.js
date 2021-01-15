@@ -166,6 +166,38 @@ class PersonModel extends BaseModel {
     return "";
     }
 
+  getNameObject(individual){
+    let out = {'fname': '', 'lname': ''};
+    if (!individual || !individual.hasContactInfo) {
+      return out;
+    }
+    let contactArray = Array.isArray(individual.hasContactInfo) ? individual.hasContactInfo : [individual.hasContactInfo];
+    for (const contactInfo of contactArray) {
+      if (out.fname && out.lname) return out;
+      if (contactInfo.familyName) out.lname = contactInfo.familyName;
+      if (contactInfo.givenName) out.fname = contactInfo.givenName;
+    }
+    return out;
+  }
+
+  getAvatarSrc(individual){
+    return "";
+  }
+
+  getSnippet(individual){
+    let out = "";
+    if (!individual || !individual._snippet) return out;
+    if (individual._snippet.value) out = individual._snippet.value;
+    return out;
+  }
+
+  getLandingPage(individual){
+    let out = "";
+    if (!individual || !individual['@id']) return out;
+    let id = individual['@id'].replace(APP_CONFIG.data.jsonldContext + ":", "");
+    return `/individual/${id}`;
+  }
+
   getEmailAddresses(individual){
     let out = []
     if (!individual) {
@@ -185,6 +217,13 @@ class PersonModel extends BaseModel {
     }
 
     return out;
+  }
+
+  getResearchSubjects(individual) {
+    let out = [];
+    if (!individual || !individual.hasResearchArea) return out;
+    if (Array.isArray(individual.hasResearchArea)) return individual.hasResearchArea;
+    return [individual.hasResearchArea];
   }
 
   getWebsites(individual) {
