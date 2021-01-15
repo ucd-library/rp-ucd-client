@@ -187,6 +187,13 @@ class PersonModel extends BaseModel {
     return out;
   }
 
+  getResearchSubjects(individual) {
+    let out = [];
+    if (!individual || !individual.hasResearchArea) return out;
+    if (Array.isArray(individual.hasResearchArea)) return individual.hasResearchArea;
+    return [individual.hasResearchArea];
+  }
+
   getWebsites(individual) {
     let out = [];
     if (!individual) {
