@@ -30,6 +30,7 @@ return html`
           <rp-person-preview
             .data="${person}"
             text-width="${this.peopleWidth}"
+            show-subjects
             class="my-3">
           </rp-person-preview>
           <hr class="dotted">

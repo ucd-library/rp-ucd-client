@@ -500,6 +500,7 @@ _urlEncode(obj) {
       <rp-person-preview
         .data="${data}"
         show-snippet
+        show-subjects
         text-width="${this.peopleWidth}"
         class="my-3">
       </rp-person-preview>

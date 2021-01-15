@@ -65,6 +65,12 @@ export default function render() {
       ${this.showSnippet && this.getSnippet() ? html`
         <div class="snippet">${unsafeHTML(this.getSnippet())}</div>
       ` : html``}
+      ${this.showSubjects && this.getSubjects() ? html`
+        <small class="badges">${this.getSubjects().map(subject => html`
+          <rp-badge class="my-1">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
+        `)}
+        </small>
+      ` : html``}
       
     </div>
   </div>

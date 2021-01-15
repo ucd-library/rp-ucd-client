@@ -8,8 +8,10 @@ export class RpPersonPreview extends Mixin(LitElement)
   return {
     data: {type: Object},
     showSnippet: {type: Boolean, attribute: 'show-snippet'},
+    showSubjects: {type: Boolean, attribute: 'show-subjects'},
+    subjectCt: {type: Number, attribute: 'subject-ct'},
     avatarSize: {type: String, attribute: 'avatar-size'},
-    textWidth: {type: String, attribute: 'text-width'}
+    textWidth: {type: String, attribute: 'text-width'},
   };
   }
 
@@ -19,7 +21,9 @@ export class RpPersonPreview extends Mixin(LitElement)
     this._injectModel('PersonModel');
     this.data = {};
     this.showSnippet = false;
-    this.avatarSrc = "md";
+    this.showSubjects = false;
+    this.subjectCt = 4;
+    this.avatarSize = "md";
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
   }
 
@@ -43,9 +47,12 @@ export class RpPersonPreview extends Mixin(LitElement)
   getTitle(){
     return this.PersonModel.getHeadlineTitle(this.data);
   }
-
   getSnippet(){
     return this.PersonModel.getSnippet(this.data);
+  }
+  getSubjects(){
+    let subjects = this.PersonModel.getResearchSubjects(this.data);
+    return subjects.slice(0, this.subjectCt);
   }
 }
 
