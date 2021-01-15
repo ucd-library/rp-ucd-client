@@ -58,12 +58,14 @@ export default function render() {
     }
   </style>
   <div class=container>
-    <rp-avatar size="${this._parsedData.avatarSize}" src="${this._parsedData.avatarSrc}"></rp-avatar>
+    <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth})}">
-      <a class="name" href="${this._parsedData.href}" ?disabled="${!this._parsedData.href}">${this._parsedData.name}</a>
-      <small>${this._parsedData.title}</small>
-      <div class="snippet">${unsafeHTML(this._parsedData.snippet.value)}</div>
-      <small class="badges">${this.badges.map(b => this._renderBadge(b))}</small>
+      <a class="name" href="${this.getLandingPage()}" ?disabled="${!this.getLandingPage()}">${this.getLastName()}, ${this.getFirstName()}</a>
+      <small>${this.getTitle()}</small>
+      ${this.showSnippet && this.getSnippet() ? html`
+        <div class="snippet">${unsafeHTML(this.getSnippet())}</div>
+      ` : html``}
+      
     </div>
   </div>
 

@@ -496,13 +496,10 @@ _urlEncode(obj) {
     let assetType = this._getAssetType(data);
 
     if (assetType == 'person') {
-      let person = this.CollectionModel._formatPerson(data);
       return html`
       <rp-person-preview
-        name="${person.name}"
-        href="${"/individual/" + person.id}"
-        title=${person.title}
-        .snippet="${person.snippet}"
+        .data="${data}"
+        show-snippet
         text-width="${this.peopleWidth}"
         class="my-3">
       </rp-person-preview>
