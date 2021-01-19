@@ -509,7 +509,7 @@ _urlEncode(obj) {
 
     if (assetType == 'work') {
       return html`
-      <rp-work-preview .data="${data}" class="my-3"></rp-work-preview>
+      <rp-work-preview .data="${data}" show-snippet class="my-3"></rp-work-preview>
       `;
     }
 

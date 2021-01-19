@@ -156,6 +156,13 @@ class WorkModel extends BaseModel {
     return "";
   }
 
+  getSnippet(work){
+    let out = "";
+    if (!work || !work._snippet) return out;
+    if (work._snippet.value) out = work._snippet.value;
+    return out;
+  }
+
   getPublishedArray(work) {
     let output = [];
     if (!work) return output;
@@ -211,6 +218,22 @@ class WorkModel extends BaseModel {
     } catch (error) {}
 
     return output;
+  }
+
+  getLabel(work){
+    if (typeof work != 'object' || !work.label) return "";
+    return work.label;
+  }
+
+  getLandingPage(work) {
+    if (typeof work != 'object' || !work['@id']) return "";
+    try {
+      let id = work['@id'].split(`${this.service.jsonContext}:publication`)[1];
+      return `${this.UrlLanding}${id}`;
+
+    } catch (error) {
+      return "";
+  }
   }
 
   getFullTextLinks(work){
