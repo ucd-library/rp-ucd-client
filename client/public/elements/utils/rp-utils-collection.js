@@ -299,7 +299,12 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     let facetColumnWidth = 140;
     let sectionPadding = 40;
     let grace = 10;
-    if (w >= 800) {
+    if (w >= 1030) {
+      let containerMaxWidth = 970;
+      sectionPadding = 180;
+      pw = containerMaxWidth - sectionPadding - facetColumnWidth
+    }
+    else if (w >= 800) {
       screenPadding = 60;
       sectionPadding = 180;
       pw = w - screenPadding - sectionPadding - facetColumnWidth;
@@ -509,7 +514,7 @@ _urlEncode(obj) {
 
     if (assetType == 'work') {
       return html`
-      <rp-work-preview .data="${data}" class="my-3"></rp-work-preview>
+      <rp-work-preview .data="${data}" show-snippet class="my-3"></rp-work-preview>
       `;
     }
 

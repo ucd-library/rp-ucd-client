@@ -2,42 +2,42 @@ import { LitElement, html } from 'lit-element';
 import render from './work-preview.tpl.js';
 
 
-export class RpWorkPreview extends LitElement {
+export class RpWorkPreview extends Mixin(LitElement)
+.with(LitCorkUtils) {
   static get properties() {
   return {
     data: {type: Object},
-    href: {type: String},
-    workPath: {type: String},
-    grpsWithLinks: {type: String},
-    authorPath: {type: String},
-    jsonldContext: {type: String},
+    showSnippet: {type: Boolean, attribute: 'show-snippet'},
+    authorCt: {type: Number},
     snippet : {type: String}
   };
   }
 
   constructor() {
     super();
-    this.workPath = "/work/";
-    this.authorPath = "/individual/";
-    this.grpsWithLinks = ["vivo:FacultyMember"];
-    this.jsonldContext = APP_CONFIG.data.jsonldContext;
+    this.data = {};
+    this.authorCt = 0;
+    this.showSnippet = false;
+    this._injectModel('WorkModel');
     this.render = render.bind(this);
   }
 
-  _renderTitleLink() {
-      let href = "";
-      if (this.href) {
-        href = this.href;
-      }
-      else {
-        try {
-            let id = this.data['@id'].split(`${this.jsonldContext}:publication`)[1];
-            href = this.workPath + id;
-        } catch (error) {
-            console.warn("Unable to construct work href.");
-        }
-      }
-      return html`<a class="title" href="${href}" ?disabled="${!href}">${this.data.label}</a>`;
+  getTitle(){
+    return this.WorkModel.getLabel(this.data);
+  }
+  getLink(){
+    return this.WorkModel.getLandingPage(this.data);
+  }
+  getAuthors(){
+    let authors = this.WorkModel.getAuthors(this.data);
+    this.authorCt = authors.length;
+    return authors;
+  }
+  getWorkType(){
+    return this.WorkModel.getWorkType(this.data);
+  }
+  getSnippet(){
+    return this.WorkModel.getSnippet(this.data);
   }
 
   _renderAuthors(){

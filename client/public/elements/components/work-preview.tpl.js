@@ -38,15 +38,9 @@ export default function render() {
       color : var(--tcolor-link-text);
       font-weight : var(--font-weight-bold);
     }
-    .author {
-      color : var(--tcolor-link-text);
-    }
-    a[disabled] {
-      pointer-events: none;
-      text-decoration: none;
-    }
-    a[disabled]:hover {
-      color : var(--tcolor-link-text);
+    .below-title {
+      color : var(--tcolor-text);
+      font-size: var(--font-size-small);
     }
     .snippet {
       font-size : var(--font-size-small);
@@ -60,9 +54,17 @@ export default function render() {
   <div class=container>
     <div class="icon-container"><iron-icon icon="av:library-books"></iron-icon></div>
     <div class="text-container">
-      ${this._renderTitleLink()}
-      ${this._renderAuthors()}
-      <div class="snippet">${unsafeHTML(this.data._snippet.value)}</div>
+      <a class="title" href="${this.getLink()}" ?disabled="${!this.getLink()}">${this.getTitle()}</a>
+      <div class="below-title">
+        <span class="work-type">${this.getWorkType()}</span>
+        ${this.getWorkType() ? html`<span class="mx-1">|</span>` : html``}
+        <span class="authors">${this.getAuthors().map((author, i) => html`
+        ${author.nameLast}, ${author.nameFirst}${this.authorCt > i + 1 ? '; ' : ''}
+        `)}</span>
+      </div>
+      ${this.showSnippet ? html`
+        <div class="snippet">${unsafeHTML(this.getSnippet())}</div>
+      ` : html``}
     </div>
   </div>
 
