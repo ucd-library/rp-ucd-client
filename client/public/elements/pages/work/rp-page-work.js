@@ -10,7 +10,6 @@ import "../../components/person-preview";
 
 
 export default class RpPageWork extends RpUtilsLanding {
-
   static get properties() {
     return {
       work: {type: Object},
@@ -52,7 +51,6 @@ export default class RpPageWork extends RpUtilsLanding {
     this.universityAuthors = [];
     this.universityAuthorsStatus = 'loading';
 
-
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
@@ -81,6 +79,8 @@ export default class RpPageWork extends RpUtilsLanding {
     if (!this.visible) {
       return;
     }
+    console.log("Path:", state.location.path);
+
     let path = state.location.path;
     if (path.length == 1) {
       this.AppStateModel.setLocation('/works');

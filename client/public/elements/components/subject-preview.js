@@ -25,7 +25,7 @@ export class RpSubjectPreview extends LitElement {
     }
     else {
       try {
-        let id = this.data['@id'].split(':')[1];
+        let id = this.data['@id'];
         href = this.subjectPath + id;
       } catch (error) {
         console.warn("Unable to construct subject href.");

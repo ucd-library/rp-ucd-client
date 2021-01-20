@@ -3,7 +3,7 @@ import styles from "../../styles/site.html";
 
 export default function render() {
 return html`
-
+ 
 <style>
   :host {
     display: block;
@@ -76,7 +76,7 @@ return html`
 
   ${styles}
 </style>
-
+ 
 <div class="work container top"> 
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
@@ -87,9 +87,6 @@ return html`
   <div class="data" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="hero">
       <div class="title mb-0"> <h2 class="text-secondary h1 bold mb-0 text-center">${this.subject.label}</h2></div>
-      <!-- <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.map((author, i) => html`
-        <span>${author.nameFirst} ${author.nameLast}</span>${i + 1 < this.authors.length ? html`<span>, </span>` : html``}
-      `)}</p></div> -->
       <div class="type text-center">${this.subjectType}</div>
     </div>
     <rp-link-list class="bg-light p-3"
@@ -97,84 +94,48 @@ return html`
                 .links="${this.getPageSections()}"
                 current-link="${this.activeSection.index}">
     </rp-link-list>
-    <!-- <div class="sections">
-
-      <section id="records" class="bg-light mt-3" ?hidden="${this._hidePageSection('records')}">
-        <h1 class="weight-regular mt-0">Publication Records</h1>
-        ${ (this.WorkModel.getAdditionalLinks(this.work).length > 0 ||
-           this.fullTextLinks) ? html`
-        <h2>Full Text</h2>
-          <ul class="pub-links">
-            ${this.WorkModel.getAdditionalLinks(this.work).map(link => html`
-            <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
-            `)}
-        ${this.fullTextLinks && false ? html`
-            ${this.fullTextLinks.map(link => html`
-            <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
-            `)}
-        ` : html``}
-          </ul>`:html`<div>No known full text links exist.</div>`}
-        ${this.isOwnWork ? html`
-          <h2>Citation Data & Metrics</h2>
-          <ul class="pub-links">
-            <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="https://oapolicy.universityofcalifornia.edu/">UC Publication Management System</a></li>
-          </ul>
-        ` : html``}
-     </section>
-
-     <section id="overview" class="bg-light mt-3" ?hidden="${this._hidePageSection('overview')}">
-        <h1 class="weight-regular mt-0">Overview</h1>
-        ${this.work.abstract ? html`
-          <h2>Abstract</h2>
-          <div>${this.work.abstract}</div>
-        ` : html``}
-        ${this.publishedArray.length > 0 ? html`
-          <h2>Published</h2>
-          <div class="flex align-items-center">${this.publishedArray.map((d, i) => html`
-            <span class="${d.class}">${d.text}</span>${i + 1 < this.publishedArray.length ? html`<span class="list-dot mx-2"></span>` : html``}
-          `)}</div>
-        ` : html``}
-
-        ${this.subjects.length > 0 ? html`
-          <h2>Subjects</h2>
-          <div>
-          ${this.subjects.map(subject => html`
-            <rp-badge size="lg" class="my-1">${subject.label}</rp-badge>
-          `)}
-          </div>
-        ` : html``}
-
-     </section>
-
-     <section id="authors" class="bg-light mt-3" ?hidden="${this._hidePageSection('authors')}">
-        <h1 class="weight-regular mt-0">${APP_CONFIG.theme.universityName} Authors</h1>
-        <div ?hidden="${this._hideStatusSection('loading', 'universityAuthorsStatus')}" class="flex align-items-center justify-content-center">
-          <div class="loading1">loading</div>
-        </div>
-        <div ?hidden="${this._hideStatusSection('error', 'universityAuthorsStatus')}" class="flex align-items-center justify-content-center">
-          <rp-alert>Error loading authors.</rp-alert>
-        </div>
-        <div class="data" ?hidden="${this._hideStatusSection('loaded', 'universityAuthorsStatus')}">
-          ${this.universityAuthors.map(author => html`
-            <rp-person-preview
-              .data="${author}"
-              text-width="${this.peopleWidth}"
-              class="my-3">
-            </rp-person-preview>
-          `)}
-        </div>
-        ${this.hasOtherAuthors ? html`
-          <h1 class="weight-regular">Other Authors</h1>
-          ${this.authors.filter(author => author.isOtherUniversity).map(author => html`
-            <div><span class="name">${author.nameLast}, ${author.nameFirst}</span></div>
-        `)}
-        ` : html``}
-     </section>
-
-    </div> -->
-
   </div>
+  <div class="sections">
 
+  <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
+    <h1 class="weight-regular mt-0">About</h1>
+    <h2 hidden>Overview</h2>
+    <p hidden>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+    ex ea commodo consequat. </p>
+    <div class="cols">
+      <div>
+        <div>
+          <h3 class="mb-2">Related Subjects</h3>
+          <h4>Broader Scope</h4>
+          <h4>Narrower Scope</h4>
+      </div>
+     </div>
+    </div>
+  </section>
+  <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
+    <div class="box-title">
+        <h1 class="weight-regular mt-0">Researchers</h1>
+    </div>
+  </section>
+  <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
+    <div class="box-title">
+      <h1 class="weight-regular mt-0">Publications</h1>
+      <div class="box-title-icons">
+        ${this.isOwnProfile ? html`
+          
+          ` : html``}
+          <div class="pub-icons">
+            <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
+            <div slot="tooltip">Edit Publications</div>
+            </rp-icon>
+            <rp-download-list title="Download Publications List"></rp-download-list>
+          </div>
+
+          <div class="pub-count">${this.totalPublications}</div>
+    </div>
+  </section>
+  </div>
 
 </div>
 

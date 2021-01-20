@@ -13,7 +13,7 @@ class SubjectService extends BaseService {
 
   async getSubject(id){
     return this.request({
-      url : `${this.baseUrl}/${this.jsonContext}%3AsubjectArea${id}`,
+      url : `${this.baseUrl}/${encodeURIComponent(id)}`,
       fetchOptions : {
         method : 'GET',
         headers : {

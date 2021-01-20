@@ -11,7 +11,7 @@ class SubjectModel extends BaseModel {
 		this.store = SubjectStore;
 		this.service = SubjectService;
 		this.CollectionModel = CollectionModel;
-
+		
 		this.register('SubjectModel');
 	}
 

@@ -4,7 +4,7 @@ import styles from "../../styles/site.html"
 export default function render() {
 return html`
 
-<style>
+<style> 
   :host {
     display: block;
   }

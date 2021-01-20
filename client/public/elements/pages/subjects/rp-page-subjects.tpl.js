@@ -21,10 +21,10 @@ ${this._renderBrowseHeader('Subjects')}
         <div class="loading1">loading</div>
       </div>
       <div ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">
-        <rp-alert>Error loading people.</rp-alert>
+        <rp-alert>Error loading subjects.</rp-alert>
       </div>
       <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
-        ${this.data.map(person => html`
+        ${this.data.map(subject => html`
           ${this._renderAssetPreview(subject)}
           <hr class="dotted">
           `)}

@@ -182,7 +182,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
     let path = state.location.path;
     let query = state.location.query;
-
     // start fresh
     this._resetQueryProperties();
 

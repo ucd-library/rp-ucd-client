@@ -2,6 +2,8 @@ import { LitElement, html } from 'lit-element';
 import render from "./rp-page-subjects.tpl.js"
 
 import RpUtilsCollection from "../../utils/rp-utils-collection";
+import "../../components/person-preview"
+
 
 import "../../components/alert";
 
@@ -11,7 +13,7 @@ export default class RpPageSubjects extends RpUtilsCollection {
 		return {
 		}
 	} 
-
+ 
 	constructor(){
 		super();
 		this.render = render.bind(this);
@@ -19,7 +21,7 @@ export default class RpPageSubjects extends RpUtilsCollection {
 		this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
 	}
 
-	async doUpdate(state){
+	async _onAppStateUpdate(state){
 		requestAnimationFrame( () => this.doUpdate(state));
 	}
 

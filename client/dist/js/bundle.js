@@ -1346,6 +1346,8 @@ object-assign
   <rp-page-work id="work"></rp-page-work>
   <rp-page-organizations id="organizations"></rp-page-organizations>
   <rp-page-organization id="organization"></rp-page-organization>
+  <rp-page-organizations id="subjects"></rp-page-organizations>
+  <rp-page-organization id="subject"></rp-page-organization>
   <rp-page-help id="help"></rp-page-help>
   <rp-page-search id="search"></rp-page-search>
   <rp-page-tou id="termsofuse"></rp-page-tou>

@@ -36,7 +36,7 @@ class CollectionModel extends BaseModel {
         {id: 'conference-papers', es: "vivo:ConferencePaper", text: 'Conference Paper', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:ConferencePaper"]}}}
       ],
       subjects: [
-        // {id: 'concept', es: "skos:Concept", text: 'Concept', baseFilter:{"@type": {"type": "keyword", "op": "and", "value": ["skos:Concept"]}}},
+        {id: 'concept', es: "skos:Concept", text: 'Research Subject', baseFilter:{"@type": {"type": "keyword", "op": "and", "value": ["skos:Concept"]}}},
       ],
       organizations: [
         {id: 'universities', es: 'vivo:University', text: 'University', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:University"]}}},
@@ -78,7 +78,7 @@ class CollectionModel extends BaseModel {
         "hasPublicationVenue.issn^5",
         ],
       subjects: [
-        "label.text^6",
+        "label.text^10",
         //"hasSubjectArea.label.text" //unsure if the subjectArea should be included since it seems to be apart of Works section
       ],
       organizations: [
@@ -323,19 +323,19 @@ class CollectionModel extends BaseModel {
     else if (mainFacet == 'subjects') {
       subFacets.push({id: "none", text: `All Subjects (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
-      for (let f of this.subFacets.subjects) {
-        let facet = {...f};
-        elementQuery.subFacet = facet.id;
-        facet.href = this.constructUrl(elementQuery, ['page', 'az']);
-        if (Object.keys(counts).includes(facet.es)){
-          facet.text += ` (${counts[facet.es]})`;
-        }
-        else {
-          facet.text += " (0)";
-          facet.disabled = true;
-        }
-        subFacets.push(facet);
-      }
+      // for (let f of this.subFacets.subjects) {
+      //   let facet = {...f};
+      //   elementQuery.subFacet = facet.id;
+      //   facet.href = this.constructUrl(elementQuery, ['page', 'az']);
+      //   if (Object.keys(counts).includes(facet.es)){
+      //     facet.text += ` (${counts[facet.es]})`;
+      //   }
+      //   else {
+      //     facet.text += " (0)";
+      //     facet.disabled = true;
+      //   }
+      //   subFacets.push(facet);
+      // }
     }    
 
     else if (mainFacet == 'organizations') {

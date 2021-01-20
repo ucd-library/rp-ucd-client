@@ -5,6 +5,10 @@ import RpUtilsLanding from "../../utils/rp-utils-landing";
 
 import "../../components/alert";
 import "../../components/badge";
+import "../../components/citation";
+import "../../components/download-list";
+import "../../components/hero-image";
+import "../../components/icon";
 import "../../components/link-list";
 import "../../components/person-preview";
 import "../../components/subject-preview";
@@ -16,6 +20,7 @@ export default class RpPageSubject extends RpUtilsLanding {
       subject: {type: Object},
       subjectStatus: {type: String},
       //grpsWithLinks: {type: String},
+      subjectId: {type: String},
       authorPath: {type: String},
       authors: {type: Array},
       universityAuthors: {type: Array},
@@ -35,23 +40,21 @@ export default class RpPageSubject extends RpUtilsLanding {
     this._injectModel('AppStateModel', 'SubjectModel');
 
     this.assetType = "subject";
+    this.subjectId = "";
     this.subject = {};
     this.subjectStatus = 'loading';
-    this.authorPath = "/individual/";
+    //this.authorPath = "/individual/";
     //this.grpsWithLinks = ["vivo:FacultyMember"];
     //this.authors = [];
     //this.hasOtherAuthors = false;
     this.subjectType = "";
     this.publishedArray = [];
-    this.subjects = [];
     this.fullTextLinks = [];
     this.isOwnWork = false;
     this.setPeopleWidth(window.innerWidth);
     this._handleResize = this._handleResize.bind(this);
     //this.universityAuthors = [];
     //this.universityAuthorsStatus = 'loading';
-
-
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
@@ -76,26 +79,30 @@ export default class RpPageSubject extends RpUtilsLanding {
    }
 
   async doUpdate(state) {
-    await this.updateComplete;
-    if (!this.visible) {
-      return;
-    }
+    //await this.updateComplete;
+
+    // if (!this.visible) {
+    //   return;
+    // }
+
     let path = state.location.path;
+
     if (path.length == 1) {
       this.AppStateModel.setLocation('/subjects');
       return;
     }
-    this.assetId = path[1];
-    if (!this.assetId) return;
+    this.subjectId = path[1];
+    if (!this.subjectId) return;
 
     this._setActiveSection(path);
 
-    await Promise.all([this._doMainQuery(this.assetId)]);
+    await Promise.all([this._doMainQuery(this.subjectId)]);
 
   }
 
   async _doMainQuery(id){
     let data = await this.SubjectModel.getSubject(id);
+
     this.subjectStatus = data.state;
     if (data.state != 'loaded') {
       return;
