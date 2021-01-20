@@ -192,7 +192,7 @@ return html`
     min-height: 56px;
   }
   #nav-left a {
-    padding: 15px 20px;
+    padding: 15px 10px;
     text-transform: uppercase;
   }
   #nav-left a:first-child {
@@ -256,6 +256,9 @@ return html`
     #desktop-menu {
       display: flex;
     }
+    #nav-left a {
+    padding: 15px 20px;
+  }
   }
   @media (min-width: 800px) {
     #nav-left a:first-child {
@@ -315,7 +318,8 @@ return html`
     <div id="nav-container" class="container flex flex-wrap align-items-center justify-content-between">
       <rp-icon @click="${this.closeQuickSearch}" ?hidden="${!this.hideMainNav}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
       <div id="nav-left" class="flex align-items-center bold" ?hidden="${this.hideMainNav}">
-        ${this.navLinks.map(link => html`<a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration">${link.text}</a>`)}
+        ${this.navLinks.map(link => html`
+        <a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration ${link.page == 'help' ? 'hidden-mobile' : ''}">${link.text}</a>`)}
       </div>
       <div id="nav-right" class="flex align-items-center">
         <rp-quick-search id="quick-search" @input-status="${this._onQuickSearchClick}" @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}" input-width="${this.quickSearchWidth}"></rp-quick-search>
