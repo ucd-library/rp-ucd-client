@@ -79,11 +79,11 @@ export default class RpPageSubject extends RpUtilsLanding {
    }
 
   async doUpdate(state) {
-    //await this.updateComplete;
+    await this.updateComplete;
 
-    // if (!this.visible) {
-    //   return;
-    // }
+    if (!this.visible) {
+      return;
+    }
 
     let path = state.location.path;
 
