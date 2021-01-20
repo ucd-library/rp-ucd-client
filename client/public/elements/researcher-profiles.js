@@ -21,6 +21,7 @@ import "../src"
 
 // app elements
 import "./components/quick-search"
+import "./components/search"
 import "./components/dropdown"
 import bundles from "./pages/bundles"
 
@@ -41,8 +42,10 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       user: {type: Object},
       textQuery: {type: String},
       isSearch: {type: Boolean},
-      hasProfile: {type: Boolean},
-      dropdownOptions:{type:Array},
+      hideMainNav: {type: Boolean},
+      accountLinks: {type:Array},
+      quickSearchWidth: {type: Number},
+      mobileMenuPage: {type: String}
     }
   }
 
@@ -55,23 +58,38 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.loadedPages = {};
     this.user = APP_CONFIG.user;
     this.eSearch = APP_CONFIG.client;
+    this.hideMainNav = false;
     this.textQuery = "";
+    this.quickSearchWidth = 220;
     this.userName = this.user && new String(this.user.username.split('@')[0]);
+    this.mobileMenuPage = "";
 
     this.isSearch = false;
-    this.hasProfile = this.user && this.user.hasProfile;
-    this.dropdownOptions = JSON.stringify([{text: "Logout", href: "/auth/logout"}]);
+    this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
                      {text: 'Subjects', page: 'subjects', href: '/subjects'},
                      {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '/help'}];
 
-    this._injectModel('AppStateModel');
-    if( this.hasProfile ){
-      this.dropdownOptions = JSON.stringify([{"text": "My Profile", "href": "individual/" + this.userName}, {"text": "Logout", "href": "/auth/logout"}]);
-    }
-    //
+    this._injectModel('AppStateModel', 'CollectionModel');
+    this._onResize = this._onResize.bind(this);
   }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('resize', this._onResize);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('resize', this._onResize);
+    super.disconnectedCallback();
+  }
+
+  firstUpdated(props) {
+    this._resizeQuickSearch();
+  }
+
+
 
   /**
    * @method _onAppStateUpdate
@@ -124,6 +142,58 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     }
   }
 
+  closeQuickSearch(){
+    this.shadowRoot.getElementById('quick-search').close();
+  }
+
+  toggleMobileMenu(){
+    let isOpen = this.page == 'app-mobile-menu';
+    if (isOpen) {
+      this.page = this.mobileMenuPage;
+    }
+    else {
+      this.mobileMenuPage = this.page;
+      this.page = 'app-mobile-menu';
+    }
+  }
+
+  _onQuickSearchClick(){
+    if (window.innerWidth < 480) {
+      if (this.shadowRoot.getElementById('quick-search').opened) {
+        this.hideMainNav = true;
+      }
+      else {
+        this.hideMainNav = false;
+      }
+    }
+    else {
+      this.hideMainNav = false;
+    }
+  }
+
+  _onResize(){
+    let w = window.innerWidth;
+    this._onQuickSearchClick();
+    this._resizeQuickSearch(w)
+    if (w >= 480 && this.page == 'app-mobile-menu') this.page = this.mobileMenuPage;
+  }
+
+  _resizeQuickSearch(w) {
+    if (!w) w = window.innerWidth;
+    
+    if (w > 540) {
+      this.quickSearchWidth = 220;
+    }
+    else if (w > 480) {
+      let navWidth = this.shadowRoot.getElementById('nav-left').offsetWidth;
+      this.quickSearchWidth = w - navWidth - 55;
+    }
+    else {
+      this.quickSearchWidth = w - 40 - 50;
+    }
+
+  }
+
   _onSearch(e){
     let url = "/search";
     if (e.target.nodeName == "RP-QUICK-SEARCH") {
@@ -137,6 +207,14 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       }
       url += `?s=${encodeURIComponent(e.target.inputValue)}`
     }
+    else if(e.target.nodeName == 'RP-SEARCH') {
+      if (e.target.searchObject.facet.id == 'all') {
+        url = `/search?s=${encodeURIComponent(e.target.inputValue)}`
+      }
+      else {
+        url = `/search/${e.target.searchObject.facet.id}?s=${encodeURIComponent(e.target.inputValue)}`
+      }
+    }
     //console.log(url);
     this.AppStateModel.setLocation(url);
   }
@@ -147,9 +225,15 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     }
     let styles = {};
     styles['background-image'] = `url(${this.theme.masthead})`;
-    return html`<div id="masthead" class="text-light flex align-items-center" style="${styleMap(styles)}">
-                  <div class="container">${this.theme.universityLogo? html`<a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html``}</div>
-                </div>`;
+    return html`
+      <div id="masthead" class="text-light flex align-items-center" style="${styleMap(styles)}">
+        <div class="container content">
+          ${this.theme.universityLogo? html`
+          <a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html`<div></div>`}
+          <iron-icon icon="menu" class="hamburger hidden-tablet-up" @click="${e => this.toggleMobileMenu()}"></iron-icon>
+        </div>
+        
+      </div>`;
   }
 
   _renderFooterColumns(){

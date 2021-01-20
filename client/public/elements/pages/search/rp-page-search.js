@@ -23,7 +23,7 @@ export default class RpPageSearch extends RpUtilsCollection {
   }
 
   updated(props) {
-    this.doUpdated(props);
+    super.updated(props);
 
     // set primary facet
     if (props.has('mainFacet') && this.mainFacet != 'none') {

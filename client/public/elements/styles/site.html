@@ -110,6 +110,23 @@
           border-color: var(--tcolor-primary70);
         }
 
+        /* Borders */
+        .border-top {
+          border-top: 1px solid var(--tcolor-primary20);
+        }
+        .border-left {
+          border-left: 1px solid var(--tcolor-primary20);
+        }
+        .border-right {
+          border-right: 1px solid var(--tcolor-primary20);
+        }
+        .border-bottom {
+          border-bottom: 1px solid var(--tcolor-primary20);
+        }
+        .border-white {
+          border-color: #fff;
+        }
+
         /* Animations */
         .loading1 {
           animation: pulseColorPrimary 2s ease-in-out infinite;
@@ -123,7 +140,7 @@
           100% { color: var(--tcolor-primary10); }
         }
 
-        /* chevrons and list markers */
+        /* chevrons, list markers and icons */
         .list-dot {
           border-radius: 50%;
           background-color: var(--tcolor-secondary);
@@ -134,24 +151,62 @@
           display: inline-block;
         }
 
+        iron-icon.filled-arrow {
+          color: var(--tcolor-secondary);
+          width: 28px;
+          min-width: 28px;
+          height: 28px;
+          transition: .3s;
+        }
+
+        .list-count {
+          display: table;
+        }
+
+        .list-count .row {
+          display: table-row;
+          align-items: center;
+        }
+        .list-count .count {
+          display: table-cell;
+          color: var(--tcolor-text);
+          font-weight: var(--font-weight-bold);
+          text-align: right;
+          width: calc(30% - 10px);
+          padding-right: 10px;
+        }
+        .list-count .text {
+          display: table-cell;
+          text-align: left;
+        }
+
+        /* Stylelized Links */
+        a.view-all {
+          display: flex;
+          align-items: center;
+          flex-wrap: nowrap;
+          font-weight: var(--font-weight-bold);
+          text-decoration: none;
+          color: var(--tcolor-text);
+          transition: .3s;
+        }
+        a.view-all:hover, a.view-all:hover iron-icon {
+          color: var(--tcolor-link-hover-text) !important
+        }
+
 
         /* Layout classes */
         .container {
-        	width: calc(100% - 30px);
-          margin-left: 15px;
-          margin-right: 15px;
+        	width: calc(100% - 40px);
+          margin-left: 20px;
+          margin-right: 20px;
         }
         .container.top {
           margin-top: 2px;
         }
         .container.collections {
-          padding: 40px 0 20px 0;
+          padding: 20px 0 20px 0;
         }
-        @media (min-width: 992px) {
-          .container {
-            margin-right: auto;
-            margin-left: auto;
-            max-width: 970px; } }
         .hlist {
           display: flex;
           align-items: center;
@@ -168,17 +223,83 @@
           border-right-width: 0;
         }
         .col-facets {
-          width: 30%;
-          margin-left: 40px;
+          display: none;
         }
         .col-main {
-          width: 70%;
-          margin-right: 40px;
+          flex-grow: 1;
+          margin: 0 20px
         }
-        .col-facets > * {
-          margin-right: 70px;
+        .mobile-browse-title {
+          margin: 0 20px 20px 20px;
+        }
+        #mobile-subfacets {
+          padding: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        #mobile-subfacets rp-dropdown {
+          width: 100%;
+          max-width: 350px;
+        }
+        #mobile-subfacets.is-browse-page {
+          padding-left: 0;
+          padding-right: 0;
         }
 
+        /* Tablet Styles */
+        @media (min-width: 480px) {
+          .hidden-tablet-up {
+            display: none !important;
+          }
+          .col-facets {
+            display: block;
+            margin-left: 20px;
+          }
+          .col-facets > rp-link-list {
+            text-align: right;
+            width: 140px;
+          }
+          .col-facets > h1 {
+            width: 140px;
+          }
+        }
+
+
+        /* Desktop Styles */
+        @media (min-width: 800px) {
+          .hidden-tablet-up {
+            display: none !important;
+          }
+          .hidden-desktop {
+            display: none !important;
+          }
+          .container {
+            margin-right: 30px;
+            margin-left: 30px;
+            max-width: 970px;
+            width: calc(100% - 60px);
+          }
+          .col-main {
+            margin: 0 60px;
+          }
+          .col-facets {
+            margin-left: 60px;
+          }
+          .container.collections {
+            padding: 40px 0 20px 0;
+          }
+
+            
+        }
+
+        @media (min-width: 1030px) {
+          .container {
+            margin-right: auto;
+            margin-left: auto;
+          }
+
+        }
 
         /* Flex Utility Classess */
         .flex {
@@ -528,6 +649,9 @@
         }
         .no-decoration {
           text-decoration: none;
+        }
+        .upper-case {
+          text-transform: uppercase !important;
         }
 
 

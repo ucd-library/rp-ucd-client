@@ -6,8 +6,10 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
+    min-width: 360px;
   }
 
   #loading {
@@ -68,8 +70,98 @@ return html`
     background-repeat: no-repeat;
     background-size: cover;
   }
+  #masthead .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   #masthead .logo {
     height: var(--masthead-logo-height);
+  }
+  #masthead .hamburger {
+    color: var(--tcolor-primary70);
+    left: 15px;
+    width: 24px;
+    height: 24px;
+    z-index: 1;
+  }
+  #masthead .hamburger::after{
+    content: "";
+    background-color: #fff;
+    opacity: .75;
+    z-index: -1;
+    height: var(--masthead-height);
+    left: -9px;
+    width: 39px;
+    position: absolute;
+    cursor: pointer;
+  }
+  #app-mobile-menu {
+    background-color: #fff;
+    width: 100%;
+    position: absolute;
+    height: calc(100% - var(--masthead-height));
+    z-index: 100;
+    top: var(--masthead-height);
+    display: flex;
+    flex-direction: column;
+  }
+  #app-mobile-menu .container {
+    margin: 0;
+    padding: 0 24px;
+    width: calc(100% - 48px);
+  }
+  #app-mobile-menu .search-box {
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+  #app-mobile-menu rp-search {
+    width: 100%;
+  }
+  #app-mobile-menu .nav-links {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  #app-mobile-menu .nav-links a {
+    display: flex;
+    height: 50px;
+    padding-left: 14px;
+    align-items: center;
+    color: var(--tcolor-primary);
+    text-decoration: none;
+    font-weight: var(--font-weight-bold);
+  }
+  #app-mobile-menu .nav-links a:hover {
+    color: var(--tcolor-link-hover-text);
+  }
+  #app-mobile-menu a.login-button {
+    font-size: var(--font-size);
+    font-weight: var(--font-weight-bold);
+    padding: 15px 50px;
+    cursor: pointer;
+    transition: .3s;
+    color: var(--tcolor-primary);
+    display: block;
+    text-decoration: none;
+    background-color: var(--tcolor-bg-primary);
+    margin-top: 20px;
+  }
+  #app-mobile-menu a.login-button:hover {
+    background-color: var(--tcolor-hover-bg);
+    color: var(--tcolor-light);
+  }
+  #app-mobile-menu .account {
+    flex-grow: 1;
+    background-color: var(--tcolor-bg-primary);
+    padding-top: 24px;
+  }
+  #app-mobile-menu .greeting {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
+    padding-bottom: 24px;
+    padding-top: 15px;
   }
   #app-header-content {
     position: relative;
@@ -93,9 +185,18 @@ return html`
     /* Disable click events */
     pointer-events: none;
   }
+  #desktop-menu {
+    display: none;
+  }
+  #nav-container {
+    min-height: 56px;
+  }
   #nav-left a {
     padding: 15px 20px;
     text-transform: uppercase;
+  }
+  #nav-left a:first-child {
+    padding-left: 0;
   }
   #nav-left a.selected {
     background-color: var(--tcolor-secondary);
@@ -150,10 +251,16 @@ return html`
   #app-footer .col-item {
     padding: 5px 0;
   }
-  #app-footer .footer-column {
-  }
 
-  @media (min-width: 768px) {
+  @media (min-width: 480px) {
+    #desktop-menu {
+      display: flex;
+    }
+  }
+  @media (min-width: 800px) {
+    #nav-left a:first-child {
+      padding-left: 20px;
+    }
     #app-footer .footer-top {
       display: grid;
       grid-gap: 10px;
@@ -165,10 +272,7 @@ return html`
     #app-footer .title {
       margin-top: 0;
     }
-
   }
-
-  ${styles}
 
 
 </style>
@@ -189,13 +293,13 @@ return html`
           ${this.theme.siteSubTitle? html`<span class="weight-regular italic text-primary50">${this.theme.siteSubTitle}</span>` : html``}
         </h1>
       </a>
-      <div class="small bold hlist">
+      <div class="small bold hlist" id="desktop-menu">
         <a class="no-decoration" href="/help">Help</a>
         ${this.user ? html`     
               <rp-dropdown no-padding
                           sticky-title="${this.user.username.split('@')[0]}"
-                          @new-selection="${e => location.href = e.target.choices[e.target.chosen].href}"
-                          choices= ${this.dropdownOptions}>
+                          use-links
+                          .choices= ${this.accountLinks}>
               </rp-dropdown>
           ` : html`
           <a class="no-decoration" href="/auth/login">Login</a>
@@ -209,11 +313,12 @@ return html`
 
     
     <div id="nav-container" class="container flex flex-wrap align-items-center justify-content-between">
-      <div id="nav-left" class="flex align-items-center bold">
+      <rp-icon @click="${this.closeQuickSearch}" ?hidden="${!this.hideMainNav}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
+      <div id="nav-left" class="flex align-items-center bold" ?hidden="${this.hideMainNav}">
         ${this.navLinks.map(link => html`<a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration">${link.text}</a>`)}
       </div>
       <div id="nav-right" class="flex align-items-center">
-        <rp-quick-search @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}"></rp-quick-search>
+        <rp-quick-search id="quick-search" @input-status="${this._onQuickSearchClick}" @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}" input-width="${this.quickSearchWidth}"></rp-quick-search>
       </div>
     </div>
   </div>
@@ -231,6 +336,31 @@ return html`
       <h1 class="dot one">.</h1><h1 class="dot two">.</h1><h1 class="dot three">.</h1>
     </div>
   </div>
+  <div id="app-mobile-menu">
+    <div class="container bg-primary search-box">
+      <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
+    </div>
+    <div class="container nav-links">
+      ${this.navLinks.map((link, i) => html`
+        <a href="${link.href}" class="upper-case ${i < this.navLinks.length - 1 || !this.user ? 'border-bottom': ''}">${link.text}</a>
+      `)}
+    </div>
+    ${this.user ? html`
+    <div class="container account">
+      <div class="text-default italic">Logged in as <span class="bold">${this.userName}</span></div>
+      <div class="greeting">Hello, ${this.userName}!</div>
+      <div class="nav-links">
+        ${this.accountLinks.map((link, i) => html`
+        <a href="${link.href}" class="border-top border-white">${link.text}</a>
+        `)}
+      </div>
+    </div>
+    ` : html`
+    <div class="container flex justify-content-center">
+      <a class="login-button" href="/auth/login">LOG IN</a>
+    </div>
+    `}
+  </div>
   <app-page-components id="components"></app-page-components>
   <rp-page-home id="home"></rp-page-home>
   <rp-page-people id="people"></rp-page-people>
@@ -245,7 +375,7 @@ return html`
   <rp-page-search id="search"></rp-page-search>
   <rp-page-tou id="termsofuse"></rp-page-tou>
 </iron-pages>
-<div id="app-footer">
+<div id="app-footer" ?hidden="${this.page == 'app-mobile-menu'}">
   <div class="container">
     <div class="footer-top">
       <div>
@@ -262,7 +392,7 @@ return html`
       ${this.theme.universityLogo? html`<a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html``}
       <hr class="flex-grow-1">
     </div>
-    ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center justify-content-center mb-3">${unsafeHTML(line)}</div>`) : html``}
+    ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center flex-wrap justify-content-center mb-3">${unsafeHTML(line)}</div>`) : html``}
   </div>
 </div>
 `;}

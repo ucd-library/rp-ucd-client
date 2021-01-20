@@ -5,26 +5,40 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
   }
-  ${styles}
+  .search.container.no-results, .search.container.not-faceted {
+    margin-top: 20px;
+  }
+  #search-term-box {
+    padding: 24px 20px;
+    text-align: center;
+  }
+  @media (min-width: 480px) {
+    #search-term-box {
+      padding: 40px 30px;
+    }
+    .search.container {
+      margin-top: 20px;
+    }
+  }
 </style>
 <div class="search-header container bg-light top">
-  <div style="text-align:center;" class="px-5 py-3 bg-primary text-light"><h1 class="weight-regular">${this.dataTotal} results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
+  <div class="bg-primary text-light" id="search-term-box"><h1 class="weight-regular my-0">${this.dataTotal} results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
   <rp-link-list class="bg-light p-3"
                 direction="horizontal"
                 current-link="${this.mainFacetIndex}"
                 .links="${this.mainFacets}">
   </rp-link-list>
 </div>
-<div class="search container bg-light mt-3 pb-3">
-<div style="padding: 25px 50px;" class="body flex">
-${this.dataFilters.length == 0 ? html``: 
-  html`  
-  <div class="col-facets mt-3">  
+${this._renderMobileSubFacets()}
+<div class="search container bg-light pb-3 ${this.data.length > 0 ? 'has-results' : 'no-results'} ${this.mainFacet == 'none' ? 'not-faceted' : 'faceted'}" >
+<div class="body flex">
+  <div class="col-facets mt-3">
     ${this._renderFacets()}
-  </div>`
+  </div>
   }
   <div class="col-main">
     <div ?hidden="${this.dataStatus == 'error' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">

@@ -12,6 +12,7 @@ import "../../components/hero-image";
 import "../../components/icon";
 import "../../components/link-list";
 import "../../components/modal";
+import { isLoading } from '../../../src/services/PersonService.js';
 
 
 
@@ -231,6 +232,11 @@ export default class RpPageIndividual extends RpUtilsLanding {
   getWebsites() {
     if (this.websitesArray.length > 0) return this.websitesArray;
     return this.PersonModel.getWebsites(this.individual)
+  }
+
+  getResearchSubjects(limit=-1) {
+    let subjects = this.PersonModel.getResearchSubjects(this.individual);
+    return subjects.slice(0, limit);
   }
 
   _showSubSection(subsection) {
