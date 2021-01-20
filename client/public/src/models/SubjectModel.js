@@ -11,6 +11,7 @@ class SubjectModel extends BaseModel {
 		this.store = SubjectStore;
 		this.service = SubjectService;
 		this.CollectionModel = CollectionModel;
+		this.UrlLanding = '/subject/';
 		
 		this.register('SubjectModel');
 	}
@@ -37,6 +38,17 @@ class SubjectModel extends BaseModel {
 
 	getSubjectTypes(){
 		return this.CollectionModel.subFacets.subjects;
+	}
+
+	getPreferredLabel(subject){
+		if (!subject || !subject.label) return "";
+		if (subject.prefLabel) return subject.prefLabel;
+		return subject.label;
+	}
+
+	getLandingPage(subject){
+		if (!subject || !subject['@id']) return "";
+		return `${this.UrlLanding}${encodeURIComponent(subject['@id'])}`
 	}
 }
 

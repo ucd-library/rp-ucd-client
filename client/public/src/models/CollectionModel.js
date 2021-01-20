@@ -106,6 +106,17 @@ class CollectionModel extends BaseModel {
         queryObject.offset = randomOffset;
       }
     }
+    else if (id = "randomSubjects") {
+      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":subjectArea"]};
+      queryObject.limit = 10;
+      if (kwargs.limit) {
+        queryObject.limit = kwargs.limit;
+      }
+      if (kwargs.total) {
+        let randomOffset = Math.floor(Math.random() * (kwargs.total - queryObject.limit));
+        queryObject.offset = randomOffset;
+      }
+    }
     else if (id == "peopleAggs") {
       queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":person"]};
       queryObject.limit = 0;

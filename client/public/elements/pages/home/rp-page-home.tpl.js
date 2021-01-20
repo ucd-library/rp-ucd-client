@@ -66,6 +66,9 @@ return html`
     width: 100%;
     justify-content: flex-end;
   }
+  #subjects {
+    padding-bottom: 15px;
+  }
 
   @media (min-width: 800px){
     .people-container {
@@ -76,6 +79,7 @@ return html`
     }
     .data .col-l {
       width: 30%;
+      min-width: 30%;
     }
     .data .col-r {
       padding-left: 24px;
@@ -93,6 +97,9 @@ return html`
     }
     #works {
       padding-top: 0;
+    }
+    #subjects {
+      padding-bottom: 15px;
     }
   }
 
@@ -133,9 +140,9 @@ return html`
 <div class="data bg-light">
   <div class="container flex">
     <div class="col-l">
-      <div ?hidden="${this.facetsStatus == 'error' || this.facetsStatus == 'loaded' }" class="loading1">loading</div>
-      <rp-alert ?hidden="${this.facetsStatus == 'loading' || this.facetsStatus == 'loaded' }">Error loading academic works</rp-alert>
-      <div id="works" ?hidden="${this.facetsStatus == 'loading' || this.facetsStatus == 'error' }">
+      <div ?hidden="${this._hideStatusSection('loading', 'facetsStatus')}" class="loading1">loading</div>
+      <rp-alert  ?hidden="${this._hideStatusSection('error', 'facetsStatus')}">Error loading academic works</rp-alert>
+      <div id="works" ?hidden="${this._hideStatusSection('loaded', 'facetsStatus')}">
         <div class="list-count">
           <div class="row">
             <div class="count"><h2 class="mt-0">${this.academicWorksTotal}</h2></div>
@@ -155,7 +162,9 @@ return html`
       </div>
     </div>
     <div class="col-r flex-grow-1">
-      <div class="people" id="people">
+      <div ?hidden="${this._hideStatusSection('loading', 'peopleStatus')}" class="loading1">loading</div>
+      <rp-alert  ?hidden="${this._hideStatusSection('error', 'peopleStatus')}">Error loading people</rp-alert>
+      <div class="people" id="people" ?hidden="${this._hideStatusSection('loaded', 'peopleStatus')}">
         <h2 class="mt-0">
           <span class="bold mr-2">${this.peopleTotal}</span>
           <span class="weight-regular">People</span>
@@ -175,15 +184,19 @@ return html`
         </div>
       </div>
       <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-      <div class="subjects">
-        <!-- 
+      <div id="subjects">
         <h2>
           <span class="bold mr-2">${this.subjectsTotal}</span>
           <span class="weight-regular">Research Subjects</span>
         </h2>
-        -->
+        ${this.subjects.map(subject => html`
+          <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(subject)}">${this.SubjectModel.getPreferredLabel(subject)}</rp-badge>
+        `)}
+        ${this.subjectsTotal > 10 ? html`
+          <rp-badge size="lg" class="my-1" ellipsis href="/subjects"></rp-badge>
+          ` : html``}
       </div>
-      </div>
+      <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
     </div>
   </div>
 </div>

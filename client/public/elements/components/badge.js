@@ -7,6 +7,7 @@ export class RpBadge extends LitElement {
   return {
     size: {type: String},
     href: {type: String},
+    ellipsis: {type: Boolean},
     colorSequence: {type: Number,
                     attribute: 'color-sequence'},
   };
@@ -15,11 +16,12 @@ export class RpBadge extends LitElement {
   constructor() {
     super();
     this.maxColor = 6;
+    this.ellipsis = false;
     this.render = render.bind(this);
   }
 
   constructClasses() {
-    let classes = {};
+    let classes = {'main': true};
 
     if (this.size) {
       classes['size-' + this.size] = true;
@@ -28,6 +30,9 @@ export class RpBadge extends LitElement {
     if (this.colorSequence) {
       let n = Math.floor(this.colorSequence);
       classes['color-' + n.toString()] = true;
+    }
+    else if ( this.ellipsis ) {
+      classes['ellipsis'] = true;
     }
     else {
       let siblings = [...this.parentNode.childNodes].filter(n => n.tagName === this.tagName);
@@ -56,7 +61,12 @@ export class RpBadge extends LitElement {
 
   _renderSpan() {
     return html`<span class=${classMap(this.constructClasses())}>
-      <slot></slot>
+      ${this.ellipsis ? html`
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      ` : html`<slot></slot>`}
+      
     </span>`;
   }
 
