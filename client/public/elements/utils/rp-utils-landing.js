@@ -27,7 +27,6 @@ export default class RpUtilsLanding extends Mixin(LitElement)
 
   getPageSections() {
     let baseHref = `/${this.assetType}/${this.assetId}`;
-    console.log("HREF:", baseHref);
     let sections = [{id:"all", text: "All Info", href: baseHref}];
     if (this.assetType == 'work') {
       sections.push(

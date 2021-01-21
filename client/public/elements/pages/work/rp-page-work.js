@@ -110,6 +110,7 @@ export default class RpPageWork extends RpUtilsLanding {
     this.subjects = this._getSubjects();
     this.fullTextLinks = this._getFullTextLinks();
     this._doAuthorQuery(id, this.authors);
+    console.log("Subjects:",this.subjects);
   }
 
   async _doAuthorQuery(id, authors) {
