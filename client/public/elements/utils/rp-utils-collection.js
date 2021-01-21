@@ -487,18 +487,9 @@ _urlEncode(obj) {
     <rp-link-list
       has-header-link
       .links='${this.subFacets}'
-      current-link='${this.subFacetIndex}'
-      >
+      current-link='${this.subFacetIndex}'>
     </rp-link-list>
     `;
-    return html`${facets.map(facet => html`
-      <rp-link-list has-header-link
-                    .links='${facet.values}'
-                    current-link='${facet.activeIndex}'
-                    @changed-link="${e => this._onUserAction('facet_' + facet.id, e.target.links[e.target.currentLink])}">
-      </rp-link-list>
-      `)}
-    `
   }
 
   _renderAssetPreview(data) {
@@ -552,11 +543,27 @@ _urlEncode(obj) {
       }
     }
 
+    // Filter out options without results for mobile only
+    let facets = [];
+    let facetIndex = this.subFacetIndex;
+    if (!singleFacetText) {
+      let oldIndex = 0;
+      let newIndex = 0;
+      for (const facet of this.subFacets) {
+        if (oldIndex == this.subFacetIndex) facetIndex = newIndex;
+        if (facet.ct > 0) {
+          newIndex += 1;
+          facets.push(facet);
+        }
+        oldIndex += 1;
+      }
+    }
+
     return html`
     <div class="container">
       <div class="hidden-tablet-up ${isBrowsePage ? 'is-browse-page' : ''}" id="mobile-subfacets">
         ${this.subFacetsWithResultsCt > 1 ? html`
-          <rp-dropdown .choices=${this.subFacets} .chosen=${this.subFacetIndex} filter-icon use-links theme-color="${isBrowsePage ? 'bg-primary' : 'outline-primary'}"></rp-dropdown>
+          <rp-dropdown .choices=${facets} .chosen=${facetIndex} filter-icon use-links theme-color="${isBrowsePage ? 'bg-primary' : 'outline-primary'}"></rp-dropdown>
         ` : html`
           <p class="bold">${singleFacetText}</p>
         `}

@@ -389,7 +389,7 @@ class CollectionModel extends BaseModel {
     // construct "all results" facet
     let hasResults = false;
     if (typeof payload.total === "number" && payload.total > 0) hasResults = true;
-    let allResults = {id: 'none', text: 'All Results', href: `/search?s=${encodeURIComponent(elementQuery.textQuery)}`};
+    let allResults = {id: 'none', text: 'All', href: `/search?s=${encodeURIComponent(elementQuery.textQuery)}`};
     if (!hasResults) {
       //allResults.disabled = true;
     }
