@@ -36,6 +36,27 @@ class SubjectModel extends BaseModel {
 		return this.store.data.researchersBySubject[id];
 	}
 
+	async getPubOverview(id) {
+		let state = {state: SubjectStore.STATE.INIT};
+		if( state.state === 'init' ) {
+			await this.service.getPubOverview(id);
+		} else if( state.state === 'loading' ){
+			await this.state.request;
+		}
+		return this.store.data.pubOverviewBySubject[id];
+	}
+
+	async getPubs(id, pubType) {
+		let state = {state: SubjectStore.STATE.INIT};
+		let cacheId = JSON.stringify({subject: id, pub: pubType.id});
+		if( state.state === 'init' ) {
+			await this.service.getPubs(id, cacheId, pubType);
+		} else if( state.state === 'loading' ){
+			await this.state.request;
+		}
+		return this.store.data.pubsById[cacheId];
+	}
+
 	getSubjectTypes(){
 		return this.CollectionModel.subFacets.subjects;
 	}

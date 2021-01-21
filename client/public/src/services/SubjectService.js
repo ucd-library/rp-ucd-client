@@ -33,7 +33,7 @@ class SubjectService extends BaseService {
       offset: 0,
       limit: 10,
       filters: {
-        "@type": {"type": "keyword", "op": "and", "value": ["ucdrp:person"]},
+        "@type": {"type": "keyword", "op": "and", "value": [`${this.jsonContext}:person`]},
         "hasResearchArea.@id": {"type": "keyword", "op": "and", "value": [subjectId]}
       }
     }
@@ -50,6 +50,64 @@ class SubjectService extends BaseService {
       onLoading : request => this.store.setResearcherLoading(subjectId, request),
       onLoad : result => this.store.setResearcherLoaded(subjectId, result.body),
       onError : e => this.store.setResearcherError(subjectId, e)
+    });
+  }
+
+  async getPubOverview(subjectId) {
+    let searchObject = {
+      offset: 0,
+      limit: 0,
+      sort: [],
+      filters: {
+        "@type": {"type": "keyword", "op": "and", "value": [`${this.jsonContext}:publication`]},
+        'hasSubjectArea.@id': {"type": "keyword", "op": "and", "value": [subjectId]},
+        'publicationDate': {"type": "exists"}
+      },
+      facets: {"@type": {"type" : "facet"}}
+    };
+
+    return this.request({
+      url : `${this.baseUrl}/search`,
+      fetchOptions : {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(searchObject)
+      },
+      checkCached : () => this.store.data.pubOverviewBySubject[subjectId],
+      onLoading : request => this.store.setPubOverviewLoading(subjectId, request),
+      onLoad : result => this.store.setPubOverviewLoaded(subjectId, result.body),
+      onError : e => this.store.setPubOverviewError(subjectId, e)
+    });
+  }
+
+  async getPubs(subjectId, cacheId, pubType) {
+    let searchObject = {
+      offset: 0,
+      limit: 5,
+      sort: [{"publicationDate": {"order" : "desc"}}],
+      filters: {
+        'hasSubjectArea.@id': {"type": "keyword", "op": "and", "value": [subjectId]},
+        'publicationDate': {"type": "exists"}
+      },
+      facets: {"@type": {"type" : "facet"}}
+    };
+    searchObject.filters = {...searchObject.filters, ...pubType.baseFilter}
+
+    return this.request({
+      url : `${this.baseUrl}/search`,
+      fetchOptions : {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(searchObject)
+      },
+      checkCached : () => this.store.data.pubsById[cacheId],
+      onLoading : request => this.store.setPubLoading(cacheId, request),
+      onLoad : result => this.store.setPubLoaded(cacheId, result.body),
+      onError : e => this.store.setPubError(cacheId, e)
     });
   }
 
