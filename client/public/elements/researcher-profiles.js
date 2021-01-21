@@ -181,7 +181,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   _resizeQuickSearch(w) {
     if (!w) w = window.innerWidth;
     
-    if (w > 540) {
+    if (w > 650) {
       this.quickSearchWidth = 220;
     }
     else if (w > 480) {

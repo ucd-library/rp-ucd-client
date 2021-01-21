@@ -256,9 +256,11 @@ return html`
     #desktop-menu {
       display: flex;
     }
-    #nav-left a {
-    padding: 15px 20px;
   }
+  @media (min-width: 600px) {
+    #nav-left a {
+      padding: 15px 20px;
+    }
   }
   @media (min-width: 800px) {
     #nav-left a:first-child {
