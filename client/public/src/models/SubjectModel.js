@@ -26,15 +26,15 @@ class SubjectModel extends BaseModel {
 		return this.store.data.bySubject[id];
 	}
 
-	// async getAuthors(subjectId, authors){
-	// 	let state = {state : SubjectStore.STATE.INIT};
-	// 	if( state.state === 'init' ) {
-  //     await this.service.getAuthors(subjectId, authors);
-  //   } else if( state.state === 'loading' ) {
-  //     await state.request;
-  //   }
-  //   return this.store.data.subjectAuthors[subjectId];
-	// } 
+	async getResearchers(id) {
+		let state = {state: SubjectStore.STATE.INIT};
+		if( state.state === 'init' ) {
+			await this.service.getResearchers(id);
+		} else if( state.state === 'loading' ){
+			await this.state.request;
+		}
+		return this.store.data.researchersBySubject[id];
+	}
 
 	getSubjectTypes(){
 		return this.CollectionModel.subFacets.subjects;

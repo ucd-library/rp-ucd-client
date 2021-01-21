@@ -7,9 +7,11 @@ class SubjectStore extends BaseStore {
     
     this.data = {
       bySubject: {},
-      subjectAuthors: {}
+      researchersBySubject: {}
     };
-    this.events = {};
+    this.events = {
+      SUBJECT_RESEARCHER_UPDATE: 'subject-researcher-update'
+    };
   }
 
   setSubjectLoading(id, request){
@@ -37,29 +39,30 @@ class SubjectStore extends BaseStore {
     this.data.bySubject[state.id] = state;
   }
 
-  setAuthorLoading(id, request) {
-    this._setAuthorState({
+  setResearcherLoading(id, request) {
+    this._setResearcherState({
       state: this.STATE.LOADING,
       id, request
     });
   }
 
-  setAuthorLoaded(id, payload) {
-    this._setAuthorState({
+  setResearcherLoaded(id, payload) {
+    this._setResearcherState({
       state: this.STATE.LOADED,
       id, payload
     });
   }
 
-  setAuthorError(id, error) {
-    this._setAuthorState({
+  setResearcherError(id, error) {
+    this._setResearcherState({
       state: this.STATE.ERROR,
       id, error
     });
   }
 
-  _setAuthorState(state) {
-    this.data.subjectAuthors[state.id] = state;
+  _setResearcherState(state) {
+    this.data.researchersBySubject[state.id] = state;
+    this.emit(this.events.SUBJECT_RESEARCHER_UPDATE, state);
   }
 }
 

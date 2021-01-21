@@ -7,6 +7,7 @@ class SubjectService extends BaseService {
     this.store = SubjectStore;
 
     this.baseUrl = APP_CONFIG.data.apiUrl;
+    this.searchUrl = APP_CONFIG.data.apiUrl + "/search";
     this.jsonContext = APP_CONFIG.data.jsonldContext;
     console.log(this.jsonContext);
   }
@@ -27,21 +28,31 @@ class SubjectService extends BaseService {
     });
   }
 
-  async getAuthors(subjectId, authorArray){
+  async getResearchers(subjectId) {
+    let searchObject = {
+      offset: 0,
+      limit: 10,
+      filters: {
+        "@type": {"type": "keyword", "op": "and", "value": ["ucdrp:person"]},
+        "hasResearchArea.@id": {"type": "keyword", "op": "and", "value": [subjectId]}
+      }
+    }
     return this.request({
-      url : `${this.baseUrl}/${authorArray.join(',')}`,
+      url : this.searchUrl,
       fetchOptions : {
-        method : 'GET',
+        method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
-        }
+        },
+        body : JSON.stringify(searchObject)
       },
-      checkCached : () => this.store.data.subjectAuthors[subjectId],
-      onLoading : request => this.store.setAuthorLoading(subjectId, request),
-      onLoad : result => this.store.setAuthorLoaded(subjectId, result.body),
-      onError : e => this.store.setAuthorError(subjectId, e)
+      checkCached : () => this.store.data.researchersBySubject[subjectId],
+      onLoading : request => this.store.setResearcherLoading(subjectId, request),
+      onLoad : result => this.store.setResearcherLoaded(subjectId, result.body),
+      onError : e => this.store.setResearcherError(subjectId, e)
     });
   }
+
 }
 
 module.exports = new SubjectService();

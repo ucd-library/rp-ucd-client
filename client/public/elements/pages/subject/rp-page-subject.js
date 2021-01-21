@@ -19,6 +19,8 @@ export default class RpPageSubject extends RpUtilsLanding {
     return {
       subject: {type: Object},
       subjectStatus: {type: String},
+      researchers: {type: Array},
+      researchersStatus: {type: String},
       //grpsWithLinks: {type: String},
       authorPath: {type: String},
       authors: {type: Array},
@@ -43,6 +45,8 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.assetType = "subject";
     this.subject = {};
     this.subjectStatus = 'loading';
+    this.researchers = [];
+    this.researchersStatus = 'loading';
     //this.authorPath = "/individual/";
     //this.grpsWithLinks = ["vivo:FacultyMember"];
     //this.authors = [];
@@ -106,7 +110,7 @@ export default class RpPageSubject extends RpUtilsLanding {
 
     this._setActiveSection(path);
 
-    await Promise.all([this._doMainQuery(this.assetId)]);
+    await Promise.all([this._doMainQuery(this.assetId), this._doResearcherQuery(this.assetId)]);
 
   }
 
@@ -127,22 +131,23 @@ export default class RpPageSubject extends RpUtilsLanding {
     //this._doAuthorQuery(id, this.authors);
   }
 
-  // async _doAuthorQuery(id, authors) {
-  //   this.universityAuthors = [];
-  //   let universityAuthors = authors.filter(author => author.isOtherUniversity == false).map(a => a.apiEndpoint);
-  //   let data = await this.WorkModel.getAuthors(id, universityAuthors);
-  //   this.universityAuthorsStatus = data.state;
-  //   if (data.state != 'loaded') return;
-  //   if (APP_CONFIG.verbose) console.log("university authors:", data);
-  //   if (Array.isArray(data.payload)) {
-  //     universityAuthors = data.payload;
-  //   }
-  //   else {
-  //     universityAuthors = [data.payload];
-  //   }
+  /**
+   * @method _doResearcherQuery
+   * @param {String} id - The subject id of this page.
+   * @description  Retrieves the researchers associated with this subject and saves in this.researchers array
+   * Called on AppStateUpdate
+   */
+  async _doResearcherQuery(id){
+    let data = await this.SubjectModel.getResearchers(id);
 
-  //   this.universityAuthors = universityAuthors;
-  // }
+    this.researchersStatus = data.state;
+    if (data.state != 'loaded') {
+      return;
+    }
+    this.researchers = data.payload;
+    if (APP_CONFIG.verbose) console.log("researchers payload:", data);
+
+  }
 
   setPeopleWidth(w) {
     let pw = 250;
