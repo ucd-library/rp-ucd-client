@@ -106,7 +106,7 @@ class CollectionModel extends BaseModel {
         queryObject.offset = randomOffset;
       }
     }
-    else if (id = "randomSubjects") {
+    else if (id == "randomSubjects") {
       queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":subjectArea"]};
       queryObject.limit = 10;
       if (kwargs.limit) {
@@ -265,7 +265,6 @@ class CollectionModel extends BaseModel {
       return subFacets;
     }
     let elementQuery = {...query};
-
     let counts = {};
     try {
       counts = payload.aggregations.facets['@type'];
