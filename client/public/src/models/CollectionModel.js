@@ -429,6 +429,11 @@ class CollectionModel extends BaseModel {
       return queryObject;
     }
 
+    // subject filter
+    if (mainFacet == 'works' && userQuery.subjectFilter) {
+      queryObject.filters['hasSubjectArea.@id'] = {"type": "keyword", "op": "and", "value": [userQuery.subjectFilter]};
+    }
+
     // merge filters into a single object
     queryObject.filters = {...queryObject.filters, ...this._combineFiltersArray(userQuery.filters)}
 
@@ -533,6 +538,11 @@ class CollectionModel extends BaseModel {
 
     // query args
     let args = [];
+
+    // subject filter
+    if (elementQuery.subjectFilter && !ignoreArgs.includes('subjectFilter')) {
+      args.push(`subject=${elementQuery.subjectFilter}`);
+    }
 
     // pagination
     if (elementQuery.pgCurrent && elementQuery.pgCurrent > 1 && !ignoreArgs.includes('page')) {
