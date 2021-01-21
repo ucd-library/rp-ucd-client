@@ -20,7 +20,6 @@ export default class RpPageSubject extends RpUtilsLanding {
       subject: {type: Object},
       subjectStatus: {type: String},
       //grpsWithLinks: {type: String},
-      subjectId: {type: String},
       authorPath: {type: String},
       authors: {type: Array},
       universityAuthors: {type: Array},
@@ -30,7 +29,9 @@ export default class RpPageSubject extends RpUtilsLanding {
       publishedArray: {type: Array},
       fullTextLinks: {type: Array},
       isOwnWork: {type: Boolean},
-      peopleWidth: {type: Number}
+      peopleWidth: {type: Number},
+      narrowListEx: {type: Object},
+      broadListEx: {type: Object}
     }
   }
 
@@ -40,7 +41,6 @@ export default class RpPageSubject extends RpUtilsLanding {
     this._injectModel('AppStateModel', 'SubjectModel');
 
     this.assetType = "subject";
-    this.subjectId = "";
     this.subject = {};
     this.subjectStatus = 'loading';
     //this.authorPath = "/individual/";
@@ -55,6 +55,15 @@ export default class RpPageSubject extends RpUtilsLanding {
     this._handleResize = this._handleResize.bind(this);
     //this.universityAuthors = [];
     //this.universityAuthorsStatus = 'loading';
+    this.narrowListEx = [{label: "Broad Subject",desc: "Description A"},
+                         {label: "Topic",desc: "Description B"}
+                        ];
+    this.broadListEx = [{label: "Related Subject", desc: "Description A"},
+                        {label: "Sub-Topic", desc: "Description B"},
+                        {label: "Topic", desc: "Description C"},
+                        {label: "Another Sub-Topic", desc: "Description D"},
+                        {label: "Example Topic", desc: "Description E"}
+                       ];    
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
@@ -79,11 +88,11 @@ export default class RpPageSubject extends RpUtilsLanding {
    }
 
   async doUpdate(state) {
-    //await this.updateComplete;
+    await this.updateComplete;
 
-    // if (!this.visible) {
-    //   return;
-    // }
+    if (!this.visible) {
+      return;
+    }
 
     let path = state.location.path;
 
@@ -91,12 +100,13 @@ export default class RpPageSubject extends RpUtilsLanding {
       this.AppStateModel.setLocation('/subjects');
       return;
     }
-    this.subjectId = path[1];
-    if (!this.subjectId) return;
+    console.log("PATH:", path);
+    this.assetId = path[1];
+    if (!this.assetId) return;
 
     this._setActiveSection(path);
 
-    await Promise.all([this._doMainQuery(this.subjectId)]);
+    await Promise.all([this._doMainQuery(this.assetId)]);
 
   }
 
@@ -153,6 +163,11 @@ export default class RpPageSubject extends RpUtilsLanding {
       return false;
     }
     return true;
+  }
+
+  _labelTitle(){
+    if(this.subject.prefLabel) return this.subject.prefLabel;
+    else return this.subject.label;
   }
 
   _getFullTextLinks(){

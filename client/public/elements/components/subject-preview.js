@@ -18,6 +18,11 @@ export class RpSubjectPreview extends LitElement {
     this.render = render.bind(this);
   }
 
+  _labelTitle(){
+    if(this.data.prefLabel) return this.data.prefLabel;
+    else return this.data.label;
+  }
+
   _renderTitleLink() {
     let href = "";
     if (this.href) {
@@ -32,7 +37,7 @@ export class RpSubjectPreview extends LitElement {
       }
 
     }
-    return html`<a class="title" href="${href}" ?disabled="${!href}">${this.data.label}</a>`;
+    return html`<a class="title" href="${href}" ?disabled="${!href}">${this._labelTitle()}</a>`;
   }
 
 

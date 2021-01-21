@@ -86,9 +86,13 @@ return html`
   </div>
   <div class="data" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="hero">
-      <div class="title mb-0"> <h2 class="text-secondary h1 bold mb-0 text-center">${this.subject.label}</h2></div>
-      <div class="type text-center">${this.subjectType}</div>
+      <div class="title mb-0"> 
+      <h2 class="text-secondary h1 bold mb-0 text-center">
+      ${this._labelTitle()}
+      </h2>
     </div>
+    <div class="type text-center">${this.subjectType}</div>
+  </div>
     <rp-link-list class="bg-light p-3"
                 direction="horizontal"
                 .links="${this.getPageSections()}"
@@ -99,16 +103,27 @@ return html`
 
   <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
     <h1 class="weight-regular mt-0">About</h1>
-    <h2 hidden>Overview</h2>
-    <p hidden>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+    <h2>Overview</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
     et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
     ex ea commodo consequat. </p>
     <div class="cols">
       <div>
         <div>
-          <h3 class="mb-2">Related Subjects</h3>
-          <h4>Broader Scope</h4>
-          <h4>Narrower Scope</h4>
+          <h2 class="mb-2">Related Subjects</h2>
+          <br />
+          <i style="font-size: 18px;">Broader Scope</i>
+          <div>
+            ${this.broadListEx.map(broader => html`
+              <rp-badge size="lg" class="my-1">${broader.label}</rp-badge>
+            `)}   
+          </div> 
+          <i style="font-size: 18px;">Narrower Scope</i>
+          <div>     
+          ${this.narrowListEx.map(narrower => html`
+              <rp-badge size="lg" class="my-1">${narrower.label}</rp-badge>
+          `)} 
+          </div> 
       </div>
      </div>
     </div>
