@@ -169,7 +169,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
 
   async _getAzAgg() {
-    let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet)
+    let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet, this.currentQuery.subjectFilter)
     this.azStatus = data.state;
     if (data.state != 'loaded') {
       return;

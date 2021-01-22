@@ -124,6 +124,7 @@ class CollectionModel extends BaseModel {
     }
     else if (id == "worksAggs") {
       queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":publication"]};
+      if (kwargs.subjectFilter) queryObject.filters['hasSubjectArea.@id'] = {"type": "keyword", "op": "and", "value": [kwargs.subjectFilter]};
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
@@ -179,9 +180,10 @@ class CollectionModel extends BaseModel {
 
   }
 
-  async azAggQuery(mainFacet, subFacet){
+  async azAggQuery(mainFacet, subFacet, subjectFilter=false){
     let state = {state : CollectionStore.STATE.INIT};
     let id = `${mainFacet}__${subFacet}`;
+    if ( subjectFilter ) id = `${id}__${subjectFilter}`;
     let filters = [];
     for (let f of this.mainFacets) {
       if (f.id == mainFacet) {
@@ -197,6 +199,7 @@ class CollectionModel extends BaseModel {
         }
       }
     }
+    if (subjectFilter) filters.push({'hasSubjectArea.@id': {"type": "keyword", "op": "and", "value": [subjectFilter]}});
     let q = this.getBaseQueryObject();
     q.limit = 0;
     q.filters = this._combineFiltersArray(filters);
