@@ -25,7 +25,7 @@ ${this._renderBrowseHeader('Subjects')}
       </div>
       <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
         ${this.data.map(subject => html`
-          ${this._renderAssetPreview(subject)}
+          <rp-subject-preview .data="${subject}" class="my-3"></rp-subject-preview>
           <hr class="dotted">
           `)}
         ${this._renderPagination(this.dataTotal)}

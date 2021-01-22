@@ -8,10 +8,13 @@ class SubjectStore extends BaseStore {
     this.data = {
       bySubject: {},
       researchersBySubject: {},
-      researchSubjectBySubject: {}
+      pubOverviewBySubject: {},
+      pubsById: {}
     };
     this.events = {
-      SUBJECT_RESEARCHER_UPDATE: 'subject-researcher-update'
+      SUBJECT_RESEARCHER_UPDATE: 'subject-researcher-update',
+      SUBJECT_PUBOVERVIEW_UPDATE: 'subject-puboverview-update',
+      SUBJECT_PUB_UPDATE: 'subject-pub-update'
     };
   }
 
@@ -65,6 +68,58 @@ class SubjectStore extends BaseStore {
   _setResearcherState(state) {
     this.data.researchersBySubject[state.id] = state;
     this.emit(this.events.SUBJECT_RESEARCHER_UPDATE, state);
+  }
+
+  setPubOverviewLoading(id, request) {
+    this._setPubOverviewState({
+      state: this.STATE.LOADING,
+      id, request
+    });
+  }
+
+  setPubOverviewLoaded(id, payload) {
+    this._setPubOverviewState({
+      state: this.STATE.LOADED,
+      id, payload
+    });
+  }
+
+  setPubOverviewError(id, error) {
+    this._setPubOverviewState({
+      state: this.STATE.ERROR,
+      id, error
+    });
+  }
+
+  _setPubOverviewState(state) {
+    this.data.pubOverviewBySubject[state.id] = state;
+    this.emit(this.events.SUBJECT_PUBOVERVIEW_UPDATE, state);
+  }
+
+  setPubLoading(id, request) {
+    this._setPubState({
+      state: this.STATE.LOADING,
+      id, request
+    });
+  }
+
+  setPubLoaded(id, payload) {
+    this._setPubState({
+      state: this.STATE.LOADED,
+      id, payload
+    });
+  }
+
+  setPubError(id, error) {
+    this._setPubState({
+      state: this.STATE.ERROR,
+      id, error
+    });
+  }
+
+  _setPubState(state) {
+    this.data.pubsById[state.id] = state;
+    this.emit(this.events.SUBJECT_PUB_UPDATE, state);
   }
 }
 

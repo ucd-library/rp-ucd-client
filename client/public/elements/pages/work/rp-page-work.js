@@ -32,7 +32,7 @@ export default class RpPageWork extends RpUtilsLanding {
   constructor() {
     super();
     this.render = render.bind(this);
-    this._injectModel('AppStateModel', 'WorkModel');
+    this._injectModel('AppStateModel', 'WorkModel', 'SubjectModel');
 
     this.assetType = "work";
     this.work = {};

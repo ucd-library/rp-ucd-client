@@ -1,45 +1,32 @@
 import { LitElement, html } from 'lit-element';
 import render from './subject-preview.tpl.js';
 
-export class RpSubjectPreview extends LitElement {
+export class RpSubjectPreview extends Mixin(LitElement)
+.with(LitCorkUtils) {
   static get properties(){
     return {
       data: {type: Object},
-      href: {type: String},
-      subjectPath: {type: String},
-      jsonldContext: {type: String}
+      showSnippet: {type: Boolean, attribute: 'show-snippet'}
     };
   }
 
   constructor(){
     super();
-    this.subjectPath = "/subject/";
-    this.jsonldContext = APP_CONFIG.data.jsonldContext;
+    this._injectModel('SubjectModel');
     this.render = render.bind(this);
+
+    this.showSnippet = false;
   }
 
-  _labelTitle(){
-    if(this.data.prefLabel) return this.data.prefLabel;
-    else return this.data.label;
+  getTitle(){
+    return this.SubjectModel.getPreferredLabel(this.data);
   }
-
-  _renderTitleLink() {
-    let href = "";
-    if (this.href) {
-      href = this.href;
-    }
-    else {
-      try {
-        let id = this.data['@id'];
-        href = this.subjectPath + id;
-      } catch (error) {
-        console.warn("Unable to construct subject href.");
-      }
-
-    }
-    return html`<a class="title" href="${href}" ?disabled="${!href}">${this._labelTitle()}</a>`;
+  getLink(){
+    return this.SubjectModel.getLandingPage(this.data);
   }
-
+  getSnippet(){
+    return this.SubjectModel.getSnippet(this.data);
+  }
 
 }
 

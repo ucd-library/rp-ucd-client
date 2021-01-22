@@ -137,7 +137,7 @@ return html`
           <h2>Subjects</h2>
           <div>
           ${this.subjects.map(subject => html`
-            <rp-badge size="lg" class="my-1">${subject.label}</rp-badge>
+            <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(subject)}">${this.SubjectModel.getPreferredLabel(subject)}</rp-badge>
           `)}
           </div>
         ` : html``}

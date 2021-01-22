@@ -21,6 +21,7 @@ export default class RpPageSubject extends RpUtilsLanding {
       subjectStatus: {type: String},
       researchers: {type: Array},
       researchersStatus: {type: String},
+      publications: {type: Object},
       //grpsWithLinks: {type: String},
       authorPath: {type: String},
       authors: {type: Array},
@@ -41,7 +42,7 @@ export default class RpPageSubject extends RpUtilsLanding {
   constructor() {
     super();
     this.render = render.bind(this);
-    this._injectModel('AppStateModel', 'SubjectModel');
+    this._injectModel('AppStateModel', 'SubjectModel', 'CollectionModel');
 
     this.assetType = "subject";
     this.subject = {};
@@ -49,6 +50,7 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.researchers = [];
     this.researchersStatus = 'loading';
     this.tempResearch = []
+    this.publications = {};
     //this.authorPath = "/individual/";
     //this.grpsWithLinks = ["vivo:FacultyMember"];
     //this.authors = [];
@@ -100,12 +102,16 @@ export default class RpPageSubject extends RpUtilsLanding {
       this.AppStateModel.setLocation('/subjects');
       return;
     }
-    this.assetId = path[1];
+    console.log("PATH:", path);
+    this.assetId = decodeURIComponent(path[1]);
     if (!this.assetId) return;
 
     this._setActiveSection(path);
 
-    await Promise.all([this._doMainQuery(this.assetId), this._doResearcherQuery(this.assetId)]);
+    await Promise.all([
+      this._doMainQuery(this.assetId), 
+      this._doResearcherQuery(this.assetId), 
+      this._doPubOverviewQuery(this.assetId)]);
 
   }
 
@@ -133,7 +139,7 @@ export default class RpPageSubject extends RpUtilsLanding {
   /**
    * @method _doResearcherQuery
    * @param {String} id - The subject id of this page.
-   * @description  Retrieves the researchers associated with this subject and saves in this.researchers array
+   * @description Retrieves the researchers associated with this subject and saves in this.researchers array
    * Called on AppStateUpdate
    */
   async _doResearcherQuery(id){
@@ -146,6 +152,59 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.researchers = data.payload;
     if (APP_CONFIG.verbose) console.log("researchers payload:", data);
 
+  }
+
+  /**
+   * @method _doPubOverviewQuery
+   * @param {String} id - The subject id of this page.
+   * @description Retrieves number of each publication type for this subject.
+   * Retrieves publications for each type by calling _doPubQuery.
+   */
+  async _doPubOverviewQuery(id) {
+    let data = await this.SubjectModel.getPubOverview(id);
+    if (data.state != 'loaded') {
+      return;
+    }
+    if (APP_CONFIG.verbose) console.log('pub overview:', data);
+    let pubTypeCounts = data.payload.aggregations.facets['@type'];
+    
+    let pubTypes = []
+    for (const pubType of this.CollectionModel.subFacets.works) {
+      if (!pubTypeCounts[pubType.es]) continue;
+      pubTypes.push(pubType);
+    }
+
+    this.publications = {}
+    pubTypes.map(pt => this._doPubQuery(pt));
+  }
+
+  /**
+   * @method _doPubQuery
+   * @param {Object} pubType - Publication type from CollectionModel.subFacets.works
+   * @description Retrieves the 5 most recent publications of the specified pubType for this subject.
+   * Adds to publications object.
+   */
+  async _doPubQuery(pubType){
+    let data = await this.SubjectModel.getPubs(this.assetId, pubType);
+    if (data.state != 'loaded') {
+      return;
+    }
+    if (APP_CONFIG.verbose) console.log(`${pubType.id} pubs`, data);
+    this.publications[pubType.id] = {'total': data.payload.total, 'results': data.payload.results};
+  }
+
+  setPeopleWidth(w) {
+    let pw = 250;
+    let avatarWidth = 82;
+    let screenPadding = 30;
+    pw = (w - screenPadding) * .8 - avatarWidth - 40;
+    this.peopleWidth = Math.floor(pw);
+  }  
+
+  _handleResize() {
+    if (!this.visible) return;
+    let w = window.innerWidth;
+    this.setPeopleWidth(w);
   }
 
   _getRelatedSubjectsNarrow(){
@@ -172,21 +231,7 @@ export default class RpPageSubject extends RpUtilsLanding {
       return result;
     } else return false
   }
-
-  setPeopleWidth(w) {
-    let pw = 250;
-    let avatarWidth = 82;
-    let screenPadding = 30;
-    pw = (w - screenPadding) * .8 - avatarWidth - 40;
-    this.peopleWidth = Math.floor(pw);
-  }  
-
-  _handleResize() {
-    if (!this.visible) return;
-    let w = window.innerWidth;
-    this.setPeopleWidth(w);
-  }
-
+  
   _hideStatusSection(section, statusProperty="subjectStatus") {
     if (section == this[statusProperty]) {
       return false;

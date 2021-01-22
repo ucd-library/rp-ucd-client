@@ -30,6 +30,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       pgPer: {type: Number},
       pgCurrent: {type: Number},
       textQuery: {type: String},
+      subjectFilter: {type: String},
       dataFilters: {type: Array},
       data: {type: Array},
       dataStatus: {type: String},
@@ -66,6 +67,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
     this.currentQuery = {};
     this.dataFilters = [];
+    this.subjectFilter = "";
 
     this.pgPer = 8;
     this.pgCurrent = 1;
@@ -167,7 +169,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
 
   async _getAzAgg() {
-    let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet)
+    let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet, this.currentQuery.subjectFilter)
     this.azStatus = data.state;
     if (data.state != 'loaded') {
       return;
@@ -240,8 +242,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       if (arg == 's') {
         this.textQuery = query.s;
       }
-      else if (arg == 'filters') {
-        //this.dataFilters.push( JSON.parse(query[arg]) );
+      else if (arg == 'subject') {
+        this.subjectFilter = query.subject
       }
       else if (arg == 'page' && !isNaN(query[arg])) {
         this.pgCurrent = query[arg];
@@ -271,6 +273,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (this.azSelected) {
       q.azSelected = this.azSelected;
     }
+    if (this.subjectFilter) q.subjectFilter = this.subjectFilter;
 
     if (this.dataFilters) {
       q.filters = this.dataFilters;
@@ -340,55 +343,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
 
     if (path) this.AppStateModel.setLocation(path);
-
-
-    /*
-    let q = {...this.urlQuery};
-    if (!q.filters) {
-      q.filters = {};
-    }
-    if (q.s && q.filters["@type"]) {
-      q.filters = {};
-    }
-    console.log(q);
-    console.log("User action:", action);
-
-    // handle az
-    if (action == 'az') {
-      return;
-    }
-
-    // handle pagination
-    if (action == 'pagination' && this.hasPagination) {
-      this.pgCurrent = args[0];
-      q.offset = this.pgCurrent * this.urlQuery.limit - this.urlQuery.limit;
-    }
-
-    // handle facets
-    if (action.startsWith('facet_')) {
-      if (args[0].filters) {
-        q.filters = {...q.filters, ...args[0].filters}
-      }
-      else {
-        let f = action.slice('facet_'.length, );
-        if (q.filters[f]) {
-          delete q.filters[f];
-        }
-      }
-      q.offset = 0;
-    }
-
-    // construct new url and redirect
-    let p = "";
-    if (this.AppStateModel) {
-      p = "/" + this.AppStateModel.store.data.location.path.join("/")
-    }
-
-    p = p + this._urlEncode(q)
-    //console.log(p);
-    //return;
-    this.AppStateModel.setLocation(p);
-    */
   }
 
   _setDifference(setA, setB) {
@@ -509,7 +463,7 @@ _urlEncode(obj) {
 
     if (assetType == 'subject') {
       return html`
-      <rp-subject-preview .data="${data}" class="my-3"></rp-subject-preview>
+      <rp-subject-preview .data="${data}" class="my-3" show-snippet></rp-subject-preview>
       `;
     }
 
@@ -533,7 +487,10 @@ _urlEncode(obj) {
     if (this.data.length == 0 || this.mainFacet == 'none') return html``;
 
     let singleFacetText = "";
-    if (this.subFacetsWithResultsCt == 1) {
+    if (!this.subFacetsWithResultsCt && this.subFacets.length > 0 ){
+      singleFacetText = this.subFacets[0].text;
+    }
+    else if (this.subFacetsWithResultsCt == 1) {
       for (const subfacet of this.subFacets) {
         if (subfacet.id=='none') continue;
         if (subfacet.ct > 0) {
