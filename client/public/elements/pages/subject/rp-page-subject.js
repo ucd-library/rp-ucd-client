@@ -107,7 +107,7 @@ export default class RpPageSubject extends RpUtilsLanding {
       return;
     }
     console.log("PATH:", path);
-    this.assetId = path[1];
+    this.assetId = decodeURIComponent(path[1]);
     if (!this.assetId) return;
 
     this._setActiveSection(path);
