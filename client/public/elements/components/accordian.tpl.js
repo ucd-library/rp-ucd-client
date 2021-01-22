@@ -13,6 +13,7 @@ export default function render() {
     iron-icon {
       color: var(--tcolor-secondary);
       width: 24px;
+      min-width: 24px;
       height: 24px;
       transition: .3s;
     }

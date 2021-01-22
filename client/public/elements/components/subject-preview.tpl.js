@@ -13,12 +13,10 @@ export default function render() {
       align-items: center;
     }
     .icon-container {
-      background-color: var(--tcolor-bg-primary);
       height: 70px;
       width: 70px;
       min-height: 70px;
       min-width: 70px;
-      border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -59,7 +57,7 @@ export default function render() {
     </style>
 
     <div class=container>
-      <div class="icon-container"><rp-icon icon="rp-subject" circle-bg theme-color='subject' sizeIconSVG="extralgSVGIcon" size="extralg"></rp-icon></div>
+      <div class="icon-container"><rp-icon icon="rp-subject" circle-bg theme-color='subject' size-icon-svg="extralgSVGIcon" size="extralg"></rp-icon></div>
       <div class="text-container">
         <a class="title" href="${this.getLink()}">${this.getTitle()}</a>
         <div class="below-title">

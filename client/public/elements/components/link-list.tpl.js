@@ -16,8 +16,8 @@ export default function render() {
       justify-content: center;
     }
     .container.h .link {
-      margin-left: 1em;
-      margin-right: 1em;
+      margin-left: .5em;
+      margin-right: .5em;
     }
     .container.v {
       flex-flow: column nowrap;
@@ -53,6 +53,12 @@ export default function render() {
     }
     .link.selected:hover, a.link.selected:hover {
       color: var(--tcolor-text);
+    }
+    @media (min-width: 480px) {
+      .container.h .link {
+        margin-left: 1em;
+        margin-right: 1em;
+      }
     }
   </style>
   <div class=${classMap(this._containerClasses)}>
