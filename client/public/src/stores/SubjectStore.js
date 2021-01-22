@@ -7,7 +7,8 @@ class SubjectStore extends BaseStore {
     
     this.data = {
       bySubject: {},
-      researchersBySubject: {}
+      researchersBySubject: {},
+      researchSubjectBySubject: {}
     };
     this.events = {
       SUBJECT_RESEARCHER_UPDATE: 'subject-researcher-update'
@@ -38,6 +39,7 @@ class SubjectStore extends BaseStore {
   _setSubjectState(state){
     this.data.bySubject[state.id] = state;
   }
+
 
   setResearcherLoading(id, request) {
     this._setResearcherState({

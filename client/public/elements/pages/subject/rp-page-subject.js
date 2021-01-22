@@ -32,8 +32,9 @@ export default class RpPageSubject extends RpUtilsLanding {
       fullTextLinks: {type: Array},
       isOwnWork: {type: Boolean},
       peopleWidth: {type: Number},
-      narrowListEx: {type: Object},
-      broadListEx: {type: Object}
+      narrowRelatedSubjects: {type: Array},
+      broadRelatedSubjects: {type: Array},
+      tempResearch: {}
     }
   }
 
@@ -47,6 +48,7 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.subjectStatus = 'loading';
     this.researchers = [];
     this.researchersStatus = 'loading';
+    this.tempResearch = []
     //this.authorPath = "/individual/";
     //this.grpsWithLinks = ["vivo:FacultyMember"];
     //this.authors = [];
@@ -55,19 +57,13 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.publishedArray = [];
     this.fullTextLinks = [];
     this.isOwnWork = false;
+    this.hasRelatedSubject = true;
     this.setPeopleWidth(window.innerWidth);
     this._handleResize = this._handleResize.bind(this);
     //this.universityAuthors = [];
     //this.universityAuthorsStatus = 'loading';
-    this.narrowListEx = [{label: "Broad Subject",desc: "Description A"},
-                         {label: "Topic",desc: "Description B"}
-                        ];
-    this.broadListEx = [{label: "Related Subject", desc: "Description A"},
-                        {label: "Sub-Topic", desc: "Description B"},
-                        {label: "Topic", desc: "Description C"},
-                        {label: "Another Sub-Topic", desc: "Description D"},
-                        {label: "Example Topic", desc: "Description E"}
-                       ];    
+    this.narrowRelatedSubjects = [];
+    this.broadRelatedSubjects = [];    
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
@@ -104,7 +100,6 @@ export default class RpPageSubject extends RpUtilsLanding {
       this.AppStateModel.setLocation('/subjects');
       return;
     }
-    console.log("PATH:", path);
     this.assetId = path[1];
     if (!this.assetId) return;
 
@@ -113,6 +108,7 @@ export default class RpPageSubject extends RpUtilsLanding {
     await Promise.all([this._doMainQuery(this.assetId), this._doResearcherQuery(this.assetId)]);
 
   }
+
 
   async _doMainQuery(id){
     let data = await this.SubjectModel.getSubject(id);
@@ -129,6 +125,9 @@ export default class RpPageSubject extends RpUtilsLanding {
     //this.publishedArray = this._getPublishedArray();
     this.fullTextLinks = this._getFullTextLinks();
     //this._doAuthorQuery(id, this.authors);
+    this.narrowRelatedSubjects = this._getRelatedSubjectsNarrow();
+    this.broadRelatedSubjects = this._getRelatedSubjectsBroader();
+
   }
 
   /**
@@ -139,7 +138,7 @@ export default class RpPageSubject extends RpUtilsLanding {
    */
   async _doResearcherQuery(id){
     let data = await this.SubjectModel.getResearchers(id);
-
+    this.tempResearch = data.payload.results;
     this.researchersStatus = data.state;
     if (data.state != 'loaded') {
       return;
@@ -147,6 +146,31 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.researchers = data.payload;
     if (APP_CONFIG.verbose) console.log("researchers payload:", data);
 
+  }
+
+  _getRelatedSubjectsNarrow(){
+    let narrow = this.SubjectModel.getRelatedSubjects(this.subject, "narrow");
+    let result = [];
+    if(narrow){
+      if(!narrow.length){
+        result = [narrow];
+      } else result = narrow.slice();
+      return result;
+
+    } else return false
+      
+  }
+
+  _getRelatedSubjectsBroader(){
+    let broad = this.SubjectModel.getRelatedSubjects(this.subject, "broader");
+    let result = {};
+
+    if(broad){
+      if(!broad.length){
+        result = [broad];
+      }  else result = broad.slice(); 
+      return result;
+    } else return false
   }
 
   setPeopleWidth(w) {

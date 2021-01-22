@@ -108,46 +108,46 @@ return html`
     et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
     ex ea commodo consequat. </p>
     <div class="cols">
-      <div>
-        <div>
-          <h2 class="mb-2">Related Subjects</h2>
-          <br />
-          <i style="font-size: 18px;">Broader Scope</i>
-          <div>
-            ${this.broadListEx.map(broader => html`
-              <rp-badge size="lg" class="my-1">${broader.label}</rp-badge>
-            `)}   
-          </div> 
-          <i style="font-size: 18px;">Narrower Scope</i>
-          <div>     
-          ${this.narrowListEx.map(narrower => html`
-              <rp-badge size="lg" class="my-1">${narrower.label}</rp-badge>
-          `)} 
-          </div> 
-      </div>
-     </div>
+    <h2>Related Subjects</h2>
+
+    <i style="font-size: 18px; padding-bottom: 5px;">Narrow Scope</i>
+    <br />   
+    ${this.narrowRelatedSubjects ? 
+            this.narrowRelatedSubjects.map(narrow => html ` 
+                                                      <rp-badge size="lg" class="my-1">
+                                                      ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
+                                                      </rp-badge>`)
+                                                    :html `<h4>None Listed</h4>`}
+    <br />   
+    <i style="font-size: 18px; padding-bottom: px;">Broad Scope</i>   
+    <br />   
+    ${this.broadRelatedSubjects ? 
+            this.broadRelatedSubjects.map(broad => html ` 
+                                                            <rp-badge size="lg" class="my-1">
+                                                              ${(broad.prefLabel) ? broad.prefLabel: broad.label}
+                                                            </rp-badge>`)
+                                                          :html `<h4>None Listed</h4>`}
     </div>
   </section>
   <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
     <div class="box-title">
         <h1 class="weight-regular mt-0">Researchers</h1>
+        ${this.tempResearch.map(researcher => html`
+          ${console.log(researcher)}
+          <rp-person-preview
+            .data="${researcher}"
+            text-width="${this.peopleWidth}"
+            show-subjects
+            class="my-3">
+          </rp-person-preview>
+          <hr class="dotted">
+        `)}
+
     </div>
   </section>
   <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
     <div class="box-title">
       <h1 class="weight-regular mt-0">Publications</h1>
-      <div class="box-title-icons">
-        ${this.isOwnProfile ? html`
-          
-          ` : html``}
-          <div class="pub-icons">
-            <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
-            <div slot="tooltip">Edit Publications</div>
-            </rp-icon>
-            <rp-download-list title="Download Publications List"></rp-download-list>
-          </div>
-
-          <div class="pub-count">${this.totalPublications}</div>
     </div>
   </section>
   </div>

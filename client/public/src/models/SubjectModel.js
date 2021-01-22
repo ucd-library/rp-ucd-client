@@ -1,4 +1,5 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
+const { NoEmitOnErrorsPlugin } = require('webpack');
 const SubjectService = require('../services/SubjectService');
 const SubjectStore = require('../stores/SubjectStore');
 
@@ -45,6 +46,25 @@ class SubjectModel extends BaseModel {
 		if (subject.prefLabel) return subject.prefLabel;
 		return subject.label;
 	}
+
+	getRelatedSubjects(subject, type){
+		if (type == "narrow"){
+			if (subject.narrower) return subject.narrower;
+			else return false;
+		}
+		else if (type == "broader"){
+			if (subject.broader) return subject.broader;
+			else return false;
+		}
+	}
+
+	// getRelatedSubjectsNarrower(subject){
+	// 	if (subject.narrower) return subject.narrower;
+	// }
+
+	// getRelatedSubjectsBroader(subject){
+	// 	if (subject.broader) return subject.broader;
+	// }
 
 	getLandingPage(subject){
 		if (!subject || !subject['@id']) return "";
