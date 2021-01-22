@@ -68,7 +68,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.isSearch = false;
     this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
-                     //{text: 'Organizations', page: 'organizations', href: '/organizations'},
+                     {text: 'Subjects', page: 'subjects', href: '/subjects'},
                      {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '/help'}];
 
@@ -192,7 +192,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   _resizeQuickSearch(w) {
     if (!w) w = window.innerWidth;
     
-    if (w > 540) {
+    if (w > 650) {
       this.quickSearchWidth = 220;
     }
     else if (w > 480) {

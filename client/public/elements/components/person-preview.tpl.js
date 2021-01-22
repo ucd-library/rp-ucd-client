@@ -46,7 +46,7 @@ export default function render() {
       line-height: 1.4;
     }
     small.badges {
-      margin-top: 5px;
+      margin-top: 10px;
     }
     .snippet {
       font-size : var(--font-size-small);
@@ -67,7 +67,7 @@ export default function render() {
       ` : html``}
       ${this.showSubjects && this.getSubjects() ? html`
         <small class="badges">${this.getSubjects().map(subject => html`
-          <rp-badge class="my-1">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
+          <rp-badge class="my-1" href="/subject/${encodeURIComponent(subject['@id'])}">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
         `)}
         </small>
       ` : html``}

@@ -1,9 +1,10 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement } from 'lit-element';
 import render from "./rp-page-home.tpl.js"
 
 import "@ucd-lib/cork-app-utils";
 
 import "../../components/alert";
+import "../../components/badge";
 import "../../components/person-preview";
 import "../../components/search";
 
@@ -21,7 +22,9 @@ export default class RpPageHome extends Mixin(LitElement)
       people: {type: Array},
       peopleTotal: {type: Number},
       peopleWidth: {type: Number},
+      subjects: {type: Array},
       subjectsTotal: {type: Number},
+      subjectsStatus: {type: String},
       context: {type: String},
       visible: {type: Boolean}
     }
@@ -31,7 +34,7 @@ export default class RpPageHome extends Mixin(LitElement)
     super();
     this.render = render.bind(this);
 
-    this._injectModel('CollectionModel', 'AppStateModel');
+    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel');
     this.reset_properties();
     this.facets = {};
     this.visible = false;
@@ -50,8 +53,10 @@ export default class RpPageHome extends Mixin(LitElement)
   reset_properties(){
     this.people = [];
     this.academicWorks = [];
+    this.subjects = [];
     this.facetsStatus = 'loading';
     this.peopleStatus = 'loading';
+    this.subjectsStatus = 'loading';
 
   }
 
@@ -59,6 +64,7 @@ export default class RpPageHome extends Mixin(LitElement)
     if (props.has('facetsStatus')) {
       if (this.facetsStatus == 'loaded') {
         this._getPeople();
+        this._getSubjects();
       }
     }
     if (props.has('visible') && this.visible ) {
@@ -149,6 +155,11 @@ export default class RpPageHome extends Mixin(LitElement)
     this.peopleWidth = Math.floor(pw);
   }
 
+  _hideStatusSection(status, field="status") {
+    if (status == this[field]) return false;
+    return true;
+  }
+
   async _getPeople() {
     let peopleList = await this.CollectionModel.overview('randomPeople', {limit: 4, total: this.peopleTotal});
     this.peopleStatus = peopleList.state;
@@ -156,7 +167,16 @@ export default class RpPageHome extends Mixin(LitElement)
       return;
     }
     this.people = peopleList.payload.results;
-    console.log(this.people);
+    if (APP_CONFIG.verbose) console.log('people: ', this.people);
+  }
+
+  async _getSubjects() {
+    let subjects = await this.CollectionModel.overview('randomSubjects', {limit: 10, total: this.subjectsTotal});
+    this.subjectsStatus = subjects.state;
+    if (subjects.state != "loaded") return;
+    this.subjects = subjects.payload.results;
+    if (APP_CONFIG.verbose) console.log('subjects: ', this.subjects);
+    
   }
 
   async _getFacets() {
@@ -166,12 +186,16 @@ export default class RpPageHome extends Mixin(LitElement)
       return;
     }
     this.facets = facetList.payload.aggregations.facets['@type'];
+    if (APP_CONFIG.verbose) console.log('facets: ', this.facets);
     for (let facet in this.facets) {
       for (let recognizedFacet of this.CollectionModel.subFacets.works) {
         if (facet == recognizedFacet.es) {
           this.academicWorks.push({text: recognizedFacet.text, count: this.facets[facet], href: `/works/${recognizedFacet.id}`});
           break;
         }
+      }
+      if (facet == (this.context + ":subjectArea")) {
+        this.subjectsTotal = this.facets[facet];
       }
       if (facet == (this.context + ":publication")) {
         this.academicWorksTotal = this.facets[facet];
