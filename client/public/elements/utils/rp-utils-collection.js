@@ -463,7 +463,7 @@ _urlEncode(obj) {
 
     if (assetType == 'subject') {
       return html`
-      <rp-subject-preview .data="${data}" class="my-3"></rp-subject-preview>
+      <rp-subject-preview .data="${data}" class="my-3" show-snippet></rp-subject-preview>
       `;
     }
 

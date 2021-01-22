@@ -71,6 +71,13 @@ class SubjectModel extends BaseModel {
 		if (!subject || !subject['@id']) return "";
 		return `${this.UrlLanding}${encodeURIComponent(subject['@id'])}`
 	}
+
+	getSnippet(subject){
+		let out = "";
+		if (!subject || !subject._snippet) return out;
+		if (subject._snippet.value) out = subject._snippet.value;
+		return out;
+	  }
 }
 
 module.exports = new SubjectModel();

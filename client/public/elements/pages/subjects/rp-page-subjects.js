@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit-element';
 import render from "./rp-page-subjects.tpl.js"
 
 import RpUtilsCollection from "../../utils/rp-utils-collection";
-import "../../components/person-preview"
+import "../../components/subject-preview"
 
 
 import "../../components/alert";
