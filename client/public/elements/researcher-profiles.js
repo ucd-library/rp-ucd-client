@@ -45,7 +45,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       hideMainNav: {type: Boolean},
       accountLinks: {type:Array},
       quickSearchWidth: {type: Number},
-      mobileMenuPage: {type: String}
+      mobileMenuPage: {type: String},
+      showVersion: {type: Boolean}
     }
   }
 
@@ -71,8 +72,18 @@ export default class ResearcherProfiles extends Mixin(LitElement)
                      {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '/help'}];
 
+    if( !APP_CONFIG.env ) {
+      APP_CONFIG.env = {APP_VERSION:''}
+    }
+    this.showVersion = APP_CONFIG.env.APP_VERSION.match(/(alpha|beta|rc)/) ? true : false;
+    this.logVersion();
+
     this._injectModel('AppStateModel', 'CollectionModel');
     this._onResize = this._onResize.bind(this);
+  }
+
+  logVersion() {
+    console.log('App Tags:', APP_CONFIG.env);
   }
 
   connectedCallback() {

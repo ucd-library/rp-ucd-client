@@ -37,4 +37,13 @@ COPY index.js .
 COPY lib lib
 COPY controllers controllers
 
+# set build tags
+ARG CLIENT_TAG
+ENV CLIENT_TAG ${CLIENT_TAG}
+ARG VESSEL_TAG
+ENV VESSEL_TAG ${VESSEL_TAG}
+ARG APP_VERSION
+ENV APP_VERSION ${APP_VERSION}
+
+
 CMD node index.js

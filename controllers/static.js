@@ -75,7 +75,12 @@ export default (app) => {
         appRoutes : config.client.appRoutes,
         theme : config.client.theme,
         data : config.client.data,
-        verbose : config.client.verbose
+        verbose : config.client.verbose,
+        env : {
+          CLIENT_TAG : process.env.CLIENT_TAG || '',
+          VESSEL_TAG : process.env.VESSEL_TAG || '',
+          APP_VERSION : process.env.APP_VERSION || ''
+        }
       });
     },
     template : (req, res, next) => {
