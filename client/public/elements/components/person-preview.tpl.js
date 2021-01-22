@@ -46,7 +46,7 @@ export default function render() {
       line-height: 1.4;
     }
     small.badges {
-      margin-top: 5px;
+      margin-top: 10px;
     }
     .snippet {
       font-size : var(--font-size-small);
