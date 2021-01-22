@@ -487,7 +487,10 @@ _urlEncode(obj) {
     if (this.data.length == 0 || this.mainFacet == 'none') return html``;
 
     let singleFacetText = "";
-    if (this.subFacetsWithResultsCt == 1) {
+    if (!this.subFacetsWithResultsCt && this.subFacets.length > 0 ){
+      singleFacetText = this.subFacets[0].text;
+    }
+    else if (this.subFacetsWithResultsCt == 1) {
       for (const subfacet of this.subFacets) {
         if (subfacet.id=='none') continue;
         if (subfacet.ct > 0) {
