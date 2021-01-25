@@ -19,6 +19,7 @@
   "devDependencies": {
     "@ucd-lib/cork-app-build": "^0.2.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "eslint": "^7.18.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   }
