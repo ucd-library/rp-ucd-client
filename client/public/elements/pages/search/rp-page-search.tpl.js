@@ -26,7 +26,7 @@ return html`
   }
 </style>
 <div class="search-header container bg-light top">
-  <div class="bg-primary text-light" id="search-term-box"><h1 class="weight-regular my-0">Search results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
+  <div class="bg-primary text-light" id="search-term-box"><h1 class="weight-regular my-0">${this.dataTotal} results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
   <rp-link-list class="bg-light p-3"
                 direction="horizontal"
                 current-link="${this.mainFacetIndex}"

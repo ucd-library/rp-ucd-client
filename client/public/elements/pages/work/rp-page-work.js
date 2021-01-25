@@ -10,7 +10,6 @@ import "../../components/person-preview";
 
 
 export default class RpPageWork extends RpUtilsLanding {
-
   static get properties() {
     return {
       work: {type: Object},
@@ -33,7 +32,7 @@ export default class RpPageWork extends RpUtilsLanding {
   constructor() {
     super();
     this.render = render.bind(this);
-    this._injectModel('AppStateModel', 'WorkModel');
+    this._injectModel('AppStateModel', 'WorkModel', 'SubjectModel');
 
     this.assetType = "work";
     this.work = {};
@@ -51,7 +50,6 @@ export default class RpPageWork extends RpUtilsLanding {
     this._handleResize = this._handleResize.bind(this);
     this.universityAuthors = [];
     this.universityAuthorsStatus = 'loading';
-
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
@@ -81,6 +79,8 @@ export default class RpPageWork extends RpUtilsLanding {
     if (!this.visible) {
       return;
     }
+    console.log("Path:", state.location.path);
+
     let path = state.location.path;
     if (path.length == 1) {
       this.AppStateModel.setLocation('/works');
@@ -112,6 +112,7 @@ export default class RpPageWork extends RpUtilsLanding {
     this.subjects = this.WorkModel.getSubjects(this.work);
     this.fullTextLinks = this.WorkModel.getFullTextLinks(this.work);
     this._doAuthorQuery(id, this.authors);
+    console.log("Subjects:",this.subjects);
   }
 
   async _doAuthorQuery(id, authors) {
