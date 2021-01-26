@@ -54,7 +54,10 @@ class CollectionModel extends BaseModel {
         "doi^10",
         'hasContactInfo.familyName.text^9',
         'hasContactInfo.givenName.text^8',
-        "label.text^6",
+        "_.organizationLabel.text^6",
+        "_.personLabel.text^6",
+        "_.publicationLabel.text^6",
+        "_.subjectAreaLabel.text^2",
         "hasSubjectArea.label.text^5",
         "abstract",
         'hasContactInfo.title.text',
@@ -62,8 +65,8 @@ class CollectionModel extends BaseModel {
         'hasPublicationVenue.issn',
         "hasPublicationVenue.label.text",
         'citation.label^10',
-        'top20Citation.label^15',
-        'lastCitation.label^15'],
+        '_.top20Citation.label^15',
+        '_.lastCitation.label^15'],
       people : [
         'hasContactInfo.familyName.text^9',
         'hasContactInfo.givenName.text^8',
@@ -76,13 +79,15 @@ class CollectionModel extends BaseModel {
         "abstract^8",
         "hasPublicationVenue.label.text^7",
         "hasPublicationVenue.issn^5",
-        ],
+      ],
       subjects: [
         "label.text^10",
         //"hasSubjectArea.label.text" //unsure if the subjectArea should be included since it seems to be apart of Works section
       ],
       organizations: [
-        "label.text^10"]}
+        "label.text^10"
+      ]
+    };
 
     this.register('CollectionModel');
   }
