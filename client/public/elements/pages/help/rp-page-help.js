@@ -1,19 +1,21 @@
 import { LitElement } from 'lit-element';
-import render from "./rp-page-help.tpl.js"
+import render from "./rp-page-help.tpl.js";
 
 import "../../components/accordian";
 
-
+/**
+ * @class RpPageHelp
+ * @description Main help page
+ */
 export default class RpPageHelp extends Mixin(LitElement)
-.with(LitCorkUtils) {
+  .with(LitCorkUtils) {
 
   static get properties() {
     return {
       visible: {type: Boolean},
       isLoggedIn: {type: Boolean},
       imgPath: {type: String}
-      
-    }
+    };
   }
 
   constructor() {
@@ -25,25 +27,43 @@ export default class RpPageHelp extends Mixin(LitElement)
     this.isLoggedIn = false;
     this.imgPath = '/images/faq/';
 
-    this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
+    this.AppStateModel.get().then(e => this._renderDelay(e));
   }
 
+  /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
   async _onAppStateUpdate(state) {
-    requestAnimationFrame( () => this.doUpdate(state));
-   }
+    this._renderDelay(state);
+  }
 
-   async doUpdate(state) {
-    await this.updateComplete;
-    if (!this.visible) {
-      return;
-    }
-    this.isLoggedIn = APP_CONFIG.user ? true : false;
-    if (state.location.hash) {
-      let pos = this.shadowRoot.getElementById(state.location.hash);
-      if (pos) window.scrollTo(0, pos.getBoundingClientRect().top + window.pageYOffset);
-    }
-    
+  /**
+   * @method _renderDelay
+   * @description delay rendering (updating of props from state)
+   * one animation frame.  required to ensure element is visible
+   * on dame for correct scroll position
+   * 
+   * @param {Object} state 
+   */
+  _renderDelay(state) {
+    requestAnimationFrame(async () => {
+      await this.updateComplete;
 
+      if (!this.visible) {
+        return;
+      }
+      
+      this.isLoggedIn = APP_CONFIG.user ? true : false;
+      
+      if (state.location.hash) {
+        let pos = this.shadowRoot.getElementById(state.location.hash);
+        if (pos) window.scrollTo(0, pos.getBoundingClientRect().top + window.pageYOffset);
+      }
+
+    });
   }
 
 }

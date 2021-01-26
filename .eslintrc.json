@@ -23,10 +23,15 @@
       "require" : {
         "MethodDefinition": true,
         "ClassDeclaration": true
-      }
+      },
+      "checkGetters" : false,
+      "checkSetters" : false,
+      "exemptEmptyConstructors" : true
     }],
     "jsdoc/require-param": 1,
     "jsdoc/require-returns": 1,
-    "jsdoc/require-description": [1, {"descriptionStyle":"tag"}]
+    "jsdoc/require-description": [1, {
+      "descriptionStyle":"tag"
+    }]
   }
 }

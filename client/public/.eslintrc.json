@@ -1,4 +1,5 @@
 {
+  "ignorePatterns" : ["*.tpl.js"],
   "globals": {
     "LitCorkUtils": "readonly",
     "Mixin": "readonly",
