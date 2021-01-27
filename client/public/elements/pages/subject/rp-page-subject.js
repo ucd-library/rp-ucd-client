@@ -22,14 +22,7 @@ export default class RpPageSubject extends RpUtilsLanding {
       researchers: {type: Array},
       researchersStatus: {type: String},
       publications: {type: Object},
-      //grpsWithLinks: {type: String},
-      authorPath: {type: String},
-      authors: {type: Array},
-      universityAuthors: {type: Array},
-      universityAuthorsStatus: {type: String},
-      hasOtherAuthors: {tyoe: Boolean},
       subjectType: {type: String},
-      publishedArray: {type: Array},
       fullTextLinks: {type: Array},
       isOwnWork: {type: Boolean},
       peopleWidth: {type: Number},
@@ -53,19 +46,12 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.tempResearch = []
     this.publications = {};
     this.urlPathId = "";
-    //this.authorPath = "/individual/";
-    //this.grpsWithLinks = ["vivo:FacultyMember"];
-    //this.authors = [];
-    //this.hasOtherAuthors = false;
     this.subjectType = "";
-    this.publishedArray = [];
     this.fullTextLinks = [];
     this.isOwnWork = false;
     this.hasRelatedSubject = true;
     this.setPeopleWidth(window.innerWidth);
     this._handleResize = this._handleResize.bind(this);
-    //this.universityAuthors = [];
-    //this.universityAuthorsStatus = 'loading';
     this.narrowRelatedSubjects = [];
     this.broadRelatedSubjects = [];    
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
@@ -129,11 +115,8 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.subject = data.payload;
     if (APP_CONFIG.verbose) console.log("subject payload:", data);
 
-    //this.authors = this._parseAuthors();
     this.subjectType = this._getSubjectType();
-    //this.publishedArray = this._getPublishedArray();
     this.fullTextLinks = this._getFullTextLinks();
-    //this._doAuthorQuery(id, this.authors);
     this.narrowRelatedSubjects = this._getRelatedSubjectsNarrow();
     this.broadRelatedSubjects = this._getRelatedSubjectsBroader();
 
