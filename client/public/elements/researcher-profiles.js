@@ -287,7 +287,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    */
   _handleUserDropdownSelection(e) {
     if( e.detail.selected.action === 'stop-impersonating' ) {
-      document.cookie = "impersonate=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      document.cookie = "impersonate=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
       location.reload();
     }
   }

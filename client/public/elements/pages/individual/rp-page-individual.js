@@ -387,7 +387,7 @@ export default class RpPageIndividual extends RpUtilsLanding {
    * and start refresh
    */
   _onImpersonateClick() {
-    document.cookie = 'impersonate='+this.individual['@id'].split(':')[1]+'@ucdavis.edu';
+    document.cookie = 'impersonate='+this.individual['@id'].split(':')[1]+'@ucdavis.edu; path=/';
     location.reload();
   }
 
