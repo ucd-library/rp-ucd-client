@@ -2,15 +2,20 @@ import { LitElement, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import render from './badge.tpl.js';
 
+/**
+ * @class RpBadge
+ * @description A badge UI component - primarily used for research subjects.
+ * Cycles through different border colors if previous element is also rp-badge.
+ * Uses a slot to render text of badge.
+ */
 export class RpBadge extends LitElement {
   static get properties() {
-  return {
-    size: {type: String},
-    href: {type: String},
-    ellipsis: {type: Boolean},
-    colorSequence: {type: Number,
-                    attribute: 'color-sequence'},
-  };
+    return {
+      size: {type: String},
+      href: {type: String},
+      ellipsis: {type: Boolean},
+      colorSequence: {type: Number, attribute: 'color-sequence'},
+    };
   }
 
   constructor() {
@@ -20,6 +25,13 @@ export class RpBadge extends LitElement {
     this.render = render.bind(this);
   }
 
+  /**
+   * @method constructClasses
+   * @description Makes a class map object based on element properties/attributes. 
+   * Classes are applied to the element.
+   * 
+   * @returns {Object} - {class1: true, class2: false}
+   */
   constructClasses() {
     let classes = {'main': true};
 
@@ -46,19 +58,28 @@ export class RpBadge extends LitElement {
       }
 
     }
-
-    return classes
+    return classes;
   }
 
+  /**
+   * @method _renderBadge
+   * @description Renders badge as a link or not.
+   * 
+   * @returns {TemplateResult}
+   */
   _renderBadge() {
     if (this.href) {
       return html`<a href=${this.href}>${this._renderSpan()}</a>`;
     }
-    else {
-      return html`${this._renderSpan()}`;
-    }
+    return html`${this._renderSpan()}`;
   }
 
+  /**
+   * @method _renderSpan
+   * @description Renders the badge content
+   * 
+   * @returns {TemplateResult}
+   */
   _renderSpan() {
     return html`<span class=${classMap(this.constructClasses())}>
       ${this.ellipsis ? html`
