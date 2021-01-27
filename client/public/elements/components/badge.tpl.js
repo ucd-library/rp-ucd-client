@@ -22,6 +22,7 @@ return html`
   }
   span.size-lg {
     padding: .55em .9em;
+    border-radius: 2em;
   }
   a:hover span.main {
       background-color: var(--tcolor-hover-bg) !important;
