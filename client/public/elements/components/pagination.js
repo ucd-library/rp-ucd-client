@@ -54,13 +54,16 @@ export class RpPagination extends LitElement {
    * 
    * @param {String} direction - 'left' or 'right'
    * 
-   * @returns {html}
+   * @returns {TemplateResult}
    */
   _renderEdge(direction) {
     if (!this._hasValidLogic()) {
       return html``;
     }
     if (direction == 'left') {
+      if ( (this.currentPage >= this.maxPage - this.pagesPerSide) && (this.maxPage <= this.pagesPerSide * 2 + 2)) {
+        return html``;
+      }
       if ((this.currentPage - this.minPage) > (this.pagesPerSide + 1)) {
         return html`
           <div @click="${this.handleClick}" class="page" page="${this.minPage}">${this.minPage}</div>
@@ -68,6 +71,9 @@ export class RpPagination extends LitElement {
       }
     }
     else if (direction == 'right') {
+      if ( (this.currentPage <= this.pagesPerSide) && (this.maxPage <= this.pagesPerSide * 2 + 2) ) {
+        return html``;
+      }
       if ((this.maxPage - this.currentPage) > (this.pagesPerSide + 1)) {
         return html`
           <div class="ellipsis">...</div>
@@ -81,7 +87,7 @@ export class RpPagination extends LitElement {
    * @method _renderCenter
    * @description Renders page links between the ellipses
    * 
-   * @returns {html}
+   * @returns {TemplateResult}
    */
   _renderCenter() {
     if (!this._hasValidLogic()) {
