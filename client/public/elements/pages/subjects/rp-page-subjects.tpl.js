@@ -3,15 +3,14 @@ import styles from "../../styles/site.html"
 
 export default function render() {
 return html`
-
 <style>
   :host {
     display: block;
   }
   ${styles}
 </style>
-<div class="collections works container bg-light top">
-  ${this._renderBrowseHeader('Works')}
+<div class="collections container bg-light top">
+${this._renderBrowseHeader('Subjects')}
   <hr class="mb-0">
   <div class="body flex">
     <div class="col-facets mt-3">
@@ -22,11 +21,11 @@ return html`
         <div class="loading1">loading</div>
       </div>
       <div ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">
-        <rp-alert>Error loading works.</rp-alert>
+        <rp-alert>Error loading subjects.</rp-alert>
       </div>
       <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
-        ${this.data.map(work => html`
-          <rp-work-preview .data="${work}" class="my-3"></rp-work-preview>
+        ${this.data.map(subject => html`
+          <rp-subject-preview .data="${subject}" class="my-3"></rp-subject-preview>
           <hr class="dotted">
           `)}
         ${this._renderPagination(this.dataTotal)}
@@ -34,6 +33,5 @@ return html`
 
     </div>
   </div>
-
 </div>
 `;}

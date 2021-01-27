@@ -41,7 +41,13 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         {id: 'publications', text: 'Publications'}
       );
     }
-
+    if (this.assetType == 'subject'){
+      sections.push(
+        {id: 'about', text:'About'},
+        {id: 'researchers', text: 'Researchers'},
+        {id: 'publications', text: 'Publications'}
+      );
+    }
     let i = 0;
     for (let section of sections) {
       if (!section.href) section.href = `${baseHref}/${section.id}`;

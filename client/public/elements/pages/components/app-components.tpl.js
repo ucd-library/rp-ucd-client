@@ -22,6 +22,8 @@ import "../../components/search"
 import "../../components/edit-profile"
 import "../../components/view-all"
 import "../../components/work-preview"
+import "../../components/subject-preview"
+
 
 export default function render() {
 return html`
@@ -199,6 +201,7 @@ Otherwise, a <code>new-selection</code> event will fire when an option is clicke
 <h2>Dropdown</h2>
 <p>A stylized dropdown. Listen with <code>@new-selection="\${e => console.log(e.target.choices[e.target.chosen])}</code></p>
 <rp-dropdown choices='["People",
+                       {"text": "Subjects"}
                        {"text": "Organizations"},
                        {"text": "Works"}]'
              @new-selection="${e => console.log(e.target.choices[e.target.chosen])}">
@@ -247,6 +250,11 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <p>Preface the <code>icon</code> attribute with "rp-" to use one of the custom icons</p>
 <rp-icon icon="rp-search" circle-bg is-link theme-color='secondary' size="lg"></rp-icon>
 <rp-icon icon="rp-qr" circle-bg is-link></rp-icon>
+<p>Can also be used in different sizes for different types of information representation.</p>
+<rp-icon icon="iron-description" theme-color='work' circle-bg sizeIcon="extralgIconWorks" size="extralg"></rp-icon>
+<rp-icon icon="rp-subject" circle-bg theme-color='subject' sizeIconSVG="extralgSVGIcon" size="extralg"></rp-icon>
+<rp-avatar></rp-avatar>
+
 </section>
 
 <section>
@@ -412,6 +420,15 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <p>Card for the Work asset type - used in browse and search pages.</p>
 ${this.exampleWorks.map((work) => html`
   <rp-work-preview .data="${work}"></rp-work-preview>
+`)}
+
+</section>
+
+<section>
+<h1>Asset Preview (Subjects)</h1>
+<p>Card for the Subject asset type - used in browse and search pages.</p>
+${this.exampleSubjects.map((subject) => html`
+  <rp-subject-preview .data="${subject}"></rp-subject-preview>
 `)}
 
 </section>

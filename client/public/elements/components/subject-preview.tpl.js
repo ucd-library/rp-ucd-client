@@ -1,10 +1,9 @@
 import { html } from 'lit-element';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
-//import { styleMap } from 'lit-html/directives/style-map';
 
 export default function render() {
   return html`
-  <style>
+    <style>
     :host {
       display: block;
     }
@@ -36,6 +35,13 @@ export default function render() {
       color : var(--tcolor-link-text);
       font-weight : var(--font-weight-bold);
     }
+    a[disabled] {
+      pointer-events: none;
+      text-decoration: none;
+    }
+    a[disabled]:hover {
+      color : var(--tcolor-link-text);
+    }
     .below-title {
       color : var(--tcolor-text);
       font-size: var(--font-size-small);
@@ -47,24 +53,20 @@ export default function render() {
     .snippet em {
       font-weight: bold;
       font-style: normal;
-    }
-  </style>
-  <div class=container>
-    <div class="icon-container"><rp-icon icon="iron-description" theme-color='work' circle-bg size-icon="extralgIconWorks" size="extralg"></rp-icon></div>
-    <div class="text-container">
-      <a class="title" href="${this.getLink()}" ?disabled="${!this.getLink()}">${this.getTitle()}</a>
-      <div class="below-title">
-        <span class="work-type">${this.getWorkType()}</span>
-        ${this.getWorkType() ? html`<span class="mx-1">|</span>` : html``}
-        <span class="authors">${this.getAuthors().map((author, i) => html`
-        ${author.nameLast}, ${author.nameFirst}${this.authorCt > i + 1 ? '; ' : ''}
-        `)}</span>
-      </div>
-      ${this.showSnippet ? html`
+    }     
+    </style>
+
+    <div class=container>
+      <div class="icon-container"><rp-icon icon="rp-subject" circle-bg theme-color='subject' size-icon-svg="extralgSVGIcon" size="extralg"></rp-icon></div>
+      <div class="text-container">
+        <a class="title" href="${this.getLink()}">${this.getTitle()}</a>
+        <div class="below-title">
+          <span>Research Subject</span>
+        </div>
+        ${this.showSnippet && this.getSnippet() ? html`
         <div class="snippet">${unsafeHTML(this.getSnippet())}</div>
       ` : html``}
+      </div>
     </div>
-  </div>
-
   `;
 }

@@ -14,6 +14,8 @@ class CollectionModel extends BaseModel {
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.mainFacets = [{id: 'people', text: 'People', es: `${this.jsonldContext}:person`,
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
+                       {id: 'subjects', text: 'Subjects', es: `${this.jsonldContext}:subjectArea`,
+                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":subjectArea"]}}},
                       /*
                        {id: 'organizations', text: 'Organizations', es: 'ucdrp:organization',
                         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":organization"]}}},
@@ -33,12 +35,16 @@ class CollectionModel extends BaseModel {
         {id: 'chapters', es: "bibo:Chapter", text: 'Chapter', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Chapter"]}}},
         {id: 'conference-papers', es: "vivo:ConferencePaper", text: 'Conference Paper', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:ConferencePaper"]}}}
       ],
+      subjects: [
+        {id: 'concept', es: "skos:Concept", text: 'Research Subject', baseFilter:{"@type": {"type": "keyword", "op": "and", "value": ["skos:Concept"]}}},
+      ],
       organizations: [
         {id: 'universities', es: 'vivo:University', text: 'University', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:University"]}}},
         {id: 'departments', es: 'vivo:AcademicDepartment', text: 'Department', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:AcademicDepartment"]}}}
       ]
     }
     this.aggs = {people : {"@type": {"type" : "facet"}},
+                 subject : {"@type": {"type" : "facet"}},
                  works : {"@type": {"type" : "facet"}},
                  organizations : {"@type": {"type" : "facet"}}};
     this.pgPer = 8;
@@ -48,7 +54,10 @@ class CollectionModel extends BaseModel {
         "doi^10",
         'hasContactInfo.familyName.text^9',
         'hasContactInfo.givenName.text^8',
-        "label.text^6",
+        "_.organizationLabel.text^6",
+        "_.personLabel.text^6",
+        "_.publicationLabel.text^6",
+        "_.subjectAreaLabel.text^2",
         "hasSubjectArea.label.text^5",
         "abstract",
         'hasContactInfo.title.text',
@@ -56,8 +65,8 @@ class CollectionModel extends BaseModel {
         'hasPublicationVenue.issn',
         "hasPublicationVenue.label.text",
         'citation.label^10',
-        'top20Citation.label^15',
-        'lastCitation.label^15'],
+        '_.top20Citation.label^15',
+        '_.lastCitation.label^15'],
       people : [
         'hasContactInfo.familyName.text^9',
         'hasContactInfo.givenName.text^8',
@@ -70,10 +79,15 @@ class CollectionModel extends BaseModel {
         "abstract^8",
         "hasPublicationVenue.label.text^7",
         "hasPublicationVenue.issn^5",
-        "hasSubjectArea.label.text"
-        ],
+      ],
+      subjects: [
+        "label.text^10",
+        //"hasSubjectArea.label.text" //unsure if the subjectArea should be included since it seems to be apart of Works section
+      ],
       organizations: [
-        "label.text^10"]}
+        "label.text^10"
+      ]
+    };
 
     this.register('CollectionModel');
   }
@@ -97,6 +111,17 @@ class CollectionModel extends BaseModel {
         queryObject.offset = randomOffset;
       }
     }
+    else if (id == "randomSubjects") {
+      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":subjectArea"]};
+      queryObject.limit = 10;
+      if (kwargs.limit) {
+        queryObject.limit = kwargs.limit;
+      }
+      if (kwargs.total) {
+        let randomOffset = Math.floor(Math.random() * (kwargs.total - queryObject.limit));
+        queryObject.offset = randomOffset;
+      }
+    }
     else if (id == "peopleAggs") {
       queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":person"]};
       queryObject.limit = 0;
@@ -104,6 +129,12 @@ class CollectionModel extends BaseModel {
     }
     else if (id == "worksAggs") {
       queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":publication"]};
+      if (kwargs.subjectFilter) queryObject.filters['hasSubjectArea.@id'] = {"type": "keyword", "op": "and", "value": [kwargs.subjectFilter]};
+      queryObject.limit = 0;
+      queryObject.facets["@type"] = {"type" : "facet"};
+    }
+    else if (id == "subjectsAggs") {
+      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":subjectArea"]};
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
@@ -154,9 +185,10 @@ class CollectionModel extends BaseModel {
 
   }
 
-  async azAggQuery(mainFacet, subFacet){
+  async azAggQuery(mainFacet, subFacet, subjectFilter=false){
     let state = {state : CollectionStore.STATE.INIT};
     let id = `${mainFacet}__${subFacet}`;
+    if ( subjectFilter ) id = `${id}__${subjectFilter}`;
     let filters = [];
     for (let f of this.mainFacets) {
       if (f.id == mainFacet) {
@@ -172,6 +204,7 @@ class CollectionModel extends BaseModel {
         }
       }
     }
+    if (subjectFilter) filters.push({'hasSubjectArea.@id': {"type": "keyword", "op": "and", "value": [subjectFilter]}});
     let q = this.getBaseQueryObject();
     q.limit = 0;
     q.filters = this._combineFiltersArray(filters);
@@ -198,6 +231,9 @@ class CollectionModel extends BaseModel {
       return {key: "hasContactInfo.familyName.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
     }
     if (mainFacet == 'works') {
+      return {key: "label.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
+    }
+    if (mainFacet == 'subjects') {
       return {key: "label.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
     }
     if (mainFacet == 'organizations') {
@@ -237,7 +273,6 @@ class CollectionModel extends BaseModel {
       return subFacets;
     }
     let elementQuery = {...query};
-
     let counts = {};
     try {
       counts = payload.aggregations.facets['@type'];
@@ -264,11 +299,11 @@ class CollectionModel extends BaseModel {
     }
 
     if (mainFacet == 'none') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", ct: dataTotal, text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
     }
 
     else if (mainFacet == 'people') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", ct: dataTotal, text: `All People(${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.people) {
         let facet = {...f};
@@ -276,9 +311,11 @@ class CollectionModel extends BaseModel {
         facet.href = this.constructUrl(elementQuery, ['page', 'az']);
         if (Object.keys(counts).includes(facet.es)){
           facet.text += ` (${counts[facet.es]})`;
+          facet.ct = counts[facet.es];
         }
         else {
           facet.text += " (0)";
+          facet.ct = 0;
           facet.disabled = true;
         }
         subFacets.push(facet);
@@ -286,7 +323,7 @@ class CollectionModel extends BaseModel {
     }
 
     else if (mainFacet == 'works') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", ct: dataTotal, text: `All Works (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.works) {
         let facet = {...f};
@@ -294,17 +331,37 @@ class CollectionModel extends BaseModel {
         facet.href = this.constructUrl(elementQuery, ['page', 'az']);
         if (Object.keys(counts).includes(facet.es)){
           facet.text += ` (${counts[facet.es]})`;
+          facet.ct = counts[facet.es];
         }
         else {
           facet.text += " (0)";
+          facet.ct = 0;
           facet.disabled = true;
         }
         subFacets.push(facet);
       }
     }
 
+    else if (mainFacet == 'subjects') {
+      subFacets.push({id: "none", text: `All Subjects (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+
+      // for (let f of this.subFacets.subjects) {
+      //   let facet = {...f};
+      //   elementQuery.subFacet = facet.id;
+      //   facet.href = this.constructUrl(elementQuery, ['page', 'az']);
+      //   if (Object.keys(counts).includes(facet.es)){
+      //     facet.text += ` (${counts[facet.es]})`;
+      //   }
+      //   else {
+      //     facet.text += " (0)";
+      //     facet.disabled = true;
+      //   }
+      //   subFacets.push(facet);
+      // }
+    }    
+
     else if (mainFacet == 'organizations') {
-      subFacets.push({id: "none", text: `All (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", ct: dataTotal, text: `All Organizations (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.organizations) {
         let facet = {...f};
@@ -312,9 +369,11 @@ class CollectionModel extends BaseModel {
         facet.href = this.constructUrl(elementQuery, ['page', 'az']);
         if (Object.keys(counts).includes(facet.es)){
           facet.text += ` (${counts[facet.es]})`;
+          facet.ct = counts[facet.es];
         }
         else {
           facet.text += " (0)";
+          facet.ct = 0;
           facet.disabled = true;
         }
         subFacets.push(facet);
@@ -338,7 +397,7 @@ class CollectionModel extends BaseModel {
     // construct "all results" facet
     let hasResults = false;
     if (typeof payload.total === "number" && payload.total > 0) hasResults = true;
-    let allResults = {id: 'none', text: 'All Results', href: `/search?s=${encodeURIComponent(elementQuery.textQuery)}`};
+    let allResults = {id: 'none', text: 'All', href: `/search?s=${encodeURIComponent(elementQuery.textQuery)}`};
     if (!hasResults) {
       //allResults.disabled = true;
     }
@@ -376,6 +435,11 @@ class CollectionModel extends BaseModel {
     let mainFacet = userQuery.mainFacet ? userQuery.mainFacet : 'all';
     if (Object.keys(userQuery).length == 0) {
       return queryObject;
+    }
+
+    // subject filter
+    if (mainFacet == 'works' && userQuery.subjectFilter) {
+      queryObject.filters['hasSubjectArea.@id'] = {"type": "keyword", "op": "and", "value": [userQuery.subjectFilter]};
     }
 
     // merge filters into a single object
@@ -483,6 +547,11 @@ class CollectionModel extends BaseModel {
     // query args
     let args = [];
 
+    // subject filter
+    if (elementQuery.subjectFilter && !ignoreArgs.includes('subjectFilter')) {
+      args.push(`subject=${elementQuery.subjectFilter}`);
+    }
+
     // pagination
     if (elementQuery.pgCurrent && elementQuery.pgCurrent > 1 && !ignoreArgs.includes('page')) {
       args.push(`page=${elementQuery.pgCurrent}`);
@@ -515,7 +584,13 @@ class CollectionModel extends BaseModel {
   }
 
   _formatPerson(person) {
-    let p = {name: person.label ? person.label : "", title: "", "@id": person['@id']};
+    console.log(person)
+    let p = {
+      name: person.label ? person.label : "", 
+      title: "", 
+      "@id": person['@id'],
+      snippet: person._snippet
+    };
     p.name=this.personModel.getBestLabel(person);
     p.title=this.personModel.getHeadlineTitle(person);
     p['id'] = person['@id'].replace(this.jsonldContext + ":", "");

@@ -5,6 +5,7 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
   }
@@ -73,8 +74,6 @@ return html`
   #authors .name {
     font-weight: var(--font-weight-bold);
   }
-
-  ${styles}
 </style>
 <div class="work container top">
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
@@ -138,7 +137,7 @@ return html`
           <h2>Subjects</h2>
           <div>
           ${this.subjects.map(subject => html`
-            <rp-badge size="lg" class="my-1">${subject.label}</rp-badge>
+            <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(subject)}">${this.SubjectModel.getPreferredLabel(subject)}</rp-badge>
           `)}
           </div>
         ` : html``}

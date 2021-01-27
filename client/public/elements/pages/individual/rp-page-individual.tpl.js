@@ -5,6 +5,7 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
   }
@@ -21,9 +22,10 @@ return html`
   }
   #about .cols {
     display: flex;
+    flex-wrap: wrap;
   }
   #about .cols > div {
-    width: 50%;
+    width: 100%;
   }
   .pub-count {
     background-color: var(--tcolor-primary);
@@ -148,9 +150,10 @@ return html`
     .own-profile .box-title-icons {
       order: 2;
     }
-
+    #about .cols > div {
+      width: 50%;
+    }
   }
-  ${styles}
 </style>
 
 
@@ -171,8 +174,19 @@ return html`
       <rp-avatar size="lg"></rp-avatar>
       <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
       <p class="text-light h3 mb-2 mt-1 text-center">${this.getHeadlineTitle()}</p>
-
-      <div></div>
+      ${this.getResearchSubjects(1).length > 0 ? html`
+        <div>
+          <p class="text-light h3 text-center bold">My research areas include:</p>
+          <div class="flex flex-wrap justify-content-center align-items-center">
+            ${this.getResearchSubjects(4).map(subject => html`
+              <rp-badge class="text-light my-1">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
+            `)}
+          </div>
+        </div>
+      ` : html``}
+      <div ?hidden="${!this.isAdmin}" style="margin-top: 20px">
+        <button @click="${this._onImpersonateClick}" class="load-pubs more">Impersonate</button>
+      </div>
     </div>
   </rp-hero-image>
   <rp-link-list class="bg-light p-3"

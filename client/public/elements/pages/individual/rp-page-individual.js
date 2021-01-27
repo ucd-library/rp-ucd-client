@@ -12,6 +12,7 @@ import "../../components/hero-image";
 import "../../components/icon";
 import "../../components/link-list";
 import "../../components/modal";
+import { isLoading } from '../../../src/services/PersonService.js';
 
 
 
@@ -27,9 +28,9 @@ export default class RpPageIndividual extends RpUtilsLanding {
       retrievedPublications: {type: Object},
       totalPublications: {type: Number},
       isOwnProfile: {type: Boolean},
-      submitText: {type: String, attribute: 'submitText'}
-
-    }
+      submitText: {type: String, attribute: 'submitText'},
+      isAdmin: {type: Boolean}
+    };
   }
 
   constructor() {
@@ -38,7 +39,11 @@ export default class RpPageIndividual extends RpUtilsLanding {
     this.submitText = "Edit Publication";
 
     this._injectModel('PersonModel', 'AppStateModel');
+    
     this.assetType = "individual";
+
+    // TODO: make util
+    this.isAdmin = APP_CONFIG.user && (APP_CONFIG.user.roles || []).includes('admin') ? true : false;
 
     this._resetEleProps();
 
@@ -233,6 +238,11 @@ export default class RpPageIndividual extends RpUtilsLanding {
     return this.PersonModel.getWebsites(this.individual)
   }
 
+  getResearchSubjects(limit=-1) {
+    let subjects = this.PersonModel.getResearchSubjects(this.individual);
+    return subjects.slice(0, limit);
+  }
+
   _showSubSection(subsection) {
     if (!subsection) return false;
 
@@ -265,6 +275,16 @@ export default class RpPageIndividual extends RpUtilsLanding {
       return b['count'] - a['count'];
     });
     return out;
+  }
+
+  /**
+   * @method _onImpersonateClick
+   * @description bound to impersonate button click event. Set cookie
+   * and start refresh
+   */
+  _onImpersonateClick() {
+    document.cookie = 'impersonate='+this.individual['@id'].split(':')[1]+'@ucdavis.edu';
+    location.reload();
   }
 
 }

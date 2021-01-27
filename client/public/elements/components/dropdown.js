@@ -1,17 +1,20 @@
 import { LitElement, html } from 'lit-element';
 import "@polymer/iron-dropdown/iron-dropdown"
 import render from './dropdown.tpl.js';
+import "./icon"
 
 export class RpDropdown extends LitElement {
   static get properties() {
   return {
     themeColor: {type: String, attribute: 'theme-color'},
     choices: {type: Array},
-    chosen: {type: parseInt, reflect: true},
+    chosen: {type: Number, reflect: true},
     opened: {type: Boolean},
     toUpperCase: {type: Boolean, attribute: 'to-upper-case'},
     noPadding: {type: Boolean, attribute: "no-padding"},
-    stickyTitle: {type: String, attribute: "sticky-title"}
+    stickyTitle: {type: String, attribute: "sticky-title"},
+    filterIcon: {type: Boolean, attribute: "filter-icon"},
+    useLinks: {type: Boolean, attribute: "use-links"}
   };
   }
 
@@ -25,12 +28,8 @@ export class RpDropdown extends LitElement {
     this.opened = false;
     this.noPadding = false;
     this.stickyTitle = "";
-
-    this._newSelection = new CustomEvent('new-selection', {
-      detail: {
-        message: 'A new selection.'
-      }
-    });
+    this.filterIcon = false;
+    this.useLinks = false;
   }
 
   firstUpdated(changedProperties) {
@@ -56,13 +55,29 @@ export class RpDropdown extends LitElement {
     if (this.toUpperCase) {
       classes.upper = true;
     }
+    if (this.filterIcon) {
+      classes['has-filter-icon'] = true;
+    }
+    if (this.themeColor == "bg-primary") {
+      classes['bg-primary'] = true;
+    }
 
     return classes;
   }
+
   _renderChoices(choice) {
-    return html`<li index="${choice.index}"
-                    ?selected="${choice.index == this.chosen && !this.stickyTitle}"
-                    @click="${this._handleClick}">${choice.text}</li>`;
+    if ( choice.href && this.useLinks ) {
+      return html`
+      <li ?selected="${choice.index == this.chosen && !this.stickyTitle}">
+        <a href="${choice.href}">${choice.text}</a>
+      </li>
+      `;
+    } 
+
+    return html`
+    <li index="${choice.index}"
+      ?selected="${choice.index == this.chosen && !this.stickyTitle}"
+      @click="${this._handleClick}">${choice.text}</li>`;
   }
 
   _handleClick(e){
@@ -70,9 +85,15 @@ export class RpDropdown extends LitElement {
     if (i == this.chosen && !this.stickyTitle) {
       return;
     }
+
     this.chosen = i;
     this.shadowRoot.getElementById('dropdown').close();
-    this.dispatchEvent(this._newSelection);
+    this.dispatchEvent(new CustomEvent('new-selection', {
+      detail: {
+        index: i,
+        selected : this.choices[i]
+      }
+    }));
   }
 
   _parseChoices(){
@@ -84,7 +105,7 @@ export class RpDropdown extends LitElement {
       }
       else if (typeof c === 'object') {
         if (c.text) {
-          choices.push({index: i, text: c.text});
+          choices.push({index: i, text: c.text, href: c.href});
         }
       }
       i += 1;
