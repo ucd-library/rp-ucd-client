@@ -222,8 +222,14 @@ class PersonModel extends BaseModel {
   getResearchSubjects(individual) {
     let out = [];
     if (!individual || !individual.hasResearchArea) return out;
-    if (Array.isArray(individual.hasResearchArea)) return individual.hasResearchArea;
-    return [individual.hasResearchArea];
+    let subjects = individual.hasResearchArea;
+    if (!Array.isArray(subjects)) subjects = [subjects];
+    for (const subject of subjects) {
+      subject.bestLabel = subject.prefLabel ? subject.prefLabel : subject.label;
+      subject.href = `/subject/${encodeURIComponent(subject['@id'])}`;
+      out.push(subject);
+    }
+    return out;
   }
 
   getWebsites(individual) {

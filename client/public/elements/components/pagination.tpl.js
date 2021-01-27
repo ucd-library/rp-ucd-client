@@ -35,7 +35,7 @@ export default function render() {
     }
     .page.selected {
       background-color: var(--tcolor-secondary);
-      pointer-event: none;
+      pointer-events: none;
       cursor: auto;
     }
     .page.selected:hover {
