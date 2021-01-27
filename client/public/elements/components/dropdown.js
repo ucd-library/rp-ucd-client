@@ -30,12 +30,6 @@ export class RpDropdown extends LitElement {
     this.stickyTitle = "";
     this.filterIcon = false;
     this.useLinks = false;
-
-    this._newSelection = new CustomEvent('new-selection', {
-      detail: {
-        message: 'A new selection.'
-      }
-    });
   }
 
   firstUpdated(changedProperties) {
@@ -70,12 +64,16 @@ export class RpDropdown extends LitElement {
 
     return classes;
   }
+
   _renderChoices(choice) {
-    if (this.useLinks) return html`
+    if ( choice.href && this.useLinks ) {
+      return html`
       <li ?selected="${choice.index == this.chosen && !this.stickyTitle}">
         <a href="${choice.href}">${choice.text}</a>
       </li>
-    `
+      `;
+    } 
+
     return html`
     <li index="${choice.index}"
       ?selected="${choice.index == this.chosen && !this.stickyTitle}"
@@ -87,9 +85,15 @@ export class RpDropdown extends LitElement {
     if (i == this.chosen && !this.stickyTitle) {
       return;
     }
+
     this.chosen = i;
     this.shadowRoot.getElementById('dropdown').close();
-    this.dispatchEvent(this._newSelection);
+    this.dispatchEvent(new CustomEvent('new-selection', {
+      detail: {
+        index: i,
+        selected : this.choices[i]
+      }
+    }));
   }
 
   _parseChoices(){

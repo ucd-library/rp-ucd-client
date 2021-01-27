@@ -18,10 +18,8 @@ if( fs.existsSync(loaderPath) ) {
   logger.warn(`JS loaded not found on disk! ${loaderPath}`);
 }
 
-
-let esClient; 
 (async function (){
-  esClient = await elasticSearch.connect();
+  await elasticSearch.connect();
 })();
 
 const bundle = `
@@ -42,7 +40,7 @@ export default (app) => {
     assetsDir,
     appRoutes : config.client.appRoutes,
     versions : config.client.versions
-  })
+  });
 
   /**
    * Setup SPA app routes
@@ -59,16 +57,26 @@ export default (app) => {
       if( token ) {
         try {
           user = await auth.verifyToken(token);
-          try{
-            user.hasProfile = await esClient.exists({index: token})//await esClient.exist -wrap in try/catch (set to true false)
-          }catch(e){
-            console.log("error")
+          try {
+            user.hasProfile = await userExists(user.username);
+          } catch(e) {
+            user.hasProfile = false;
           }
         } catch(e) {
-          console.log("error")
+          logger.log('error parsing jwt token: ', e);
         }
       }
 
+      // check for admin impersonation
+      if( user && req.cookies.impersonate && (user.roles || []).includes('admin') ) {
+        logger.info(`user ${user.username} is impersonating: ${req.cookies.impersonate}`);
+        user = {
+          impersonatedBy : user,
+          username : req.cookies.impersonate,
+          roles : [],
+          hasProfile : await userExists(req.cookies.impersonate)
+        };
+      }
 
       next({
         user,
@@ -93,4 +101,16 @@ export default (app) => {
    * Setup static asset dir
    */
   app.use(express.static(assetsDir));
+};
+
+async function userExists(email) {
+  try {
+    return await elasticSearch.client.exists({
+      index: config.elasticSearch.indexAlias,
+      id: 'ucdrp:'+email.replace(/@.*/, '')
+    });
+  } catch(e) {
+    logger.info(e);
+  }
+  return false;
 }

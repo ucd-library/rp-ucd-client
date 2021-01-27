@@ -46,7 +46,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       accountLinks: {type:Array},
       quickSearchWidth: {type: Number},
       mobileMenuPage: {type: String},
-      showVersion: {type: Boolean}
+      showVersion: {type: Boolean},
+      hasProfile: {type: Boolean},
     }
   }
 
@@ -66,11 +67,21 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.mobileMenuPage = "";
 
     this.isSearch = false;
+    this.hasProfile = this.user && this.user.hasProfile;
     this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
     this.navLinks = [{text: 'People', page: 'people', href: '/people'},
                      {text: 'Subjects', page: 'subjects', href: '/subjects'},
                      {text: 'Works', page: 'works', href: '/works'},
                      {text: 'Help', page: 'help', href: '/help'}];
+
+
+    if( APP_CONFIG.user && APP_CONFIG.user.impersonatedBy ) {
+      this.accountLinks.unshift({text: "Stop Impersonating", action: 'stop-impersonating'}); 
+    }
+    if( this.hasProfile ){
+      this.accountLinks.unshift({text: "My Profile", href: "/individual/" + this.userName}); 
+    }
+
 
     if( !APP_CONFIG.env ) {
       APP_CONFIG.env = {APP_VERSION:''}
@@ -266,6 +277,19 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       return html`${columnTemplates}`;
     }
     return html``;
+  }
+
+  /**
+   * @method _handleUserDropdownSelection
+   * @description bound to the rp-dropdown new-selection event
+   * 
+   * @param {Object} e 
+   */
+  _handleUserDropdownSelection(e) {
+    if( e.detail.selected.action === 'stop-impersonating' ) {
+      document.cookie = "impersonate=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      location.reload();
+    }
   }
 
 }

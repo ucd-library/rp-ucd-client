@@ -302,9 +302,10 @@ return html`
         <a class="no-decoration" href="/help">Help</a>
         ${this.user ? html`     
               <rp-dropdown no-padding
-                          sticky-title="${this.user.username.split('@')[0]}"
-                          use-links
-                          .choices= ${this.accountLinks}>
+                sticky-title="${this.user.username.split('@')[0]}"
+                use-links
+                .choices= ${this.accountLinks}
+                @new-selection=${this._handleUserDropdownSelection}>
               </rp-dropdown>
           ` : html`
           <a class="no-decoration" href="/auth/login">Login</a>

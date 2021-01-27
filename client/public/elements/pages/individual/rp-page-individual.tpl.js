@@ -184,7 +184,9 @@ return html`
           </div>
         </div>
       ` : html``}
-      
+      <div ?hidden="${!this.isAdmin}" style="margin-top: 20px">
+        <button @click="${this._onImpersonateClick}" class="load-pubs more">Impersonate</button>
+      </div>
     </div>
   </rp-hero-image>
   <rp-link-list class="bg-light p-3"
