@@ -1,4 +1,3 @@
-import { LitElement } from 'lit-element';
 import render from "./rp-page-individual.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
@@ -12,10 +11,13 @@ import "../../components/hero-image";
 import "../../components/icon";
 import "../../components/link-list";
 import "../../components/modal";
-import { isLoading } from '../../../src/services/PersonService.js';
 
 
-
+/**
+ * @class rpPageIndividual
+ * @description Landing page for an individual person.
+ * Inherits the RpUtilsLanding element, which handles a lot of the rendering.
+ */
 export default class RpPageIndividual extends RpUtilsLanding {
 
   static get properties() {
@@ -29,8 +31,7 @@ export default class RpPageIndividual extends RpUtilsLanding {
       totalPublications: {type: Number},
       isOwnProfile: {type: Boolean},
       submitText: {type: String, attribute: 'submitText'}
-
-    }
+    };
   }
 
   constructor() {
@@ -46,10 +47,21 @@ export default class RpPageIndividual extends RpUtilsLanding {
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
+  /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
   async _onAppStateUpdate(state) {
-   requestAnimationFrame( () => this.doUpdate(state));
+    requestAnimationFrame( () => this.doUpdate(state));
   }
 
+  /**
+   * @method doUpdate
+   * @description Updates the data for this page. Will rerender.
+   * @param {Object} state 
+   */
   async doUpdate(state) {
     let updateData = true;
     await this.updateComplete;
@@ -62,28 +74,35 @@ export default class RpPageIndividual extends RpUtilsLanding {
       this.assetId = path[1];
       this.PersonModel.individualId = this.assetId;
     }
-    let sections = this.getPageSections();
+    this.getPageSections();
     if (!this.assetId) return;
     this._setActiveSection(path);
 
     if (!updateData) return;
-    this._resetEleProps()
-    await Promise.all([this._doMainQuery(this.assetId),
-                        this._doPubOverviewQuery(this.assetId)]);
+    this._resetEleProps();
+    await Promise.all([
+      this._doMainQuery(this.assetId),
+      this._doPubOverviewQuery(this.assetId)]);
     this.isOwnProfile = this._isOwnProfile();
 
   }
 
+  /**
+   * @method updated
+   * @description lit method called when element is updated.
+   * @param {Map} props - The properties that were updated.
+   */
   updated(props){
     if (props.has('assetId') && this.assetId) {
       this.shadowRoot.getElementById('hero').shuffle();
     }
   }
 
-  _handleClick(e) {
-    window.location.href = 'https://oapolicy.universityofcalifornia.edu/objects.html?as=3&am=false&cid=1&ipr=false&iqf=true';
-  }
-
+  /**
+   * @method _resetEleProps
+   * @description Resets properties to their native state. 
+   * Ususally called before data for a new individual is loaded.
+   */
   _resetEleProps() {
     this.individual = {};
     this.individualStatus = 'loading';
@@ -97,6 +116,16 @@ export default class RpPageIndividual extends RpUtilsLanding {
     this.publicationOverviewStatus = 'loading';
   }
 
+  /**
+   * @method _loadPubs
+   * @description Retrieves publications and adds them to the master publication object.
+   * Attached to "Get More" buttons in the publication section of profile.
+   * 
+   * @param {String} pubType - the id of the publication type to retrieve. i.e. article, conference-paper, etc
+   * @param {Boolean} getMore - Have we already retrieved a few publications of this type?
+   * 
+   * @returns {Promise}
+   */
   async _loadPubs(pubType, getMore=true){
     let offset = this.publicationOverview[pubType].displayedOffset;
     if (offset < 10) {
@@ -106,10 +135,18 @@ export default class RpPageIndividual extends RpUtilsLanding {
       offset -= 10;
     }
     this.publicationOverview[pubType].displayedOffset = getMore ? offset + 10 : offset;
-    await this._doPubQuery(this.publicationOverview[pubType], offset=offset);
+    await this._doPubQuery(this.publicationOverview[pubType], offset);
 
   }
 
+  /**
+   * @method _doMainQuery
+   * @description Retrieves data for individual on AppStateUpdate. Rerenders.
+   * 
+   * @param {String} id - The id of the individual (without the jsonld context).
+   * 
+   * @returns {Promise}
+   */
   async _doMainQuery(id){
     let data = await this.PersonModel.getIndividual(id);
     this.individualStatus = data.state;
@@ -120,6 +157,15 @@ export default class RpPageIndividual extends RpUtilsLanding {
     if (APP_CONFIG.verbose) console.log(data);
   }
 
+  /** 
+   * @method _doPubOverviewQuery
+   * @description Gets aggregation counts of all publication types for this individual.
+   * Kicks off further queries for the actual publication records if applicable.
+   * 
+   * @param {String} id - The individual's id
+   * 
+   * @returns {Promise}
+   */
   async _doPubOverviewQuery(id) {
     let data = await this.PersonModel.getPubOverview(id);
     if (data.state != 'loaded') {
@@ -130,10 +176,10 @@ export default class RpPageIndividual extends RpUtilsLanding {
     let totalPubs = 0;
     let pubTypes = {};
     for (let possiblePubType of this.PersonModel.getPublicationTypes()) {
-      let ct = data.payload.aggregations.facets['@type'][possiblePubType.es]
+      let ct = data.payload.aggregations.facets['@type'][possiblePubType.es];
       if (ct) {
         totalPubs += ct;
-        pubTypes[possiblePubType.id] = {...possiblePubType, ct: ct, displayedOffset: 0, dataStatus: 'loading'}
+        pubTypes[possiblePubType.id] = {...possiblePubType, ct: ct, displayedOffset: 0, dataStatus: 'loading'};
       }
     }
     this.hasMultiplePubTypes = Object.keys(pubTypes).length > 1;
@@ -148,6 +194,15 @@ export default class RpPageIndividual extends RpUtilsLanding {
 
   }
 
+  /**
+   * @method _doPubQuery
+   * @description Retrieves publications in chronological order. Rerenders.
+   * 
+   * @param {Object} pubTypeObject - Object containing metadata about the publication type.
+   * @param {Number} offset - Offsets query by this value.
+   * 
+   * @returns {Promise}
+   */
   async _doPubQuery(pubTypeObject, offset=0){
 
     let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
@@ -156,37 +211,32 @@ export default class RpPageIndividual extends RpUtilsLanding {
     if (APP_CONFIG.verbose) console.log(`${pubTypeObject.id} pubs:`, data);
     this.retrievedPublications[pubTypeObject.id] = data.masterStore;
     this.requestUpdate();
-
-
-
-
-    /*
-    if ( this.retrievedPublications.length < this.totalPublications ) {
-      offset = this.retrievedPublications.length;
-    }
-    let data = await this.PersonModel.getPublications(id, offset);
-    this.publicationStatus = data.state;
-    if (data.state != 'loaded') {
-      return;
-    }
-    if (APP_CONFIG.verbose) console.log("pubs", data);
-
-    this.retrievedPublications = data.payload.results;
-    if (data.payload.results.length > 0) {
-      this.totalPublications = data.payload.total;
-    }
-    */
   }
 
+  /**
+   * @method _isOwnProfile
+   * @description Determines if currently loaded page is the logged in user's
+   * 
+   * @returns {Boolean}
+   */
   _isOwnProfile() {
     try {
       if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === this.assetId.toLowerCase()) {
         return true;
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn("Error parsing username.");
+    }
     return false;
   }
 
+  /**
+   * @method getPubsByYear
+   * @description Formats retrieved publications according to section layout
+   * 
+   * @param {String} pubType - The type of publication (article, book, etc)
+   * @returns {Array} Ordered array of objects with publications for a given year.
+   */
   getPubsByYear(pubType){
     let output = [];
     if (!this.publicationOverview[pubType] || !this.retrievedPublications[pubType]) return output;
@@ -214,31 +264,78 @@ export default class RpPageIndividual extends RpUtilsLanding {
     return output;
   }
 
+  /**
+   * @method getIndividualTitles
+   * @description Gets titles for a person.
+   * 
+   * @returns {Array}
+   */
   getIndividualTitles(){
-    return this.PersonModel.getIndividualTitles(this.individual)
-  }
-  getHeadlineTitle() {
-    return this.PersonModel.getHeadlineTitle(this.individual)
-  }
-  getBestLabel() {
-    return this.PersonModel.getBestLabel(this.individual)
+    return this.PersonModel.getIndividualTitles(this.individual);
   }
 
+  /**
+   * @method getHeadlineTitle
+   * @description Gets title and organization for a person
+   * 
+   * @returns {String}
+   */
+  getHeadlineTitle() {
+    return this.PersonModel.getHeadlineTitle(this.individual);
+  }
+
+  /**
+   * @method getBestLabel
+   * @description Gets name of a person.
+   * 
+   * @returns {String}
+   */
+  getBestLabel() {
+    return this.PersonModel.getBestLabel(this.individual);
+  }
+
+  /**
+   * @method getEmailAddresses
+   * @description Gets email addresses for person
+   * 
+   * @returns {Array}
+   */
   getEmailAddresses(){
     if (this.emailArray.length > 0) return this.emailArray;
-    return this.PersonModel.getEmailAddresses(this.individual)
+    return this.PersonModel.getEmailAddresses(this.individual);
   }
 
+  /**
+   * @method getWebsites
+   * @description Gets websites for person
+   * 
+   * @returns {Array}
+   */
   getWebsites() {
     if (this.websitesArray.length > 0) return this.websitesArray;
-    return this.PersonModel.getWebsites(this.individual)
+    return this.PersonModel.getWebsites(this.individual);
   }
 
+  /**
+   * @method getResearchSubjects
+   * @description Gets research subjects for person
+   * @param {Number} limit - Max number of subjects to return
+   * 
+   * @returns {Array}
+   */
   getResearchSubjects(limit=-1) {
     let subjects = this.PersonModel.getResearchSubjects(this.individual);
     return subjects.slice(0, limit);
   }
 
+  /**
+   * @method _showSubSection
+   * @description Logic for displaying different parts within a section
+   * Attached to various ?hidden properties
+   * 
+   * @param {String} subsection - Identifier for a subsection.
+   * @returns {Boolean}
+   */
   _showSubSection(subsection) {
     if (!subsection) return false;
 
@@ -252,25 +349,14 @@ export default class RpPageIndividual extends RpUtilsLanding {
     return false;
   }
 
+  /**
+   * @method getPubExports
+   * @description Returns the ways a user can export their publications.
+   * 
+   * @returns {Array}
+   */
   getPubExports() {
     return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/${this.assetId}`}];
-  }
-
-  formatSubjectsObject(subjects){
-    let out = [];
-    for (let subject in subjects) {
-      let subObj = {subject: subject, count: subjects[subject], label: subject};
-      let words = subject.split(" ");
-      if (words[0].startsWith("0") && !isNaN(words[0])) {
-        subObj.label = words.slice(1,).join(" ");
-      }
-      out.push(subObj);
-    }
-
-    out.sort(function (a, b) {
-      return b['count'] - a['count'];
-    });
-    return out;
   }
 
 }
