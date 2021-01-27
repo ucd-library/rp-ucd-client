@@ -364,7 +364,6 @@ export default class RpPageIndividual extends RpUtilsLanding {
     return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/${this.assetId}`}];
   }
 
-<<<<<<< HEAD
   formatSubjectsObject(subjects){
     let out = [];
     for (let subject in subjects) {
@@ -392,8 +391,6 @@ export default class RpPageIndividual extends RpUtilsLanding {
     location.reload();
   }
 
-=======
->>>>>>> 1965ccc06a9bab84c8620c350fed12654a11ed73
 }
 
 customElements.define('rp-page-individual', RpPageIndividual);
