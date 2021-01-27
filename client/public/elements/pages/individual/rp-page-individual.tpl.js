@@ -179,7 +179,7 @@ return html`
           <p class="text-light h3 text-center bold">My research areas include:</p>
           <div class="flex flex-wrap justify-content-center align-items-center">
             ${this.getResearchSubjects(4).map(subject => html`
-              <rp-badge size="lg" class="text-light my-1">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
+              <rp-badge size="lg" class="text-light my-1" href="${subject.href}">${subject.bestLabel}</rp-badge>
             `)}
           </div>
         </div>
