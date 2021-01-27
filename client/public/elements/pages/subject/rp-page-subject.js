@@ -35,7 +35,8 @@ export default class RpPageSubject extends RpUtilsLanding {
       peopleWidth: {type: Number},
       narrowRelatedSubjects: {type: Array},
       broadRelatedSubjects: {type: Array},
-      tempResearch: {}
+      tempResearch: {},
+      urlPathId: {type: String},
     }
   }
 
@@ -51,6 +52,7 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.researchersStatus = 'loading';
     this.tempResearch = []
     this.publications = {};
+    this.urlPathId = "";
     //this.authorPath = "/individual/";
     //this.grpsWithLinks = ["vivo:FacultyMember"];
     //this.authors = [];
@@ -103,6 +105,7 @@ export default class RpPageSubject extends RpUtilsLanding {
       return;
     }
     console.log("PATH:", path);
+    this.urlPathId = path[1];
     this.assetId = decodeURIComponent(path[1]);
     if (!this.assetId) return;
 
@@ -144,6 +147,7 @@ export default class RpPageSubject extends RpUtilsLanding {
    */
   async _doResearcherQuery(id){
     let data = await this.SubjectModel.getResearchers(id);
+
     this.tempResearch = data.payload.results;
     this.researchersStatus = data.state;
     if (data.state != 'loaded') {
@@ -176,6 +180,8 @@ export default class RpPageSubject extends RpUtilsLanding {
 
     this.publications = {}
     pubTypes.map(pt => this._doPubQuery(pt));
+
+
   }
 
   /**
@@ -184,30 +190,46 @@ export default class RpPageSubject extends RpUtilsLanding {
    * @description Retrieves the 5 most recent publications of the specified pubType for this subject.
    * Adds to publications object.
    */
-  async _doPubQuery(pubType){
-    let data = await this.SubjectModel.getPubs(this.assetId, pubType);
-    if (data.state != 'loaded') {
-      return;
+    async _doPubQuery(pubType){
+      let data = await this.SubjectModel.getPubs(this.assetId, pubType);
+      if (data.state != 'loaded') {
+        return;
+      }
+      if (APP_CONFIG.verbose) console.log(`${pubType.id} pubs`, data);
+      this.publications[pubType.id] = {'total': data.payload.total, 'results': data.payload.results};
+      this.requestUpdate();
     }
-    if (APP_CONFIG.verbose) console.log(`${pubType.id} pubs`, data);
-    this.publications[pubType.id] = {'total': data.payload.total, 'results': data.payload.results};
-  }
 
-  setPeopleWidth(w) {
-    let pw = 250;
-    let avatarWidth = 82;
-    let screenPadding = 30;
-    pw = (w - screenPadding) * .8 - avatarWidth - 40;
-    this.peopleWidth = Math.floor(pw);
-  }  
+    setPeopleWidth(w) {
+      let pw = 250;
+      let avatarWidth = 82;
+      let screenPadding = 30;
+      pw = (w - screenPadding) * .8 - avatarWidth - 40;
+      this.peopleWidth = Math.floor(pw);
+    }  
 
-  _handleResize() {
-    if (!this.visible) return;
-    let w = window.innerWidth;
-    this.setPeopleWidth(w);
-  }
+    _handleResize() {
+      if (!this.visible) return;
+      let w = window.innerWidth;
+      this.setPeopleWidth(w);
+    }
 
-  _getRelatedSubjectsNarrow(){
+    _pubRedirect(k){
+      let path = '/works/' + k + "?" + "subject=" + this.urlPathId;
+      //console.log(path);
+      //location.href = path;
+
+    }
+
+    _isEmpty(obj) {
+      for(var key in obj) {
+          if(obj.hasOwnProperty(key))
+              return false;
+      }
+      return true;
+    }
+  
+    _getRelatedSubjectsNarrow(){
     let narrow = this.SubjectModel.getRelatedSubjects(this.subject, "narrow");
     let result = [];
     if(narrow){
@@ -231,7 +253,6 @@ export default class RpPageSubject extends RpUtilsLanding {
       return result;
     } else return false
   }
-  
   _hideStatusSection(section, statusProperty="subjectStatus") {
     if (section == this[statusProperty]) {
       return false;
@@ -242,6 +263,19 @@ export default class RpPageSubject extends RpUtilsLanding {
   _labelTitle(){
     if(this.subject.prefLabel) return this.subject.prefLabel;
     else return this.subject.label;
+  }
+
+  _publicationTitle(name){
+    if(name == "articles") return "Academic Articles"
+    else if(name == "conference-papers") return "Conference Papers"
+    else if(name == "books") return "Books"
+    else if(name == "chapters") return "Chapters"
+    else return
+  }
+
+  _getYear(date){
+    if (!date) return;
+    return date.split("-")[0];
   }
 
   _getFullTextLinks(){
@@ -275,45 +309,6 @@ export default class RpPageSubject extends RpUtilsLanding {
     return "";
   }
 
-  // _getPublishedArray() {
-  //   let output = [];
-  //   if (!this.work) return output;
-    
-  //   // venue name
-  //   try {
-  //     let venue = this.work.hasPublicationVenue['@id'];
-  //     if (venue && this.workType.toLowerCase() == 'academic article') {
-  //       venue = venue.replace(APP_CONFIG.data.jsonldContext + ":journal", "").replace(/-/g, " ");
-  //       venue += " (journal)"
-  //     }
-  //     if (venue) output.push({text: venue, class: 'venue'});
-      
-  //   } catch (error) {}
-
-  //   // venue release
-  //   try {
-  //     let r = "";
-  //     if (output.length > 0) {
-  //       if (this.work.volume) r += `Volume ${this.work.volume}`;
-  //       if (this.work.issue) {
-  //         if (r) r += ", ";
-  //         r += `Issue ${this.work.issue}`;
-  //       }
-  //       if (r) output.push({text: r, class: 'release'});
-  //     }
-      
-  //   } catch (error) {}
-
-  //   // publication date
-  //   try {
-  //     let d = new Date(this.work.publicationDate);
-  //     let options = {year: 'numeric', month: 'long', day: 'numeric' };
-  //     d = new Intl.DateTimeFormat('en-US', options).format(d);
-  //     if (d) output.push({text: d, class: 'pub-date'});
-  //   } catch (error) {}
-
-  //   return output;
-  // }
 
 }
 

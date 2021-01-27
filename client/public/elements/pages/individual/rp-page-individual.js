@@ -2,7 +2,7 @@ import { LitElement } from 'lit-element';
 import render from "./rp-page-individual.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
-
+ 
 import "../../components/alert";
 import "../../components/avatar";
 import "../../components/badge";
@@ -145,7 +145,6 @@ export default class RpPageIndividual extends RpUtilsLanding {
     this.publicationOverview  = pubTypes;
 
     Object.values(pubTypes).map(pt => this._doPubQuery(pt));
-
   }
 
   async _doPubQuery(pubTypeObject, offset=0){

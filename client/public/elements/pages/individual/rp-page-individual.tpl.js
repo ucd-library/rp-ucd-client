@@ -259,6 +259,7 @@ return html`
         ${ Object.values(this.publicationOverview).map(pubType => html`
           <h3>${pubType.label} (${pubType.ct})</h3>
           ${this.getPubsByYear(pubType.id).map(yr => html`
+          ${console.log(yr)}
             <div class="box-pubsyear">
               <div class="year">${yr.year}</div>
               <div class="pubs">${yr.pubs.map(pub => html`

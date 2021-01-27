@@ -1,4 +1,5 @@
 import { html } from 'lit-element';
+import { getPublicationTypes } from '../../../src/models/PersonModel';
 import styles from "../../styles/site.html";
 
 export default function render() {
@@ -24,6 +25,11 @@ return html`
   text-transform: uppercase;
   font-size: var(--font-size-small);
 }
+.box-title {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
   .icon-container {
       background-color: var(--tcolor-bg-primary);
       height: 150px;
@@ -72,6 +78,65 @@ return html`
   }
   #authors .name {
     font-weight: var(--font-weight-bold);
+  }
+  .box-pubsyear {
+    display: flex;
+  }
+  .box-pubsyear .year {
+    font-weight: var(--font-weight-bold);
+    width: 60px;
+    min-width: 60px;
+  }
+  .box-pubsyear .pubs {
+    flex-grow: 1;
+  }
+  .box-pubsyear .pubs rp-citation {
+    margin-bottom: 8px;
+  }
+  .button {
+        color: var(--tcolor-primary);
+        padding: 10px;
+        background-color: var(--tcolor-bg-primary);
+        cursor: pointer;
+        transition: .3s;
+        margin: 5px;
+    }
+  .button:hover {
+        background-color: var(--tcolor-hover-bg);
+        color: var(--tcolor-hover-text);
+  }
+  .load-pubs {
+    height: 42px;
+    font-size: var(--font-size);
+    color: var(--tcolor-text);
+    font-weight: var(--font-weight);
+    border: 2px solid var(--tcolor-primary10);
+    padding: 0 15px;
+    cursor: pointer;
+    transition: .3s;
+    color: var(--tcolor-primary);
+  }
+
+  .load-pubs.less {
+    background-color: var(--tcolor-primary10);
+    margin-right: 8px;
+  }
+  .load-pubs:hover {
+    background-color: var(--tcolor-hover-bg);
+    border: 2px solid var(--tcolor-hover-bg);
+    color: var(--tcolor-light);
+  }
+
+  .box-pub-buttons {
+    display: flex;
+  }
+  .box-pub-buttons .padding {
+    width: 60px;
+    min-width: 60px;
+  }
+  .box-pub-buttons .buttons {
+    display: flex;
+    flex-grow: 1;
   }
 
   ${styles}
@@ -131,26 +196,50 @@ return html`
   </section>
   <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
     <div class="box-title">
-        <h1 class="weight-regular mt-0">Researchers</h1>
+      <h1 class="weight-regular mt-0">Researchers</h1>
+    </div>
+      ${this._isEmpty(this.tempResearch) ? html `<h3>None Listed</h3>` : html `
         ${this.tempResearch.map(researcher => html`
-          ${console.log(researcher)}
           <rp-person-preview
             .data="${researcher}"
             text-width="${this.peopleWidth}"
             show-subjects
             class="my-3">
           </rp-person-preview>
-          <hr class="dotted">
-        `)}
+        `)}   
+       `}
 
-    </div>
+
   </section>
   <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
     <div class="box-title">
-      <h1 class="weight-regular mt-0">Publications</h1>
+      <h1 class="weight-regular mt-0">Related Publications</h1>
     </div>
+      ${this._isEmpty(this.publications) ? html `<h3>None Listed</h3>` : html `
+      <div class="data">
+        ${Object.entries(this.publications).map(([k, v]) => html`
+          <h3>${this._publicationTitle(k)} (${v.total})</h3>
+          ${v.results.map(yr => html`
+            <div class="box-pubsyear">
+              <div class="year">${this._getYear(yr.publicationDate)}</div>
+              <div class="pubs"><rp-citation .data="${yr}"></rp-citation></div>
+            </div>          
+          `)}
+
+        <div class="box-pub-buttons">
+          <div class="padding"></div>
+          <div class="buttons">
+            <button type="button" @click=${this._pubRedirect(k)} class="load-pubs less">View All Related ${this._publicationTitle(k)}</button>
+          </div>
+          </div>
+        </div>
+
+      </div>   
+    </div>
+    `)} 
+    `}
+
   </section>
-  </div>
 
 </div>
 

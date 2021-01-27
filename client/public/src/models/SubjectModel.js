@@ -1,5 +1,4 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
-const { NoEmitOnErrorsPlugin } = require('webpack');
 const SubjectService = require('../services/SubjectService');
 const SubjectStore = require('../stores/SubjectStore');
 
