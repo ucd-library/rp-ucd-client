@@ -237,10 +237,9 @@ return html`
             <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
               <div slot="tooltip">Edit Publications</div>
             </rp-icon>
-          ` : html``
-        }
-        <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
-      </div>
+          ` : html``}
+            <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
+          </div>
 
       <div class="pub-count">${this.totalPublications}</div>
           
