@@ -17,6 +17,7 @@ export default function render() {
     #input {
       flex-grow: 1;
       height: 44px;
+      min-width: 30px;
       border: none;
       background-color: var(--tcolor-light);
       font-size: var(--font-size);
@@ -25,8 +26,9 @@ export default function render() {
     #icon-container {
       height: 44px;
       display: flex;
+      flex-grow: 1;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       padding-left: 15px;
       padding-right: 15px;
       background-color: var(--tcolor-light);
@@ -37,6 +39,7 @@ export default function render() {
     .line {
       background-color: var(--tcolor-primary10);
       width: 1px;
+      min-width: 1px;
       height: 34px;
     }
   </style>

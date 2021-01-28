@@ -119,6 +119,7 @@ return html`
   }
   #app-mobile-menu rp-search {
     width: 100%;
+    max-width: 100%;
   }
   #app-mobile-menu .nav-links {
     padding-top: 8px;
