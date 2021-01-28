@@ -11,7 +11,7 @@ export default function render() {
     .container {
       display: flex;
       flex-flow: row nowrap;
-      align-items: center;
+      align-items: flex-start;
     }
     .icon-container {
       height: 70px;
@@ -30,6 +30,7 @@ export default function render() {
     .text-container {
       margin-left: 12px;
       flex-grow: 1;
+      align-self: center;
     }
     .title {
       font-size: var(--font-size);
