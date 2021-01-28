@@ -252,7 +252,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
         <div class="container content">
           ${this.theme.universityLogo? html`
           <a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html`<div></div>`}
-          <iron-icon icon="menu" class="hamburger hidden-tablet-up" @click="${e => this.toggleMobileMenu()}"></iron-icon>
+          <iron-icon icon="${this.page == 'app-mobile-menu' ? 'close' : 'menu'}" class="hamburger hidden-tablet-up" @click="${e => this.toggleMobileMenu()}"></iron-icon>
         </div>
         
       </div>`;
