@@ -303,7 +303,7 @@ class CollectionModel extends BaseModel {
     }
 
     else if (mainFacet == 'people') {
-      subFacets.push({id: "none", ct: dataTotal, text: `All People(${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
+      subFacets.push({id: "none", ct: dataTotal, text: `All People (${dataTotal})`, href: this.constructUrl(elementQuery, ['subFacet', 'page', 'az'])})
 
       for (let f of this.subFacets.people) {
         let facet = {...f};
