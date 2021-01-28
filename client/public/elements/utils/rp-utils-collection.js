@@ -530,7 +530,7 @@ _urlEncode(obj) {
   }
 
   _renderPagination(totalResults) {
-    if (!totalResults) {
+    if (!totalResults || totalResults <= this.pgPer ) {
       return html``;
     }
     this.hasPagination = true;
