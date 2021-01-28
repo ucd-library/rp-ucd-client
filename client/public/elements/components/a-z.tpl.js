@@ -5,6 +5,7 @@ export default function render() {
     :host {
       display: block;
       font-size: var(--font-size-small);
+      line-height: 1.8;
     }
     .container {
       display: flex;

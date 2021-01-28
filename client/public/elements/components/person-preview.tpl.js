@@ -12,11 +12,12 @@ export default function render() {
     .container {
       display: flex;
       flex-flow: row nowrap;
-      align-items: center;
+      align-items: flex-start;
     }
     .text-container {
       margin-left: 12px;
       flex-grow: 1;
+      align-self: center;
     }
     .name {
       font-size: var(--font-size);

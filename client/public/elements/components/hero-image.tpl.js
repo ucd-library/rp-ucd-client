@@ -15,8 +15,8 @@ export default function render() {
       background-size: cover;
     }
     .slot {
-      margin-left: 10px;
-      margin-right: 10px;
+      margin-left: 20px;
+      margin-right: 20px;
     }
     #top {
       height: 30px;
@@ -31,6 +31,12 @@ export default function render() {
       display: flex;
       flex-flow: row nowrap;
       align-items: center;
+    }
+    @media (min-width: 800px) {
+      .slot {
+      margin-left: 30px;
+      margin-right: 30px;
+    }
     }
   </style>
   <div class="container ${classMap(this.constructClasses())}" style="${styleMap(this.constructStyles())}">
