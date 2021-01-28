@@ -349,6 +349,7 @@ return html`
       <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
     </div>
     <div class="container nav-links">
+      <a href="/" class="upper-case border-bottom">HOME</a>
       ${this.navLinks.map((link, i) => html`
         <a href="${link.href}" class="upper-case ${i < this.navLinks.length - 1 || !this.user ? 'border-bottom': ''}">${link.text}</a>
       `)}
