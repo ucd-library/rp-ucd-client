@@ -232,17 +232,17 @@ return html`
     <div class="box-title">
       <h1 class="weight-regular mt-0">Publications</h1>
       <div class="box-title-icons">
+      <div class="pub-icons">
         ${this.isOwnProfile ? html`
-          
-          ` : html``}
-          <div class="pub-icons">
             <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
-            <div slot="tooltip">Edit Publications</div>
+              <div slot="tooltip">Edit Publications</div>
             </rp-icon>
-            <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
-          </div>
+          ` : html``
+        }
+        <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
+      </div>
 
-          <div class="pub-count">${this.totalPublications}</div>
+      <div class="pub-count">${this.totalPublications}</div>
           
     <rp-modal content-title='Edit "Publications"' id="modal-pub-edit">
     Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
