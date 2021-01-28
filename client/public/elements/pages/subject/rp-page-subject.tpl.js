@@ -135,7 +135,6 @@ return html`
 
   ${styles}
 </style>
- ${console.log("lol")}
 <div class="work container top"> 
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
