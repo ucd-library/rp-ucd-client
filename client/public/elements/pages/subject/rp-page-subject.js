@@ -13,7 +13,10 @@ import "../../components/link-list";
 import "../../components/person-preview";
 import "../../components/subject-preview";
 
-
+/**
+ * @class RpPageSubject
+ * @description main subject page
+ */
 export default class RpPageSubject extends RpUtilsLanding {
   static get properties() {
     return {
@@ -22,19 +25,14 @@ export default class RpPageSubject extends RpUtilsLanding {
       researchers: {type: Array},
       researchersStatus: {type: String},
       publications: {type: Object},
-      //grpsWithLinks: {type: String},
-      authorPath: {type: String},
-      authors: {type: Array},
-      universityAuthors: {type: Array},
-      universityAuthorsStatus: {type: String},
-      hasOtherAuthors: {tyoe: Boolean},
       subjectType: {type: String},
-      publishedArray: {type: Array},
       fullTextLinks: {type: Array},
       isOwnWork: {type: Boolean},
       peopleWidth: {type: Number},
-      narrowListEx: {type: Object},
-      broadListEx: {type: Object}
+      narrowRelatedSubjects: {type: Array},
+      broadRelatedSubjects: {type: Array},
+      tempResearch: {},
+      urlPathId: {type: String},
     }
   }
 
@@ -48,51 +46,68 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.subjectStatus = 'loading';
     this.researchers = [];
     this.researchersStatus = 'loading';
+    this.tempResearch = []
     this.publications = {};
-    //this.authorPath = "/individual/";
-    //this.grpsWithLinks = ["vivo:FacultyMember"];
-    //this.authors = [];
-    //this.hasOtherAuthors = false;
+    this.urlPathId = "";
     this.subjectType = "";
-    this.publishedArray = [];
     this.fullTextLinks = [];
     this.isOwnWork = false;
+    this.hasRelatedSubject = true;
     this.setPeopleWidth(window.innerWidth);
     this._handleResize = this._handleResize.bind(this);
-    //this.universityAuthors = [];
-    //this.universityAuthorsStatus = 'loading';
-    this.narrowListEx = [{label: "Broad Subject",desc: "Description A"},
-                         {label: "Topic",desc: "Description B"}
-                        ];
-    this.broadListEx = [{label: "Related Subject", desc: "Description A"},
-                        {label: "Sub-Topic", desc: "Description B"},
-                        {label: "Topic", desc: "Description C"},
-                        {label: "Another Sub-Topic", desc: "Description D"},
-                        {label: "Example Topic", desc: "Description E"}
-                       ];    
+    this.narrowRelatedSubjects = [];
+    this.broadRelatedSubjects = [];    
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
+  /**
+   * @method updated
+   * @description lit method called when props update
+   * 
+   * @param {Object} props 
+   */
   updated(props) {
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
     }
   }
 
+  /**
+   * @method connectedCallback
+   * @description lit method called when element is connected to dom
+   */
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('resize', this._handleResize);
   }
 
+  /**
+   * @method disconnectedCallback
+   * @description lit method called when element is disconnected to dom
+   */
   disconnectedCallback() {
     window.removeEventListener('resize', this._handleResize);
     super.disconnectedCallback();
   }
 
+    /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
   async _onAppStateUpdate(state) {
     requestAnimationFrame( () => this.doUpdate(state));
-   }
+  }
 
+  /**
+   * @method _doUpdate
+   * @param {Object} state - State of the app
+   * @description On the call, it would update the state of the app.
+   * Promises these functions to query data: this._doMainQuery(this.assetId), 
+                                             this._doResearcherQuery(this.assetId), 
+                                             this._doPubOverviewQuery(this.assetId)])
+   */
   async doUpdate(state) {
     await this.updateComplete;
 
@@ -107,6 +122,7 @@ export default class RpPageSubject extends RpUtilsLanding {
       return;
     }
     console.log("PATH:", path);
+    this.urlPathId = path[1];
     this.assetId = decodeURIComponent(path[1]);
     if (!this.assetId) return;
 
@@ -119,6 +135,18 @@ export default class RpPageSubject extends RpUtilsLanding {
 
   }
 
+  /**
+   * @method _doMainQuery
+   * @param {String} id - The subject id of this page.
+   * @description Retrieves the subject from the id given and saves in this.subject array
+   * Called on AppStateUpdate
+   * 
+   * Calls the functions: this._getSubjectType(), 
+   *                      this._getFullTextLinks(),
+   *                      this._getRelatedSubjectsNarrow(), 
+   *                      this._getRelatedSubjectsBroader()
+   */
+
   async _doMainQuery(id){
     let data = await this.SubjectModel.getSubject(id);
 
@@ -129,11 +157,11 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.subject = data.payload;
     if (APP_CONFIG.verbose) console.log("subject payload:", data);
 
-    //this.authors = this._parseAuthors();
     this.subjectType = this._getSubjectType();
-    //this.publishedArray = this._getPublishedArray();
     this.fullTextLinks = this._getFullTextLinks();
-    //this._doAuthorQuery(id, this.authors);
+    this.narrowRelatedSubjects = this._getRelatedSubjectsNarrow();
+    this.broadRelatedSubjects = this._getRelatedSubjectsBroader();
+
   }
 
   /**
@@ -145,6 +173,7 @@ export default class RpPageSubject extends RpUtilsLanding {
   async _doResearcherQuery(id){
     let data = await this.SubjectModel.getResearchers(id);
 
+    this.tempResearch = data.payload.results;
     this.researchersStatus = data.state;
     if (data.state != 'loaded') {
       return;
@@ -176,6 +205,8 @@ export default class RpPageSubject extends RpUtilsLanding {
 
     this.publications = {}
     pubTypes.map(pt => this._doPubQuery(pt));
+
+
   }
 
   /**
@@ -191,7 +222,17 @@ export default class RpPageSubject extends RpUtilsLanding {
     }
     if (APP_CONFIG.verbose) console.log(`${pubType.id} pubs`, data);
     this.publications[pubType.id] = {'total': data.payload.total, 'results': data.payload.results};
+    this.requestUpdate();
   }
+
+  /**
+   * @method setPeopleWidth
+   * @description
+   * Sets the text-width property of the rp-subject-preview elements on this page.
+   * It's the only way to get the ellipsis overflow on their titles. 
+   * 
+   * @param {Number} w - Window width (pixels)
+   */
 
   setPeopleWidth(w) {
     let pw = 250;
@@ -201,12 +242,95 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.peopleWidth = Math.floor(pw);
   }  
 
+  /**
+   * @method _handleResize
+   * @description bound to main window resize event
+   */
   _handleResize() {
     if (!this.visible) return;
-    let w = window.innerWidth;
-    this.setPeopleWidth(w);
+      let w = window.innerWidth;
+      this.setPeopleWidth(w);
   }
 
+  /**
+   * @method _pubRedirect
+   * @description creates the href that specifies the subject and 
+   * type of document for the publication redirect
+   */
+  _pubRedirect(k){
+    let href = '/works/' + k + "?" + "subject=" + this.urlPathId;
+    this.AppStateModel.setLocation(href);
+  }
+
+  /**
+   * @method _isEmpty
+   * @description checks if the object has any values for it to 
+   * show the object or not
+   * 
+   * @param {Object} 
+   * 
+   * @returns {Boolean}
+   */
+  _isEmpty(obj) {
+    for(var key in obj) {
+      if(obj.hasOwnProperty(key))
+        return false;
+    }
+    return true;
+  }
+ 
+  /**
+   * @method _getRelatedSubjectsNarrow
+   * @description determines if subject object has narrow scope and returns 
+   * the resulting array if it did and false if it didn't
+   * 
+   * @returns {Object, Boolean} 
+   */
+
+  _getRelatedSubjectsNarrow(){
+    let narrow = this.SubjectModel.getRelatedSubjects(this.subject, "narrow");
+    let result = [];
+    if(narrow){
+      if(!narrow.length){
+        result = [narrow];
+      } else result = narrow.slice();
+      return result;
+
+    } else return false
+      
+  }
+
+  /**
+   * @method _getRelatedSubjectsBroader
+   * @description determines if subject object has broader scope and returns 
+   * the resulting array if it did and false if it didn't
+   * 
+   * @returns {Object, Boolean} 
+   */
+
+  _getRelatedSubjectsBroader(){
+    let broad = this.SubjectModel.getRelatedSubjects(this.subject, "broader");
+    let result = {};
+
+    if(broad){
+      if(!broad.length){
+        result = [broad];
+      }  else result = broad.slice(); 
+      return result;
+    } else return false
+  }
+
+  /**
+   * @method _hideStatusSection
+   * @description should a given UI section be hidden based on the
+   * state of this elements property
+   * 
+   * @param {String} status state of call
+   * @param {String} field this elements stored property
+   * 
+   * @returns {Boolean}
+   */
+  
   _hideStatusSection(section, statusProperty="subjectStatus") {
     if (section == this[statusProperty]) {
       return false;
@@ -214,10 +338,55 @@ export default class RpPageSubject extends RpUtilsLanding {
     return true;
   }
 
+
+  /**
+   * @method _labelTitle
+   * @description returns the prefLabel to screen if it exists, otherwise 
+   * it returns the stated label
+   * 
+   * @returns {String}
+   */
+
   _labelTitle(){
     if(this.subject.prefLabel) return this.subject.prefLabel;
     else return this.subject.label;
   }
+
+  /**
+   * @method _publicationTitle
+   * @param {String}
+   * @description returns the string in a different format else it returns none 
+   * 
+   * @returns {String}
+   */
+
+  _publicationTitle(name){
+    if(name == "articles") return "Academic Articles"
+    else if(name == "conference-papers") return "Conference Papers"
+    else if(name == "books") return "Books"
+    else if(name == "chapters") return "Chapters"
+    else return
+  }
+
+  /**
+   * @method _getYear
+   * @param {String}
+   * @description returns the year after splitting the year from the query 
+   * 
+   * @returns {String}
+   */
+
+  _getYear(date){
+    if (!date) return;
+    return date.split("-")[0];
+  }
+
+  /**
+   * @method _getFullTextLinks
+   * @description returns the full text links for the subject queried
+   * 
+   * @returns text links output
+   */
 
   _getFullTextLinks(){
     let output = [];
@@ -237,6 +406,13 @@ export default class RpPageSubject extends RpUtilsLanding {
     return output;
   }
 
+  /**
+   * @method _getSubjectType
+   * @description load and render a list of subject type
+   * 
+   * @returns {Promise}
+   */
+
   _getSubjectType() {
     try {
       for (let t of this.subject['@type']) {
@@ -250,45 +426,6 @@ export default class RpPageSubject extends RpUtilsLanding {
     return "";
   }
 
-  // _getPublishedArray() {
-  //   let output = [];
-  //   if (!this.work) return output;
-    
-  //   // venue name
-  //   try {
-  //     let venue = this.work.hasPublicationVenue['@id'];
-  //     if (venue && this.workType.toLowerCase() == 'academic article') {
-  //       venue = venue.replace(APP_CONFIG.data.jsonldContext + ":journal", "").replace(/-/g, " ");
-  //       venue += " (journal)"
-  //     }
-  //     if (venue) output.push({text: venue, class: 'venue'});
-      
-  //   } catch (error) {}
-
-  //   // venue release
-  //   try {
-  //     let r = "";
-  //     if (output.length > 0) {
-  //       if (this.work.volume) r += `Volume ${this.work.volume}`;
-  //       if (this.work.issue) {
-  //         if (r) r += ", ";
-  //         r += `Issue ${this.work.issue}`;
-  //       }
-  //       if (r) output.push({text: r, class: 'release'});
-  //     }
-      
-  //   } catch (error) {}
-
-  //   // publication date
-  //   try {
-  //     let d = new Date(this.work.publicationDate);
-  //     let options = {year: 'numeric', month: 'long', day: 'numeric' };
-  //     d = new Intl.DateTimeFormat('en-US', options).format(d);
-  //     if (d) output.push({text: d, class: 'pub-date'});
-  //   } catch (error) {}
-
-  //   return output;
-  // }
 
 }
 

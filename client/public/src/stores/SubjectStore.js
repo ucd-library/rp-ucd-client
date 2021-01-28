@@ -43,6 +43,7 @@ class SubjectStore extends BaseStore {
     this.data.bySubject[state.id] = state;
   }
 
+
   setResearcherLoading(id, request) {
     this._setResearcherState({
       state: this.STATE.LOADING,

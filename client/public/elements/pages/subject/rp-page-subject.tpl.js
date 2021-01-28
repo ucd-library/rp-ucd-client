@@ -12,29 +12,31 @@ return html`
     background-color: var(--tcolor-primary);
     padding: 30px 60px;
   }
-  .hero .title {
-
-  }
   .hero .authors {
     color: var(--tcolor-primary20);
     margin: 0 15%;
-}
-.hero .type {
-  color: var(--tcolor-primary10);
-  text-transform: uppercase;
-  font-size: var(--font-size-small);
-}
+  }
+  .hero .type {
+    color: var(--tcolor-primary10);
+    text-transform: uppercase;
+    font-size: var(--font-size-small);
+  }
+  .box-title {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
   .icon-container {
-      background-color: var(--tcolor-bg-primary);
-      height: 150px;
-      width: 150px;
-      min-height: 150px;
-      min-width: 150px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    background-color: var(--tcolor-bg-primary);
+    height: 150px;
+    width: 150px;
+    min-height: 150px;
+    min-width: 150px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   iron-icon {
     color: var(--tcolor-primary);
     height: 50%;
@@ -44,8 +46,8 @@ return html`
     color: var(--tcolor-light) !important;
   }
   .authors a[disabled] {
-      pointer-events: none;
-      text-decoration: none;
+    pointer-events: none;
+    text-decoration: none;
     }
   .authors a[disabled]:hover {
     color : var(--tcolor-link-text);
@@ -73,10 +75,67 @@ return html`
   #authors .name {
     font-weight: var(--font-weight-bold);
   }
+  .box-pubsyear {
+    display: flex;
+  }
+  .box-pubsyear .year {
+    font-weight: var(--font-weight-bold);
+    width: 60px;
+    min-width: 60px;
+  }
+  .box-pubsyear .pubs {
+    flex-grow: 1;
+  }
+  .box-pubsyear .pubs rp-citation {
+    margin-bottom: 8px;
+  }
+  .button {
+    color: var(--tcolor-primary);
+    padding: 10px;
+    background-color: var(--tcolor-bg-primary);
+    cursor: pointer;
+    transition: .3s;
+    margin: 5px;
+  }
+  .button:hover {
+    background-color: var(--tcolor-hover-bg);
+    color: var(--tcolor-hover-text);
+  }
+  .load-pubs {
+    height: 42px;
+    font-size: var(--font-size);
+    color: var(--tcolor-text);
+    font-weight: var(--font-weight);
+    border: 2px solid var(--tcolor-primary10);
+    padding: 0 15px;
+    cursor: pointer;
+    transition: .3s;
+    color: var(--tcolor-primary);
+  }
+  .load-pubs.less {
+    background-color: var(--tcolor-primary10);
+    margin-right: 8px;
+  }
+  .load-pubs:hover {
+    background-color: var(--tcolor-hover-bg);
+    border: 2px solid var(--tcolor-hover-bg);
+    color: var(--tcolor-light);
+  }
+  .box-pub-buttons {
+    display: flex;
+  }
+  .box-pub-buttons .padding {
+    width: 60px;
+    min-width: 60px;
+  }
+  .box-pub-buttons .buttons {
+    display: flex;
+    flex-grow: 1;
+  }
 
   ${styles}
 </style>
- 
+ ${console.log("lol")}
 <div class="work container top"> 
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
@@ -87,12 +146,12 @@ return html`
   <div class="data" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="hero">
       <div class="title mb-0"> 
-      <h2 class="text-secondary h1 bold mb-0 text-center">
-      ${this._labelTitle()}
-      </h2>
+        <h2 class="text-secondary h1 bold mb-0 text-center">
+        ${this._labelTitle()}
+        </h2>
+      </div>
+      <div class="type text-center">${this.subjectType}</div>
     </div>
-    <div class="type text-center">${this.subjectType}</div>
-  </div>
     <rp-link-list class="bg-light p-3"
                 direction="horizontal"
                 .links="${this.getPageSections()}"
@@ -101,57 +160,88 @@ return html`
   </div>
   <div class="sections">
 
-  <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
-    <h1 class="weight-regular mt-0">About</h1>
-    <h2>Overview</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-    ex ea commodo consequat. </p>
-    <div class="cols">
-      <div>
-        <div>
-          <h2 class="mb-2">Related Subjects</h2>
-          <br />
-          <i style="font-size: 18px;">Broader Scope</i>
-          <div>
-            ${this.broadListEx.map(broader => html`
-              <rp-badge size="lg" class="my-1">${broader.label}</rp-badge>
-            `)}   
-          </div> 
-          <i style="font-size: 18px;">Narrower Scope</i>
-          <div>     
-          ${this.narrowListEx.map(narrower => html`
-              <rp-badge size="lg" class="my-1">${narrower.label}</rp-badge>
-          `)} 
-          </div> 
+    <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
+      <h1 class="weight-regular mt-0">About</h1>
+      <h2>Overview</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+      et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+      ex ea commodo consequat. </p>
+      <div class="cols">
+      ${this.narrowRelatedSubjects || this.broadRelatedSubjects ? html`
+        <h2 style="margin-bottom: 5px;">Related Subjects</h2>
+
+        ${this._isEmpty(this.narrowRelatedSubjects) ? html `` : 
+                html `
+                <br />   
+                  <i style="font-size: 18px; padding-bottom: 5px;">Narrow Scope</i>   
+                <br /> 
+                
+                ${this.narrowRelatedSubjects.map(narrow => html ` 
+                                                                <rp-badge size="lg" class="my-1">
+                                                                  ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
+                                                                </rp-badge>`)}`
+         }        
+        ${this._isEmpty(this.broadRelatedSubjects) ? html `` : 
+                html `
+                <br />   
+                  <i style="font-size: 18px; padding-bottom: 5px;">Broad Scope</i>   
+                <br /> 
+                ${this.broadRelatedSubjects.map(broad => html ` 
+                                                                <rp-badge size="lg" class="my-1">
+                                                                  ${(broad.prefLabel) ? broad.prefLabel: broad.label}
+                                                                </rp-badge>`)}`
+         }
+         `: html``
+       }
       </div>
-     </div>
-    </div>
-  </section>
-  <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
-    <div class="box-title">
+    </section>
+    <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
+      <div class="box-title">
         <h1 class="weight-regular mt-0">Researchers</h1>
-    </div>
-  </section>
-  <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
-    <div class="box-title">
-      <h1 class="weight-regular mt-0">Publications</h1>
-      <div class="box-title-icons">
-        ${this.isOwnProfile ? html`
-          
-          ` : html``}
-          <div class="pub-icons">
-            <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
-            <div slot="tooltip">Edit Publications</div>
-            </rp-icon>
-            <rp-download-list title="Download Publications List"></rp-download-list>
-          </div>
-
-          <div class="pub-count">${this.totalPublications}</div>
-    </div>
-  </section>
+      </div>
+        ${this._isEmpty(this.tempResearch) ? html `<h3>None Listed</h3>` : html `
+          ${this.tempResearch.map(researcher => html`
+            <rp-person-preview
+              .data="${researcher}"
+              text-width="${this.peopleWidth}"
+              show-subjects
+              class="my-3">
+            </rp-person-preview>
+          `)}   
+        `}
+    </section>
+    <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
+      <div class="box-title">
+        <h1 class="weight-regular mt-0">Related Publications</h1>
+      </div>
+      ${this._isEmpty(this.publications) ? html `<h3>None Listed</h3>` : 
+        html `
+        <div class="data">
+          ${Object.entries(this.publications).map(([k, v]) => html`
+            <h3>${this._publicationTitle(k)} (${v.total})</h3>
+            ${v.results.map(yr => html`
+                                  <div class="box-pubsyear">
+                                    <div class="year">${this._getYear(yr.publicationDate)}</div>
+                                    <div class="pubs"><rp-citation .data="${yr}"></rp-citation></div>
+                                  </div>          
+                          `)
+             }
+            <div class="box-pub-buttons">
+            <div class="padding"></div>
+            ${ v.total > 5 ? html`
+              <div class="buttons">
+                <button @click=${() => this._pubRedirect(k)} class="load-pubs less">
+                  View All Related ${this._publicationTitle(k)}
+                </button>
+              </div>
+              `: html ``
+             }
+            </div>
+        `)} 
+        </div>
+      `}
+    </section>
   </div>
-
 </div>
 
 `;}

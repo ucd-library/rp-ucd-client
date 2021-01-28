@@ -37,7 +37,11 @@ ${this._renderMobileSubFacets()}
 <div class="search container bg-light pb-3 ${this.data.length > 0 ? 'has-results' : 'no-results'} ${this.mainFacet == 'none' ? 'not-faceted' : 'faceted'}" >
 <div class="body flex">
   <div class="col-facets mt-3">
-    ${this._renderFacets()}
+    ${console.log(this.currentQuery)}
+    ${this.currentQuery.mainFacet == undefined ? 
+    html `` : 
+    html `${this._renderFacets()} `
+    }
   </div>
   <div class="col-main">
     <div ?hidden="${this.dataStatus == 'error' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">
