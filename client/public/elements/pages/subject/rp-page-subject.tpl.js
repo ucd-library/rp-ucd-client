@@ -5,12 +5,13 @@ export default function render() {
 return html`
  
 <style>
+  ${styles}
   :host {
     display: block;
   }
   .hero {
     background-color: var(--tcolor-primary);
-    padding: 30px 60px;
+    padding: 30px 20px;
   }
   .hero .authors {
     color: var(--tcolor-primary20);
@@ -132,11 +133,15 @@ return html`
     display: flex;
     flex-grow: 1;
   }
-
-  ${styles}
+  @media (min-width: 800px) {
+      .hero {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
 </style>
  
-<div class="work container top"> 
+<div class="work top"> 
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
   </div>
@@ -144,103 +149,105 @@ return html`
     <rp-alert>Error loading work.</rp-alert>
   </div>
   <div class="data" ?hidden="${this._hideStatusSection('loaded')}">
-    <div class="hero">
-      <div class="title mb-0"> 
-        <h2 class="text-secondary h1 bold mb-0 text-center">
-        ${this._labelTitle()}
-        </h2>
-      </div>
-      <div class="type text-center">${this.subjectType}</div>
-    </div>
-    <rp-link-list class="bg-light p-3"
-                direction="horizontal"
-                .links="${this.getPageSections()}"
-                current-link="${this.activeSection.index}">
-    </rp-link-list>
-  </div>
-  <div class="sections">
-
-    <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
-      <h1 class="weight-regular mt-0">About</h1>
-      <h2>Overview</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-      et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-      ex ea commodo consequat. </p>
-      <div class="cols">
-      ${this.narrowRelatedSubjects || this.broadRelatedSubjects ? html`
-        <h2 style="margin-bottom: 5px;">Related Subjects</h2>
-
-        ${this._isEmpty(this.narrowRelatedSubjects) ? html `` : 
-                html `
-                <br />   
-                  <i style="font-size: 18px; padding-bottom: 5px;">Narrow Scope</i>   
-                <br /> 
-                
-                ${this.narrowRelatedSubjects.map(narrow => html ` 
-                                                                <rp-badge size="lg" class="my-1">
-                                                                  ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
-                                                                </rp-badge>`)}`
-         }        
-        ${this._isEmpty(this.broadRelatedSubjects) ? html `` : 
-                html `
-                <br />   
-                  <i style="font-size: 18px; padding-bottom: 5px;">Broad Scope</i>   
-                <br /> 
-                ${this.broadRelatedSubjects.map(broad => html ` 
-                                                                <rp-badge size="lg" class="my-1">
-                                                                  ${(broad.prefLabel) ? broad.prefLabel: broad.label}
-                                                                </rp-badge>`)}`
-         }
-         `: html``
-       }
-      </div>
-    </section>
-    <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
-      <div class="box-title">
-        <h1 class="weight-regular mt-0">Researchers</h1>
-      </div>
-        ${this._isEmpty(this.tempResearch) ? html `<h3>None Listed</h3>` : html `
-          ${this.tempResearch.map(researcher => html`
-            <rp-person-preview
-              .data="${researcher}"
-              text-width="${this.peopleWidth}"
-              show-subjects
-              class="my-3">
-            </rp-person-preview>
-          `)}   
-        `}
-    </section>
-    <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
-      <div class="box-title">
-        <h1 class="weight-regular mt-0">Related Publications</h1>
-      </div>
-      ${this._isEmpty(this.publications) ? html `<h3>None Listed</h3>` : 
-        html `
-        <div class="data">
-          ${Object.entries(this.publications).map(([k, v]) => html`
-            <h3>${this._publicationTitle(k)} (${v.total})</h3>
-            ${v.results.map(yr => html`
-                                  <div class="box-pubsyear">
-                                    <div class="year">${this._getYear(yr.publicationDate)}</div>
-                                    <div class="pubs"><rp-citation .data="${yr}"></rp-citation></div>
-                                  </div>          
-                          `)
-             }
-            <div class="box-pub-buttons">
-            <div class="padding"></div>
-            ${ v.total > 5 ? html`
-              <div class="buttons">
-                <button @click=${() => this._pubRedirect(k)} class="load-pubs less">
-                  View All Related ${this._publicationTitle(k)}
-                </button>
-              </div>
-              `: html ``
-             }
-            </div>
-        `)} 
+    <div class="page-header container-wide">
+      <div class="hero">
+        <div class="title mb-0"> 
+          <h2 class="text-secondary h1 bold mb-0 text-center">
+          ${this._labelTitle()}
+          </h2>
         </div>
-      `}
-    </section>
+        <div class="type text-center">${this.subjectType}</div>
+      </div>
+      <rp-link-list class="bg-light p-3"
+                  direction="horizontal"
+                  .links="${this.getPageSections()}"
+                  current-link="${this.activeSection.index}">
+      </rp-link-list>
+    </div>
+    <div class="sections container">
+
+      <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
+        <h1 class="weight-regular mt-0">About</h1>
+        <h2>Overview</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+        ex ea commodo consequat. </p>
+        <div class="cols">
+        ${this.narrowRelatedSubjects || this.broadRelatedSubjects ? html`
+          <h2 style="margin-bottom: 5px;">Related Subjects</h2>
+
+          ${this._isEmpty(this.narrowRelatedSubjects) ? html `` : 
+                  html `
+                  <br />   
+                    <i style="font-size: 18px; padding-bottom: 5px;">Narrow Scope</i>   
+                  <br /> 
+                  
+                  ${this.narrowRelatedSubjects.map(narrow => html ` 
+                                                                  <rp-badge size="lg" class="my-1">
+                                                                    ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
+                                                                  </rp-badge>`)}`
+          }        
+          ${this._isEmpty(this.broadRelatedSubjects) ? html `` : 
+                  html `
+                  <br />   
+                    <i style="font-size: 18px; padding-bottom: 5px;">Broad Scope</i>   
+                  <br /> 
+                  ${this.broadRelatedSubjects.map(broad => html ` 
+                                                                  <rp-badge size="lg" class="my-1">
+                                                                    ${(broad.prefLabel) ? broad.prefLabel: broad.label}
+                                                                  </rp-badge>`)}`
+          }
+          `: html``
+        }
+        </div>
+      </section>
+      <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
+        <div class="box-title">
+          <h1 class="weight-regular mt-0">Researchers</h1>
+        </div>
+          ${this._isEmpty(this.tempResearch) ? html `<h3>None Listed</h3>` : html `
+            ${this.tempResearch.map(researcher => html`
+              <rp-person-preview
+                .data="${researcher}"
+                text-width="${this.peopleWidth}"
+                show-subjects
+                class="my-3">
+              </rp-person-preview>
+            `)}   
+          `}
+      </section>
+      <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
+        <div class="box-title">
+          <h1 class="weight-regular mt-0">Related Publications</h1>
+        </div>
+        ${this._isEmpty(this.publications) ? html `<h3>None Listed</h3>` : 
+          html `
+          <div class="data">
+            ${Object.entries(this.publications).map(([k, v]) => html`
+              <h3>${this._publicationTitle(k)} (${v.total})</h3>
+              ${v.results.map(yr => html`
+                                    <div class="box-pubsyear">
+                                      <div class="year">${this._getYear(yr.publicationDate)}</div>
+                                      <div class="pubs"><rp-citation .data="${yr}"></rp-citation></div>
+                                    </div>          
+                            `)
+              }
+              <div class="box-pub-buttons">
+              <div class="padding"></div>
+              ${ v.total > 5 ? html`
+                <div class="buttons">
+                  <button @click=${() => this._pubRedirect(k)} class="load-pubs less">
+                    View All Related ${this._publicationTitle(k)}
+                  </button>
+                </div>
+                `: html ``
+              }
+              </div>
+          `)} 
+          </div>
+        `}
+      </section>
+    </div>
   </div>
 </div>
 

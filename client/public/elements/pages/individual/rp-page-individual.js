@@ -363,23 +363,6 @@ export default class RpPageIndividual extends RpUtilsLanding {
     return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/${this.assetId}`}];
   }
 
-  formatSubjectsObject(subjects){
-    let out = [];
-    for (let subject in subjects) {
-      let subObj = {subject: subject, count: subjects[subject], label: subject};
-      let words = subject.split(" ");
-      if (words[0].startsWith("0") && !isNaN(words[0])) {
-        subObj.label = words.slice(1,).join(" ");
-      }
-      out.push(subObj);
-    }
-
-    out.sort(function (a, b) {
-      return b['count'] - a['count'];
-    });
-    return out;
-  }
-
   /**
    * @method _onImpersonateClick
    * @description bound to impersonate button click event. Set cookie

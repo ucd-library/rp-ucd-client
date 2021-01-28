@@ -96,6 +96,9 @@ return html`
     position: absolute;
     cursor: pointer;
   }
+  #masthead .hamburger:hover {
+    color: var(--tcolor-link-hover-text);
+  }
   #app-mobile-menu {
     background-color: #fff;
     width: 100%;

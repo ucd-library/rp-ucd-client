@@ -11,10 +11,7 @@ return html`
   }
   .hero {
     background-color: var(--tcolor-primary);
-    padding: 30px 60px;
-  }
-  .hero .title {
-
+    padding: 30px 20px;
   }
   .hero .authors {
     color: var(--tcolor-primary20);
@@ -74,8 +71,14 @@ return html`
   #authors .name {
     font-weight: var(--font-weight-bold);
   }
+  @media (min-width: 800px) {
+      .hero {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+    }
 </style>
-<div class="work container top">
+<div class="work top">
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
   </div>
@@ -83,19 +86,21 @@ return html`
     <rp-alert>Error loading work.</rp-alert>
   </div>
   <div class="data" ?hidden="${this._hideStatusSection('loaded')}">
-    <div class="hero">
-      <div class="title mb-0"> <h2 class="text-secondary h1 bold mb-0 text-center">${this.work.label}</h2></div>
-      <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.map((author, i) => html`
-        <span>${author.nameFirst} ${author.nameLast}</span>${i + 1 < this.authors.length ? html`<span>, </span>` : html``}
-      `)}</p></div>
-      <div class="type text-center">${this.workType}</div>
+    <div class="page-header container-wide">
+      <div class="hero">
+        <div class="title mb-0"> <h2 class="text-secondary h1 bold mb-0 text-center">${this.work.label}</h2></div>
+        <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.map((author, i) => html`
+          <span>${author.nameFirst} ${author.nameLast}</span>${i + 1 < this.authors.length ? html`<span>, </span>` : html``}
+        `)}</p></div>
+        <div class="type text-center">${this.workType}</div>
+      </div>
+      <rp-link-list class="bg-light p-3"
+                  direction="horizontal"
+                  .links="${this.getPageSections()}"
+                  current-link="${this.activeSection.index}">
+      </rp-link-list>
     </div>
-    <rp-link-list class="bg-light p-3"
-                direction="horizontal"
-                .links="${this.getPageSections()}"
-                current-link="${this.activeSection.index}">
-    </rp-link-list>
-    <div class="sections">
+    <div class="sections container">
 
       <section id="records" class="bg-light mt-3" ?hidden="${this._hidePageSection('records')}">
         <h1 class="weight-regular mt-0">Publication Records</h1>
