@@ -13,7 +13,10 @@ import "../../components/link-list";
 import "../../components/person-preview";
 import "../../components/subject-preview";
 
-
+/**
+ * @class RpPageSubject
+ * @description main subject page
+ */
 export default class RpPageSubject extends RpUtilsLanding {
   static get properties() {
     return {
@@ -57,26 +60,54 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
+  /**
+   * @method updated
+   * @description lit method called when props update
+   * 
+   * @param {Object} props 
+   */
   updated(props) {
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
     }
   }
 
+  /**
+   * @method connectedCallback
+   * @description lit method called when element is connected to dom
+   */
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('resize', this._handleResize);
   }
 
+  /**
+   * @method disconnectedCallback
+   * @description lit method called when element is disconnected to dom
+   */
   disconnectedCallback() {
     window.removeEventListener('resize', this._handleResize);
     super.disconnectedCallback();
   }
 
+    /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
   async _onAppStateUpdate(state) {
     requestAnimationFrame( () => this.doUpdate(state));
-   }
+  }
 
+  /**
+   * @method _doUpdate
+   * @param {Object} state - State of the app
+   * @description On the call, it would update the state of the app.
+   * Promises these functions to query data: this._doMainQuery(this.assetId), 
+                                             this._doResearcherQuery(this.assetId), 
+                                             this._doPubOverviewQuery(this.assetId)])
+   */
   async doUpdate(state) {
     await this.updateComplete;
 
@@ -104,6 +135,17 @@ export default class RpPageSubject extends RpUtilsLanding {
 
   }
 
+  /**
+   * @method _doMainQuery
+   * @param {String} id - The subject id of this page.
+   * @description Retrieves the subject from the id given and saves in this.subject array
+   * Called on AppStateUpdate
+   * 
+   * Calls the functions: this._getSubjectType(), 
+   *                      this._getFullTextLinks(),
+   *                      this._getRelatedSubjectsNarrow(), 
+   *                      this._getRelatedSubjectsBroader()
+   */
 
   async _doMainQuery(id){
     let data = await this.SubjectModel.getSubject(id);
@@ -173,46 +215,79 @@ export default class RpPageSubject extends RpUtilsLanding {
    * @description Retrieves the 5 most recent publications of the specified pubType for this subject.
    * Adds to publications object.
    */
-    async _doPubQuery(pubType){
-      let data = await this.SubjectModel.getPubs(this.assetId, pubType);
-      if (data.state != 'loaded') {
-        return;
-      }
-      if (APP_CONFIG.verbose) console.log(`${pubType.id} pubs`, data);
-      this.publications[pubType.id] = {'total': data.payload.total, 'results': data.payload.results};
-      this.requestUpdate();
+  async _doPubQuery(pubType){
+    let data = await this.SubjectModel.getPubs(this.assetId, pubType);
+    if (data.state != 'loaded') {
+      return;
     }
+    if (APP_CONFIG.verbose) console.log(`${pubType.id} pubs`, data);
+    this.publications[pubType.id] = {'total': data.payload.total, 'results': data.payload.results};
+    this.requestUpdate();
+  }
 
-    setPeopleWidth(w) {
-      let pw = 250;
-      let avatarWidth = 82;
-      let screenPadding = 30;
-      pw = (w - screenPadding) * .8 - avatarWidth - 40;
-      this.peopleWidth = Math.floor(pw);
-    }  
+  /**
+   * @method setPeopleWidth
+   * @description
+   * Sets the text-width property of the rp-subject-preview elements on this page.
+   * It's the only way to get the ellipsis overflow on their titles. 
+   * 
+   * @param {Number} w - Window width (pixels)
+   */
 
-    _handleResize() {
-      if (!this.visible) return;
+  setPeopleWidth(w) {
+    let pw = 250;
+    let avatarWidth = 82;
+    let screenPadding = 30;
+    pw = (w - screenPadding) * .8 - avatarWidth - 40;
+    this.peopleWidth = Math.floor(pw);
+  }  
+
+  /**
+   * @method _handleResize
+   * @description bound to main window resize event
+   */
+  _handleResize() {
+    if (!this.visible) return;
       let w = window.innerWidth;
       this.setPeopleWidth(w);
-    }
+  }
 
-    _pubRedirect(k){
-      let path = '/works/' + k + "?" + "subject=" + this.urlPathId;
-      //console.log(path);
-      //location.href = path;
+  /**
+   * @method _pubRedirect
+   * @description creates the href that specifies the subject and 
+   * type of document for the publication redirect
+   */
+  _pubRedirect(k){
+    let href = '/works/' + k + "?" + "subject=" + this.urlPathId;
+    this.AppStateModel.setLocation(href);
+  }
 
+  /**
+   * @method _isEmpty
+   * @description checks if the object has any values for it to 
+   * show the object or not
+   * 
+   * @param {Object} 
+   * 
+   * @returns {Boolean}
+   */
+  _isEmpty(obj) {
+    for(var key in obj) {
+      if(obj.hasOwnProperty(key))
+        return false;
     }
+    return true;
+  }
+ 
+  /**
+   * @method _getRelatedSubjectsNarrow
+   * @description determines if subject object has narrow scope and returns 
+   * the resulting array if it did and false if it didn't
+   * 
+   * @returns {Object, Boolean} 
+   */
 
-    _isEmpty(obj) {
-      for(var key in obj) {
-          if(obj.hasOwnProperty(key))
-              return false;
-      }
-      return true;
-    }
-  
-    _getRelatedSubjectsNarrow(){
+  _getRelatedSubjectsNarrow(){
     let narrow = this.SubjectModel.getRelatedSubjects(this.subject, "narrow");
     let result = [];
     if(narrow){
@@ -225,6 +300,14 @@ export default class RpPageSubject extends RpUtilsLanding {
       
   }
 
+  /**
+   * @method _getRelatedSubjectsBroader
+   * @description determines if subject object has broader scope and returns 
+   * the resulting array if it did and false if it didn't
+   * 
+   * @returns {Object, Boolean} 
+   */
+
   _getRelatedSubjectsBroader(){
     let broad = this.SubjectModel.getRelatedSubjects(this.subject, "broader");
     let result = {};
@@ -236,6 +319,18 @@ export default class RpPageSubject extends RpUtilsLanding {
       return result;
     } else return false
   }
+
+  /**
+   * @method _hideStatusSection
+   * @description should a given UI section be hidden based on the
+   * state of this elements property
+   * 
+   * @param {String} status state of call
+   * @param {String} field this elements stored property
+   * 
+   * @returns {Boolean}
+   */
+  
   _hideStatusSection(section, statusProperty="subjectStatus") {
     if (section == this[statusProperty]) {
       return false;
@@ -243,10 +338,27 @@ export default class RpPageSubject extends RpUtilsLanding {
     return true;
   }
 
+
+  /**
+   * @method _labelTitle
+   * @description returns the prefLabel to screen if it exists, otherwise 
+   * it returns the stated label
+   * 
+   * @returns {String}
+   */
+
   _labelTitle(){
     if(this.subject.prefLabel) return this.subject.prefLabel;
     else return this.subject.label;
   }
+
+  /**
+   * @method _publicationTitle
+   * @param {String}
+   * @description returns the string in a different format else it returns none 
+   * 
+   * @returns {String}
+   */
 
   _publicationTitle(name){
     if(name == "articles") return "Academic Articles"
@@ -256,10 +368,25 @@ export default class RpPageSubject extends RpUtilsLanding {
     else return
   }
 
+  /**
+   * @method _getYear
+   * @param {String}
+   * @description returns the year after splitting the year from the query 
+   * 
+   * @returns {String}
+   */
+
   _getYear(date){
     if (!date) return;
     return date.split("-")[0];
   }
+
+  /**
+   * @method _getFullTextLinks
+   * @description returns the full text links for the subject queried
+   * 
+   * @returns text links output
+   */
 
   _getFullTextLinks(){
     let output = [];
@@ -278,6 +405,13 @@ export default class RpPageSubject extends RpUtilsLanding {
 
     return output;
   }
+
+  /**
+   * @method _getSubjectType
+   * @description load and render a list of subject type
+   * 
+   * @returns {Promise}
+   */
 
   _getSubjectType() {
     try {

@@ -10,7 +10,7 @@ return html`
   ${styles}
 </style>
 <div class="collections container bg-light top">
-${this._renderBrowseHeader('Subjects')}
+  ${this._renderBrowseHeader('Subjects')}
   <hr class="mb-0">
   <div class="body flex">
     <div class="col-facets mt-3">
@@ -27,7 +27,7 @@ ${this._renderBrowseHeader('Subjects')}
         ${this.data.map(subject => html`
           <rp-subject-preview .data="${subject}" class="my-3"></rp-subject-preview>
           <hr class="dotted">
-          `)}
+        `)}
         ${this._renderPagination(this.dataTotal)}
       </div>
 

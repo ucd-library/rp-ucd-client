@@ -167,26 +167,32 @@ return html`
       et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
       ex ea commodo consequat. </p>
       <div class="cols">
-        <h2>Related Subjects</h2>
+      ${this.narrowRelatedSubjects || this.broadRelatedSubjects ? html`
+        <h2 style="margin-bottom: 5px;">Related Subjects</h2>
 
-        <i style="font-size: 18px; padding-bottom: 5px;">Narrow Scope</i>
-        <br />   
-
-        ${this._isEmpty(this.narrowRelatedSubjects) ? html `<h4>None Listed</h4>` :
-                this.narrowRelatedSubjects.map(narrow => html ` 
-                                                          <rp-badge size="lg" class="my-1">
-                                                          ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
-                                                          </rp-badge>`)
-         }
-        <br />   
-        <i style="font-size: 18px; padding-bottom: px;">Broad Scope</i>   
-        <br />   
-        ${this._isEmpty(this.broadRelatedSubjects) ? html `<h4>None Listed</h4>` :
-                this.broadRelatedSubjects.map(broad => html ` 
+        ${this._isEmpty(this.narrowRelatedSubjects) ? html `` : 
+                html `
+                <br />   
+                  <i style="font-size: 18px; padding-bottom: 5px;">Narrow Scope</i>   
+                <br /> 
+                
+                ${this.narrowRelatedSubjects.map(narrow => html ` 
+                                                                <rp-badge size="lg" class="my-1">
+                                                                  ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
+                                                                </rp-badge>`)}`
+         }        
+        ${this._isEmpty(this.broadRelatedSubjects) ? html `` : 
+                html `
+                <br />   
+                  <i style="font-size: 18px; padding-bottom: 5px;">Broad Scope</i>   
+                <br /> 
+                ${this.broadRelatedSubjects.map(broad => html ` 
                                                                 <rp-badge size="lg" class="my-1">
                                                                   ${(broad.prefLabel) ? broad.prefLabel: broad.label}
-                                                                </rp-badge>`)
+                                                                </rp-badge>`)}`
          }
+         `: html``
+       }
       </div>
     </section>
     <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
@@ -220,19 +226,22 @@ return html`
                                   </div>          
                           `)
              }
-
             <div class="box-pub-buttons">
             <div class="padding"></div>
-            <div class="buttons">
-              <button type="button" @click=${this._pubRedirect(k)} class="load-pubs less">
-                View All Related ${this._publicationTitle(k)}
-              </button>
-            </div>
+            ${ v.total > 5 ? html`
+              <div class="buttons">
+                <button @click=${() => this._pubRedirect(k)} class="load-pubs less">
+                  View All Related ${this._publicationTitle(k)}
+                </button>
+              </div>
+              `: html ``
+             }
             </div>
         `)} 
         </div>
       `}
     </section>
+  </div>
 </div>
 
 `;}
