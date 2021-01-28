@@ -357,9 +357,10 @@ return html`
       <div class="text-default italic">Logged in as <span class="bold">${this.userName}</span></div>
       <div class="greeting">Hello, ${this.userName}!</div>
       <div class="nav-links">
-        ${this.accountLinks.map((link, i) => html`
-        <a href="${link.href}" class="border-top border-white">${link.text}</a>
-        `)}
+        ${this.accountLinks.map((link, i) => link.href ? 
+          html`<a href="${link.href}" class="border-top border-white">${link.text}</a>` :
+          html`<a class="border-top border-white" @click="${this._onMobileNavClick}" action="${link.action}">${link.text}</a>`
+        )}
       </div>
     </div>
     ` : html`

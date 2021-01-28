@@ -287,9 +287,31 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    */
   _handleUserDropdownSelection(e) {
     if( e.detail.selected.action === 'stop-impersonating' ) {
-      document.cookie = "impersonate=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-      location.reload();
+      this._stopImpersonating();
     }
+  }
+
+  /**
+   * @method _onMobileNavClick
+   * @description handle mobile nave 
+   * 
+   * @param {Object} e 
+   */
+  _onMobileNavClick(e) {
+    let action = e.currentTarget.getAttribute('action');
+    if( action === 'stop-impersonating' ) {
+      this._stopImpersonating();
+    }
+  }
+
+  /**
+   * @method _stopImpersonating
+   * @description stop admin impersonation by clearing imersonate cookie
+   * and reloading page
+   */
+  _stopImpersonating() {
+    document.cookie = "impersonate=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    location.reload();
   }
 
 }
