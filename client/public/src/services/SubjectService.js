@@ -80,7 +80,7 @@ class SubjectService extends BaseService {
       onLoad : result => this.store.setPubOverviewLoaded(subjectId, result.body),
       onError : e => this.store.setPubOverviewError(subjectId, e)
     });
-  }
+  } 
 
   async getPubs(subjectId, cacheId, pubType) {
     let searchObject = {

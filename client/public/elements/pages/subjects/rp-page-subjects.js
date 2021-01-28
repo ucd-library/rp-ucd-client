@@ -9,41 +9,60 @@ import "../../components/alert";
 
 export default class RpPageSubjects extends RpUtilsCollection {
 
-	static get properties(){
-		return {
-		}
-	} 
+  static get properties(){
+    return {
+    }
+  } 
  
-	constructor(){
-		super();
-		this.render = render.bind(this);
+  constructor(){
+    super();
+    this.render = render.bind(this);
 
-		this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
-	}
+    this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
+  }
 
-	async _onAppStateUpdate(state){
-		requestAnimationFrame( () => this.doUpdate(state));
-	}
+  /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
+  
+  async _onAppStateUpdate(state){
+    requestAnimationFrame( () => this.doUpdate(state));
+  }
 
-	async doUpdate(state){
-		await this.updateComplete;
-		if (!this.visible){
-			return;
-		}
-		this._parseUrlQuery(state);
+  /**
+   * @method doUpdate
+   * @description reset props and update facets, this will rerender
+   */
+
+  async doUpdate(state){
+    await this.updateComplete;
+    if (!this.visible){
+      return;
+    }
+    this._parseUrlQuery(state);
     await Promise.all([this._doMainQuery(), this._getFacets(), this._getAzAgg()]);
-	}
+  }
 
-	async _getFacets() {
-		let activeFilters = {};
-		let subjectsAggs = await this.CollectionModel.overview('subjectsAggs');
-		this.subFacetStatus = subjectsAggs.state;
-		if (subjectsAggs.state != 'loaded'){
-			return;
-		}
-		console.log("subjectsAggs", subjectsAggs);
-		this.subFacets = this.CollectionModel._getSubFacets('subjects', subjectsAggs.payload, this.currentQuery);
-	}
+  /**
+   * @method _getFacets
+   * @description load and render the current overview subject facet list
+   * 
+   * @returns {Promise}
+   */
+  
+  async _getFacets() {
+    let activeFilters = {};
+    let subjectsAggs = await this.CollectionModel.overview('subjectsAggs');
+    this.subFacetStatus = subjectsAggs.state;
+    if (subjectsAggs.state != 'loaded'){
+      return;
+    }
+    console.log("subjectsAggs", subjectsAggs);
+    this.subFacets = this.CollectionModel._getSubFacets('subjects', subjectsAggs.payload, this.currentQuery);
+  }
 
 
 }

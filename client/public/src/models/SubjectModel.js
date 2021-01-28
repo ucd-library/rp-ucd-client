@@ -67,6 +67,25 @@ class SubjectModel extends BaseModel {
 		return subject.label;
 	}
 
+	getRelatedSubjects(subject, type){
+		if (type == "narrow"){
+			if (subject.narrower) return subject.narrower;
+			else return false;
+		}
+		else if (type == "broader"){
+			if (subject.broader) return subject.broader;
+			else return false;
+		}
+	}
+
+	// getRelatedSubjectsNarrower(subject){
+	// 	if (subject.narrower) return subject.narrower;
+	// }
+
+	// getRelatedSubjectsBroader(subject){
+	// 	if (subject.broader) return subject.broader;
+	// }
+
 	getLandingPage(subject){
 		if (!subject || !subject['@id']) return "";
 		return `${this.UrlLanding}${encodeURIComponent(subject['@id'])}`
