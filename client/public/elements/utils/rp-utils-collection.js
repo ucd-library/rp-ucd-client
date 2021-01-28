@@ -9,6 +9,10 @@ import "../components/person-preview";
 import "../components/work-preview";
 import "../components/subject-preview";
 
+/**
+ * @class RpUtilsCollection
+ * Parent class for page elements that list multiple assets. ie. search and browse.
+ */
 export default class RpUtilsCollection extends Mixin(LitElement)
   .with(LitCorkUtils) {
 
@@ -41,7 +45,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       subFacetStatus: {type: String},
       subFacetsWithResultsCt: {type: Number}
 
-    }
+    };
   }
 
   constructor() {
@@ -60,6 +64,11 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   }
 
 
+  /**
+   * @method _resetQueryProperties
+   * @description Resets element properties to their default state.
+   * Called before a new browse/search query is executed.
+   */
   _resetQueryProperties(){
     this.data = [];
     this.dataStatus = 'loading';
@@ -91,6 +100,12 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
   }
 
+  /**
+   * @method updated
+   * @description Lit method called when element is updated
+   * 
+   * @param {Map} props - changed properties.
+   */
   updated(props) {
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
@@ -107,16 +122,30 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
   }
 
+  /**
+   * @method connectedCallback
+   * @description Lit method called when element enters the dom
+   */
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('resize', this._handleResize);
   }
 
+  /**
+   * @method disconnectedCallback
+   * @description Lit method called when element exits the dom
+   */
   disconnectedCallback() {
     window.removeEventListener('resize', this._handleResize);
     super.disconnectedCallback();
   }
 
+  /**
+   * @method _doMainQuery
+   * @description Performs primary browse/search query for page based on url path and parameters
+   * 
+   * @returns {Promise}
+   */
   async _doMainQuery(){
     let q = this.currentQuery;
     let data = await this.CollectionModel.query(q);
@@ -146,10 +175,16 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       this.hasAz = true;
     }
     this.data = data.payload.results;
-    console.log("main query result:", data);
+    if (APP_CONFIG.verbose) console.log("main search/browse query result:", data);
+    
   }
 
-
+  /**
+   * @method _getSearchAggs
+   * @description Does query to retrieve the total counts for any facets/subfacets.
+   * 
+   * @returns {Promise}
+   */
   async _getSearchAggs() {
     if (!this.textQuery) {
       return;
@@ -168,8 +203,14 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   }
 
 
+  /**
+   * @method _getAzAgg
+   * @description Does query to retrieve the total counts for all letters in the A-Z element
+   * 
+   * @returns {Promise}
+   */
   async _getAzAgg() {
-    let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet, this.currentQuery.subjectFilter)
+    let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet, this.currentQuery.subjectFilter);
     this.azStatus = data.state;
     if (data.state != 'loaded') {
       return;
@@ -185,6 +226,17 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
   }
 
+  /**
+   * @method _parseUrlQuery
+   * @description Parses url path and parameters and sets the currentQuery property.
+   * Called on app-state-update
+   * 
+   * Primary route structure:
+   *  Search: /search/<mainFacet>/<subFacet>?s=search&p=page
+   *  Browse: /<mainFacet>/<subFacet>?p=page
+   * There are some additional query parameters for special queries.
+   * @param {Object} state - App State
+   */
   _parseUrlQuery(state){
 
     // get current location
@@ -216,6 +268,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       }
     }
 
+    // get subfacet pf query if applicable
     let subFacetFromPath = "";
     if (path[0] == 'search' && path.length > 2) {
       subFacetFromPath = path[2].toLowerCase();
@@ -243,7 +296,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
         this.textQuery = query.s;
       }
       else if (arg == 'subject') {
-        this.subjectFilter = query.subject
+        this.subjectFilter = query.subject;
       }
       else if (arg == 'page' && !isNaN(query[arg])) {
         this.pgCurrent = query[arg];
@@ -254,10 +307,16 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
 
     this.currentQuery = this._constructQuery();
-    console.log( 'element query:', this.currentQuery);
+    if (APP_CONFIG.verbose) console.log( 'element query:', this.currentQuery);
 
   }
 
+  /**
+   * @method _constructQuery
+   * @description Constructs and returns a query object out of element properties.
+   * 
+   * @returns {Object} Query Object
+   */
   _constructQuery(){
     let q = {};
     if (this.textQuery) {
@@ -288,13 +347,21 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     return q;
   }
 
+  /**
+   * @method _handleResize
+   * @description attached to window resize
+   */
   _handleResize() {
     if (!this.visible) return;
     let w = window.innerWidth;
     this.setPeopleWidth(w);
   }
 
-
+  /**
+   * @method setPeopleWidth
+   * @description Sets the width property on any person-preview elements.
+   * @param {Number} w - window width in pixels.
+   */
   setPeopleWidth(w) {
     let pw = 250;
     let avatarWidth = 82;
@@ -305,7 +372,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (w >= 1030) {
       let containerMaxWidth = 970;
       sectionPadding = 180;
-      pw = containerMaxWidth - sectionPadding - facetColumnWidth
+      pw = containerMaxWidth - sectionPadding - facetColumnWidth;
     }
     else if (w >= 800) {
       screenPadding = 60;
@@ -323,90 +390,130 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.peopleWidth = Math.floor(pw);
   }
 
+  /**
+   * @method _onUserAction
+   * @description Handles various user interactions when <a> tags aren't used.
+   * Constructs the new app url and sets the AppStateModel location
+   * @param {String} action - Type of user action.
+   * @param  {...any} args - Value of user action.
+   */
   _onUserAction(action, ...args) {
     if (!action) {
       return;
     }
-    let path = ""
+    let path = "";
     let q = {...this.currentQuery};
 
     // handle page change
     if (action == 'pagination' && this.hasPagination) {
-      q.pgCurrent = args[0]
-      path = this.CollectionModel.constructUrl(q)
+      q.pgCurrent = args[0];
+      path = this.CollectionModel.constructUrl(q);
     }
 
     // handle az change
     else if (action == 'az') {
-      q.azSelected = args[0]
-      path = this.CollectionModel.constructUrl(q, ['page'])
+      q.azSelected = args[0];
+      path = this.CollectionModel.constructUrl(q, ['page']);
     }
 
     if (path) this.AppStateModel.setLocation(path);
   }
 
+  /**
+   * @method setDifference
+   * @description Gets the difference between two sets.
+   * @param {Set} setA 
+   * @param {Set} setB 
+   * 
+   * @returns {Set}
+   */
   _setDifference(setA, setB) {
-    let _difference = new Set(setA)
+    let _difference = new Set(setA);
     for (let elem of setB) {
-        _difference.delete(elem)
+      _difference.delete(elem);
     }
-    return _difference
-}
-
-_getAssetType(data) {
-  if (!data['@type']) {
-    return;
-  }
-  if (typeof data['@type'] === 'string') {
-    data['@type'] = [data['@type']];
-  }
-  if ( !Array.isArray(data['@type']) ) {
-    return;
+    return _difference;
   }
 
-  if (data['@type'].includes(this.jsonldContext + ":person")) {
-    return "person";
-  }
-  if (data['@type'].includes(this.jsonldContext + ":subjectArea")) {
-    return "subject";
-  }  
-  if (data['@type'].includes(this.jsonldContext + ":publication")) {
-    return "work";
-  }
-  if (data['@type'].includes(this.jsonldContext + ":organization")) {
-    return "organization";
+  /**
+   * @method _getAssetType
+   * @description Returns asset type based on data object returned in a query.
+   * @param {Object} data 
+   * 
+   * @returns {String}
+   */
+  _getAssetType(data) {
+    if (!data['@type']) {
+      return "";
+    }
+    if (typeof data['@type'] === 'string') {
+      data['@type'] = [data['@type']];
+    }
+    if ( !Array.isArray(data['@type']) ) {
+      return "";
+    }
+
+    if (data['@type'].includes(this.jsonldContext + ":person")) {
+      return "person";
+    }
+    if (data['@type'].includes(this.jsonldContext + ":subjectArea")) {
+      return "subject";
+    }  
+    if (data['@type'].includes(this.jsonldContext + ":publication")) {
+      return "work";
+    }
+    if (data['@type'].includes(this.jsonldContext + ":organization")) {
+      return "organization";
+    }
+
+    return "";
   }
 
-  return;
-}
-
-_urlEncode(obj) {
-  let str = [];
-  for (let p in obj)
-    if (obj.hasOwnProperty(p)) {
+  /**
+   * @method _urlEncode
+   * @description Constructs encoded url parameters
+   * @param {Object} obj - key:value pairs of url arguments.
+   * 
+   * @returns {String}
+   */
+  _urlEncode(obj) {
+    let str = [];
+    for (let p in obj) {
       if (p == 'offset' && obj[p] == 0) {
         continue;
       }
-      if (p == 'filters' && Object.keys(obj[p]).length == 0) {
+      else if (p == 'filters' && Object.keys(obj[p]).length == 0) {
         continue;
       }
-      if (p == 'limit') {
+      else if (p == 'limit') {
         continue;
       }
       str.push(encodeURIComponent(p) + "=" + encodeURIComponent( JSON.stringify(obj[p]) ));
     }
-  if (!str.length) {
-    return ""
+          
+    if (!str.length) {
+      return "";
+    }
+    return "?" + str.join("&");
   }
-  return "?" + str.join("&");
-}
 
-/*
-*
-* RENDER FUNCTIONS
-*
-*/
 
+
+
+  /*
+  *
+  * RENDER FUNCTIONS
+  *
+  */
+
+  /**
+   * @method _renderBrowseHeader
+   * @description Renders the page header of browse pages
+   * @param {String} title - Page Title
+   * @param {String} Azselected - Selected letter in AZ index.
+   * 
+   * @returns {TemplateResult}
+   */
   _renderBrowseHeader(title, Azselected) {
     this.hasAz = true;
     if (Azselected) {
@@ -432,6 +539,12 @@ _urlEncode(obj) {
     `;
   }
 
+  /**
+   * @method _renderFacets
+   * @description Renders subfacet list
+   * 
+   * @returns {TemplateResult}
+   */
   _renderFacets() {
     if (!this.subFacets) {
       return html``;
@@ -446,6 +559,13 @@ _urlEncode(obj) {
     `;
   }
 
+  /**
+   * @method _renderAssetPreview
+   * @description Renders the appropriate asset preview
+   * @param {Object} data - An asset data object.
+   * 
+   * @returns {TemplateResult}
+   */
   _renderAssetPreview(data) {
     let assetType = this._getAssetType(data);
 
@@ -479,10 +599,17 @@ _urlEncode(obj) {
       `;
     }
 
-    return html``
+    return html``;
 
   }
 
+  /**
+   * @method _renderMobileSubFacets
+   * @description Renders the subfacet dropdown in the mobile view.
+   * @param {Boolean} isBrowsePage - Is this a browse or search page?
+   * 
+   * @returns {TemplateResult}
+   */
   _renderMobileSubFacets(isBrowsePage=false){
     if (this.data.length == 0 || this.mainFacet == 'none') return html``;
 
@@ -529,6 +656,13 @@ _urlEncode(obj) {
     `;
   }
 
+  /**
+   * @method _renderPagination
+   * @description Renders the pagination element
+   * @param {Number} totalResults - Total number of results of the current query.
+   * 
+   * @returns {TemplateResult}
+   */
   _renderPagination(totalResults) {
     if (!totalResults || totalResults <= this.pgPer ) {
       return html``;
@@ -541,7 +675,7 @@ _urlEncode(obj) {
                    @changed-page="${e => this._onUserAction("pagination", e.target.currentPage)}"
                    class="mt-3"
     ></rp-pagination>
-    `
+    `;
   }
 }
 
