@@ -1,5 +1,6 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
+import {unsafeHTML} from 'lit-html/directives/unsafe-html.js';
 
 export default function render() {
 return html`
@@ -129,7 +130,7 @@ return html`
         <h1 class="weight-regular mt-0">Overview</h1>
         ${this.work.abstract ? html`
           <h2>Abstract</h2>
-          <div>${this.work.abstract}</div>
+          <div>${unsafeHTML(this.work.abstract)}</div>
         ` : html``}
         ${this.publishedArray.length > 0 ? html`
           <h2>Published</h2>
