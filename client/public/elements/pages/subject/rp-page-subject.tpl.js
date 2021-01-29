@@ -166,10 +166,12 @@ return html`
       et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
       ex ea commodo consequat. </p>
       <div class="cols">
-      ${this.narrowRelatedSubjects || this.broadRelatedSubjects ? html`
+      ${this.narrowRelatedSubjects || this.broadRelatedSubjects ? 
+        html`
         <h2 style="margin-bottom: 5px;">Related Subjects</h2>
 
-        ${this._isEmpty(this.narrowRelatedSubjects) ? html `` : 
+        ${this._isEmpty(this.narrowRelatedSubjects) ? 
+                html `` : 
                 html `
                 <br />   
                   <i style="font-size: 18px; padding-bottom: 5px;">Narrow Scope</i>   
@@ -180,7 +182,8 @@ return html`
                                                                   ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
                                                                 </rp-badge>`)}`
          }        
-        ${this._isEmpty(this.broadRelatedSubjects) ? html `` : 
+        ${this._isEmpty(this.broadRelatedSubjects) ? 
+                html `` : 
                 html `
                 <br />   
                   <i style="font-size: 18px; padding-bottom: 5px;">Broad Scope</i>   
@@ -190,7 +193,8 @@ return html`
                                                                   ${(broad.prefLabel) ? broad.prefLabel: broad.label}
                                                                 </rp-badge>`)}`
          }
-         `: html``
+         `: 
+         html``
        }
       </div>
     </section>
@@ -213,7 +217,8 @@ return html`
       <div class="box-title">
         <h1 class="weight-regular mt-0">Related Publications</h1>
       </div>
-      ${this._isEmpty(this.publications) ? html `<h3>None Listed</h3>` : 
+      ${this._isEmpty(this.publications) ? 
+        html `<h3>None Listed</h3>` : 
         html `
         <div class="data">
           ${Object.entries(this.publications).map(([k, v]) => html`
@@ -227,13 +232,15 @@ return html`
              }
             <div class="box-pub-buttons">
             <div class="padding"></div>
-            ${ v.total > 5 ? html`
+            ${ v.total > 5 ? 
+              html`
               <div class="buttons">
                 <button @click=${() => this._pubRedirect(k)} class="load-pubs less">
                   View All Related ${this._publicationTitle(k)}
                 </button>
               </div>
-              `: html ``
+              `: 
+              html ``
              }
             </div>
         `)} 
