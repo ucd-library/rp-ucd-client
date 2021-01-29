@@ -38,7 +38,7 @@ export default function render() {
     }
     }
   </style>
-  <div class="container style="${styleMap(this.constructStyles())}">
+  <div class="container"  style="${styleMap(this.constructStyles())}">
       <div class="slot" id="top"><slot name="top"></slot></div>
       <div class="slot" id="main"><slot name="main"></slot></div>
       <div class="slot" id="bottom"><slot name="bottom"></slot></div>
