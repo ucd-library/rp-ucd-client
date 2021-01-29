@@ -300,7 +300,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     let avatarWidth = 82;
     let screenPadding = 40;
     let facetColumnWidth = 140;
-    let sectionPadding = 40;
+    let sectionPadding = 60;
     let grace = 10;
     if (w >= 1030) {
       let containerMaxWidth = 970;
