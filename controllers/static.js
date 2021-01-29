@@ -87,7 +87,8 @@ export default (app) => {
         env : {
           CLIENT_TAG : process.env.CLIENT_TAG || '',
           VESSEL_TAG : process.env.VESSEL_TAG || '',
-          APP_VERSION : process.env.APP_VERSION || ''
+          APP_VERSION : process.env.APP_VERSION || '',
+          BUILD_TIME : process.env.BUILD_TIME || ''
         }
       });
     },
