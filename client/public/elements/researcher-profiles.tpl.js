@@ -408,9 +408,9 @@ return html`
     ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center flex-wrap justify-content-center mb-3">${unsafeHTML(line)}</div>`) : html``}
     <div ?hidden="${!this.showVersion}">
       <div>${APP_CONFIG.env.APP_VERSION}</div>
-      <div>Build Time:${APP_CONFIG.env.BUILD_TIME}</div>
-      <div>Client Tag:${APP_CONFIG.env.CLIENT_TAG}</div>
-      <div>Vessel Tag:${APP_CONFIG.env.VESSEL_TAG}</div>
+      <div>Build Time: ${APP_CONFIG.env.BUILD_TIME}</div>
+      <div>Client Tag: ${APP_CONFIG.env.CLIENT_TAG}</div>
+      <div>Vessel Tag: ${APP_CONFIG.env.VESSEL_TAG}</div>
     </div>
   </div>
 </div>
