@@ -9,6 +9,7 @@ return html`
   :host {
     display: block;
   }
+
   .search.container.no-results, .search.container.not-faceted {
     margin-top: 20px;
   }
@@ -36,13 +37,20 @@ return html`
 ${this._renderMobileSubFacets()}
 <div class="search container bg-light pb-3 ${this.data.length > 0 ? 'has-results' : 'no-results'} ${this.mainFacet == 'none' ? 'not-faceted' : 'faceted'}" >
 <div class="body flex">
-  <div class="col-facets mt-3">
-    ${console.log(this.currentQuery)}
+
     ${this.currentQuery.mainFacet == undefined ? 
-    html `` : 
-    html `${this._renderFacets()} `
+    html `  
+          <div   s>
+          ${console.log(this.currentQuery)}
+          </div>
+         `:
+    html `
+          <div class="col-facets mt-3">
+          ${console.log(this.currentQuery)}
+           ${this._renderFacets()} 
+          </div>
+         `
     }
-  </div>
   <div class="col-main">
     <div ?hidden="${this.dataStatus == 'error' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>

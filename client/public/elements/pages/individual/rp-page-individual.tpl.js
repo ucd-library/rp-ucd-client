@@ -57,6 +57,9 @@ return html`
   rp-badge:first-child {
     margin-left: 0;
   }
+  .hidden {
+    display:none;
+  }
   .load-pubs {
     height: 42px;
     font-size: var(--font-size);
