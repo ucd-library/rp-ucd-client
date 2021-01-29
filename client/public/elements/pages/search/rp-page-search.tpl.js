@@ -51,9 +51,12 @@ ${this._renderMobileSubFacets()}
       <rp-alert>Error loading search results.</rp-alert>
     </div>
     <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
-      ${this.data.map(searchResult => html`
+      ${this.data.map((searchResult, i) => html`
         ${this._renderAssetPreview(searchResult)}
-        <hr class="dotted">
+        ${this.data.length - i == 1 && this.dataTotal <= this.pgPer ? html`
+        ` : html`
+          <hr class="dotted">
+        `}
         `)}
       ${this.data.length == 0 ? html`
       <div class="flex align-items-center justify-content-center" style="height:100%;">No search results found!</div>

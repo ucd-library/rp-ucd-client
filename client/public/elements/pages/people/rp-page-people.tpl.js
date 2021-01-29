@@ -26,14 +26,17 @@ return html`
         <rp-alert>Error loading people.</rp-alert>
       </div>
       <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
-        ${this.data.map(person => html`
+        ${this.data.map((person, i) => html`
           <rp-person-preview
             .data="${person}"
             text-width="${this.peopleWidth}"
             show-subjects
             class="my-3">
           </rp-person-preview>
-          <hr class="dotted">
+          ${this.data.length - i == 1 && this.dataTotal <= this.pgPer ? html`
+            ` : html`
+            <hr class="dotted">
+            `}
           `)}
         ${this._renderPagination(this.dataTotal)}
       </div>
