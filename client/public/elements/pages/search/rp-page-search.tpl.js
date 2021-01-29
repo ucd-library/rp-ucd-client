@@ -25,7 +25,7 @@ return html`
     }
   }
 </style>
-<div class="search-header container bg-light top">
+<div class="search-header container-wide bg-light top">
   <div class="bg-primary text-light" id="search-term-box"><h1 class="weight-regular my-0">${this.dataTotal} results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
   <rp-link-list class="bg-light p-3"
                 direction="horizontal"
@@ -51,9 +51,12 @@ ${this._renderMobileSubFacets()}
       <rp-alert>Error loading search results.</rp-alert>
     </div>
     <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
-      ${this.data.map(searchResult => html`
+      ${this.data.map((searchResult, i) => html`
         ${this._renderAssetPreview(searchResult)}
-        <hr class="dotted">
+        ${this.data.length - i == 1 && this.dataTotal <= this.pgPer ? html`
+        ` : html`
+          <hr class="dotted">
+        `}
         `)}
       ${this.data.length == 0 ? html`
       <div class="flex align-items-center justify-content-center" style="height:100%;">No search results found!</div>

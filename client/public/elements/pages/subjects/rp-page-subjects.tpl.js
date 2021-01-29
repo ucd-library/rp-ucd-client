@@ -24,9 +24,12 @@ return html`
         <rp-alert>Error loading subjects.</rp-alert>
       </div>
       <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
-        ${this.data.map(subject => html`
+        ${this.data.map((subject, i) => html`
           <rp-subject-preview .data="${subject}" class="my-3"></rp-subject-preview>
-          <hr class="dotted">
+          ${this.data.length - i == 1 && this.dataTotal <= this.pgPer ? html`
+            ` : html`
+            <hr class="dotted">
+          `}
         `)}
         ${this._renderPagination(this.dataTotal)}
       </div>

@@ -1,5 +1,4 @@
 import { html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
 import { styleMap } from 'lit-html/directives/style-map';
 
 export default function render() {
@@ -39,7 +38,7 @@ export default function render() {
     }
     }
   </style>
-  <div class="container ${classMap(this.constructClasses())}" style="${styleMap(this.constructStyles())}">
+  <div class="container"  style="${styleMap(this.constructStyles())}">
       <div class="slot" id="top"><slot name="top"></slot></div>
       <div class="slot" id="main"><slot name="main"></slot></div>
       <div class="slot" id="bottom"><slot name="bottom"></slot></div>
