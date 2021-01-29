@@ -1,9 +1,12 @@
-import { LitElement, html } from 'lit-element';
-import render from "./rp-utils-landing.tpl.js"
+import { LitElement } from 'lit-element';
+import render from "./rp-utils-landing.tpl.js";
 
-
+/**
+ * @class RpUtilsLanding
+ * @description Parent class for asset landing page elements.
+ */
 export default class RpUtilsLanding extends Mixin(LitElement)
-.with(LitCorkUtils) {
+  .with(LitCorkUtils) {
 
   static get properties() {
     return {
@@ -13,7 +16,7 @@ export default class RpUtilsLanding extends Mixin(LitElement)
       disabledSections: {type: Array},
       activeSection: {type: Object},
       peopleWidth: {type: Number}
-    }
+    };
   }
 
   constructor() {
@@ -27,6 +30,12 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     this.activeSection = {};
   }
 
+  /**
+   * @method getPageSections
+   * @description Constructs the metadata about sections on an asset page
+   * 
+   * @returns {Array} - Array of objects with section details.
+   */
   getPageSections() {
     let baseHref = `/${this.assetType}/${this.assetId}`;
     let sections = [{id:"all", text: "All Info", href: baseHref}];
@@ -53,13 +62,20 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     let i = 0;
     for (let section of sections) {
       if (!section.href) section.href = `${baseHref}/${section.id}`;
-      section.disabled = this.disabledSections.includes(section.id)
+      section.disabled = this.disabledSections.includes(section.id);
       section.index = i;
       i++;
     }
     return sections;
   }
 
+  /**
+   * @method _hidePageSection
+   * @description Bound to 'hidden' attribute of page sections
+   * @param {String} section - id of page section
+   * 
+   * @returns {Boolean}
+   */
   _hidePageSection(section){
     if (this.activeSection.index == 0) {
       return false;
@@ -72,9 +88,15 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     return true;
   }
 
+  /**
+   * @method _setActiveSection
+   * @description Sets the 'activeSection' property based on the current URL. Should be bound to app-state-update.
+   * @param {Array} path - URL path broken into an array.
+   * @param {Number} pathIndex - Index of path array that should contain the page section.
+   */
   _setActiveSection(path, pathIndex=2){
     let sections = this.getPageSections();
-    this.activeSection = sections[0]
+    this.activeSection = sections[0];
     if (path.length >= pathIndex + 1) {
       for (let section of sections) {
         if (section.id == path[pathIndex]) {
@@ -85,8 +107,15 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     }
   }
   
+  /**
+   * @method setPeopleWidth
+   * @description Determines how wide any people-preview elements should be.
+   * Sets the `peopleWidth' property
+   * 
+   * @param {Number} w - Screen width in pixels.
+   */
   setPeopleWidth(w) {
-    if (!w) return 250;
+    if (!w) this.peopleWidth = 250;
     let avatarWidth = 82;
     let screenPadding = 40;
     let sectionPadding = 40;
@@ -100,7 +129,6 @@ export default class RpUtilsLanding extends Mixin(LitElement)
       screenPadding = 60;
       sectionPadding = 120;
     }
-
     let pw = w - screenPadding - sectionPadding - avatarWidth - grace;
     this.peopleWidth = Math.floor(pw);
   }
