@@ -132,14 +132,6 @@ export default class RpPageWork extends RpUtilsLanding {
     this.universityAuthors = universityAuthors;
   }
 
-  setPeopleWidth(w) {
-    let pw = 250;
-    let avatarWidth = 82;
-    let screenPadding = 30;
-    pw = (w - screenPadding) * .8 - avatarWidth - 40;
-    this.peopleWidth = Math.floor(pw);
-  }
-
   _handleResize() {
     if (!this.visible) return;
     let w = window.innerWidth;

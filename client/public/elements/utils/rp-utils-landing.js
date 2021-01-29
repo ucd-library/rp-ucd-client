@@ -11,7 +11,8 @@ export default class RpUtilsLanding extends Mixin(LitElement)
       assetType: {type: String},
       assetId: {type: String},
       disabledSections: {type: Array},
-      activeSection: {type: Object}
+      activeSection: {type: Object},
+      peopleWidth: {type: Number}
     }
   }
 
@@ -21,6 +22,7 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     this.visible = false;
     this.assetType = '';
     this.assetId = "";
+    this.peopleWidth = this.setPeopleWidth(window.innerWidth);
     this.disabledSections = [];
     this.activeSection = {};
   }
@@ -81,7 +83,26 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         }
       }
     }
+  }
+  
+  setPeopleWidth(w) {
+    if (!w) return 250;
+    let avatarWidth = 82;
+    let screenPadding = 40;
+    let sectionPadding = 40;
+    let grace = 10;
+    if ( w >= 1030 ) {
+      w = 970;
+      screenPadding = 0;
+      sectionPadding = 120;
+    }
+    else if ( w >= 800 ) {
+      screenPadding = 60;
+      sectionPadding = 120;
+    }
 
+    let pw = w - screenPadding - sectionPadding - avatarWidth - grace;
+    this.peopleWidth = Math.floor(pw);
   }
 
 }
