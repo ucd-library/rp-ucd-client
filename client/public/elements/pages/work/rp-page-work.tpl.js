@@ -19,23 +19,23 @@ return html`
   .hero .authors {
     color: var(--tcolor-primary20);
     margin: 0 15%;
-}
-.hero .type {
-  color: var(--tcolor-primary10);
-  text-transform: uppercase;
-  font-size: var(--font-size-small);
-}
+  }
+  .hero .type {
+    color: var(--tcolor-primary10);
+    text-transform: uppercase;
+    font-size: var(--font-size-small);
+  }
   .icon-container {
-      background-color: var(--tcolor-bg-primary);
-      height: 150px;
-      width: 150px;
-      min-height: 150px;
-      min-width: 150px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    background-color: var(--tcolor-bg-primary);
+    height: 150px;
+    width: 150px;
+    min-height: 150px;
+    min-width: 150px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   iron-icon {
     color: var(--tcolor-primary);
     height: 50%;
@@ -45,8 +45,8 @@ return html`
     color: var(--tcolor-light) !important;
   }
   .authors a[disabled] {
-      pointer-events: none;
-      text-decoration: none;
+    pointer-events: none;
+    text-decoration: none;
     }
   .authors a[disabled]:hover {
     color : var(--tcolor-link-text);
@@ -100,38 +100,57 @@ return html`
       <section id="records" class="bg-light mt-3" ?hidden="${this._hidePageSection('records')}">
         <h1 class="weight-regular mt-0">Publication Records</h1>
         ${ (this.WorkModel.getAdditionalLinks(this.work).length > 0 ||
-           this.fullTextLinks) ? html`
+           this.fullTextLinks) ? 
+           html`
         <h2>Full Text</h2>
           <ul class="pub-links">
-            ${this.WorkModel.getAdditionalLinks(this.work).map(link => html`
-            <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
-            `)}
-        ${this.fullTextLinks && false ? html`
-            ${this.fullTextLinks.map(link => html`
-            <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
-            `)}
-        ` : html``}
-          </ul>`:html`<div>No known full text links exist.</div>`}
-        ${this.isOwnWork ? html`
+            ${this.WorkModel.getAdditionalLinks(this.work).map(link => 
+              html`
+              <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
+              `)
+            }
+            ${this.fullTextLinks && false ? 
+              html`
+                ${this.fullTextLinks.map(link => html`
+                <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
+              `)
+            }
+              `
+              :html``
+            }
+          </ul>
+           `
+           :html`<div>No known full text links exist.</div>`
+          }
+        ${this.isOwnWork ? 
+          html`
           <h2>Citation Data & Metrics</h2>
           <ul class="pub-links">
             <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="https://oapolicy.universityofcalifornia.edu/">UC Publication Management System</a></li>
           </ul>
-        ` : html``}
+           ` 
+          :html``}
      </section>
 
      <section id="overview" class="bg-light mt-3" ?hidden="${this._hidePageSection('overview')}">
         <h1 class="weight-regular mt-0">Overview</h1>
-        ${this.work.abstract ? html`
+        ${this.work.abstract ? 
+          html`
           <h2>Abstract</h2>
           <div>${this.work.abstract}</div>
-        ` : html``}
-        ${this.publishedArray.length > 0 ? html`
+          ` 
+          :html``
+        }
+        ${this.publishedArray.length > 0 ? 
+          html`
           <h2>Published</h2>
           <div class="flex align-items-center">${this.publishedArray.map((d, i) => html`
-            <span class="${d.class}">${d.text}</span>${i + 1 < this.publishedArray.length ? html`<span class="list-dot mx-2"></span>` : html``}
+            <span class="${d.class}">${d.text}</span>${i + 1 < this.publishedArray.length ? 
+              html`<span class="list-dot mx-2"></span>` 
+              :html``}
           `)}</div>
-        ` : html``}
+          ` 
+          :html``}
 
         ${this.subjects.length > 0 ? html`
           <h2>Subjects</h2>
@@ -140,7 +159,8 @@ return html`
             <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(subject)}">${this.SubjectModel.getPreferredLabel(subject)}</rp-badge>
           `)}
           </div>
-        ` : html``}
+        `
+        :html``}
 
      </section>
 
@@ -161,12 +181,14 @@ return html`
             </rp-person-preview>
           `)}
         </div>
-        ${this.hasOtherAuthors ? html`
+        ${this.hasOtherAuthors ? 
+        html`
           <h1 class="weight-regular">Other Authors</h1>
           ${this.authors.filter(author => author.isOtherUniversity).map(author => html`
             <div><span class="name">${author.nameLast}, ${author.nameFirst}</span></div>
-        `)}
-        ` : html``}
+          `)}
+        ` 
+        :html``}
      </section>
 
     </div>
