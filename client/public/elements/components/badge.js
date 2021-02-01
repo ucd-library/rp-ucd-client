@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { styleMap } from 'lit-html/directives/style-map';
 import render from './badge.tpl.js';
 
 /**
@@ -13,6 +14,7 @@ export class RpBadge extends LitElement {
     return {
       size: {type: String},
       href: {type: String},
+      maxWidth: {type: Number, attribute: 'max-width'},
       ellipsis: {type: Boolean},
       colorSequence: {type: Number, attribute: 'color-sequence'},
     };
@@ -21,18 +23,20 @@ export class RpBadge extends LitElement {
   constructor() {
     super();
     this.maxColor = 6;
+    this.href = "";
+    this.maxWidth = 0;
     this.ellipsis = false;
     this.render = render.bind(this);
   }
 
   /**
-   * @method constructClasses
+   * @method _constructClasses
    * @description Makes a class map object based on element properties/attributes. 
    * Classes are applied to the element.
    * 
    * @returns {Object} - {class1: true, class2: false}
    */
-  constructClasses() {
+  _constructClasses() {
     let classes = {'main': true};
 
     if (this.size) {
@@ -58,7 +62,22 @@ export class RpBadge extends LitElement {
       }
 
     }
+
+    if (this.maxWidth > 0) classes['has-max-width'] =  true;
+    
     return classes;
+  }
+
+  /**
+   * @method _constructStyles
+   * @description Constructs CSS styles based on element properties
+   * 
+   * @returns {Object}
+   */
+  _constructStyles(){
+    let styles = {};
+    if (this.maxWidth > 0) styles['max-width'] = `${this.maxWidth}px`;
+    return styles;
   }
 
   /**
@@ -81,7 +100,7 @@ export class RpBadge extends LitElement {
    * @returns {TemplateResult}
    */
   _renderSpan() {
-    return html`<span class=${classMap(this.constructClasses())}>
+    return html`<span class=${classMap(this._constructClasses())} style=${styleMap(this._constructStyles())}>
       ${this.ellipsis ? html`
         <span class="dot"></span>
         <span class="dot"></span>
