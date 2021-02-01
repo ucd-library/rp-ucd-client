@@ -37,7 +37,7 @@ export default function render() {
     }
   </style>
   <div class="circle ${classMap(this.constructClasses())}" style="${styleMap(this.constructStyles())}">
-    ${this.renderFace()}
+    ${this._renderFace()}
   </div>
   `;
 }

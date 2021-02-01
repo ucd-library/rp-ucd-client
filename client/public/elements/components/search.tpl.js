@@ -43,7 +43,7 @@ export default function render() {
       height: 34px;
     }
   </style>
-  <div class="container ${classMap(this._constructClasses())}">
+  <div class="container">
     <rp-dropdown .choices="${this.getDropdownOptions()}"
                  to-upper-case
                  chosen="${this.activeFacet}"

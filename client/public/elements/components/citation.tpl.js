@@ -1,5 +1,4 @@
 import { html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
 
 export default function render() {
   return html`

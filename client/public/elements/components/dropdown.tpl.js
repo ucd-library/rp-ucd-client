@@ -16,18 +16,18 @@ export default function render() {
       display: flex;
       align-items: center;
     }
-    .container.bg-primary {
+    .container.color-bg-primary {
       background-color: var(--tcolor-bg-primary);
       color: var(--tcolor-text);
     }
-    .container.outline-primary {
+    .container.color-outline-primary {
       color: var(--tcolor-primary70);
       background-color: var(--tcolor-light);
     }
     rp-icon {
       padding-left: 10px;
     }
-    .bg-primary .line {
+    .color-bg-primary .line {
       background-color: #fff;
     }
     .line {
@@ -80,10 +80,10 @@ export default function render() {
     iron-icon {
       margin-top: 2px;
     }
-    .outline-primary li:hover, .bg-primary li:hover {
+    .color-outline-primary li:hover, .color-bg-primary li:hover {
       background-color: var(--tcolor-primary10) !important;
     }
-    .outline-primary ul, .bg-primary ul{
+    .color-outline-primary ul, .color-bg-primary ul{
       border-style: solid;
       border-width: 1px;
       border-color: var(--tcolor-primary70);
@@ -104,7 +104,7 @@ export default function render() {
         <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
    </div>
     <iron-dropdown id="dropdown" scroll-action="cancel" vertical-align="top" vertical-offset=${this.stickyTitle ? "35" : "0"}>
-      <ul slot="dropdown-content">${this._parseChoices().map(choice => this._renderChoices(choice))}</ul>
+      <ul slot="dropdown-content">${this._parseChoices().map(choice => this._renderChoice(choice))}</ul>
     </iron-dropdown>
   </div>
   `;

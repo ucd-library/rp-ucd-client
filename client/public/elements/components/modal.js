@@ -1,14 +1,17 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement } from 'lit-element';
 import render from './modal.tpl.js';
 
+/**
+ * @class RpModal
+ * @description A modal UI component. Content is rendered using slots.
+ */
 export class RpModal extends LitElement {
   static get properties() {
-  return {
+    return {
       visible: {type: Boolean},
       contentTitle: {type: String, attribute: "content-title"},
-      dismissText: {type: String, attribute: 'dismiss-text'},
-
-  };
+      dismissText: {type: String, attribute: 'dismiss-text'}
+    };
   }
 
   constructor() {
@@ -19,20 +22,28 @@ export class RpModal extends LitElement {
     this.dismissText = "Cancel";
   }
 
-  updated(props) {
-      if (props.has('visible')) {
-          
-      }
+  /**
+   * @method show
+   * @description Shows the modal.
+   */
+  show() {
+    this.visible = true;
   }
 
-  show() {
-      this.visible = true;
-  }
+  /**
+   * @method hide
+   * @description Hides the modal.
+   */
   hide() {
-      this.visible = false;
+    this.visible = false;
   }
+
+  /**
+   * @method toggle
+   * @description Shows/hides the modal.
+   */
   toggle() {
-      this.visible = !this.visible;
+    this.visible = !this.visible;
   }
 
 }
