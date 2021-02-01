@@ -129,7 +129,10 @@ class CollectionModel extends BaseModel {
     }
     else if (id == "worksAggs") {
       queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":publication"]};
-      if (kwargs.subjectFilter) queryObject.filters['hasSubjectArea.@id'] = {"type": "keyword", "op": "and", "value": [kwargs.subjectFilter]};
+      if (kwargs.subjectFilter) {
+        queryObject.filters['hasSubjectArea.@id'] = {"type": "keyword", "op": "and", "value": [kwargs.subjectFilter]};
+        id = `${id}?subject=${kwargs.subjectFilter}`;
+      }
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
