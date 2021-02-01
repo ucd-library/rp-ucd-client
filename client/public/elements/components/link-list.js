@@ -2,14 +2,18 @@ import { LitElement, html } from 'lit-element';
 import render from './link-list.tpl.js';
 import { classMap } from 'lit-html/directives/class-map';
 
+/**
+ * @class RpLinkList
+ * @description UI component for sub-nav style link list
+ */
 export class RpLinkList extends LitElement {
   static get properties() {
-  return {
-    links: {type: Array},
-    currentLink:  {converter: parseInt, attribute: 'current-link', reflect: true},
-    direction: {type: String, attribute: 'direction'},
-    hasHeaderLink: {type: Boolean, attribute: 'has-header-link'}
-  };
+    return {
+      links: {type: Array},
+      currentLink:  {type: Number, attribute: 'current-link', reflect: true},
+      direction: {type: String, attribute: 'direction'},
+      hasHeaderLink: {type: Boolean, attribute: 'has-header-link'}
+    };
   }
 
   constructor() {
@@ -17,8 +21,6 @@ export class RpLinkList extends LitElement {
     this.render = render.bind(this);
     this.direction = 'v';
     this.currentLink = 0;
-    this._containerClasses = {container: true};
-    this._containerClasses[this.direction] = true;
 
     this._changedLink = new CustomEvent('changed-link', {
       detail: {
@@ -27,20 +29,29 @@ export class RpLinkList extends LitElement {
     });
   }
 
+  /**
+   * @method _constructClasses
+   * @description Constructs CSS classes based on element properties
+   * 
+   * @returns {Object}
+   */
+  _constructClasses() {
+    let classes = {};
 
-  attributeChangedCallback(name, oldVal, newVal) {
-    if (name == 'direction') {
-      if (newVal) {
-        if (this._containerClasses.v) {
-          delete this._containerClasses.v
-        }
-        this._containerClasses[newVal.toLowerCase()[0]] = true;
-      }
-
+    if (this.direction) {
+      classes['direction-' + this.direction.toLowerCase()[0]] = true;
     }
-    super.attributeChangedCallback(name, oldVal, newVal);
+    return classes;
   }
 
+  /**
+   * @method _renderLink
+   * @description Renders a single link
+   * @param {Object|String} link - Link text or object
+   * @param {Number} index - Index of link
+   * 
+   * @returns {TemplateResult}
+   */
   _renderLink(link, index){
     let text = "";
     let href = "";
@@ -73,8 +84,16 @@ export class RpLinkList extends LitElement {
       return html`<div @click="${this.handleClick}" link="${index}" class=${classMap(classes)}>${text}</div>`;
     }
 
+    return html``;
+
   }
 
+  /**
+   * @method handleClick
+   * @description - Bound to list item click event if href is not specified.
+   * Fires the changed-link event.
+   * @param {Event} e 
+   */
   handleClick(e) {
     let new_link = parseInt(e.target.getAttribute('link'));
     if ((new_link != this.currentLink) && (!e.target.classList.contains('disabled'))) {

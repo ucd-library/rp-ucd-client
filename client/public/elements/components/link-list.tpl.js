@@ -11,19 +11,19 @@ export default function render() {
     .container {
       display: flex;
     }
-    .container.h {
+    .container.direction-h {
       flex-flow: row nowrap;
       justify-content: center;
     }
-    .container.h .link {
+    .container.direction-h .link {
       margin-left: .5em;
       margin-right: .5em;
     }
-    .container.v {
+    .container.direction-v {
       flex-flow: column nowrap;
       align-items: flex-end;
     }
-    .container.v .link {
+    .container.direction-v .link {
       margin-bottom: 1.5em;
     }
     .link {
@@ -55,13 +55,13 @@ export default function render() {
       color: var(--tcolor-text);
     }
     @media (min-width: 480px) {
-      .container.h .link {
+      .container.direction-h .link {
         margin-left: 1em;
         margin-right: 1em;
       }
     }
   </style>
-  <div class=${classMap(this._containerClasses)}>
+  <div class="container ${classMap(this._constructClasses())}">
     ${this.links.map((link, index) => this._renderLink(link, index))}
   </div>
   `;
