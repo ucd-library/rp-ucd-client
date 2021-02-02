@@ -34,7 +34,7 @@ class SubjectService extends BaseService {
       limit: 10,
       filters: {
         "@type": {"type": "keyword", "op": "and", "value": [`${this.jsonContext}:person`]},
-        "hasResearchArea.@id": {"type": "keyword", "op": "and", "value": [subjectId]}
+        "_.allResearchArea": {"type": "keyword", "op": "and", "value": [subjectId]}
       }
     }
     return this.request({
@@ -60,7 +60,7 @@ class SubjectService extends BaseService {
       sort: [],
       filters: {
         "@type": {"type": "keyword", "op": "and", "value": [`${this.jsonContext}:publication`]},
-        'hasSubjectArea.@id': {"type": "keyword", "op": "and", "value": [subjectId]},
+        '_.allSubjectArea': {"type": "keyword", "op": "and", "value": [subjectId]},
         'publicationDate': {"type": "exists"}
       },
       facets: {"@type": {"type" : "facet"}}
@@ -88,7 +88,7 @@ class SubjectService extends BaseService {
       limit: 5,
       sort: [{"publicationDate": {"order" : "desc"}}],
       filters: {
-        'hasSubjectArea.@id': {"type": "keyword", "op": "and", "value": [subjectId]},
+        '_.allSubjectArea': {"type": "keyword", "op": "and", "value": [subjectId]},
         'publicationDate': {"type": "exists"}
       },
       facets: {"@type": {"type" : "facet"}}
