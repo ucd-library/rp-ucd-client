@@ -24,6 +24,11 @@ return html`
     padding: .55em .9em;
     border-radius: 2em;
   }
+  span.main.has-max-width {
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
   a:hover span.main {
       background-color: var(--tcolor-hover-bg) !important;
       color:  var(--tcolor-hover-text) !important;

@@ -190,10 +190,17 @@ return html`
           <span class="weight-regular">Research Subjects</span>
         </h2>
         ${this.subjects.map(subject => html`
-          <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(subject)}">${this.SubjectModel.getPreferredLabel(subject)}</rp-badge>
+          <rp-badge 
+            title="${this.SubjectModel.getPreferredLabel(subject)}" 
+            size="lg" 
+            max-width="280" 
+            class="my-1" 
+            href="${this.SubjectModel.getLandingPage(subject)}">
+            ${this.SubjectModel.getPreferredLabel(subject)}
+          </rp-badge>
         `)}
         ${this.subjectsTotal > 10 ? html`
-          <rp-badge size="lg" class="my-1" ellipsis href="/subjects"></rp-badge>
+          <rp-badge size="lg" class="my-1" max-width="280"  ellipsis href="/subjects"></rp-badge>
           ` : html``}
       </div>
       <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
