@@ -21,10 +21,22 @@ export default class RpPageWorks extends RpUtilsCollection {
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
+  /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
   async _onAppStateUpdate(state) {
     requestAnimationFrame( () => this.doUpdate(state));
   }
 
+  /**
+   * @method doUpdate
+   * @param {Object} state
+   * @description collects the path and set the location to the
+   * works path, then performs this with the state, this will rerender
+   */
   async doUpdate(state){
     await this.updateComplete;
     if (!this.visible) {
@@ -34,6 +46,12 @@ export default class RpPageWorks extends RpUtilsCollection {
     await Promise.all([this._doMainQuery(), this._getFacets(), this._getAzAgg()]);
   }
 
+  /**
+   * @method _getFacets
+   * @description load and render the current overview works facet list
+   * and sub facets from the CollectionModel
+   * 
+   */
   async _getFacets() {
     let activeFilters = {};
     let kwargs = {}

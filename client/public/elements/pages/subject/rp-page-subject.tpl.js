@@ -141,8 +141,7 @@ return html`
     }
   }
 </style>
- 
-<div class="work top"> 
+<div class="work container top"> 
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
   </div>
@@ -234,13 +233,15 @@ return html`
              }
             <div class="box-pub-buttons">
             <div class="padding"></div>
-            ${ v.total > 5 ? html`
+            ${ v.total > 5 ? 
+              html`
               <div class="buttons">
                 <button @click=${() => this._pubRedirect(k)} class="load-pubs less">
                   View All Related ${this._publicationTitle(k)}
                 </button>
               </div>
-              `: html ``
+              `: 
+              html ``
              }
             </div>
         `)} 

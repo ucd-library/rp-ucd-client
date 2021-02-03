@@ -150,7 +150,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    *                      this._getRelatedSubjectsNarrow(), 
    *                      this._getRelatedSubjectsBroader()
    */
-
   async _doMainQuery(id){
     let data = await this.SubjectModel.getSubject(id);
 
@@ -270,7 +269,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @param {Number} w - Window width (pixels)
    */
-
   setPeopleWidth(w) {
     let pw = 250;
     let avatarWidth = 82;
@@ -341,7 +339,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {Object, Boolean} 
    */
-
   _getRelatedSubjectsNarrow(){
     let narrow = this.SubjectModel.getRelatedSubjects(this.subject, "narrow");
     let result = [];
@@ -362,7 +359,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {Object, Boolean} 
    */
-
   _getRelatedSubjectsBroader(){
     let broad = this.SubjectModel.getRelatedSubjects(this.subject, "broader");
     let result = {};
@@ -385,7 +381,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {Boolean}
    */
-  
   _hideStatusSection(section, statusProperty="subjectStatus") {
     if (section == this[statusProperty]) {
       return false;
@@ -401,7 +396,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {String}
    */
-
   _labelTitle(){
     if(this.subject.prefLabel) return this.subject.prefLabel;
     else return this.subject.label;
@@ -414,7 +408,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {String}
    */
-
   _publicationTitle(name){
     if(name == "articles") return "Academic Articles"
     else if(name == "conference-papers") return "Conference Papers"
@@ -430,7 +423,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {String}
    */
-
   _getYear(date){
     if (!date) return;
     return date.split("-")[0];
@@ -442,7 +434,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns text links output
    */
-
   _getFullTextLinks(){
     let output = [];
     if (!this.subject) return output;
@@ -467,7 +458,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {Promise}
    */
-
   _getSubjectType() {
     try {
       for (let t of this.subject['@type']) {
