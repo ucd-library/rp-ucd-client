@@ -183,12 +183,12 @@ export default class RpPageSubject extends RpUtilsLanding {
     let data = await this.SubjectModel.getSubject(id);
 
     //Add location of the description and add to array if there is none
-    this.about = data.payload;
+    this.about = data.payload.description;
 
     //delete this when description is added
-    if(this.about){ 
-      this.about = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."];
-    }
+    // if(this.about){ 
+    //   this.about = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."];
+    // }
     //
 
     if (APP_CONFIG.verbose) console.log("description:", data);

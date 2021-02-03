@@ -159,19 +159,20 @@ return html`
         </div>
         <div class="type text-center">${this.subjectType}</div>
       </div>
-      <rp-link-list class="bg-light p-3"
+      <!-- <rp-link-list class="bg-light p-3"
                   direction="horizontal"
                   .links="${this.getPageSections()}"
                   current-link="${this.activeSection.index}">
+      </rp-link-list> -->
+      <rp-link-list id="navbar" class="bg-light p-3"
+        direction="horizontal"
+        .links="${this.getPageSections()}"
+        current-link="${this.activeSection.index}">
       </rp-link-list>
     </div>
-    <rp-link-list id="navbar" class="bg-light p-3"
-                direction="horizontal"
-                .links="${this.getPageSections()}"
-                current-link="${this.activeSection.index}">
-    </rp-link-list>
+   
   </div>
-  <div class="sections">
+  <div class="sections container">
 
     <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
       <h1 class="weight-regular mt-0">About</h1>
