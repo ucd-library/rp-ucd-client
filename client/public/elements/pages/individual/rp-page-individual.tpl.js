@@ -196,6 +196,7 @@ return html`
                 current-link="${this.activeSection.index}">
   </rp-link-list>
 
+
   <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
     <h1 class="weight-regular mt-0">About</h1>
     <h2 hidden>Overview</h2>
