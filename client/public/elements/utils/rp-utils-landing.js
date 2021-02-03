@@ -44,6 +44,7 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     if (this.assetType == 'subject'){
       sections.push(
         {id: 'about', text:'About'},
+        {id: 'relatedSubjects', text:'Related Subjects'},
         {id: 'researchers', text: 'Researchers'},
         {id: 'publications', text: 'Publications'}
       );
@@ -62,7 +63,6 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     if (this.activeSection.index == 0) {
       return false;
     }
-
     if (section == this.activeSection.id) {
       return false;
     }
@@ -71,6 +71,7 @@ export default class RpUtilsLanding extends Mixin(LitElement)
   }
 
   _setActiveSection(path, pathIndex=2){
+
     let sections = this.getPageSections();
     this.activeSection = sections[0]
     if (path.length >= pathIndex + 1) {

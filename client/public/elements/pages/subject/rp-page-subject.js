@@ -12,6 +12,7 @@ import "../../components/icon";
 import "../../components/link-list";
 import "../../components/person-preview";
 import "../../components/subject-preview";
+import CollectionModel from '../../../src/models/CollectionModel.js';
 
 /**
  * @class RpPageSubject
@@ -33,6 +34,8 @@ export default class RpPageSubject extends RpUtilsLanding {
       broadRelatedSubjects: {type: Array},
       tempResearch: {},
       urlPathId: {type: String},
+      pub: {type: Boolean},
+      about: {type: Array}
     }
   }
 
@@ -58,6 +61,7 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.narrowRelatedSubjects = [];
     this.broadRelatedSubjects = [];    
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
+    this.about = [];
   }
 
   /**
@@ -130,6 +134,7 @@ export default class RpPageSubject extends RpUtilsLanding {
 
     await Promise.all([
       this._doMainQuery(this.assetId), 
+      this._doAboutQuery(this.assetId),
       this._doResearcherQuery(this.assetId), 
       this._doPubOverviewQuery(this.assetId)]);
 
@@ -161,8 +166,38 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.fullTextLinks = this._getFullTextLinks();
     this.narrowRelatedSubjects = this._getRelatedSubjectsNarrow();
     this.broadRelatedSubjects = this._getRelatedSubjectsBroader();
-
+    if(this._isEmpty(this.narrowRelatedSubjects) && this._isEmpty(this.broadRelatedSubjects)){
+      this._hideElements("relatedSubjects", this.narrowRelatedSubjects);
+    }
   }
+
+  /**
+   * @method _doAboutQuery
+   * @param {String} id - The subject id of this page.
+   * @description Retrieves the subject from the id given and saves description in this.about array
+   * Called on AppStateUpdate
+   * 
+
+   */
+
+  async _doAboutQuery(id){
+    let data = await this.SubjectModel.getSubject(id);
+
+    //Add location of the description and add to array if there is none
+    this.about = data.payload;
+
+    //delete this when description is added
+    if(this.about){ 
+      this.about = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."];
+    }
+    //
+
+    if (APP_CONFIG.verbose) console.log("description:", data);
+
+    this._hideElements("about", this.about);
+    
+  }
+
 
   /**
    * @method _doResearcherQuery
@@ -180,6 +215,7 @@ export default class RpPageSubject extends RpUtilsLanding {
     }
     this.researchers = data.payload;
     if (APP_CONFIG.verbose) console.log("researchers payload:", data);
+    this._hideElements("researchers", this.researchers.results);
 
   }
 
@@ -196,7 +232,6 @@ export default class RpPageSubject extends RpUtilsLanding {
     }
     if (APP_CONFIG.verbose) console.log('pub overview:', data);
     let pubTypeCounts = data.payload.aggregations.facets['@type'];
-    
     let pubTypes = []
     for (const pubType of this.CollectionModel.subFacets.works) {
       if (!pubTypeCounts[pubType.es]) continue;
@@ -205,7 +240,7 @@ export default class RpPageSubject extends RpUtilsLanding {
 
     this.publications = {}
     pubTypes.map(pt => this._doPubQuery(pt));
-
+    this._hideElements("publications", pubTypes);
 
   }
 
@@ -216,13 +251,16 @@ export default class RpPageSubject extends RpUtilsLanding {
    * Adds to publications object.
    */
   async _doPubQuery(pubType){
+    
     let data = await this.SubjectModel.getPubs(this.assetId, pubType);
     if (data.state != 'loaded') {
       return;
     }
+
     if (APP_CONFIG.verbose) console.log(`${pubType.id} pubs`, data);
     this.publications[pubType.id] = {'total': data.payload.total, 'results': data.payload.results};
     this.requestUpdate();
+
   }
 
   /**
@@ -278,6 +316,24 @@ export default class RpPageSubject extends RpUtilsLanding {
     }
     return true;
   }
+
+   /**
+   * @method _hideElements
+   * @description checks if the object is empty it would take away the
+   * section and the nav bar
+   * 
+   * @param {String, Object} 
+   * 
+   */
+  _hideElements(type, arrayCheck) {
+    if(this._isEmpty(arrayCheck)){
+      this.shadowRoot.getElementById(type).style.display = "none";
+      let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
+      for(let i = 0; i < data.length; i++){
+        if(data[i].href.includes(type)) data[i].style.display = "none";
+      }
+    }
+  } 
  
   /**
    * @method _getRelatedSubjectsNarrow

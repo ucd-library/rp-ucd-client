@@ -21,6 +21,7 @@ return html`
     text-transform: uppercase;
     font-size: var(--font-size-small);
   }
+
   .box-title {
     display: flex;
     flex-flow: row nowrap;
@@ -151,7 +152,7 @@ return html`
       </div>
       <div class="type text-center">${this.subjectType}</div>
     </div>
-    <rp-link-list class="bg-light p-3"
+    <rp-link-list id="navbar" class="bg-light p-3"
                 direction="horizontal"
                 .links="${this.getPageSections()}"
                 current-link="${this.activeSection.index}">
@@ -161,44 +162,39 @@ return html`
 
     <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
       <h1 class="weight-regular mt-0">About</h1>
-      <h2>Overview</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-      et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-      ex ea commodo consequat. </p>
-      <div class="cols">
-      ${this.narrowRelatedSubjects || this.broadRelatedSubjects ? html`
-        <h2 style="margin-bottom: 5px;">Related Subjects</h2>
-
-        ${this._isEmpty(this.narrowRelatedSubjects) ? html `` : 
-                html `
-                <br />   
-                  <i style="font-size: 18px; padding-bottom: 5px;">Narrow Scope</i>   
-                <br /> 
-                
-                ${this.narrowRelatedSubjects.map(narrow => html ` 
-                                                                <rp-badge size="lg" class="my-1">
-                                                                  ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
-                                                                </rp-badge>`)}`
-         }        
-        ${this._isEmpty(this.broadRelatedSubjects) ? html `` : 
-                html `
-                <br />   
-                  <i style="font-size: 18px; padding-bottom: 5px;">Broad Scope</i>   
-                <br /> 
-                ${this.broadRelatedSubjects.map(broad => html ` 
-                                                                <rp-badge size="lg" class="my-1">
-                                                                  ${(broad.prefLabel) ? broad.prefLabel: broad.label}
-                                                                </rp-badge>`)}`
-         }
-         `: html``
-       }
-      </div>
+      <p>${this.about}</p>
     </section>
+    <section id="relatedSubjects" class="bg-light mt-3" ?hidden="${this._hidePageSection('relatedSubjects')}">
+      <h1 class="weight-regular mt-0">Related Subjects</h1>
+      
+      ${this._isEmpty(this.broadRelatedSubjects) ? html `` : 
+            html `
+              <b style="font-size: 18px;">Broader Scope</b>   
+            <br /> 
+            ${this.broadRelatedSubjects.map(broad => html ` 
+                                                     <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(broad)}">
+                                                        ${(broad.prefLabel) ? broad.prefLabel: broad.label}
+                                                      </rp-badge>`)}`
+       }
+       <br />   
+
+       ${this._isEmpty(this.narrowRelatedSubjects) ? html `` : 
+            html `
+              <b style="font-size: 18px; ">Narrower Scope</b>   
+            <br /> 
+
+            ${this.narrowRelatedSubjects.map(narrow => html ` 
+                                                      <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(narrow)}">
+                                                        ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
+                                                      </rp-badge>`)}`
+       }        
+
+    </section>
+    
     <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
       <div class="box-title">
         <h1 class="weight-regular mt-0">Researchers</h1>
-      </div>
-        ${this._isEmpty(this.tempResearch) ? html `<h3>None Listed</h3>` : html `
+      </div>    
           ${this.tempResearch.map(researcher => html`
             <rp-person-preview
               .data="${researcher}"
@@ -207,14 +203,11 @@ return html`
               class="my-3">
             </rp-person-preview>
           `)}   
-        `}
     </section>
     <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
       <div class="box-title">
         <h1 class="weight-regular mt-0">Related Publications</h1>
       </div>
-      ${this._isEmpty(this.publications) ? html `<h3>None Listed</h3>` : 
-        html `
         <div class="data">
           ${Object.entries(this.publications).map(([k, v]) => html`
             <h3>${this._publicationTitle(k)} (${v.total})</h3>
@@ -238,7 +231,6 @@ return html`
             </div>
         `)} 
         </div>
-      `}
     </section>
   </div>
 </div>
