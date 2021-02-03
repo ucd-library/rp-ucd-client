@@ -3,7 +3,7 @@ const SubjectStore = require('../stores/SubjectStore');
 
 class SubjectService extends BaseService {
   constructor() {
-    super();
+    super(); 
     this.store = SubjectStore;
 
     this.baseUrl = APP_CONFIG.data.apiUrl;
@@ -12,6 +12,13 @@ class SubjectService extends BaseService {
     console.log(this.jsonContext);
   }
 
+  /**
+   * @method getSubject
+   * @param {String} id
+   * @description from SubjectModel call
+   * 
+   * @returns {Object} Request
+   */  
   async getSubject(id){
     return this.request({
       url : `${this.baseUrl}/${encodeURIComponent(id)}`,
