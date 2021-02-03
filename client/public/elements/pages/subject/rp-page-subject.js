@@ -12,7 +12,6 @@ import "../../components/icon";
 import "../../components/link-list";
 import "../../components/person-preview";
 import "../../components/subject-preview";
-import CollectionModel from '../../../src/models/CollectionModel.js';
 
 /**
  * @class RpPageSubject
