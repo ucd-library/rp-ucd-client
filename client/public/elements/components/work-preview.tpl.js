@@ -49,11 +49,20 @@ export default function render() {
       font-weight: bold;
       font-style: normal;
     }
+    .title em {
+      font-weight: bold;
+    }
   </style>
   <div class=container>
     <div class="icon-container"><rp-icon icon="iron-description" theme-color='work' circle-bg size-icon="extralgIconWorks" size="extralg"></rp-icon></div>
     <div class="text-container">
-      <a class="title" href="${this.getLink()}" ?disabled="${!this.getLink()}">${this.getTitle()}</a>
+      
+      <a class="title" 
+        href="${this.getLink()}" 
+        ?disabled="${!this.getLink()}">
+        ${unsafeHTML(this.title)}
+      </a>
+      
       <div class="below-title">
         <span class="work-type">${this.getWorkType()}</span>
         ${this.getWorkType() ? html`<span class="mx-1">|</span>` : html``}

@@ -61,7 +61,11 @@ export default function render() {
   <div class=container>
     <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth})}">
-      <a class="name" href="${this.getLandingPage()}" ?disabled="${!this.getLandingPage()}">${this.getLastName()}, ${this.getFirstName()}</a>
+      <a class="name" 
+        href="${this.getLandingPage()}" 
+        ?disabled="${!this.getLandingPage()}">
+        ${unsafeHTML(this.title)}
+      </a>
       <small>${this.getTitle()}</small>
       ${this.showSnippet && this.getSnippet() ? html`
         <div class="snippet">${unsafeHTML(this.getSnippet())}</div>

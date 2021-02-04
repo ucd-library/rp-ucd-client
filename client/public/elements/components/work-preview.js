@@ -1,16 +1,23 @@
 import { LitElement, html } from 'lit-element';
 import render from './work-preview.tpl.js';
 
+import previewUtils from "../../src/lib/preview-utils";
 
+/**
+ * @class RpWorkPreview
+ * @description element for showing works in a list
+ */
 export class RpWorkPreview extends Mixin(LitElement)
-.with(LitCorkUtils) {
+  .with(LitCorkUtils) {
+  
   static get properties() {
-  return {
-    data: {type: Object},
-    showSnippet: {type: Boolean, attribute: 'show-snippet'},
-    authorCt: {type: Number},
-    snippet : {type: String}
-  };
+    return {
+      data: {type: Object},
+      showSnippet: {type: Boolean, attribute: 'show-snippet'},
+      authorCt: {type: Number},
+      snippet : {type: String},
+      title : {type: String}
+    };
   }
 
   constructor() {
@@ -22,20 +29,44 @@ export class RpWorkPreview extends Mixin(LitElement)
     this.render = render.bind(this);
   }
 
+  /**
+   * @method updated
+   * @description lit-element updated method
+   * 
+   * @param {Object} props 
+   */
+  updated(props) {
+    if( props.has('data') ) {
+      let result = previewUtils.getSnippetTitle(
+        this.WorkModel.getLabel(this.data),
+        this.WorkModel.getSnippet(this.data)
+      );
+
+      this.title = result.title;
+      if( result.showSnippet === false ) {
+        this.showSnippet = false;
+      }
+    }
+  }
+
   getTitle(){
     return this.WorkModel.getLabel(this.data);
   }
+
   getLink(){
     return this.WorkModel.getLandingPage(this.data);
   }
+
   getAuthors(){
     let authors = this.WorkModel.getAuthors(this.data);
     this.authorCt = authors.length;
     return authors;
   }
+
   getWorkType(){
     return this.WorkModel.getWorkType(this.data);
   }
+
   getSnippet(){
     return this.WorkModel.getSnippet(this.data);
   }
@@ -76,7 +107,7 @@ export class RpWorkPreview extends Mixin(LitElement)
         return a['vivo:rank'] - b['vivo:rank'];
       });
     }
-return html`<div class="authors">${authors.map(author => html`<a class="author" href="${author.href}" ?disabled="${!author.href}">${author.nameLast}, ${author.nameFirst}</a>; `)}</div>`;
+    return html`<div class="authors">${authors.map(author => html`<a class="author" href="${author.href}" ?disabled="${!author.href}">${author.nameLast}, ${author.nameFirst}</a>; `)}</div>`;
   }
 }
 
