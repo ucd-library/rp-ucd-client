@@ -22,6 +22,14 @@ class WorkModel extends BaseModel {
     this.register('WorkModel');
   }
 
+  /**
+   * @method getWork
+   * @param {String} id
+   * @description query the work from the ID from the
+   * service depending on the state of the work object
+   * 
+   * @returns {Object}
+   */
   async getWork(id) {
     let state = {state : WorkStore.STATE.INIT};
     if( state.state === 'init' ) {
@@ -32,6 +40,15 @@ class WorkModel extends BaseModel {
     return this.store.data.byWork[id];
   }
 
+  /**
+   * @method getAuthorsFullObject
+   * @param {String, Object} 
+   * @description query the work object from the ID and
+   * the authors associated with it, and the service 
+   * depending on the state of the work object
+   * 
+   * @returns {Object}
+   */
   async getAuthorsFullObject(workId, authors) {
     let state = {state : WorkStore.STATE.INIT};
     if( state.state === 'init' ) {
@@ -42,6 +59,15 @@ class WorkModel extends BaseModel {
     return this.store.data.workAuthors[workId];
   }
 
+  /**
+   * @method getAdditionalLinks
+   * @param {Object} 
+   * @description query the work object additional
+   * links that are in the work object and push into
+   * and array to return 
+   * 
+   * @returns {Array}
+   */
   getAdditionalLinks(work) {
     let output = [];
     if (typeof work !== 'object' ) return output;
@@ -69,6 +95,15 @@ class WorkModel extends BaseModel {
     return output
   }
 
+  /**
+   * @method isUsersWork
+   * @param {Object} 
+   * @description query the work object sent in params and 
+   * send it into getAuthors function determine if the user's 
+   * work is within the array returned. 
+   * 
+   * @returns {Boolean}
+   */
   isUsersWork(work) {
     try {
       let authors = this.getAuthors(work);
@@ -84,6 +119,15 @@ class WorkModel extends BaseModel {
     return false;
   }
 
+  /**
+   * @method hasNonInstitutionAuthors
+   * @param {Object} 
+   * @description query the work object sent in params and 
+   * send it into getAuthors function determine if the authors
+   * are or are not part of another university. 
+   * 
+   * @returns {Boolean}
+   */
   hasNonInstitutionAuthors(work){
     try {
       let authors = this.getAuthors(work);
@@ -97,6 +141,14 @@ class WorkModel extends BaseModel {
     
   }
 
+  /**
+   * @method getAuthors
+   * @param {Object} 
+   * @description query the work object and get the authors
+   * from the work object into a formatted structure Object
+   * 
+   * @returns {Object}
+   */  
   getAuthors(work) {
     let authors = [];
     if (typeof work !== 'object' || typeof work.Authorship !== 'object' ) return authors;
@@ -139,10 +191,24 @@ class WorkModel extends BaseModel {
     return authors;
   }
 
+  /**
+   * @method getWorkTypes
+   * @description query collectionModel for the subFacet
+   * works and return that subFacet Object
+   * 
+   * @returns {Object}
+   */  
   getWorkTypes(){
     return this.CollectionModel.subFacets.works;
   }
 
+  /**
+   * @method getWorkType
+   * @param {Object} work
+   * @description calls getWorkTypes() and return the text
+   * 
+   * @returns {String}
+   */  
   getWorkType(work) {
     try {
       for (let t of work['@type']) {
@@ -156,6 +222,14 @@ class WorkModel extends BaseModel {
     return "";
   }
 
+  /**
+   * @method getSnippet
+   * @param {Object} work
+   * @description checks if the snippet exists and if it does
+   * return the string
+   * 
+   * @returns {String}
+   */  
   getSnippet(work){
     let out = "";
     if (!work || !work._snippet) return out;
@@ -163,6 +237,14 @@ class WorkModel extends BaseModel {
     return out;
   }
 
+  /**
+   * @method getPublishedArray
+   * @param {Object} work
+   * @description formats the Published Array from the
+   * object and return it 
+   * 
+   * @returns {Object}
+   */  
   getPublishedArray(work) {
     let output = [];
     if (!work) return output;
@@ -203,7 +285,14 @@ class WorkModel extends BaseModel {
     return output;
   }
 
-
+  /**
+   * @method getSubjects
+   * @param {Object} work
+   * @description gets the subjects from the work object
+   * and returns the object created 
+   * 
+   * @returns {Object}
+   */  
   getSubjects(work) {
     let output = [];
     if (!work) return output;
@@ -220,11 +309,27 @@ class WorkModel extends BaseModel {
     return output;
   }
 
+  /**
+   * @method getLabel
+   * @param {Object} work
+   * @description gets the label from the work object
+   * and returns it if it exists
+   * 
+   * @returns {String}
+   */  
   getLabel(work){
     if (typeof work != 'object' || !work.label) return "";
     return work.label;
   }
 
+  /**
+   * @method getLandingPage
+   * @param {Object} work
+   * @description it gets the id from the work object and adds it to
+   * the url landing which returns as a string
+   * 
+   * @returns {String}
+   */  
   getLandingPage(work) {
     if (typeof work != 'object' || !work['@id']) return "";
     try {
@@ -236,6 +341,14 @@ class WorkModel extends BaseModel {
   }
   }
 
+  /**
+   * @method getFullTextLinks
+   * @param {Object} work
+   * @description taks the urls from the work object and adds it to 
+   * and array which is returned
+   * 
+   * @returns {Array}
+   */  
   getFullTextLinks(work){
     let output = [];
     if (!work) return output;

@@ -54,27 +54,53 @@ export default class RpPageWork extends RpUtilsLanding {
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
+  /**
+   * @method updated
+   * @description lit method called when props update
+   * 
+   * @param {Object} props 
+   */
   updated(props) {
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
     }
   }
 
+  /**
+   * @method connectedCallback
+   * @description lit method called when element is connected to dom
+   */
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('resize', this._handleResize);
   }
 
+  /**
+   * @method disconnectedCallback
+   * @description lit method called when element is disconnected to dom
+   */  
   disconnectedCallback() {
     window.removeEventListener('resize', this._handleResize);
     super.disconnectedCallback();
   }
 
+  /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
   async _onAppStateUpdate(state) {
     requestAnimationFrame( () => this.doUpdate(state));
    }
 
-   async doUpdate(state) {
+  /**
+   * @method doUpdate
+   * @param {Object} state
+   * @description collects the path and set the location to the
+   * work path, then performs the MainQuery with assetId, this will rerender
+   */
+  async doUpdate(state) {
     await this.updateComplete;
     if (!this.visible) {
       return;
@@ -95,6 +121,13 @@ export default class RpPageWork extends RpUtilsLanding {
 
   }
 
+  /**
+   * @method _doMainQuery
+   * @param {String} id
+   * @description Performs primary browse/search query for the work model based on url path and parameters
+   * 
+   * @returns {Promise}
+   */
   async _doMainQuery(id){
     let data = await this.WorkModel.getWork(id);
     this.workStatus = data.state;
@@ -115,6 +148,13 @@ export default class RpPageWork extends RpUtilsLanding {
     console.log("Subjects:",this.subjects);
   }
 
+  /**
+   * @method _doAuthorQuery
+   * @description Performs primary browse/search query for the work model based on url path and parameters
+   * to get the authors for the works
+   * 
+   * @param {String, Object}
+   */
   async _doAuthorQuery(id, authors) {
     this.universityAuthors = [];
     let universityAuthors = authors.filter(author => author.isOtherUniversity == false).map(a => a.apiEndpoint);
@@ -132,12 +172,42 @@ export default class RpPageWork extends RpUtilsLanding {
     this.universityAuthors = universityAuthors;
   }
 
+  /**
+   * @method setPeopleWidth
+   * @description
+   * Sets the text-width property of the rp-work-preview elements on this page.
+   * It's the only way to get the ellipsis overflow on their titles. 
+   * 
+   * @param {Number} w - Window width (pixels)
+   */
+  setPeopleWidth(w) {
+    let pw = 250;
+    let avatarWidth = 82;
+    let screenPadding = 30;
+    pw = (w - screenPadding) * .8 - avatarWidth - 40;
+    this.peopleWidth = Math.floor(pw);
+  }
+
+  /**
+   * @method _handleResize
+   * @description bound to main window resize event
+   */
   _handleResize() {
     if (!this.visible) return;
     let w = window.innerWidth;
     this.setPeopleWidth(w);
   }
 
+  /**
+   * @method _hideStatusSection
+   * @description should a given UI section be hidden based on the
+   * state of this elements property
+   * 
+   * @param {String} status state of call
+   * @param {String} field this elements stored property
+   * 
+   * @returns {Boolean}
+   */
   _hideStatusSection(section, statusProperty="workStatus") {
     if (section == this[statusProperty]) {
       return false;

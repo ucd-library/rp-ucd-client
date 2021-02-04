@@ -22,6 +22,12 @@ export default class RpPageSearch extends RpUtilsCollection {
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
+  /**
+   * @method updated
+   * @description lit method called when props update
+   * 
+   * @param {Object} props 
+   */
   updated(props) {
     super.updated(props);
 
@@ -45,10 +51,21 @@ export default class RpPageSearch extends RpUtilsCollection {
 
   }
 
+  /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
   async _onAppStateUpdate(state) {
     requestAnimationFrame( () => this.doUpdate(state));
   }
 
+  /**
+   * @method doUpdate
+   * @description reset props and update facets, this will rerender
+   * and promise to run MainQuery() and searchAggs()
+   */
   async doUpdate(state){
     await this.updateComplete;
     if (!this.visible) {

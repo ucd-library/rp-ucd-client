@@ -60,7 +60,7 @@ export default function render() {
     <div class=container>
       <div class="icon-container"><rp-icon icon="rp-subject" circle-bg theme-color='subject' size-icon-svg="extralgSVGIcon" size="extralg"></rp-icon></div>
       <div class="text-container">
-        <a class="title" href="${this.getLink()}">${this.getTitle()}</a>
+        <a class="title" href="${this.getLink()}">${unsafeHTML(this.title)}</a>
         <div class="below-title">
           <span>Research Subject</span>
         </div>
