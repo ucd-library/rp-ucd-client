@@ -63,7 +63,7 @@ export default (app) => {
             user.hasProfile = false;
           }
         } catch(e) {
-          logger.log('error parsing jwt token: ', e);
+          logger.info('error parsing jwt token: ', e);
         }
       }
 
