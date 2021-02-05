@@ -3,6 +3,15 @@ const CollectionService = require('../services/CollectionService');
 const CollectionStore = require('../stores/CollectionStore');
 const PersonModel = require('./PersonModel');
 
+// TODO: Ask Justin why we use require here
+//import AssetDefs from "../lib/asset-definitions";
+const AssetDefs = require('../lib/asset-defs');
+const QueryUtils = require('../lib/query-utils');
+
+/**
+ * @class CollectionModel
+ * @description Model for handling a collection of assets. i.e. search, browse.
+ */
 class CollectionModel extends BaseModel {
 
   constructor() {
@@ -12,41 +21,15 @@ class CollectionModel extends BaseModel {
     this.service = CollectionService;
     this.personModel = PersonModel;
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
-    this.mainFacets = [{id: 'people', text: 'People', es: `${this.jsonldContext}:person`,
-                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":person"]}}},
-                       {id: 'subjects', text: 'Subjects', es: `${this.jsonldContext}:subjectArea`,
-                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":subjectArea"]}}},
-                      /*
-                       {id: 'organizations', text: 'Organizations', es: 'ucdrp:organization',
-                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":organization"]}}},
-                      */
-                       {id: 'works', text: 'Works', es: `${this.jsonldContext}:publication`,
-                        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.jsonldContext + ":publication"]}}}
-                      ];
+    this.mainFacets = AssetDefs.getMainFacets();
     this.currentQuery = {};
-    this.subFacets = {
-      people: [
-        {id: 'faculty', es: 'vivo:FacultyMember', text: 'Faculty Member', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:FacultyMember"]}}},
-        {id: 'non-academics', es: 'vivo:NonAcademic', text: 'Non Academic', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:NonAcademic"]}}}
-      ],
-      works: [
-        {id: 'articles', es: "bibo:AcademicArticle", text: 'Academic Article', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:AcademicArticle"]}}},
-        {id: 'books', es: "bibo:Book", text: 'Book', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Book"]}}},
-        {id: 'chapters', es: "bibo:Chapter", text: 'Chapter', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Chapter"]}}},
-        {id: 'conference-papers', es: "vivo:ConferencePaper", text: 'Conference Paper', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:ConferencePaper"]}}}
-      ],
-      subjects: [
-        {id: 'concept', es: "skos:Concept", text: 'Research Subject', baseFilter:{"@type": {"type": "keyword", "op": "and", "value": ["skos:Concept"]}}},
-      ],
-      organizations: [
-        {id: 'universities', es: 'vivo:University', text: 'University', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:University"]}}},
-        {id: 'departments', es: 'vivo:AcademicDepartment', text: 'Department', baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:AcademicDepartment"]}}}
-      ]
-    }
-    this.aggs = {people : {"@type": {"type" : "facet"}},
-                 subject : {"@type": {"type" : "facet"}},
-                 works : {"@type": {"type" : "facet"}},
-                 organizations : {"@type": {"type" : "facet"}}};
+    this.subFacets = AssetDefs.getSubFacets();
+    this.aggs = {
+      people : {"@type": {"type" : "facet"}},
+      subject : {"@type": {"type" : "facet"}},
+      works : {"@type": {"type" : "facet"}},
+      organizations : {"@type": {"type" : "facet"}}
+    };
     this.pgPer = 8;
     this.defaultIndices = ["label.text"];
     this.searchFields = {
@@ -82,7 +65,6 @@ class CollectionModel extends BaseModel {
       ],
       subjects: [
         "label.text^10",
-        //"hasSubjectArea.label.text" //unsure if the subjectArea should be included since it seems to be apart of Works section
       ],
       organizations: [
         "label.text^10"
@@ -92,16 +74,24 @@ class CollectionModel extends BaseModel {
     this.register('CollectionModel');
   }
 
+  /**
+   * @method overview
+   * @description Runs basic aggregation queries for facet counts
+   * @param {String} id - The type of aggregation to run
+   * @param {Object} kwargs - Additional keyword arguments to pass to query
+   * 
+   * @returns {Promise}
+   */
   async overview(id, kwargs={}) {
-    let state = {state : CollectionStore.STATE.INIT};
-    let queryObject = this.getBaseQueryObject();
+
+    let queryObject = QueryUtils.getBaseQueryObject();
 
     if (id == "facets") {
       queryObject.facets["@type"] = {"type" : "facet"};
       queryObject.limit = 0;
     }
     else if (id == "randomPeople") {
-      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":person"]};
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('people').baseFilter);
       queryObject.limit = 4;
       if (kwargs.limit) {
         queryObject.limit = kwargs.limit;
@@ -112,7 +102,7 @@ class CollectionModel extends BaseModel {
       }
     }
     else if (id == "randomSubjects") {
-      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":subjectArea"]};
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('subjects').baseFilter);
       queryObject.limit = 10;
       if (kwargs.limit) {
         queryObject.limit = kwargs.limit;
@@ -123,12 +113,12 @@ class CollectionModel extends BaseModel {
       }
     }
     else if (id == "peopleAggs") {
-      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":person"]};
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('people').baseFilter);
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
     else if (id == "worksAggs") {
-      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":publication"]};
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('works').baseFilter);
       if (kwargs.subjectFilter) {
         queryObject.filters['hasSubjectArea.@id'] = {"type": "keyword", "op": "and", "value": [kwargs.subjectFilter]};
         id = `${id}?subject=${kwargs.subjectFilter}`;
@@ -137,34 +127,44 @@ class CollectionModel extends BaseModel {
       queryObject.facets["@type"] = {"type" : "facet"};
     }
     else if (id == "subjectsAggs") {
-      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":subjectArea"]};
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('subjects').baseFilter);
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
     else if (id == "organizationsAggs") {
-      queryObject.filters["@type"] = {type: 'keyword', op: "and", value: [this.jsonldContext + ":organization"]};
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('organizations').baseFilter);
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
 
-    if( state.state === 'init' ) {
+    let current = this.store.data.overview[id];
+    if( current && current.request ) {
+      await current.request;
+    } 
+    else {
       await this.service.overview(id, queryObject);
-    } else if( state.state === 'loading' ) {
-      await state.request;
     }
     return this.store.data.overview[id];
   }
 
+  /**
+   * @method query
+   * @description Performs the primary search/browse query
+   * @param {Object} userQuery - A simplified query object
+   * 
+   * @returns {Promise}
+   */
   async query(userQuery={}){
-    let state = {state : CollectionStore.STATE.INIT};
 
     let queryObject = this._constructQueryObject(userQuery);
-    let id = this._makeQueryId(queryObject);
+    let id = QueryUtils.getQueryId(queryObject);
 
-    if( state.state === 'init' ) {
+    let current = this.store.data.queryById[id];
+    if( current && current.request ) {
+      await current.request;
+    } 
+    else {
       await this.service.query(id, queryObject);
-    } else if( state.state === 'loading' ) {
-      await state.request;
     }
     return this.store.data.queryById[id];
   }
@@ -172,7 +172,7 @@ class CollectionModel extends BaseModel {
 
   async searchAggQuery(textQuery, mainFacet) {
     let state = {state : CollectionStore.STATE.INIT};
-    let q = this.getBaseQueryObject();
+    let q = QueryUtils.getBaseQueryObject();
     let id = textQuery;
     q.limit = 0;
     q.text = textQuery;
@@ -191,11 +191,13 @@ class CollectionModel extends BaseModel {
   async azAggQuery(mainFacet, subFacet, subjectFilter=false){
     let state = {state : CollectionStore.STATE.INIT};
     let id = `${mainFacet}__${subFacet}`;
+    let hasMainFacet = false;
     if ( subjectFilter ) id = `${id}__${subjectFilter}`;
     let filters = [];
     for (let f of this.mainFacets) {
       if (f.id == mainFacet) {
-        filters.push(f.baseFilter)
+        filters.push(f.baseFilter);
+        hasMainFacet = true;
         break;
       }
     }
@@ -208,15 +210,12 @@ class CollectionModel extends BaseModel {
       }
     }
     if (subjectFilter) filters.push({'hasSubjectArea.@id': {"type": "keyword", "op": "and", "value": [subjectFilter]}});
-    let q = this.getBaseQueryObject();
+    let q = QueryUtils.getBaseQueryObject();
     q.limit = 0;
     q.filters = this._combineFiltersArray(filters);
 
     q.facets = {};
-    let f = this.getAzBaseFilter(mainFacet);
-    if (f) {
-      q.facets[f.key] = {"type": "facet"};
-    }
+    if (hasMainFacet) q.facets[AssetDefs.getAzAggField(mainFacet)] = {"type": "facet"};
 
     if( state.state === 'init' ) {
       await this.service.azAgg(id, q);
@@ -224,48 +223,6 @@ class CollectionModel extends BaseModel {
       await state.request;
     }
     return this.store.data.azAggs[id];
-  }
-
-  getAzBaseFilter(mainFacet) {
-    if (!this.mainFacets.map(e => e.id).includes(mainFacet)) {
-      return;
-    }
-    if (mainFacet == 'people') {
-      return {key: "hasContactInfo.familyName.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
-    }
-    if (mainFacet == 'works') {
-      return {key: "label.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
-    }
-    if (mainFacet == 'subjects') {
-      return {key: "label.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
-    }
-    if (mainFacet == 'organizations') {
-      return {key: "label.firstLetter", value: {"type": "keyword", "op": "and", "value": []}};
-    }
-
-  }
-
-  getBaseQueryObject() {
-    return {offset: 0,
-      limit: 8,
-      sort: [{}],
-      filters: {},
-      facets: {}
-    };
-  }
-
-  _makeQueryId(q){
-    let id = {};
-    for (let key in q) {
-      if (key == 'facets') {
-        continue;
-      }
-      if (key == 'textFields') {
-        continue;
-      }
-      id[key] = q[key]
-    }
-      return JSON.stringify(id);
   }
 
   _getSubFacets(mainFacet, payload, query) {
@@ -434,7 +391,7 @@ class CollectionModel extends BaseModel {
 
   _constructQueryObject(query) {
     let userQuery = JSON.parse(JSON.stringify(query));
-    let queryObject = this.getBaseQueryObject();
+    let queryObject = QueryUtils.getBaseQueryObject();
     let mainFacet = userQuery.mainFacet ? userQuery.mainFacet : 'all';
     if (Object.keys(userQuery).length == 0) {
       return queryObject;
@@ -450,14 +407,9 @@ class CollectionModel extends BaseModel {
 
 
     // a-z filters
-    if (userQuery.azSelected && userQuery.azSelected.toLowerCase() != 'all') {
-      let azFilter = this.getAzBaseFilter(userQuery.mainFacet);
-      if (azFilter) {
-        azFilter.value.value = [userQuery.azSelected];
-        queryObject.filters[azFilter.key]= azFilter.value;
-      }
-
-    }
+    let c1 = userQuery.azSelected && userQuery.azSelected.toLowerCase() != 'all';
+    let c2 = this.mainFacets.map(e => e.id).includes(userQuery.mainFacet);
+    if (c1 && c2) queryObject.filters[AssetDefs.getAzAggField(userQuery.mainFacet)]= QueryUtils.getKeywordFilter(userQuery.azSelected);
 
     // handle search query
     if (userQuery.textQuery) {

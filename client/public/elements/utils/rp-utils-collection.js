@@ -9,6 +9,8 @@ import "../components/person-preview";
 import "../components/work-preview";
 import "../components/subject-preview";
 
+import AssetDefs from "../../src/lib/asset-defs";
+
 /**
  * @class RpUtilsCollection
  * Parent class for page elements that list multiple assets. ie. search and browse.
@@ -215,12 +217,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (data.state != 'loaded') {
       return;
     }
-    let aggKey = this.CollectionModel.getAzBaseFilter(this.currentQuery.mainFacet);
-    if (aggKey && aggKey.key) {
-      this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[aggKey.key]))].filter(x => x != 'all');
-    }
-    else {
-      this.azStatus = 'error';
+    let azAggField = AssetDefs.getAzAggField(this.currentQuery.mainFacet);
+    if (azAggField) {
+      this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[azAggField]))].filter(x => x != 'all');
     }
     console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`, data);
 
