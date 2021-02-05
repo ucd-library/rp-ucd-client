@@ -170,7 +170,7 @@ return html`
   <div class="data" ?hidden="${this.individualStatus == 'loading' || this.individualStatus == 'error' }">
     <div class="page-header container-wide">
       <rp-hero-image id="hero">
-        <div slot="top" class="herotop">
+        <div class="hidden" slot="top" class="herotop">
           <rp-icon icon="iron-link" circle-bg is-link style="margin-right:5px;"></rp-icon>
           <rp-icon icon="rp-qr" circle-bg is-link></rp-icon>
         </div>
@@ -243,9 +243,9 @@ return html`
                   <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
                     <div slot="tooltip">Edit Publications</div>
                   </rp-icon>
+                  <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
                 ` : html``
               }
-              <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
             </div>
 
             <div class="pub-count">${this.totalPublications}</div>
