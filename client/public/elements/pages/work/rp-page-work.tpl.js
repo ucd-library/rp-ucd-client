@@ -143,7 +143,7 @@ return html`
         ${this.work.abstract ? 
           html`
           <h2>Abstract</h2>
-          <div>${this.work.abstract}</div>
+          <div>${unsafeHTML(this.work.abstract)}</div>
           ` 
           :html``
         }
