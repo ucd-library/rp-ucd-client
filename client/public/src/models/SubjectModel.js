@@ -40,6 +40,27 @@ class SubjectModel extends BaseModel {
   }
 
   /**
+   * @method getRandomSubjects
+   * @description load random subject terms.  Used by homepage
+   * 
+   * @param {Number} count 
+   * 
+   * @returns {Promise} state object
+   */
+  async getRandomSubjects(count) {
+    let id = 'random-subject';
+    let state = this.store.data.bySubject[id];
+
+    if( state && state.request ) {
+      await this.state.request;
+    } else {
+      await this.service.getRandomSubjects(id, count);
+    }
+
+    return this.store.data.bySubject[id];
+  }
+
+  /**
    * @method getResearchers
    * @description query the subject's researchers associated with
    * the ID service depending on the state of the subject object

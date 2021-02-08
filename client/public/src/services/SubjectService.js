@@ -35,6 +35,31 @@ class SubjectService extends BaseService {
     });
   }
 
+  /**
+   * @method getRandomSubjects
+   * @description load random subjects.  Used in home page
+   * 
+   * @param {String} id cache id
+   * @param {Number} count count to return
+   * 
+   * @returns {Promise} request 
+   */
+  async getRandomSubjects(id='random-subject', count=10){
+    return this.request({
+      url : `${this.baseUrl}/subject-terms/random/${count}`,
+      fetchOptions : {
+        method : 'GET',
+        headers : {
+          'Content-Type' : 'application/json'
+        }
+      },
+      checkCached : () => this.store.data.bySubject[id],
+      onLoading : request => this.store.setSubjectLoading(id, request),
+      onLoad : result => this.store.setSubjectLoaded(id, result.body),
+      onError : e => this.store.setSubjectError(id, e)
+    });
+  }
+
   async getResearchers(subjectId) {
     let searchObject = {
       offset: 0,
