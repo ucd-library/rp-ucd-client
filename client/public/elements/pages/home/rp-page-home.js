@@ -238,12 +238,9 @@ export default class RpPageHome extends Mixin(LitElement)
    * @returns {Promise}
    */
   async _getSubjects() {
-    let subjects = await this.CollectionModel.overview('randomSubjects', {limit: 10, total: this.subjectsTotal});
-    this.subjectsStatus = subjects.state;
-    if (subjects.state != "loaded") return;
-    this.subjects = subjects.payload.results;
+    let subjects = await this.SubjectModel.getRandomSubjects(10);
+    this.subjects = subjects.payload;
     if (APP_CONFIG.verbose) console.log('subjects: ', this.subjects);
-    
   }
 
   /**
