@@ -6,7 +6,7 @@ import config from '../lib/config.js';
 import esmUtils from '../lib/esm-utils.js';
 import rpNodeUtils from '@ucd-lib/rp-node-utils';
 
-const {logger, auth, elasticSearch} = rpNodeUtils;
+const {logger, auth, elasticSearch, redis} = rpNodeUtils;
 const {__dirname} = esmUtils.moduleLocation(import.meta);
 const assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
 const loaderPath = path.join(assetsDir, 'loader', 'loader.js');
@@ -20,7 +20,11 @@ if( fs.existsSync(loaderPath) ) {
 
 (async function (){
   await elasticSearch.connect();
+  redis.connect();
 })();
+
+const USER_AUTH_PROPS = ['departmentnumber', 'displayname', 'edupersonaffiliation',
+'edupersonprincipalname', 'givenname', 'mail', 'ou', 'sn', 'title', 'uid'];
 
 const bundle = `
   <script>
@@ -57,13 +61,23 @@ export default (app) => {
       if( token ) {
         try {
           user = await auth.verifyToken(token);
+
+          // set has profile flag
           try {
             user.hasProfile = await userExists(user.username);
           } catch(e) {
             user.hasProfile = false;
           }
+
+          // fetch additional user properties
+          let authProps = await redis.client.get(config.redis.prefixes.authProperties+user.username);
+          if( authProps ) {
+            authProps = JSON.parse(authProps);
+            USER_AUTH_PROPS.forEach(prop => user[prop] = authProps[prop]);
+          }
+
         } catch(e) {
-          logger.log('error parsing jwt token: ', e);
+          logger.error('error parsing jwt token: ', e);
         }
       }
 
@@ -76,6 +90,13 @@ export default (app) => {
           roles : [],
           hasProfile : await userExists(req.cookies.impersonate)
         };
+
+        // fetch additional user properties
+        let authProps = await redis.client.get(config.redis.prefixes.authProperties+user.username);
+        if( authProps ) {
+          authProps = JSON.parse(authProps);
+          USER_AUTH_PROPS.forEach(prop => user[prop] = authProps[prop]);
+        }
       }
 
       next({

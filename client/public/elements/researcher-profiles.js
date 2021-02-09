@@ -11,6 +11,7 @@ import "@polymer/iron-icons/iron-icons";
 import "@polymer/iron-icons/av-icons";
 import "@polymer/iron-icons/editor-icons";
 import "@polymer/iron-icons/hardware-icons";
+import "@polymer/iron-pages";
 
 // styles
 import "./styles/properties";
@@ -18,6 +19,7 @@ import "./styles/site";
 
 // main library
 import "../src";
+import userUtils from "../src/lib/user-utils";
 
 // app elements
 import "./components/quick-search";
@@ -28,7 +30,7 @@ import bundles from "./pages/bundles";
 // default pages
 import './pages/terms-of-use/rp-page-tou';
 
-import "@polymer/iron-pages";
+
 
 /**
  * @class ResearcherProfiles
@@ -68,7 +70,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.hideMainNav = false;
     this.textQuery = "";
     this.quickSearchWidth = 220;
-    this.userName = this.user && new String(this.user.username.split('@')[0]);
+    this.userName = userUtils.getUserDisplayName(this.user);
     this.mobileMenuPage = "";
 
     this.isSearch = false;
@@ -85,7 +87,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       this.accountLinks.unshift({text: "Stop Impersonating", action: 'stop-impersonating'}); 
     }
     if( this.hasProfile ){
-      this.accountLinks.unshift({text: "My Profile", href: "/individual/" + this.userName}); 
+      this.accountLinks.unshift({text: "My Profile", href: "/individual/" + this.user.uid}); 
     }
 
 
