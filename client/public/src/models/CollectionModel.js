@@ -32,44 +32,7 @@ class CollectionModel extends BaseModel {
     };
     this.pgPer = 8;
     this.defaultIndices = ["label.text"];
-    this.searchFields = {
-      all: [
-        "doi^10",
-        'hasContactInfo.familyName.text^9',
-        'hasContactInfo.givenName.text^8',
-        "_.organizationLabel.text^6",
-        "_.personLabel.text^6",
-        "_.publicationLabel.text^6",
-        "_.subjectAreaLabel.text^2",
-        "hasSubjectArea.label.text^5",
-        "abstract",
-        'hasContactInfo.title.text',
-        'hasResearchArea.label.text',
-        'hasPublicationVenue.issn',
-        "hasPublicationVenue.label.text",
-        'citation.label^10',
-        '_.top20Citation.label^15',
-        '_.lastCitation.label^15'],
-      people : [
-        'hasContactInfo.familyName.text^9',
-        'hasContactInfo.givenName.text^8',
-        'hasContactInfo.title.text^7',
-        'hasResearchArea.label.text^6',
-        'citation.label'],
-      works: [
-        "doi^10",
-        "label.text^9",
-        "abstract^8",
-        "hasPublicationVenue.label.text^7",
-        "hasPublicationVenue.issn^5",
-      ],
-      subjects: [
-        "label.text^10",
-      ],
-      organizations: [
-        "label.text^10"
-      ]
-    };
+
 
     this.register('CollectionModel');
   }
@@ -150,13 +113,15 @@ class CollectionModel extends BaseModel {
   /**
    * @method query
    * @description Performs the primary search/browse query
-   * @param {Object} userQuery - A simplified query object
+   * @param {Object} elementQuery - A simplified query object that more closely matches the
    * 
    * @returns {Promise}
    */
-  async query(userQuery={}){
+  async query(elementQuery={}){
 
-    let queryObject = this._constructQueryObject(userQuery);
+
+    let queryObject = this.convertElementQuery(elementQuery);
+    //let queryObject = this._constructQueryObject(userQuery);
     let id = QueryUtils.getQueryId(queryObject);
 
     let current = this.store.data.queryById[id];
@@ -176,7 +141,7 @@ class CollectionModel extends BaseModel {
     let id = textQuery;
     q.limit = 0;
     q.text = textQuery;
-    q.textFields =   this.searchFields[mainFacet];
+    q.textFields = AssetDefs.getSearchFields(mainFacet);
     q.facets = {"@type": {"type" : "facet"}};
 
     if( state.state === 'init' ) {
@@ -389,59 +354,64 @@ class CollectionModel extends BaseModel {
 
   }
 
-  
-  _constructQueryObject(query) {
-    let userQuery = JSON.parse(JSON.stringify(query));
-    let queryObject = QueryUtils.getBaseQueryObject();
-    let mainFacet = userQuery.mainFacet ? userQuery.mainFacet : 'all';
-    if (Object.keys(userQuery).length == 0) {
-      return queryObject;
+  /**
+   * @method convertElementQuery
+   * @description Converts the simplified query object used by the html element into the format used by the API
+   * @param {Object} elementQuery - Query object that mirrors element UI
+   * 
+   * @returns {Object} - Query object to be passed to API
+   */
+  convertElementQuery(elementQuery={}){
+    let query = QueryUtils.getBaseQueryObject();
+    if (Object.keys(elementQuery).length == 0) return query;
+
+    // Apply primary facets
+    let mainFacet = AssetDefs.facetExists(elementQuery.mainFacet) ? elementQuery.mainFacet : AssetDefs.defaultFacetId;
+    let subFacet = AssetDefs.subFacetExists(mainFacet, elementQuery.subFacet) ? elementQuery.subFacet : AssetDefs.defaultFacetId;
+    if ( mainFacet != AssetDefs.defaultFacetId && subFacet != AssetDefs.defaultFacetId ) {
+      query.filters['@type'] = QueryUtils.getKeywordFilter([
+        AssetDefs.getMainFacetById(mainFacet).es,
+        AssetDefs.getSubFacetById(mainFacet, subFacet).es
+      ]);
+    }
+    else if( mainFacet != AssetDefs.defaultFacetId ) {
+      query.filters = AssetDefs.getMainFacetById(mainFacet).baseFilter;
     }
 
-    // subject filter
-    if (mainFacet == 'works' && userQuery.subjectFilter) {
-      queryObject.filters['hasSubjectArea.@id'] = {"type": "keyword", "op": "and", "value": [userQuery.subjectFilter]};
+    // Apply subject filter
+    if ( elementQuery.subjectFilter ) {
+      query.filters[`${AssetDefs.getAreaField(mainFacet)}.@id`] = AssetDefs.getKeywordFilter(elementQuery.subjectFilter);
     }
 
-    // merge filters into a single object
-    queryObject.filters = {...queryObject.filters, ...this._combineFiltersArray(userQuery.filters)}
+    // Apply a-z filters
+    let c1 = elementQuery.azSelected && elementQuery.azSelected.toLowerCase() != AssetDefs.defaultAzId;
+    let c2 = mainFacet != AssetDefs.defaultFacetId;
+    if (c1 && c2) query.filters[AssetDefs.getAzAggField(mainFacet)]= QueryUtils.getKeywordFilter(elementQuery.azSelected);
 
+    // Apply search text query filter
+    if (elementQuery.textQuery) {
+      query.text = elementQuery.textQuery;
+      query.textFields = AssetDefs.getSearchFields(mainFacet);
 
-    // a-z filters
-    let c1 = userQuery.azSelected && userQuery.azSelected.toLowerCase() != 'all';
-    let c2 = this.mainFacets.map(e => e.id).includes(userQuery.mainFacet);
-    if (c1 && c2) queryObject.filters[AssetDefs.getAzAggField(userQuery.mainFacet)]= QueryUtils.getKeywordFilter(userQuery.azSelected);
-
-    // handle search query
-    if (userQuery.textQuery) {
-      queryObject.text = userQuery.textQuery;
-      queryObject.textFields = this.searchFields[mainFacet];
-
-      // get aggs for search query
-      if ( Object.keys(this.aggs).includes(userQuery.mainFacet)) {
-        queryObject.facets = this.aggs[userQuery.mainFacet];
-      }
-      else {
-        queryObject.facets = {"@type": {"type" : "facet"}};
-      }
+      // Apply faceting to query
+      query.facets = QueryUtils.defaultTypeFacet;
     }
-    // asset browsing pages
+    // No search text query. Just sort by title
     else {
-      queryObject.sort = [{"label": "asc"}];
-      // queryObject.facets = {"hasContactInfo.familyName.firstLetter" : {"type": "facet"}}; MOVED TO OWN QUERY
+      query.sort = QueryUtils.defaultBrowseSort;
     }
 
-    // compute offset if pagination parameter is sent
-    if (userQuery.offset) {
-      queryObject.offset = userQuery.offset;
+    // Apply pagination
+    if (elementQuery.offset) {
+      query.offset = elementQuery.offset;
     }
-    else if (userQuery.pgCurrent) {
+    else if (elementQuery.pgCurrent) {
       let pg = this.pgPer;
-      if (userQuery.pgPer) pg = userQuery.pgPer;
-      queryObject.offset = userQuery.pgCurrent * pg - pg;
+      if (elementQuery.pgPer) pg = elementQuery.pgPer;
+      query.offset = elementQuery.pgCurrent * pg - pg;
     }
 
-    return queryObject
+    return query;
   }
 
   _combineFiltersArray(filters){
@@ -527,50 +497,6 @@ class CollectionModel extends BaseModel {
     path += args.join('&');
 
     return path;
-  }
-
-
-  _formatPeople(people) {
-    let out = []
-    for (let person of people) {
-      let p = this._formatPerson(person);
-      out.push(p)
-    }
-    return out;
-  }
-
-  _formatPerson(person) {
-    console.log(person)
-    let p = {
-      name: person.label ? person.label : "", 
-      title: "", 
-      "@id": person['@id'],
-      snippet: person._snippet
-    };
-    p.name=this.personModel.getBestLabel(person);
-    p.title=this.personModel.getHeadlineTitle(person);
-    p['id'] = person['@id'].replace(this.jsonldContext + ":", "");
-    return p;
-
-  }
-
-  _formatAgg(agg, prefix, splitCamel=true) {
-    if (prefix && agg.startsWith(prefix)) {
-      agg = agg.slice(prefix.length,);
-    }
-    if (splitCamel) {
-      agg = [...agg];
-      for (let i = 0; i < agg.length; i++) {
-        if (i == 0) {
-          continue;
-        }
-        if (agg[i] == agg[i].toUpperCase()) {
-          agg[i] = " " + agg[i];
-        }
-      }
-      agg = agg.join("");
-    }
-    return agg;
   }
 
 }

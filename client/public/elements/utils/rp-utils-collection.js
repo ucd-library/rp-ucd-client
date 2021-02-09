@@ -37,7 +37,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       pgCurrent: {type: Number},
       textQuery: {type: String},
       subjectFilter: {type: String},
-      dataFilters: {type: Array},
       data: {type: Array},
       dataStatus: {type: String},
       dataTotal: {type: Number},
@@ -77,7 +76,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.dataTotal = 0;
 
     this.currentQuery = {};
-    this.dataFilters = [];
     this.subjectFilter = "";
 
     this.pgPer = 8;
@@ -121,6 +119,19 @@ export default class RpUtilsCollection extends Mixin(LitElement)
         if (subfacet.ct > 0) subfacetCt += 1;
       }
       this.subFacetsWithResultsCt = subfacetCt;
+    }
+
+    // get menu index of active subfilter
+    if ( props.has('subFacet') ) {
+      this.subFacetIndex = 0;
+      let i = 1;
+      for (const subfacet of AssetDefs.getSubFacetsByMainId(this.mainFacet)) {
+        if (subfacet.id == this.subFacet) {
+          this.subFacetIndex = i;
+          break;
+        }
+        i++;
+      }
     }
   }
 
@@ -245,46 +256,22 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (!state) state = this.AppStateModel.store.data;
     let path = state.location.path;
     let query = state.location.query;
-
-    // get primary facet of query
     if (path.length < 1) return;
 
     // get primary facet of query
-    let facetFromPath = "";
     if (path[0] == 'search' && path.length > 1) {
-      facetFromPath = path[1].toLowerCase();
+      this.mainFacet = path[1].toLowerCase();
     }
     else {
-      facetFromPath = path[0].toLowerCase();
-    }
-    for (let f of this.CollectionModel.mainFacets) {
-      if (facetFromPath == f.id.toLowerCase() ) {
-        this.mainFacet = facetFromPath;
-        this.dataFilters.push(f.baseFilter);
-        break;
-      }
+      this.mainFacet = path[0].toLowerCase();
     }
 
-    // get subfacet pf query if applicable
-    let subFacetFromPath = "";
+    // get subfacet of query
     if (path[0] == 'search' && path.length > 2) {
-      subFacetFromPath = path[2].toLowerCase();
+      this.subFacet = path[2].toLowerCase();
     }
     else if (path[0] != 'search' && path.length > 1) {
-      subFacetFromPath = path[1].toLowerCase();
-    }
-    if (this.CollectionModel.subFacets[this.mainFacet]) {
-      let i = 1;
-      for (let f of this.CollectionModel.subFacets[this.mainFacet]) {
-        if (f.id == subFacetFromPath) {
-          this.subFacet = subFacetFromPath;
-          this.subFacetIndex = i;
-          this.dataFilters.push(f.baseFilter);
-          break;
-        }
-        i += 1;
-      }
-
+      this.subFacet = path[1].toLowerCase();
     }
 
     // get any query arguments
@@ -331,9 +318,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
     if (this.subjectFilter) q.subjectFilter = this.subjectFilter;
 
-    if (this.dataFilters) {
-      q.filters = this.dataFilters;
-    }
     if (this.mainFacet && this.mainFacet != 'none') {
       q.mainFacet = this.mainFacet;
     }
@@ -449,20 +433,11 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if ( !Array.isArray(data['@type']) ) {
       return "";
     }
-
-    if (data['@type'].includes(this.jsonldContext + ":person")) {
-      return "person";
+    for (const asset of AssetDefs.getMainFacets()) {
+      if ( data['@type'].includes(asset.es) ) {
+        return asset.idSingular;
+      }
     }
-    if (data['@type'].includes(this.jsonldContext + ":subjectArea")) {
-      return "subject";
-    }  
-    if (data['@type'].includes(this.jsonldContext + ":publication")) {
-      return "work";
-    }
-    if (data['@type'].includes(this.jsonldContext + ":organization")) {
-      return "organization";
-    }
-
     return "";
   }
 

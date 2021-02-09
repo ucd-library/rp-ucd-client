@@ -1,8 +1,14 @@
+const AssetDefs = require('./asset-defs');
+
 /**
  * @class QueryUtils
  * @description Utility class for interacting with the API
  */
 class QueryUtils {
+  constructor(){
+    this.defaultTypeFacet = {"@type": {"type" : "facet"}};
+    this.defaultBrowseSort = [{"label": "asc"}];
+  }
 
   /**
    * @method getBaseQueryObject
@@ -20,18 +26,11 @@ class QueryUtils {
   }
 
   /**
-   * @method convertUserQuery
-   */
-  convertUserQuery(){
-
-  }
-
-  /**
    * @method getQueryId
    * @description Constructs a string id from a query object
    * @param {Object} q - a query object
    * 
-   * @returns - A stringified version of the query
+   * @returns {String} - A stringified version of the query
    */
   getQueryId(q) {
     if (!q) q = this.getBaseQueryObject();

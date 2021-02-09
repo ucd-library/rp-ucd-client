@@ -5,6 +5,8 @@
 class AssetDefs {
   constructor() {
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
+    this.defaultFacetId = 'none';
+    this.defaultAzId = 'all';
   }
 
   /**
@@ -16,34 +18,59 @@ class AssetDefs {
   getMainFacets(){
     return [
       {
-        id: 'people', 
+        id: 'people',
+        idSingular: 'person',
         text: 'People', 
         es: this.addContext('person'),
         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.addContext('person')]}},
-        azField: "hasContactInfo.familyName.firstLetter"
+        azField: "hasContactInfo.familyName.firstLetter",
+        areaField: "hasResearchArea",
+        facetedSearchFields: [
+          'hasContactInfo.familyName.text^9',
+          'hasContactInfo.givenName.text^8',
+          'hasContactInfo.title.text^7',
+          'hasResearchArea.label.text^6',
+          'citation.label']
       }, 
       {
-        id: 'subjects', 
+        id: 'subjects',
+        idSingular: 'subject',
         text: 'Subjects', 
         es: this.addContext('subjectArea'),
         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.addContext('subjectArea')]}},
-        azField: "label.firstLetter"
+        azField: "label.firstLetter",
+        facetedSearchFields: [
+          "label.text^10"
+        ]
       },
       /*
       {
         id: 'organizations', 
+        idSingular: 'organization',
         text: 'Organizations', 
         es: this.addContext('organization'),
         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.addContext('organization')]}},
-        azField: "label.firstLetter"
+        azField: "label.firstLetter",
+        facetedSearchFields: [
+          "label.text^10"
+        ]
       },
       */
       {
         id: 'works', 
+        idSingular: 'work',
         text: 'Works', 
         es: this.addContext('publication'),
         baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.addContext('publication')]}},
-        azField: "label.firstLetter"
+        azField: "label.firstLetter",
+        areaField: "hasSubjectArea",
+        facetedSearchFields: [
+          "doi^10",
+          "label.text^9",
+          "abstract^8",
+          "hasPublicationVenue.label.text^7",
+          "hasPublicationVenue.issn^5"
+        ]
       }
     ];
   }
@@ -122,6 +149,37 @@ class AssetDefs {
   }
 
   /**
+   * @method getSearchFields
+   * @description Returns a list of fields to use in a text search.
+   * @param {String} facet - An optional facet id.
+   * 
+   * @returns {String[]}
+   */
+  getSearchFields(facet) {
+    for (const f of this.getMainFacets()) {
+      if (f.id == facet) return f.facetedSearchFields;
+    }
+    return [
+      "doi^10",
+      'hasContactInfo.familyName.text^9',
+      'hasContactInfo.givenName.text^8',
+      "_.organizationLabel.text^6",
+      "_.personLabel.text^6",
+      "_.publicationLabel.text^6",
+      "_.subjectAreaLabel.text^2",
+      "hasSubjectArea.label.text^5",
+      "abstract",
+      'hasContactInfo.title.text',
+      'hasResearchArea.label.text',
+      'hasPublicationVenue.issn',
+      "hasPublicationVenue.label.text",
+      'citation.label^10',
+      '_.top20Citation.label^15',
+      '_.lastCitation.label^15'
+    ];
+  }
+
+  /**
    * @method getAzAggField
    * @description Returns field for performing AZ aggregations
    * @param {String} facet - A Facet id.
@@ -133,6 +191,20 @@ class AssetDefs {
       if (f.id == facet) return f.azField;
     }
     return "label.firstLetter";
+  }
+
+  /**
+   * @method getAreaField
+   * @description Returns fields for filtering by subject/research area
+   * @param {*} facet - A Facet id.
+   * 
+   * @returns {String} An elasticsearch field
+   */
+  getAreaField(facet){
+    for (const f of this.getMainFacets()) {
+      if (f.id == facet) return f.areaField;
+    }
+    return "";
   }
 
   /**
@@ -164,6 +236,44 @@ class AssetDefs {
       if (subFacetId == f.id) return f;
     }
     return {};
+  }
+
+  /**
+   * @method facetExists
+   * @description Checks if a facet is defined
+   * @param {*} id - facet id
+   * 
+   * @returns {Boolean}
+   */
+  facetExists(id){
+    let f = this.getMainFacetById(id);
+    return Object.keys(f).length > 0;
+  }
+
+  /**
+   * @method subFacetExists
+   * @description Checks if a subfacet is defined
+   * @param {String} mainFacetId 
+   * @param {String} subFacetId 
+   * 
+   * @returns {Boolean}
+   */
+  subFacetExists(mainFacetId, subFacetId){
+    let f = this.getSubFacetById(mainFacetId, subFacetId);
+    return Object.keys(f).length > 0;
+  }
+
+  /**
+   * @method getSubFacetsByMainId
+   * @description Retrieves ordered list of subfacets for a main facet
+   * @param {String} id - Main Facet Id
+   * 
+   * @returns {Object[]}
+   */
+  getSubFacetsByMainId(id) {
+    let facets = this.getSubFacets()[id];
+    if ( !facets ) return [];
+    return facets;
   }
 
   /**
