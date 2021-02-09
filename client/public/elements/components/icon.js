@@ -58,6 +58,12 @@ export class RpIcon extends LitElement {
     }
   }
 
+  /**
+   * @method getIconSize
+   * @description return the size of the icon depending on the 
+   * assigned sizeIcon
+   * @return {Integer} 
+   */
   getIconSize(){
     let size = this.iconPixelSize;
     if (this.sizeIconSVG == 'extralgIconSubject' || this.sizeIcon == 'extralgIconSubject') {
@@ -79,11 +85,23 @@ export class RpIcon extends LitElement {
     return size;
   }
 
+  /**
+   * @method getIconSizeStyles
+   * @description return the object of the style assigned
+   * icons and calls the getIconSize
+   * @return {Object} 
+   */
   getIconSizeStyles(){
     let size = `${this.getIconSize()}px`;
     return {'width': size, "min-width": size, 'height': size};
   }
 
+  /**
+   * @method getCircleSize
+   * @description returns the size of the circle based on the 
+   * size of the icon
+   * @return {Integer} 
+   */
   getCircleSize(){
     let size = this.circlePixelSize;
     if (this.size == 'lg') {
@@ -95,11 +113,23 @@ export class RpIcon extends LitElement {
     return size;
   }
 
+  /**
+   * @method getCircleSizeStyles
+   * @description return the object of the style assigned
+   * circles of icon and calls the getCircleSize
+   * @return {Object} 
+   */
   getCircleSizeStyles(){
     let size = `${this.getCircleSize()}px`;
     return {'width': size, "min-width": size, 'height': size};
   }
 
+  /**
+   * @method _constructClasses
+   * @description Constructs CSS classes based on element properties
+   * 
+   * @returns {Object}
+   */
   constructClasses() {
     let classes = {};
     if ( (!this.icon ) || (this.icon == "iron-") ) {
@@ -134,12 +164,24 @@ export class RpIcon extends LitElement {
     return classes;
   }
 
+  /**
+   * @method _calculateViewBox
+   * @description return the calcuation of the viewbox
+   * for each icon size and calls getIconSize
+   * @return {String} 
+   */
   _calculateViewBox() {
     let size = this.getIconSize();
     if (this.icon == 'rp-subject') size = 24;
     return `0 0 ${size} ${size}`;
   }
 
+  /**
+   * @method renderIcon
+   * @description renders the icon depending on if it is
+   * and iron icon or a custom icon as an html
+   * @return {HTML} 
+   */
   renderIcon() {
     if ( (!this.icon ) || (this.icon == "iron-") ) {
       return html``;
@@ -156,10 +198,23 @@ export class RpIcon extends LitElement {
     return html``;
   }
 
+  /**
+   * @method _renderCustomIcon
+   * @description returns the custom icon definition defined
+   * above in the constructor
+   * @return {HTML} 
+   */
   _renderCustomIcon(icon) {
     return this._customIcons[icon];
   }
 
+  /**
+   * @method _isCustomIcon
+   * @param {Object} icon
+   * @description returns if it is a custom icon or not
+   * 
+   * @return {Boolean} 
+   */
   _isCustomIcon(icon){
     if (icon.startsWith('rp-')) icon = icon.split("-").slice(1).join('-');
     if (Object.keys(this._customIcons).includes(icon)) {

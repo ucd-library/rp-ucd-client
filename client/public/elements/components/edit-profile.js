@@ -63,6 +63,12 @@ export class RpProfileAboutEditor extends LitElement {
     this.requestUpdate();
   }  
 
+  /**
+   * @method _constructClasses
+   * @description Constructs CSS classes based on element properties
+   * 
+   * @returns {Object}
+   */
   _constructClasses() {
     let classes = {};
     classes[this.themeColor] = true;
@@ -70,6 +76,13 @@ export class RpProfileAboutEditor extends LitElement {
     return classes;
   }
 
+  /**
+   * @method setData
+   * 
+   * @description sets data fields to be empty on initialization
+   * 
+   * @param {Object} data
+   */
   setData(data) {
     this.emailTextField = data.email || [{value: '', default: true}];
     this.phoneTextField = data.phone || '';
@@ -77,6 +90,14 @@ export class RpProfileAboutEditor extends LitElement {
     this.overviewText = data.overview || '';
   }
 
+  /**
+   * @method getData
+   * 
+   * @description returns the data that is being stored at this 
+   * time in the constructor variables
+   * 
+   * @return {Object} 
+   */
   getData() {
     return {
       email : this.emailTextField || [],

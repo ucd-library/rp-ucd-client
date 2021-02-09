@@ -41,13 +41,36 @@ export class RpSubjectPreview extends Mixin(LitElement)
       }
     }
   }
-
+  /**
+   * @method getTitle
+   * @description calls the getLink function gets the 
+   * preferred the subject name if it exists and the 
+   * standard subject name if it doesn't
+   * 
+   * @return {String}  
+   */
   getTitle(){
     return this.SubjectModel.getPreferredLabel(this.data);
   }
+
+  /**
+   * @method getLink
+   * @description calls the getLink function gets the url 
+   * for the landing page based off the subject ID
+   * 
+   * @return {URL} 
+   */
   getLink(){
     return this.SubjectModel.getLandingPage(this.data);
   }
+
+  /**
+   * @method getTitle
+   * @description calls the getSnippet function in subject
+   * model and returns it based on subject
+   * 
+   * @return {String}  
+   */
   getSnippet(){
     return this.SubjectModel.getSnippet(this.data);
   }
