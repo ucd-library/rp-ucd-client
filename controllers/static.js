@@ -86,7 +86,7 @@ export default (app) => {
         logger.info(`user ${user.username} is impersonating: ${req.cookies.impersonate}`);
         user = {
           impersonatedBy : user,
-          username : req.cookies.impersonate+'@ucdavis.edu',
+          username : req.cookies.impersonate,
           roles : [],
           hasProfile : await userExists(req.cookies.impersonate)
         };
