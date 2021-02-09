@@ -13,7 +13,7 @@ export default class RpPagePeople extends RpUtilsCollection {
     return {
     }
   }
-
+ 
   constructor() {
     super();
     this.render = render.bind(this);
@@ -21,9 +21,21 @@ export default class RpPagePeople extends RpUtilsCollection {
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
+  /**
+   * @method _onAppStateUpdate
+   * @param {Object} state 
+   * @description bound to AppStateModel app-state-update event
+   * 
+   */
   async _onAppStateUpdate(state) {
     requestAnimationFrame( () => this.doUpdate(state));
   }
+
+  /**
+   * @method doUpdate
+   * @param {Object} state
+   * @description reset props and update facets, this will rerender
+   */
 
   async doUpdate(state){
     await this.updateComplete;
@@ -34,6 +46,12 @@ export default class RpPagePeople extends RpUtilsCollection {
     await Promise.all([this._doMainQuery(), this._getFacets(), this._getAzAgg()]);
   }
 
+  /**
+   * @method _getFacets
+   * @description load and render the current overview subject facet list
+   * 
+   * @returns {Promise}
+   */
   async _getFacets() {
     let activeFilters = {};
     let peopleAggs = await this.CollectionModel.overview('peopleAggs');

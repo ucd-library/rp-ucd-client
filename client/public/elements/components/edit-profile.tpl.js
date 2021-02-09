@@ -179,12 +179,15 @@ export default function render() {
     <div class="dotted-break"></div>
 
     <h3>Overview</h3>
-      <textarea name="overview" .value="${this.overviewText}"></textarea>
+      <textarea name="overview" .value="${this.overviewText}">
+      </textarea>
     </div>
 
     <h3>Positions</h3>
-    Position information is managed via <a style="color:#355B85" href=""><strong>UC Path/HR</strong></a>. Any changes made there will be reflected
-       on your registry profile.
+    Position information is managed via 
+    <a style="color:#355B85" href=""><strong>UC Path/HR</strong></a>. 
+    Any changes made there will be reflected
+    on your registry profile.
 
     <div class="container">
       <h3>Contact</h3>
@@ -205,17 +208,35 @@ export default function render() {
             @change="${this._onArrayValueChange}"
             />
           </div>
-          <input type="radio" name="primary" id="primary-${index}" ?checked="${item.default}" />
+          <input type="radio" 
+            name="primary" 
+            id="primary-${index}" 
+            ?checked="${item.default}"
+            />
           <div class="reveal-if-active">Primary</div>
-          <button type='button' @click=${() => this._delete(this.emailTextField, index)}  class='delete' id='delete'>
-            <rp-icon icon="iron-close" circle-bg is-link></rp-icon> 
+          <button type='button' 
+            @click=${() => this._delete(this.emailTextField, index)}  
+            class='delete' 
+            id='delete'>
+            <rp-icon icon="iron-close" 
+              circle-bg 
+              is-link>
+            </rp-icon> 
           </button>
         </div>
       `)}
 
       </div>
-      <button type="button" class="icon-button" @click="${this._addEmail}" style="margin-top: 5px" >
-        <iron-icon icon="add-circle" circle-bg ></iron-icon> <span style="color: #355B85">Add Email</span> 
+      <button type="button" 
+        class="icon-button" 
+        @click="${this._addEmail}" 
+        style="margin-top: 5px" >
+        <iron-icon icon="add-circle" 
+          circle-bg >
+        </iron-icon> 
+        <span style="color: #355B85">
+          Add Email
+        </span> 
       </button>  
     </div>
 
@@ -225,7 +246,12 @@ export default function render() {
       <div class="wrapper"><label for="phone" >Phone</label></div>
       <div id="phone-field">
       <div class="wrapper">
-          <div class="textbox maxwidth"><input type=text name="phone" class="flexible-width-radio" id="phone" /></div>
+          <div class="textbox maxwidth">
+            <input type=text 
+              name="phone" 
+              class="flexible-width-radio" 
+              id="phone" />
+          </div>
       </div>
     </div>
 
@@ -270,7 +296,10 @@ export default function render() {
         </div> 
         `)}
       </div>
-      <button type="button" class="icon-button" @click="${this._addWebsite}" style="margin-top: 5px" >
+      <button type="button" 
+        class="icon-button" 
+        @click="${this._addWebsite}" 
+        style="margin-top: 5px" >
         <iron-icon icon="add-circle" circle-bg ></iron-icon> <span style="color: #355B85">Add Website</span> 
       </button>     
     </div>

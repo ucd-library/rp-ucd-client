@@ -10,7 +10,14 @@ class WorkService extends BaseService {
     this.baseUrl = APP_CONFIG.data.apiUrl;
     this.jsonContext = APP_CONFIG.data.jsonldContext;
   }
-
+ 
+  /**
+   * @method getWork
+   * @param {String} id
+   * @description from WorkModel call
+   * 
+   * @returns {Object} Request
+   */  
   async getWork(id) {
     return this.request({
       url : `${this.baseUrl}/${this.jsonContext}%3Apublication${id}`,
@@ -27,6 +34,15 @@ class WorkService extends BaseService {
     });
   }
 
+  /**
+   * @method getAuthors
+   * @description load authors associated with each work
+   * 
+   * @param {String} workId work
+   * @param {Object} authorArray author array
+   * 
+   * @returns {Promise} request 
+   */
   async getAuthors(workId, authorArray) {
     return this.request({
       url : `${this.baseUrl}/${authorArray.join(',')}`,

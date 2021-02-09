@@ -10,7 +10,7 @@ class SubjectService extends BaseService {
     this.searchUrl = APP_CONFIG.data.apiUrl + "/search";
     this.jsonContext = APP_CONFIG.data.jsonldContext;
     console.log(this.jsonContext);
-  }
+  } 
 
   /**
    * @method getSubject
@@ -60,6 +60,14 @@ class SubjectService extends BaseService {
     });
   }
 
+  /**
+   * @method getResearchers
+   * @description load researchers associated with each subject
+   * 
+   * @param {String} id subject
+   * 
+   * @returns {Promise} request 
+   */
   async getResearchers(subjectId) {
     let searchObject = {
       offset: 0,
@@ -85,6 +93,14 @@ class SubjectService extends BaseService {
     });
   }
 
+  /**
+   * @method getPubOverview
+   * @description load publications associated with the subject ids
+   * 
+   * @param {String} id subject
+   * 
+   * @returns {Promise} request 
+   */
   async getPubOverview(subjectId) {
     let searchObject = {
       offset: 0,
@@ -113,7 +129,18 @@ class SubjectService extends BaseService {
       onError : e => this.store.setPubOverviewError(subjectId, e)
     });
   } 
-
+  
+  /**
+   * @method getPubs
+   * @description get individual publications from the publications associated with
+   * each subject
+   * 
+   * @param {String} subjectid subject id
+   * @param {String} id cache id
+   * @param {Type} pubtype publicaton type
+   * 
+   * @returns {Promise} request 
+   */
   async getPubs(subjectId, cacheId, pubType) {
     let searchObject = {
       offset: 0,
