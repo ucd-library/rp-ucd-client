@@ -238,20 +238,18 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    */
   _parseUrlQuery(state){
 
-    // get current location
-    if (!state) {
-      state = this.AppStateModel.store.data;
-    }
-    let path = state.location.path;
-    let query = state.location.query;
-    // start fresh
+    // reset element query properties
     this._resetQueryProperties();
 
-    // get primary facet of query
-    if (path.length < 1) {
-      return;
-    }
+    // get current app location
+    if (!state) state = this.AppStateModel.store.data;
+    let path = state.location.path;
+    let query = state.location.query;
 
+    // get primary facet of query
+    if (path.length < 1) return;
+
+    // get primary facet of query
     let facetFromPath = "";
     if (path[0] == 'search' && path.length > 1) {
       facetFromPath = path[1].toLowerCase();

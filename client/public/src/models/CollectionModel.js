@@ -389,6 +389,7 @@ class CollectionModel extends BaseModel {
 
   }
 
+  
   _constructQueryObject(query) {
     let userQuery = JSON.parse(JSON.stringify(query));
     let queryObject = QueryUtils.getBaseQueryObject();

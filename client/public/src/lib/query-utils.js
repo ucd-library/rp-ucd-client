@@ -20,6 +20,13 @@ class QueryUtils {
   }
 
   /**
+   * @method convertUserQuery
+   */
+  convertUserQuery(){
+
+  }
+
+  /**
    * @method getQueryId
    * @description Constructs a string id from a query object
    * @param {Object} q - a query object
