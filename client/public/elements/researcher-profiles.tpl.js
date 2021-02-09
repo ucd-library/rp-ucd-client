@@ -306,7 +306,7 @@ return html`
         <a class="no-decoration" href="/help">Help</a>
         ${this.user ? html`     
               <rp-dropdown no-padding
-                sticky-title="${this.user.username.split('@')[0]}"
+                sticky-title="${this.userName}"
                 use-links
                 .choices= ${this.accountLinks}
                 @new-selection=${this._handleUserDropdownSelection}>
@@ -321,7 +321,7 @@ return html`
     <hr class="mb-0 mt-0 light dashed">
     </div>
 
-    
+
     <div id="nav-container" class="container flex flex-wrap align-items-center justify-content-between">
       <rp-icon @click="${this.closeQuickSearch}" ?hidden="${!this.hideMainNav}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
       <div id="nav-left" class="flex align-items-center bold" ?hidden="${this.hideMainNav}">
