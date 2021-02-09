@@ -186,14 +186,14 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.about = data.payload.description;
 
     //delete this when description is added
-    if(!this.about){ 
-      this.about = `Lorem ipsum dolor sit amet, consectetur 
-                    adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua. 
-                    Ut enim ad minim veniam, quis nostrud 
-                    exercitation ullamco laboris nisi ut aliquip 
-                    ex ea commodo consequat.`
-    }
+    // if(!this.about){ 
+    //   this.about = `Lorem ipsum dolor sit amet, consectetur 
+    //                 adipiscing elit, sed do eiusmod tempor 
+    //                 incididunt ut labore et dolore magna aliqua. 
+    //                 Ut enim ad minim veniam, quis nostrud 
+    //                 exercitation ullamco laboris nisi ut aliquip 
+    //                 ex ea commodo consequat.`
+    // }
     
 
     if (APP_CONFIG.verbose) console.log("description:", data);
