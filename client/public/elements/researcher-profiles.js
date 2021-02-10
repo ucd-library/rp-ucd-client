@@ -87,7 +87,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       this.accountLinks.unshift({text: "Stop Impersonating", action: 'stop-impersonating'}); 
     }
     if( this.hasProfile ){
-      this.accountLinks.unshift({text: "My Profile", href: "/individual/" + this.user.username.split['@'][0]}); 
+      this.accountLinks.unshift({text: "My Profile", href: "/individual/" + this.user.username.split('@')[0]}); 
     }
 
 
