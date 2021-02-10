@@ -51,29 +51,91 @@ export class RpPersonPreview extends Mixin(LitElement)
     }
   }
 
+  /**
+   * @method getName
+   * @description calls the getBestLabel function gets the 
+   * preferred the person label if it exists 
+   * @return {String}  
+   */
   getName() {
     if (!this.data) return "";
     return this.PersonModel.getBestLabel(this.data);
   }
 
+  /**
+   * @method getFirstName
+   * @description calls the getFirstName function gets the 
+   * first name of the person from the person object
+   * 
+   * @return {String}  
+   */
   getFirstName() {
     return this.PersonModel.getNameObject(this.data).fname;
   }
+
+  /**
+   * @method getLastName
+   * @description calls the getLastName function gets the 
+   * last name of the person from the person object
+   * 
+   * @return {String}  
+   */
   getLastName() {
     return this.PersonModel.getNameObject(this.data).lname;
   }
+
+  /**
+   * @method getAvatar
+   * @description calls the getAvatar function gets the 
+   * avatar type of the person from the person object
+   * 
+   * @return {Object}  
+   */
   getAvatar() {
     return this.PersonModel.getAvatarSrc(this.data);
   }
+
+  /**
+   * @method getLandingPage
+   * @description calls the getLandingPage function and 
+   * creates the url and from the person id
+   * 
+   * @return {URL}  
+   */
   getLandingPage() {
     return this.PersonModel.getLandingPage(this.data);
   }
+
+  /**
+   * @method getTitle
+   * @description calls the getTitle function gets the 
+   * headline title of the person from the person object
+   * 
+   * @return {String}  
+   */
   getTitle(){
     return this.PersonModel.getHeadlineTitle(this.data);
   }
+
+  /**
+   * @method getSnippet
+   * @description calls the getSnippet function gets the 
+   * description of the person from the person object
+   * 
+   * @return {String}  
+   */
   getSnippet(){
     return this.PersonModel.getSnippet(this.data);
   }
+
+  /**
+   * @method getSubjects
+   * @description calls the getResearchSubjects function gets the 
+   * research subjects associated with the person from the 
+   * person object
+   * 
+   * @return {Object}   
+   */
   getSubjects(){
     let subjects = this.PersonModel.getResearchSubjects(this.data);
     return subjects.slice(0, this.subjectCt);

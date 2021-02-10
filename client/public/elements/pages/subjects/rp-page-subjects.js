@@ -34,6 +34,7 @@ export default class RpPageSubjects extends RpUtilsCollection {
 
   /**
    * @method doUpdate
+   * @param {Object} state
    * @description reset props and update facets, this will rerender
    */
 
