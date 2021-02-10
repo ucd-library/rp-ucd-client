@@ -144,7 +144,11 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onAppStateUpdate(e) {
-    if ( APP_CONFIG.verbose ) console.log('Current app state:', e);
+    if ( APP_CONFIG.verbose ) {
+      console.log('');
+      console.log('=======---  APP STATE CHANGE ---=======');
+      console.log('app state:', e);
+    }
     
     if ( e.location.query.s ) {
       this.isSearch = true;
@@ -259,7 +263,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     }
     else if (w > 480) {
       let navWidth = this.shadowRoot.getElementById('nav-left').offsetWidth;
-      this.quickSearchWidth = w - navWidth - 55;
+      this.quickSearchWidth = w - navWidth - 56;
     }
     else {
       this.quickSearchWidth = w - 40 - 50;

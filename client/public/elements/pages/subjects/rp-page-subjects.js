@@ -62,7 +62,7 @@ export default class RpPageSubjects extends RpUtilsCollection {
       return;
     }
     console.log("subjectsAggs", subjectsAggs);
-    this.subFacets = this.CollectionModel._getSubFacets('subjects', subjectsAggs.payload, this.currentQuery);
+    this.subFacets = this.CollectionModel._getSubFacets(subjectsAggs.payload, this.currentQuery);
   }
 
 

@@ -41,7 +41,7 @@ export default class RpPageOrganizations extends RpUtilsCollection {
     if (facetAggs.state != 'loaded') {
       return;
     }
-    this.subFacets = this.CollectionModel._getSubFacets('organizations', facetAggs.payload, this.currentQuery);
+    this.subFacets = this.CollectionModel._getSubFacets(facetAggs.payload, this.currentQuery);
   }
 
 }

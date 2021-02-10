@@ -9,6 +9,8 @@ import "../components/person-preview";
 import "../components/work-preview";
 import "../components/subject-preview";
 
+import AssetDefs from "../../src/lib/asset-defs";
+
 /**
  * @class RpUtilsCollection
  * Parent class for page elements that list multiple assets. ie. search and browse.
@@ -35,7 +37,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       pgCurrent: {type: Number},
       textQuery: {type: String},
       subjectFilter: {type: String},
-      dataFilters: {type: Array},
       data: {type: Array},
       dataStatus: {type: String},
       dataTotal: {type: Number},
@@ -43,7 +44,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       subFacet: {type: String},
       subFacetIndex: {type: Number},
       subFacetStatus: {type: String},
-      subFacetsWithResultsCt: {type: Number}
+      subFacetsWithResultsCt: {type: Number},
+      defaultFacetId: {type: String}
 
     };
   }
@@ -56,6 +58,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.visible = false;
     this.urlQuery = {};
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
+    this.defaultFacetId = AssetDefs.defaultFacetId;
 
     this._resetQueryProperties();
 
@@ -75,17 +78,16 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.dataTotal = 0;
 
     this.currentQuery = {};
-    this.dataFilters = [];
     this.subjectFilter = "";
 
     this.pgPer = 8;
     this.pgCurrent = 1;
 
-    this.mainFacet = 'none';
+    this.mainFacet = this.defaultFacetId;
     this.mainFacets = [];
     this.mainFacetIndex = 0;
 
-    this.subFacet = 'none';
+    this.subFacet = this.defaultFacetId;
     this.subFacetIndex = 0;
     this.subFacets = [];
     this.subFacetStatus = "loading";
@@ -120,6 +122,19 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       }
       this.subFacetsWithResultsCt = subfacetCt;
     }
+
+    // get menu index of active subfilter
+    if ( props.has('subFacet') ) {
+      this.subFacetIndex = 0;
+      let i = 1;
+      for (const subfacet of AssetDefs.getSubFacetsByMainId(this.mainFacet)) {
+        if (subfacet.id == this.subFacet) {
+          this.subFacetIndex = i;
+          break;
+        }
+        i++;
+      }
+    }
   }
 
   /**
@@ -150,7 +165,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     let q = this.currentQuery;
     let data = await this.CollectionModel.query(q);
     let facetAggDoneHere = false;
-    if (this.textQuery && this.mainFacet == 'none' && this.subFacet == 'none') {
+    if (this.textQuery && this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
       this.subFacetStatus = data.state;
       facetAggDoneHere = true;
     }
@@ -168,7 +183,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (facetAggDoneHere) {
       this.CollectionModel.store.setSearchAggsLoaded(this.textQuery, data.payload);
       this.mainFacets = this.CollectionModel._getMainFacets(data.payload, this.currentQuery);
-      this.subFacets = this.CollectionModel._getSubFacets(this.mainFacet, data.payload, this.currentQuery);
+      this.subFacets = this.CollectionModel._getSubFacets(data.payload, this.currentQuery);
 
     }
     else {
@@ -189,7 +204,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (!this.textQuery) {
       return;
     }
-    if (this.mainFacet == 'none' && this.subFacet == 'none') {
+    if (this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
       return; // agg retrieved by main query
     }
     let data = await this.CollectionModel.searchAggQuery(this.textQuery, this.mainFacet);
@@ -198,7 +213,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       return;
     }
     this.mainFacets = this.CollectionModel._getMainFacets(data.payload, this.currentQuery);
-    this.subFacets = this.CollectionModel._getSubFacets(this.mainFacet, data.payload, this.currentQuery);
+    this.subFacets = this.CollectionModel._getSubFacets(data.payload, this.currentQuery);
 
   }
 
@@ -215,12 +230,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (data.state != 'loaded') {
       return;
     }
-    let aggKey = this.CollectionModel.getAzBaseFilter(this.currentQuery.mainFacet);
-    if (aggKey && aggKey.key) {
-      this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[aggKey.key]))].filter(x => x != 'all');
-    }
-    else {
-      this.azStatus = 'error';
+    let azAggField = AssetDefs.getAzAggField(this.currentQuery.mainFacet);
+    if (azAggField) {
+      this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[azAggField]))].filter(x => x != 'all');
     }
     console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`, data);
 
@@ -239,55 +251,32 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    */
   _parseUrlQuery(state){
 
-    // get current location
-    if (!state) {
-      state = this.AppStateModel.store.data;
-    }
-    let path = state.location.path;
-    let query = state.location.query;
-    // start fresh
+    // reset element query properties
     this._resetQueryProperties();
 
-    // get primary facet of query
-    if (path.length < 1) {
-      return;
-    }
+    // get current app location
+    if (!state) state = this.AppStateModel.store.data;
+    let path = state.location.path;
+    let query = state.location.query;
+    if (path.length < 1) return;
 
-    let facetFromPath = "";
+    // get primary facet of query
     if (path[0] == 'search' && path.length > 1) {
-      facetFromPath = path[1].toLowerCase();
+      this.mainFacet = path[1].toLowerCase();
+    }
+    else if ( path[0] == 'search' ) {
+      this.mainFacet = this.defaultFacetId;
     }
     else {
-      facetFromPath = path[0].toLowerCase();
-    }
-    for (let f of this.CollectionModel.mainFacets) {
-      if (facetFromPath == f.id.toLowerCase() ) {
-        this.mainFacet = facetFromPath;
-        this.dataFilters.push(f.baseFilter);
-        break;
-      }
+      this.mainFacet = path[0].toLowerCase();
     }
 
-    // get subfacet pf query if applicable
-    let subFacetFromPath = "";
+    // get subfacet of query
     if (path[0] == 'search' && path.length > 2) {
-      subFacetFromPath = path[2].toLowerCase();
+      this.subFacet = path[2].toLowerCase();
     }
     else if (path[0] != 'search' && path.length > 1) {
-      subFacetFromPath = path[1].toLowerCase();
-    }
-    if (this.CollectionModel.subFacets[this.mainFacet]) {
-      let i = 1;
-      for (let f of this.CollectionModel.subFacets[this.mainFacet]) {
-        if (f.id == subFacetFromPath) {
-          this.subFacet = subFacetFromPath;
-          this.subFacetIndex = i;
-          this.dataFilters.push(f.baseFilter);
-          break;
-        }
-        i += 1;
-      }
-
+      this.subFacet = path[1].toLowerCase();
     }
 
     // get any query arguments
@@ -334,9 +323,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
     if (this.subjectFilter) q.subjectFilter = this.subjectFilter;
 
-    if (this.dataFilters) {
-      q.filters = this.dataFilters;
-    }
     if (this.mainFacet && this.mainFacet != 'none') {
       q.mainFacet = this.mainFacet;
     }
@@ -452,20 +438,11 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if ( !Array.isArray(data['@type']) ) {
       return "";
     }
-
-    if (data['@type'].includes(this.jsonldContext + ":person")) {
-      return "person";
+    for (const asset of AssetDefs.getMainFacets()) {
+      if ( data['@type'].includes(asset.es) ) {
+        return asset.idSingular;
+      }
     }
-    if (data['@type'].includes(this.jsonldContext + ":subjectArea")) {
-      return "subject";
-    }  
-    if (data['@type'].includes(this.jsonldContext + ":publication")) {
-      return "work";
-    }
-    if (data['@type'].includes(this.jsonldContext + ":organization")) {
-      return "organization";
-    }
-
     return "";
   }
 

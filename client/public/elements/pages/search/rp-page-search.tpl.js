@@ -35,18 +35,15 @@ return html`
   </rp-link-list>
 </div>
 ${this._renderMobileSubFacets()}
-<div class="search container bg-light pb-3 ${this.data.length > 0 ? 'has-results' : 'no-results'} ${this.mainFacet == 'none' ? 'not-faceted' : 'faceted'}" >
+<div class="search container bg-light pb-3 ${this.data.length > 0 ? 'has-results' : 'no-results'} ${this.mainFacet == this.defaultFacetId ? 'not-faceted' : 'faceted'}" >
 <div class="body flex">
 
-    ${this.currentQuery.mainFacet == undefined ? 
+    ${this.mainFacet == this.defaultFacetId ? 
     html `  
-          <div   s>
-          ${console.log(this.currentQuery)}
-          </div>
+          <div></div>
          `:
     html `
           <div class="col-facets mt-3">
-          ${console.log(this.currentQuery)}
            ${this._renderFacets()} 
           </div>
          `
