@@ -306,7 +306,7 @@ return html`
         <a class="no-decoration" href="/help">Help</a>
         ${this.user ? html`     
               <rp-dropdown no-padding
-                sticky-title="${this.userName}"
+                sticky-title="${this.userFirstName}"
                 use-links
                 .choices= ${this.accountLinks}
                 @new-selection=${this._handleUserDropdownSelection}>
@@ -359,7 +359,7 @@ return html`
     </div>
     ${this.user ? html`
     <div class="container account">
-      <div class="text-default italic">Logged in as <span class="bold">${this.userName}</span></div>
+      <div class="text-default italic">Logged in as <span class="bold">${this.userId}</span></div>
       <div class="greeting">Hello, ${this.userName}!</div>
       <div class="nav-links">
         ${this.accountLinks.map((link, i) => link.href ? 

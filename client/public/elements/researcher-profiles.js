@@ -70,7 +70,9 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.hideMainNav = false;
     this.textQuery = "";
     this.quickSearchWidth = 220;
+    this.userId = userUtils.getUserId(this.user);
     this.userName = userUtils.getUserDisplayName(this.user);
+    this.userFirstName = userUtils.getUserFirstName(this.user);
     this.mobileMenuPage = "";
 
     this.isSearch = false;
