@@ -27,7 +27,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       azDisabled: {type: Array},
       azOptions: {type: Set},
       urlQuery: {type: Object},
-      jsonldContext: {type: String},
       peopleWidth: {type: Number},
       visible: {type: Boolean},
       currentQuery: {type: Object},
@@ -57,7 +56,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.hasPagination = false;
     this.visible = false;
     this.urlQuery = {};
-    this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.defaultFacetId = AssetDefs.defaultFacetId;
 
     this._resetQueryProperties();

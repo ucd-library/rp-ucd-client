@@ -89,17 +89,17 @@ export class RpWorkPreview extends Mixin(LitElement)
         }
         author.href = "";
         try {
-            if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
-                author.identifiers = [author.identifiers]
+          if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
+            author.identifiers = [author.identifiers]
+          }
+          for (let id of author.identifiers) {
+            if (this.grpsWithLinks.includes(id['@type'])) {
+              author.href = this.authorPath + id['@id'].replace(this.jsonldContext + ":", "");
             }
-            for (let id of author.identifiers) {
-                if (this.grpsWithLinks.includes(id['@type'])) {
-                    author.href = this.authorPath + id['@id'].replace(this.jsonldContext + ":", "");
-                }
-            }
+          }
 
         } catch (error) {
-            console.warn("Unable to construct author href.");
+          console.warn("Unable to construct author href.");
         }
         authors.push(author);
       }

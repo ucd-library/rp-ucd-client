@@ -10,7 +10,6 @@ class PersonModel extends BaseModel {
     this.store = PersonStore;
     this.service = PersonService;
     this.individualId = "";
-    this.jsonContext = APP_CONFIG.data.jsonldContext;
     this.register('PersonModel');
   }
 
@@ -194,7 +193,7 @@ class PersonModel extends BaseModel {
   getLandingPage(individual){
     let out = "";
     if (!individual || !individual['@id']) return out;
-    let id = individual['@id'].replace(APP_CONFIG.data.jsonldContext + ":", "");
+    let id = individual['@id'].replace(APP_CONFIG.data.context.person + ":", "");
     return `/individual/${id}`;
   }
 

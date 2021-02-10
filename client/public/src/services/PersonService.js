@@ -8,12 +8,12 @@ class PersonService extends BaseService {
     this.store = PersonStore;
 
     this.baseUrl = APP_CONFIG.data.apiUrl;
-    this.jsonContext = APP_CONFIG.data.jsonldContext;
+    this.jsonContext = APP_CONFIG.data.context.person;
   }
 
   async getIndividual(id) {
     return this.request({
-      url : `${this.baseUrl}/${this.jsonContext}%3A${id}`,
+      url : this.baseUrl+'/'+encodeURIComponent(this.jsonContext+':'+id),
       fetchOptions : {
         method : 'GET',
         headers : {
@@ -33,7 +33,10 @@ class PersonService extends BaseService {
       limit: 0,
       sort: [],
       filters: {
-        'Authorship.identifiers.@id': {"type": "keyword", "op" : "and", "value": [`${this.jsonContext}:${personid}`]},
+        'Authorship.identifiers.@id': {
+          type: "keyword", 
+          op : "and", 
+          value: [`${this.jsonContext}:${personid}`]},
         'publicationDate': {"type": "exists"}
       },
       facets: {"@type": {"type" : "facet"}}

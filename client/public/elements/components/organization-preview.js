@@ -3,19 +3,20 @@ import render from './organization-preview.tpl.js';
 
 
 export class RpOrganizationPreview extends LitElement {
+  
   static get properties() {
-  return {
-    data: {type: Object},
-    href: {type: String},
-    organizationPath: {type: String},
-    jsonldContext: {type: String}
-  };
+    return {
+      data: {type: Object},
+      href: {type: String},
+      organizationPath: {type: String},
+      jsonldContext: {type: String}
+    };
   }
 
   constructor() {
     super();
     this.organizationPath = "/organization/";
-    this.jsonldContext = APP_CONFIG.data.jsonldContext;
+    this.jsonldContext = APP_CONFIG.data.context.organization;
     this.render = render.bind(this);
   }
 
@@ -26,10 +27,10 @@ export class RpOrganizationPreview extends LitElement {
     }
     else {
       try {
-          let id = this.data['@id'].split(`${this.jsonldContext}:g-`)[1];
-          href = this.organizationPath + id;
+        let id = this.data['@id'].split(`${this.jsonldContext}:g-`)[1];
+        href = this.organizationPath + id;
       } catch (error) {
-          console.warn("Unable to construct org href.");
+        console.warn("Unable to construct org href.");
       }
     }
     return html`<a class="name" href="${href}" ?disabled="${!href}">${this.data.label}</a>`;

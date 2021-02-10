@@ -8,8 +8,7 @@ class SubjectService extends BaseService {
 
     this.baseUrl = APP_CONFIG.data.apiUrl;
     this.searchUrl = APP_CONFIG.data.apiUrl + "/search";
-    this.jsonContext = APP_CONFIG.data.jsonldContext;
-    console.log(this.jsonContext);
+    this.jsonContext = APP_CONFIG.data.context.publication;
   } 
 
   /**

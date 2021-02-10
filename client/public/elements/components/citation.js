@@ -65,7 +65,7 @@ export class RpCitation extends LitElement {
    * @returns {String}
    */
   _constructHref(id){
-    let href = `/work/${id.replace(APP_CONFIG.data.jsonldContext + ":publication", "")}`;
+    let href = `/work/${id.replace(APP_CONFIG.data.context.ucdtype + ":publication", "")}`;
     return href;
   }
 
@@ -78,7 +78,7 @@ export class RpCitation extends LitElement {
    */
   _getVenue(venue){
     if (!venue || !venue['@id']) return "";
-    return venue['@id'].replace(APP_CONFIG.data.jsonldContext + ":journal", "").replace(/-/g, " ");
+    return venue['@id'].replace(APP_CONFIG.data.context.ucdtype + ":journal", "").replace(/-/g, " ");
   }
 
   /**

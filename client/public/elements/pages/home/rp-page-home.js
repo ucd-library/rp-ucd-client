@@ -29,7 +29,6 @@ export default class RpPageHome extends Mixin(LitElement)
       subjects: {type: Array},
       subjectsTotal: {type: Number},
       subjectsStatus: {type: String},
-      context: {type: String},
       visible: {type: Boolean}
     };
   }
@@ -46,7 +45,6 @@ export default class RpPageHome extends Mixin(LitElement)
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
     this.setPeopleWidth(window.innerWidth);
-    this.context = APP_CONFIG.data.jsonldContext;
 
     this.theme = APP_CONFIG.theme;
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
@@ -264,13 +262,13 @@ export default class RpPageHome extends Mixin(LitElement)
           break;
         }
       }
-      if (facet == (this.context + ":subjectArea")) {
+      if (facet == APP_CONFIG.data.types.subjectArea ) {
         this.subjectsTotal = this.facets[facet];
       }
-      if (facet == (this.context + ":publication")) {
+      if (facet == APP_CONFIG.data.types.publication ) {
         this.academicWorksTotal = this.facets[facet];
       }
-      if (facet == (this.context + ":person")) {
+      if (facet == APP_CONFIG.data.types.person ) {
         this.peopleTotal = this.facets[facet];
       }
     }

@@ -20,7 +20,6 @@ class CollectionModel extends BaseModel {
     this.store = CollectionStore;
     this.service = CollectionService;
     this.personModel = PersonModel;
-    this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.mainFacets = AssetDefs.getMainFacets();
     this.currentQuery = {};
     this.subFacets = AssetDefs.getSubFacets();

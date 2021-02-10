@@ -1,10 +1,11 @@
+const TYPES = APP_CONFIG.data.types;
+
 /**
  * @class AssetDefs
  * @description Utility class for defining site asset types (works, people, subjects, etc)
  */
-class AssetDefs {
+class AssetDefs { 
   constructor() {
-    this.jsonldContext = APP_CONFIG.data.jsonldContext;
     this.defaultFacetId = 'none';
     this.defaultAzId = 'all';
   }
@@ -21,8 +22,14 @@ class AssetDefs {
         id: 'people',
         idSingular: 'person',
         text: 'People', 
-        es: this.addContext('person'),
-        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.addContext('person')]}},
+        es: TYPES.person,
+        baseFilter: {
+          '@type': {
+            type: "keyword", 
+            op: "and", 
+            value: [TYPES.person]
+          }
+        },
         azField: "hasContactInfo.familyName.firstLetter",
         areaField: "hasResearchArea",
         facetedSearchFields: [
@@ -36,8 +43,14 @@ class AssetDefs {
         id: 'subjects',
         idSingular: 'subject',
         text: 'Subjects', 
-        es: this.addContext('subjectArea'),
-        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.addContext('subjectArea')]}},
+        es: TYPES.subjectArea,
+        baseFilter: {
+          '@type': {
+            type: "keyword", 
+            op: "and", 
+            value: [TYPES.subjectArea]
+          }
+        },
         azField: "label.firstLetter",
         facetedSearchFields: [
           "label.text^10"
@@ -60,8 +73,14 @@ class AssetDefs {
         id: 'works', 
         idSingular: 'work',
         text: 'Works', 
-        es: this.addContext('publication'),
-        baseFilter: {"@type": {"type": "keyword", "op": "and", "value": [this.addContext('publication')]}},
+        es: TYPES.publication,
+        baseFilter: {
+          "@type": {
+            type: "keyword", 
+            op: "and", 
+            value: [TYPES.publication]
+          }
+        },
         azField: "label.firstLetter",
         areaField: "hasSubjectArea",
         facetedSearchFields: [
@@ -86,63 +105,117 @@ class AssetDefs {
       people: [
         {
           id: 'faculty', 
-          es: 'vivo:FacultyMember', 
+          es: TYPES.facultyMember, 
           text: 'Faculty Member', 
-          baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:FacultyMember"]}}
+          baseFilter: {
+            "@type": {
+              type: "keyword", 
+              op: "and", 
+              value: [TYPES.facultyMember]
+            }
+          }
         },
         {
           id: 'non-academics', 
-          es: 'vivo:NonAcademic', 
+          es: TYPES.facultyMember, 
           text: 'Non Academic', 
-          baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:NonAcademic"]}}
+          baseFilter: {
+            "@type": {
+              type: "keyword", 
+              op: "and", 
+              value: [TYPES.facultyMember]
+            }
+          }
         }
       ],
       works: [
         {
           id: 'articles', 
-          es: "bibo:AcademicArticle", 
+          es: TYPES.academicArticle, 
           text: 'Academic Article', 
-          baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:AcademicArticle"]}}
+          baseFilter: {
+            "@type": {
+              type: "keyword", 
+              op: "and", 
+              value: [TYPES.academicArticle]
+            }
+          }
         },
         {
           id: 'books', 
-          es: "bibo:Book", 
+          es: TYPES.book, 
           text: 'Book', 
-          baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Book"]}}
+          baseFilter: {
+            "@type": {
+              type: "keyword", 
+              op: "and", 
+              value: [TYPES.book]
+            }
+          }
         },
         {
           id: 'chapters', 
-          es: "bibo:Chapter", 
+          es: TYPES.chapter, 
           text: 'Chapter', 
-          baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["bibo:Chapter"]}}
+          baseFilter: {
+            "@type": {
+              type: "keyword", 
+              op: "and", 
+              value: [TYPES.chapter]
+            }
+          }
         },
         {
           id: 'conference-papers', 
-          es: "vivo:ConferencePaper", 
+          es: TYPES.conferencePaper, 
           text: 'Conference Paper', 
-          baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:ConferencePaper"]}}
+          baseFilter: {
+            "@type": {
+              type: "keyword", 
+              op: "and", 
+              value: [TYPES.conferencePaper]
+            }
+          }
         }
       ],
       subjects: [
         {
           id: 'concept', 
-          es: "skos:Concept", 
+          es: TYPES.subjectArea, 
           text: 'Research Subject', 
-          baseFilter:{"@type": {"type": "keyword", "op": "and", "value": ["skos:Concept"]}}
+          baseFilter: {
+            "@type": {
+              type: "keyword", 
+              op: "and", 
+              value: [TYPES.subjectArea]
+            }
+          }
         }
       ],
       organizations: [
         {
           id: 'universities', 
-          es: 'vivo:University', 
+          es: TYPES.university, 
           text: 'University', 
-          baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:University"]}}
+          baseFilter: {
+            "@type": {
+              type: "keyword", 
+              op: "and", 
+              value: [TYPES.university]
+            }
+          }
         },
         {
           id: 'departments', 
-          es: 'vivo:AcademicDepartment', 
+          es: TYPES.academicDepartment, 
           text: 'Department', 
-          baseFilter: {"@type": {"type": "keyword", "op": "and", "value": ["vivo:AcademicDepartment"]}}
+          baseFilter: {
+            "@type": {
+              type: "keyword", 
+              op: "and", 
+              value: [TYPES.academicDepartment]
+            }
+          }
         }
       ]
     };
@@ -280,6 +353,7 @@ class AssetDefs {
    * @method addContext
    * @description Prepends the JSON-LD context to a string
    * @param {String} text
+   * @deprecated TODO: (JM) remove this?
    * 
    * @returns {String}
    */
