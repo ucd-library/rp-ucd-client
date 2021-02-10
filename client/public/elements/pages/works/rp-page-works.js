@@ -62,7 +62,7 @@ export default class RpPageWorks extends RpUtilsCollection {
       return;
     }
     //console.log("peopleaggs", peopleAggs);
-    this.subFacets = this.CollectionModel._getSubFacets('works', facetAggs.payload, this.currentQuery);
+    this.subFacets = this.CollectionModel._getSubFacets(facetAggs.payload, this.currentQuery);
   }
 
 }

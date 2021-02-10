@@ -44,7 +44,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       subFacet: {type: String},
       subFacetIndex: {type: Number},
       subFacetStatus: {type: String},
-      subFacetsWithResultsCt: {type: Number}
+      subFacetsWithResultsCt: {type: Number},
+      defaultFacetId: {type: String}
 
     };
   }
@@ -57,6 +58,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.visible = false;
     this.urlQuery = {};
     this.jsonldContext = APP_CONFIG.data.jsonldContext;
+    this.defaultFacetId = AssetDefs.defaultFacetId;
 
     this._resetQueryProperties();
 
@@ -81,11 +83,11 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.pgPer = 8;
     this.pgCurrent = 1;
 
-    this.mainFacet = 'none';
+    this.mainFacet = this.defaultFacetId;
     this.mainFacets = [];
     this.mainFacetIndex = 0;
 
-    this.subFacet = 'none';
+    this.subFacet = this.defaultFacetId;
     this.subFacetIndex = 0;
     this.subFacets = [];
     this.subFacetStatus = "loading";
@@ -163,7 +165,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     let q = this.currentQuery;
     let data = await this.CollectionModel.query(q);
     let facetAggDoneHere = false;
-    if (this.textQuery && this.mainFacet == 'none' && this.subFacet == 'none') {
+    if (this.textQuery && this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
       this.subFacetStatus = data.state;
       facetAggDoneHere = true;
     }
@@ -181,7 +183,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (facetAggDoneHere) {
       this.CollectionModel.store.setSearchAggsLoaded(this.textQuery, data.payload);
       this.mainFacets = this.CollectionModel._getMainFacets(data.payload, this.currentQuery);
-      this.subFacets = this.CollectionModel._getSubFacets(this.mainFacet, data.payload, this.currentQuery);
+      this.subFacets = this.CollectionModel._getSubFacets(data.payload, this.currentQuery);
 
     }
     else {
@@ -202,7 +204,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (!this.textQuery) {
       return;
     }
-    if (this.mainFacet == 'none' && this.subFacet == 'none') {
+    if (this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
       return; // agg retrieved by main query
     }
     let data = await this.CollectionModel.searchAggQuery(this.textQuery, this.mainFacet);
@@ -211,7 +213,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       return;
     }
     this.mainFacets = this.CollectionModel._getMainFacets(data.payload, this.currentQuery);
-    this.subFacets = this.CollectionModel._getSubFacets(this.mainFacet, data.payload, this.currentQuery);
+    this.subFacets = this.CollectionModel._getSubFacets(data.payload, this.currentQuery);
 
   }
 
@@ -261,6 +263,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     // get primary facet of query
     if (path[0] == 'search' && path.length > 1) {
       this.mainFacet = path[1].toLowerCase();
+    }
+    else if ( path[0] == 'search' ) {
+      this.mainFacet = this.defaultFacetId;
     }
     else {
       this.mainFacet = path[0].toLowerCase();
