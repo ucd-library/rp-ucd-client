@@ -3,7 +3,6 @@ const CollectionService = require('../services/CollectionService');
 const CollectionStore = require('../stores/CollectionStore');
 const PersonModel = require('./PersonModel');
 
-// TODO: Ask Justin why we use require here
 //import AssetDefs from "../lib/asset-definitions";
 const AssetDefs = require('../lib/asset-defs');
 const QueryUtils = require('../lib/query-utils');
