@@ -1,4 +1,3 @@
-import { LitElement, html } from 'lit-element';
 import render from "./rp-page-work.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
@@ -10,6 +9,7 @@ import "../../components/person-preview";
 
 
 export default class RpPageWork extends RpUtilsLanding {
+
   static get properties() {
     return {
       work: {type: Object},
@@ -26,7 +26,7 @@ export default class RpPageWork extends RpUtilsLanding {
       fullTextLinks: {type: Array},
       isOwnWork: {type: Boolean},
       peopleWidth: {type: Number}
-    }
+    };
   }
 
   constructor() {
@@ -92,7 +92,7 @@ export default class RpPageWork extends RpUtilsLanding {
    */
   async _onAppStateUpdate(state) {
     requestAnimationFrame( () => this.doUpdate(state));
-   }
+  }
 
   /**
    * @method doUpdate
@@ -138,6 +138,8 @@ export default class RpPageWork extends RpUtilsLanding {
     if (APP_CONFIG.verbose) console.log("work payload:", data);
 
     this.authors = this.WorkModel.getAuthors(this.work);
+    console.log(this.authors);
+    
     this.isOwnWork = this.WorkModel.isUsersWork(this.work);
     this.hasOtherAuthors = this.WorkModel.hasNonInstitutionAuthors(this.work);
     this.workType = this.WorkModel.getWorkType(this.work);
@@ -153,7 +155,8 @@ export default class RpPageWork extends RpUtilsLanding {
    * @description Performs primary browse/search query for the work model based on url path and parameters
    * to get the authors for the works
    * 
-   * @param {String, Object}
+   * @param {String} id
+   * @param {Object} authors
    */
   async _doAuthorQuery(id, authors) {
     this.universityAuthors = [];
@@ -203,8 +206,8 @@ export default class RpPageWork extends RpUtilsLanding {
    * @description should a given UI section be hidden based on the
    * state of this elements property
    * 
-   * @param {String} status state of call
-   * @param {String} field this elements stored property
+   * @param {String} section
+   * @param {String} statusProperty
    * 
    * @returns {Boolean}
    */

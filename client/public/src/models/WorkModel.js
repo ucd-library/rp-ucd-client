@@ -42,10 +42,12 @@ class WorkModel extends BaseModel {
 
   /**
    * @method getAuthorsFullObject
-   * @param {String, Object} 
    * @description query the work object from the ID and
    * the authors associated with it, and the service 
    * depending on the state of the work object
+   * 
+   * @param {String} workId
+   * @param {Array} authors 
    * 
    * @returns {Object}
    */
@@ -61,10 +63,11 @@ class WorkModel extends BaseModel {
 
   /**
    * @method getAdditionalLinks
-   * @param {Object} 
    * @description query the work object additional
    * links that are in the work object and push into
    * and array to return 
+   * 
+   * @param {Object} work 
    * 
    * @returns {Array}
    */
@@ -82,60 +85,65 @@ class WorkModel extends BaseModel {
       else if (work.hasPublicationVenue) {
         output.push({label, url: `${url}issn=${work.hasPublicationVenue.issn}&spage=${work.pageStart}&volume=${work.volume}&issue=${work.issue}&date=${work.publicationDate}`});
       }
-
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error processing additional links', error);
+    }
 
     // publisher page
-    try {
-      let label = "Publisher Page";
-      let url = "http://doi.org/";
-      if (work.doi) output.push({label, url: `${url}${work.doi}`})
-    } catch (error) {}
+    let label = "Publisher Page";
+    let url = "http://doi.org/";
+    if ( work.doi ) {
+      output.push({label, url: `${url}${work.doi}`});
+    }
 
-    return output
+    return output;
   }
 
   /**
    * @method isUsersWork
-   * @param {Object} 
    * @description query the work object sent in params and 
    * send it into getAuthors function determine if the user's 
    * work is within the array returned. 
    * 
+   * @param {Object} work
+   * 
    * @returns {Boolean}
    */
   isUsersWork(work) {
+    if( !APP_CONFIG.user ) return false;
+    if( !APP_CONFIG.user.username ) return false;
+
     try {
       let authors = this.getAuthors(work);
       for (let author of authors) {
         for (let id of author.identifiers) {
           let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
           if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
-            return true
+            return true;
           }
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error checking isUsersWork', error);
+    }
+
     return false;
   }
 
   /**
    * @method hasNonInstitutionAuthors
-   * @param {Object} 
    * @description query the work object sent in params and 
    * send it into getAuthors function determine if the authors
    * are or are not part of another university. 
    * 
+   * @param {Object} work
+   * 
    * @returns {Boolean}
    */
   hasNonInstitutionAuthors(work){
-    try {
-      let authors = this.getAuthors(work);
-      for (let author of authors) {
-        if (author.isOtherUniversity) return true;
-      }
-    } catch (error) {
-      
+    let authors = this.getAuthors(work);
+    for (let author of authors) {
+      if (author.isOtherUniversity) return true;
     }
     return false;
     
@@ -143,9 +151,10 @@ class WorkModel extends BaseModel {
 
   /**
    * @method getAuthors
-   * @param {Object} 
    * @description query the work object and get the authors
    * from the work object into a formatted structure Object
+   * 
+   * @param {Object} work
    * 
    * @returns {Object}
    */  
@@ -168,20 +177,19 @@ class WorkModel extends BaseModel {
       author.href = "";
       author.isOtherUniversity = true;
       try {
-          if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
-              author.identifiers = [author.identifiers]
+        if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
+          author.identifiers = [author.identifiers]
+        }
+        for (let id of author.identifiers) {
+          if (this.grpsWithLinks.includes(id['@type'])) {
+            let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
+            author.apiEndpoint = id['@id'];
+            author.href = this.urlAuthor + authorId;
+            author.isOtherUniversity = false;
           }
-          for (let id of author.identifiers) {
-              if (this.grpsWithLinks.includes(id['@type'])) {
-                let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
-                author.apiEndpoint = id['@id'];
-                author.href = this.urlAuthor + authorId;
-                author.isOtherUniversity = false;
-              }
-          }
-
+        }
       } catch (error) {
-          console.warn("Unable to construct author href.");
+        console.warn("Unable to construct author href.");
       }
       authors.push(author);
     }
@@ -333,12 +341,12 @@ class WorkModel extends BaseModel {
   getLandingPage(work) {
     if (typeof work != 'object' || !work['@id']) return "";
     try {
-      let id = work['@id'].split(`${this.service.jsonContext}:publication`)[1];
+      let id = work['@id'].split(`/`)[1];
       return `${this.UrlLanding}${id}`;
-
     } catch (error) {
+      console.error('Error grabbing landing page for work', error);
       return "";
-  }
+    }
   }
 
   /**

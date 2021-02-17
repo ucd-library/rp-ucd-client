@@ -377,11 +377,11 @@ return html`
   <app-page-components id="components"></app-page-components>
   <rp-page-home id="home"></rp-page-home>
   <rp-page-people id="people"></rp-page-people>
-  <rp-page-individual id="individual"></rp-page-individual>
+  <rp-page-person id="person"></rp-page-person>
   <rp-page-works id="works"></rp-page-works>
   <rp-page-work id="work"></rp-page-work>
-  <rp-page-subjects id="subjects"></rp-page-subjects>
-  <rp-page-subject id="subject"></rp-page-subject>  
+  <rp-page-concepts id="concepts"></rp-page-concepts>
+  <rp-page-concept id="concept"></rp-page-concept>  
   <rp-page-organizations id="organizations"></rp-page-organizations>
   <rp-page-organization id="organization"></rp-page-organization>
   <rp-page-help id="help"></rp-page-help>

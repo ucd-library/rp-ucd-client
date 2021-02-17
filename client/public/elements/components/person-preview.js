@@ -55,7 +55,8 @@ export class RpPersonPreview extends Mixin(LitElement)
    * @method getName
    * @description calls the getBestLabel function gets the 
    * preferred the person label if it exists 
-   * @return {String}  
+   * 
+   * @returns {String}  
    */
   getName() {
     if (!this.data) return "";
@@ -67,7 +68,7 @@ export class RpPersonPreview extends Mixin(LitElement)
    * @description calls the getFirstName function gets the 
    * first name of the person from the person object
    * 
-   * @return {String}  
+   * @returns {String}  
    */
   getFirstName() {
     return this.PersonModel.getNameObject(this.data).fname;
@@ -78,7 +79,7 @@ export class RpPersonPreview extends Mixin(LitElement)
    * @description calls the getLastName function gets the 
    * last name of the person from the person object
    * 
-   * @return {String}  
+   * @returns {String}  
    */
   getLastName() {
     return this.PersonModel.getNameObject(this.data).lname;
@@ -89,7 +90,7 @@ export class RpPersonPreview extends Mixin(LitElement)
    * @description calls the getAvatar function gets the 
    * avatar type of the person from the person object
    * 
-   * @return {Object}  
+   * @returns {Object}  
    */
   getAvatar() {
     return this.PersonModel.getAvatarSrc(this.data);
@@ -100,7 +101,7 @@ export class RpPersonPreview extends Mixin(LitElement)
    * @description calls the getLandingPage function and 
    * creates the url and from the person id
    * 
-   * @return {URL}  
+   * @returns {URL}  
    */
   getLandingPage() {
     return this.PersonModel.getLandingPage(this.data);
@@ -111,7 +112,7 @@ export class RpPersonPreview extends Mixin(LitElement)
    * @description calls the getTitle function gets the 
    * headline title of the person from the person object
    * 
-   * @return {String}  
+   * @returns {String}  
    */
   getTitle(){
     return this.PersonModel.getHeadlineTitle(this.data);
@@ -122,7 +123,7 @@ export class RpPersonPreview extends Mixin(LitElement)
    * @description calls the getSnippet function gets the 
    * description of the person from the person object
    * 
-   * @return {String}  
+   * @returns {String}  
    */
   getSnippet(){
     return this.PersonModel.getSnippet(this.data);
@@ -134,7 +135,7 @@ export class RpPersonPreview extends Mixin(LitElement)
    * research subjects associated with the person from the 
    * person object
    * 
-   * @return {Object}   
+   * @returns {Object}   
    */
   getSubjects(){
     let subjects = this.PersonModel.getResearchSubjects(this.data);

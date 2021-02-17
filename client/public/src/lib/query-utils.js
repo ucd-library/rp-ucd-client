@@ -69,6 +69,21 @@ class QueryUtils {
     f.value = value;
     return f;
   }
+
+  /**
+   * @method appendIdPrefix
+   * @description append the ucd id prefix to a provided identifier
+   * 
+   * @param {String} id
+   * 
+   * @returns {String} 
+   */
+  appendIdPrefix(id) {
+    if( id.startsWith(APP_CONFIG.data.prefix.ucdId) ) {
+      return id;
+    }
+    return APP_CONFIG.data.prefix.ucdId+':'+id;
+  }
 }
 
 //export default new QueryUtils();

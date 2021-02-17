@@ -65,7 +65,7 @@ export class RpCitation extends LitElement {
    * @returns {String}
    */
   _constructHref(id){
-    let href = `/work/${id.replace(APP_CONFIG.data.context.ucdtype + ":publication", "")}`;
+    let href = `/work/${id.replace(APP_CONFIG.data.context.ucdtype + ":pub/", "")}`;
     return href;
   }
 

@@ -8,7 +8,7 @@ class SubjectService extends BaseService {
 
     this.baseUrl = APP_CONFIG.data.apiUrl;
     this.searchUrl = APP_CONFIG.data.apiUrl + "/search";
-    this.jsonContext = APP_CONFIG.data.context.publication;
+    // this.jsonContext = APP_CONFIG.data.context.publication;
   } 
 
   /**
@@ -20,7 +20,7 @@ class SubjectService extends BaseService {
    */  
   async getSubject(id){
     return this.request({
-      url : `${this.baseUrl}/${encodeURIComponent(id)}`,
+      url : `${this.baseUrl}/record/${encodeURIComponent(id)}`,
       fetchOptions : {
         method : 'GET',
         headers : {

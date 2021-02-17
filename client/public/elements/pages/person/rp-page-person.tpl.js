@@ -40,16 +40,16 @@ return html`
     justify-content: center;
   }
   .button {
-        color: var(--tcolor-primary);
-        padding: 10px;
-        background-color: var(--tcolor-bg-primary);
-        cursor: pointer;
-        transition: .3s;
-        margin: 5px;
+    color: var(--tcolor-primary);
+    padding: 10px;
+    background-color: var(--tcolor-bg-primary);
+    cursor: pointer;
+    transition: .3s;
+    margin: 5px;
     }
   .button:hover {
-        background-color: var(--tcolor-hover-bg);
-        color: var(--tcolor-hover-text);
+    background-color: var(--tcolor-hover-bg);
+    color: var(--tcolor-hover-text);
   }
   rp-badge {
     margin-left: 8px;
@@ -211,7 +211,7 @@ return html`
           <div>
             <div>
               <h3 class="mb-2">Positions</h3>
-              ${this.getIndividualTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
+              ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
             </div>
             ${this._showSubSection('contact') ? html`
               <div
@@ -267,7 +267,6 @@ return html`
           ${ Object.values(this.publicationOverview).map(pubType => html`
             <h3>${pubType.label} (${pubType.ct})</h3>
             ${this.getPubsByYear(pubType.id).map(yr => html`
-            ${console.log(yr)}
               <div class="box-pubsyear">
                 <div class="year">${yr.year}</div>
                 <div class="pubs">${yr.pubs.map(pub => html`

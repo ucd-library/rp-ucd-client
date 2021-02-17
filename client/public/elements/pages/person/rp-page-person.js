@@ -1,4 +1,4 @@
-import render from "./rp-page-individual.tpl.js";
+import render from "./rp-page-person.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
  
@@ -14,11 +14,11 @@ import "../../components/modal";
 
 
 /**
- * @class rpPageIndividual
+ * @class RpPagePerson
  * @description Landing page for an individual person.
  * Inherits the RpUtilsLanding element, which handles a lot of the rendering.
  */
-export default class RpPageIndividual extends RpUtilsLanding {
+export default class RpPagePerson extends RpUtilsLanding {
 
   static get properties() {
     return {
@@ -59,38 +59,29 @@ export default class RpPageIndividual extends RpUtilsLanding {
    * @param {Object} state 
    */
   async _onAppStateUpdate(state) {
-    requestAnimationFrame( () => this.doUpdate(state));
-  }
+    if( state.page !== 'person' ) return;
 
-  /**
-   * @method doUpdate
-   * @description Updates the data for this page. Will rerender.
-   * @param {Object} state 
-   */
-  async doUpdate(state) {
-    let updateData = true;
-    await this.updateComplete;
-    if (!this.visible) {
-      return;
+    if( state.location.length < 2 ) {
+      this.AppStateModel.setLocation('/people');
     }
-    let path = state.location.path;
-    if (path.length >= 2) {
-      if (this.assetId == path[1]) updateData = false;
-      this.assetId = path[1];
-      this.PersonModel.individualId = this.assetId;
-    }
+
+    let assetId = state.location.path.slice(0, 2).join('/');
+    if( this.assetId === assetId ) return;
+    this.assetId = assetId;
+
     this.getPageSections();
-    if (!this.assetId) return;
-    this._setActiveSection(path);
-
-    if (!updateData) return;
+    this._setActiveSection(state.location.path);
     this._resetEleProps();
+
     await Promise.all([
       this._doMainQuery(this.assetId),
-      this._doPubOverviewQuery(this.assetId)]);
-    this.isOwnProfile = this._isOwnProfile();
+      this._doPubOverviewQuery(this.assetId)
+    ]);
 
+    this.isOwnProfile = this._isOwnProfile();
   }
+
+
 
   /**
    * @method updated
@@ -153,7 +144,7 @@ export default class RpPageIndividual extends RpUtilsLanding {
    * @returns {Promise}
    */
   async _doMainQuery(id){
-    let data = await this.PersonModel.getIndividual(id);
+    let data = await this.PersonModel.get(id);
     this.individualStatus = data.state;
     if (data.state != 'loaded') {
       return;
@@ -210,10 +201,14 @@ export default class RpPageIndividual extends RpUtilsLanding {
   async _doPubQuery(pubTypeObject, offset=0){
 
     let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
-    this.publicationOverview[pubTypeObject.id].dataStatus = data.request.state;
-    if (data.request.state != 'loaded') return;
-    if (APP_CONFIG.verbose) console.log(`${pubTypeObject.id} pubs:`, data);
-    this.retrievedPublications[pubTypeObject.id] = data.masterStore;
+    this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
+    if (data.state != 'loaded') return;
+
+    if( !this.retrievedPublications[pubTypeObject.id] ) {
+      this.retrievedPublications[pubTypeObject.id] = [];
+    }
+
+    this.retrievedPublications[pubTypeObject.id].push(...data.payload.results);
     this.requestUpdate();
   }
 
@@ -269,13 +264,13 @@ export default class RpPageIndividual extends RpUtilsLanding {
   }
 
   /**
-   * @method getIndividualTitles
+   * @method getTitles
    * @description Gets titles for a person.
    * 
    * @returns {Array}
    */
-  getIndividualTitles(){
-    return this.PersonModel.getIndividualTitles(this.individual);
+  getTitles(){
+    return this.PersonModel.getTitles(this.individual);
   }
 
   /**
@@ -375,4 +370,4 @@ export default class RpPageIndividual extends RpUtilsLanding {
 
 }
 
-customElements.define('rp-page-individual', RpPageIndividual);
+customElements.define('rp-page-person', RpPagePerson);

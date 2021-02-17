@@ -1,6 +1,6 @@
 const defs = {
-  search : ['people', 'works', 'organizations', 'subjects', 'search'],
-  landing : ['individual', 'work', 'organization', 'subject']
-}
+  search : ['people', 'works', 'organizations', 'concepts', 'search'],
+  landing : ['person', 'work', 'organization', 'concept']
+};
 
-export default defs
+export default defs;

@@ -8,7 +8,7 @@ class OrganizationService extends BaseService {
     this.store = OrganizationStore;
 
     this.baseUrl = APP_CONFIG.data.apiUrl;
-    this.jsonContext = APP_CONFIG.data.context.organization;
+    // this.jsonContext = APP_CONFIG.data.context.organization;
   }
 
   async getOrganization(id) {

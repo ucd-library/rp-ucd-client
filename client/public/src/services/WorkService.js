@@ -8,7 +8,7 @@ class WorkService extends BaseService {
     this.store = WorkStore;
 
     this.baseUrl = APP_CONFIG.data.apiUrl;
-    this.jsonContext = APP_CONFIG.data.context.publication;
+    // this.jsonContext = APP_CONFIG.data.context.publication;
   }
  
   /**
@@ -20,7 +20,7 @@ class WorkService extends BaseService {
    */  
   async getWork(id) {
     return this.request({
-      url : this.baseUrl+'/'+encodeURIComponent(this.jsonContext+':publication'+id),
+      url : this.baseUrl+'/'+encodeURIComponent(this.jsonContext+':pub/'+id),
       fetchOptions : {
         method : 'GET',
         headers : {
