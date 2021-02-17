@@ -37,7 +37,6 @@ class CollectionModel extends BaseModel {
    * @returns {Promise}
    */
   async overview(id, kwargs={}) {
-
     let queryObject = QueryUtils.getBaseQueryObject();
 
     if (id == "facets") {
@@ -56,7 +55,7 @@ class CollectionModel extends BaseModel {
       }
     }
     else if (id == "randomSubjects") {
-      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('subjects').baseFilter);
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('concepts').baseFilter);
       queryObject.limit = 10;
       if (kwargs.limit) {
         queryObject.limit = kwargs.limit;
@@ -74,14 +73,16 @@ class CollectionModel extends BaseModel {
     else if (id == "worksAggs") {
       Object.assign(queryObject.filters, AssetDefs.getMainFacetById('works').baseFilter);
       if (kwargs.subjectFilter) {
-        queryObject.filters[`${AssetDefs.getAreaField('works')}.@id`] = QueryUtils.getKeywordFilter(kwargs.subjectFilter);
+        queryObject.filters[AssetDefs.getAreaField('works')] = QueryUtils.getKeywordFilter(
+          QueryUtils.appendIdPrefix(kwargs.subjectFilter)
+        );
         id = `${id}?subject=${kwargs.subjectFilter}`;
       }
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
     else if (id == "subjectsAggs") {
-      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('subjects').baseFilter);
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('concepts').baseFilter);
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
@@ -178,7 +179,11 @@ class CollectionModel extends BaseModel {
     }
 
     // Filter by subject id if applicable
-    if (subjectFilter) q.filters[AssetDefs.getAreaField(mainFacet)] = QueryUtils.getKeywordFilter(subjectFilter);
+    if (subjectFilter) {
+      q.filters[AssetDefs.getAreaField(mainFacet)] = QueryUtils.getKeywordFilter(
+        QueryUtils.appendIdPrefix(subjectFilter)
+      );
+    }
 
     let current = this.store.data.azAggs[id];
     if ( current && current.request ) {
@@ -274,7 +279,7 @@ class CollectionModel extends BaseModel {
       }
     }
 
-    else if (mainFacet == 'subjects') {
+    else if (mainFacet == 'concepts') {
       subFacets.push({
         id: AssetDefs.defaultFacetId, 
         text: `All Subjects (${dataTotal})`, 
@@ -399,7 +404,9 @@ class CollectionModel extends BaseModel {
 
     // Apply subject filter
     if ( elementQuery.subjectFilter ) {
-      query.filters[`${AssetDefs.getAreaField(mainFacet)}.@id`] = AssetDefs.getKeywordFilter(elementQuery.subjectFilter);
+      query.filters[AssetDefs.getAreaField(mainFacet)] = QueryUtils.getKeywordFilter(
+        QueryUtils.appendIdPrefix(elementQuery.subjectFilter)
+      );
     }
 
     // Apply a-z filters

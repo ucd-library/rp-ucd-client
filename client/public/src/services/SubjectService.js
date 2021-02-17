@@ -1,5 +1,6 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const SubjectStore = require('../stores/SubjectStore');
+const queryUtils = require('../lib/query-utils');
 
 class SubjectService extends BaseService {
   constructor() {
@@ -20,7 +21,7 @@ class SubjectService extends BaseService {
    */  
   async getSubject(id){
     return this.request({
-      url : `${this.baseUrl}/record/${encodeURIComponent(id)}`,
+      url : `${this.baseUrl}/record/${queryUtils.appendIdPrefix(id)}`,
       fetchOptions : {
         method : 'GET',
         headers : {
@@ -45,7 +46,7 @@ class SubjectService extends BaseService {
    */
   async getRandomSubjects(id='random-subject', count=10){
     return this.request({
-      url : `${this.baseUrl}/subject-terms/random/${count}`,
+      url : `${this.baseUrl}/concept/random/${count}`,
       fetchOptions : {
         method : 'GET',
         headers : {
@@ -63,7 +64,7 @@ class SubjectService extends BaseService {
    * @method getResearchers
    * @description load researchers associated with each subject
    * 
-   * @param {String} id subject
+   * @param {String} subjectId subject
    * 
    * @returns {Promise} request 
    */
@@ -72,8 +73,16 @@ class SubjectService extends BaseService {
       offset: 0,
       limit: 10,
       filters: {
-        "@type": {"type": "keyword", "op": "and", "value": [`${this.jsonContext}:person`]},
-        "_.allResearchArea": {"type": "keyword", "op": "and", "value": [subjectId]}
+        "@type": {
+          type: "keyword", 
+          op: "and", 
+          value: [APP_CONFIG.data.types.person]
+        },
+        "_.allResearchArea": {
+          type: "keyword", 
+          op: "and", 
+          value: [queryUtils.appendIdPrefix(subjectId)]
+        }
       }
     }
     return this.request({
@@ -96,7 +105,7 @@ class SubjectService extends BaseService {
    * @method getPubOverview
    * @description load publications associated with the subject ids
    * 
-   * @param {String} id subject
+   * @param {String} subjectId subject
    * 
    * @returns {Promise} request 
    */
@@ -106,11 +115,21 @@ class SubjectService extends BaseService {
       limit: 0,
       sort: [],
       filters: {
-        "@type": {"type": "keyword", "op": "and", "value": [`${this.jsonContext}:publication`]},
-        '_.allSubjectArea': {"type": "keyword", "op": "and", "value": [subjectId]},
-        'publicationDate': {"type": "exists"}
+        "@type": {
+          type: "keyword", 
+          op: "and", 
+          value: [APP_CONFIG.data.types.work]
+        },
+        '_.allSubjectArea': {
+          type: "keyword", 
+          op: "and", 
+          value: [queryUtils.appendIdPrefix(subjectId)]
+        },
+        'publicationDate': {type: "exists"}
       },
-      facets: {"@type": {"type" : "facet"}}
+      facets: {
+        "@type": {type : "facet"}
+      }
     };
 
     return this.request({
@@ -134,9 +153,9 @@ class SubjectService extends BaseService {
    * @description get individual publications from the publications associated with
    * each subject
    * 
-   * @param {String} subjectid subject id
-   * @param {String} id cache id
-   * @param {Type} pubtype publicaton type
+   * @param {String} subjectId subject id
+   * @param {String} cacheId cache id
+   * @param {Type} pubType publicaton type
    * 
    * @returns {Promise} request 
    */
@@ -144,14 +163,24 @@ class SubjectService extends BaseService {
     let searchObject = {
       offset: 0,
       limit: 5,
-      sort: [{"publicationDate": {"order" : "desc"}}],
+      sort: [{
+        publicationDate: {order : "desc"}
+      }],
       filters: {
-        '_.allSubjectArea': {"type": "keyword", "op": "and", "value": [subjectId]},
-        'publicationDate': {"type": "exists"}
+        '_.allSubjectArea': {
+          type: "keyword", 
+          op: "and", 
+          value: [queryUtils.appendIdPrefix(subjectId)]
+        },
+        publicationDate: {
+          type: "exists"
+        }
       },
-      facets: {"@type": {"type" : "facet"}}
+      facets: {
+        "@type": {"type" : "facet"}
+      }
     };
-    searchObject.filters = {...searchObject.filters, ...pubType.baseFilter}
+    searchObject.filters = {...searchObject.filters, ...pubType.baseFilter};
 
     return this.request({
       url : `${this.baseUrl}/search`,

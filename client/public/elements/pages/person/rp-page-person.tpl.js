@@ -274,19 +274,21 @@ return html`
                 `)}</div>
               </div>
             `)}
-            ${pubType.displayedOffset > 10 || pubType.displayedOffset + 10 <= Math.ceil(pubType.ct / 10) * 10 ? html`
-              <div class="box-pub-buttons">
-                <div class="padding"></div>
-                <div class="buttons">
-                  ${pubType.displayedOffset > 10 ? html`
-                    <button type="button" @click="${e => this._loadPubs(pubType.id, false)}" class="load-pubs less">Show ${pubType.displayedOffset > pubType.ct ? pubType.ct - (pubType.displayedOffset - 10) : 10} less</button>
-                    ` : html``}
-                  ${pubType.displayedOffset + 10 <= Math.ceil(pubType.ct / 10) * 10 ? html`
-                    <button type="button" @click="${e => this._loadPubs(pubType.id, true)}" class="load-pubs more">Show ${pubType.ct - pubType.displayedOffset < 10 ? pubType.ct - pubType.displayedOffset : 10} more</button>
-                  ` : html``}
-                </div>
+
+            <div class="box-pub-buttons" ?hidden="${!this.showMoreButton(pubType)}">
+              <div class="padding"></div>
+              <div class="buttons">
+                <button type="button" 
+                  ?hidden="${!this.showLessButton(pubType)}"
+                  @click="${e => this._loadPubs(pubType.id, false)}" 
+                  class="load-pubs less">Show ${this.showLessCount(pubType)} less</button>
+
+                <button type="button" 
+                  ?hidden="${!this.showMoreButton(pubType)}"
+                  @click="${e => this._loadPubs(pubType.id, true)}" 
+                  class="load-pubs more">Show ${this.showMoreCount(pubType)} more</button>
               </div>
-            ` : html``}
+            </div>
           `)}
         </div>
 

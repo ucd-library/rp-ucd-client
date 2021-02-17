@@ -10,7 +10,8 @@ class CollectionService extends BaseService {
     this.baseUrl = APP_CONFIG.data.apiUrl;
     this.searchUrl = APP_CONFIG.data.apiUrl + "/search";
   }
-    async overview(id, searchObject) {
+  
+  async overview(id, searchObject) {
     return this.request({
       url : this.searchUrl,
       fetchOptions : {
@@ -62,21 +63,21 @@ class CollectionService extends BaseService {
   }
 
   async query(id, searchObject) {
-  return this.request({
-    url : this.searchUrl+'?debug=true',
-    fetchOptions : {
-      method : 'POST',
-      headers : {
-        'Content-Type' : 'application/json'
+    return this.request({
+      url : this.searchUrl+'?debug=true',
+      fetchOptions : {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(searchObject)
       },
-      body : JSON.stringify(searchObject)
-    },
-    checkCached : () => this.store.data.queryById[id],
-    onLoading : request => this.store.setQueryLoading(id, request),
-    onLoad : result => this.store.setQueryLoaded(id, result.body),
-    onError : e => this.store.setQueryError(id, e)
-  });
-}
+      checkCached : () => this.store.data.queryById[id],
+      onLoading : request => this.store.setQueryLoading(id, request),
+      onLoad : result => this.store.setQueryLoaded(id, result.body),
+      onError : e => this.store.setQueryError(id, e)
+    });
+  }
 
 }
 

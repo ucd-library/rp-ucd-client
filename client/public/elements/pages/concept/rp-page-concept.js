@@ -1,5 +1,4 @@
-import { LitElement, html } from 'lit-element';
-import render from "./rp-page-subject.tpl.js";
+import render from "./rp-page-concept.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
 
@@ -14,10 +13,10 @@ import "../../components/person-preview";
 import "../../components/subject-preview";
 
 /**
- * @class RpPageSubject
+ * @class RpPageConcept
  * @description main subject page
  */
-export default class RpPageSubject extends RpUtilsLanding {
+export default class RpPageConcept extends RpUtilsLanding {
   static get properties() {
     return {
       subject: {type: Object},
@@ -43,12 +42,12 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.render = render.bind(this);
     this._injectModel('AppStateModel', 'SubjectModel', 'CollectionModel');
 
-    this.assetType = "subject";
+    this.assetType = "concept";
     this.subject = {};
     this.subjectStatus = 'loading';
     this.researchers = [];
     this.researchersStatus = 'loading';
-    this.tempResearch = []
+    this.tempResearch = [];
     this.publications = {};
     this.urlPathId = "";
     this.subjectType = "";
@@ -93,14 +92,14 @@ export default class RpPageSubject extends RpUtilsLanding {
     super.disconnectedCallback();
   }
 
-    /**
+  /**
    * @method _onAppStateUpdate
    * @description bound to AppStateModel app-state-update event
    * 
    * @param {Object} state 
    */
   async _onAppStateUpdate(state) {
-    requestAnimationFrame( () => this.doUpdate(state));
+    this.doUpdate(state);
   }
 
   /**
@@ -112,30 +111,22 @@ export default class RpPageSubject extends RpUtilsLanding {
                                              this._doPubOverviewQuery(this.assetId)])
    */
   async doUpdate(state) {
-    await this.updateComplete;
-
-    if (!this.visible) {
-      return;
-    }
+    if( state.page !== 'concept' ) return;
 
     let path = state.location.path;
 
-    if (path.length == 1) {
-      this.AppStateModel.setLocation('/subjects');
-      return;
-    }
-    console.log("PATH:", path);
-    this.urlPathId = path[1];
-    this.assetId = decodeURIComponent(path[1]);
-    if (!this.assetId) return;
+    this.urlPathId = path.slice(0, 3).join('/');
+    this.assetId = this.urlPathId;
+    if ( !this.assetId ) return;
 
-    this._setActiveSection(path);
+    this._setActiveSection(path, 3);
 
     await Promise.all([
       this._doMainQuery(this.assetId), 
       this._doAboutQuery(this.assetId),
       this._doResearcherQuery(this.assetId), 
-      this._doPubOverviewQuery(this.assetId)]);
+      this._doPubOverviewQuery(this.assetId)
+    ]);
 
   }
 
@@ -166,7 +157,7 @@ export default class RpPageSubject extends RpUtilsLanding {
     this.narrowRelatedSubjects = this._getRelatedSubjectsNarrow();
     this.broadRelatedSubjects = this._getRelatedSubjectsBroader();
     if(this._isEmpty(this.narrowRelatedSubjects) && this._isEmpty(this.broadRelatedSubjects)){
-      this._hideElements("relatedSubjects", this.narrowRelatedSubjects);
+      this._toggleElements("relatedSubjects", this.narrowRelatedSubjects);
     }
   }
 
@@ -198,7 +189,7 @@ export default class RpPageSubject extends RpUtilsLanding {
 
     if (APP_CONFIG.verbose) console.log("description:", data);
 
-    this._hideElements("about", this.about);
+    this._toggleElements("about", this.about);
     
   }
 
@@ -209,7 +200,7 @@ export default class RpPageSubject extends RpUtilsLanding {
    * @description Retrieves the researchers associated with this subject and saves in this.researchers array
    * Called on AppStateUpdate
    */
-  async _doResearcherQuery(id){
+  async _doResearcherQuery(id) {
     let data = await this.SubjectModel.getResearchers(id);
 
     this.tempResearch = data.payload.results;
@@ -219,7 +210,7 @@ export default class RpPageSubject extends RpUtilsLanding {
     }
     this.researchers = data.payload;
     if (APP_CONFIG.verbose) console.log("researchers payload:", data);
-    this._hideElements("researchers", this.researchers.results);
+    this._toggleElements("researchers", this.researchers.results);
 
   }
 
@@ -244,7 +235,7 @@ export default class RpPageSubject extends RpUtilsLanding {
 
     this.publications = {}
     pubTypes.map(pt => this._doPubQuery(pt));
-    this._hideElements("publications", pubTypes);
+    this._toggleElements("publications", pubTypes);
 
   }
 
@@ -275,7 +266,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @param {Number} w - Window width (pixels)
    */
-
   setPeopleWidth(w) {
     let pw = 250;
     let avatarWidth = 82;
@@ -289,15 +279,17 @@ export default class RpPageSubject extends RpUtilsLanding {
    * @description bound to main window resize event
    */
   _handleResize() {
-    if (!this.visible) return;
-      let w = window.innerWidth;
-      this.setPeopleWidth(w);
+    if( !this.visible ) return;
+    let w = window.innerWidth;
+    this.setPeopleWidth(w);
   }
 
   /**
    * @method _pubRedirect
    * @description creates the href that specifies the subject and 
    * type of document for the publication redirect
+   * 
+   * @param {String} k
    */
   _pubRedirect(k){
     let href = '/works/' + k + "?" + "subject=" + this.urlPathId;
@@ -309,32 +301,34 @@ export default class RpPageSubject extends RpUtilsLanding {
    * @description checks if the object has any values for it to 
    * show the object or not
    * 
-   * @param {Object} 
+   * @param {Object} obj
    * 
    * @returns {Boolean}
    */
-  _isEmpty(obj) {
-    for(var key in obj) {
-      if(obj.hasOwnProperty(key))
-        return false;
-    }
-    return true;
+  _isEmpty(obj={}) {
+    return Object.keys(obj).length === 0;
   }
 
-   /**
-   * @method _hideElements
+  /**
+   * @method _toggleElements
    * @description checks if the object is empty it would take away the
    * section and the nav bar
    * 
-   * @param {String, Object} 
-   * 
+   * @param {String} type
+   * @param {Array} arrayCheck 
    */
-  _hideElements(type, arrayCheck) {
+  _toggleElements(type, arrayCheck) {
     if(this._isEmpty(arrayCheck)){
       this.shadowRoot.getElementById(type).style.display = "none";
       let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
       for(let i = 0; i < data.length; i++){
         if(data[i].href.includes(type)) data[i].style.display = "none";
+      }
+    } else {
+      this.shadowRoot.getElementById(type).style.display = "block";
+      let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
+      for(let i = 0; i < data.length; i++){
+        if(data[i].href.includes(type)) data[i].style.display = "block";
       }
     }
   } 
@@ -346,18 +340,19 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {Object, Boolean} 
    */
-
   _getRelatedSubjectsNarrow(){
     let narrow = this.SubjectModel.getRelatedSubjects(this.subject, "narrow");
     let result = [];
     if(narrow){
-      if(!narrow.length){
+      if( !narrow.length ){
         result = [narrow];
-      } else result = narrow.slice();
+      } else {
+        result = narrow.slice();
+      }
       return result;
 
-    } else return false
-      
+    }
+    return false;
   }
 
   /**
@@ -367,17 +362,19 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {Object, Boolean} 
    */
-
   _getRelatedSubjectsBroader(){
     let broad = this.SubjectModel.getRelatedSubjects(this.subject, "broader");
     let result = {};
 
     if(broad){
-      if(!broad.length){
+      if( !broad.length ){
         result = [broad];
-      }  else result = broad.slice(); 
+      } else {
+        result = broad.slice();
+      } 
       return result;
-    } else return false
+    }
+    return false;
   }
 
   /**
@@ -385,12 +382,11 @@ export default class RpPageSubject extends RpUtilsLanding {
    * @description should a given UI section be hidden based on the
    * state of this elements property
    * 
-   * @param {String} status state of call
-   * @param {String} field this elements stored property
+   * @param {String} section
+   * @param {String} statusProperty
    * 
    * @returns {Boolean}
    */
-  
   _hideStatusSection(section, statusProperty="subjectStatus") {
     if (section == this[statusProperty]) {
       return false;
@@ -406,38 +402,37 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {String}
    */
-
   _labelTitle(){
     if(this.subject.prefLabel) return this.subject.prefLabel;
-    else return this.subject.label;
+    return this.subject.label;
   }
 
   /**
    * @method _publicationTitle
-   * @param {String}
    * @description returns the string in a different format else it returns none 
+   * 
+   * @param {String} name
    * 
    * @returns {String}
    */
-
   _publicationTitle(name){
-    if(name == "articles") return "Academic Articles"
-    else if(name == "conference-papers") return "Conference Papers"
-    else if(name == "books") return "Books"
-    else if(name == "chapters") return "Chapters"
-    else return
+    if(name == "articles") return "Academic Articles";
+    else if(name == "conference-papers") return "Conference Papers";
+    else if(name == "books") return "Books";
+    else if(name == "chapters") return "Chapters";
+    return '';
   }
 
   /**
    * @method _getYear
-   * @param {String}
    * @description returns the year after splitting the year from the query 
+   * 
+   * @param {String} date
    * 
    * @returns {String}
    */
-
   _getYear(date){
-    if (!date) return;
+    if (!date) return '';
     return date.split("-")[0];
   }
 
@@ -447,7 +442,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns text links output
    */
-
   _getFullTextLinks(){
     let output = [];
     if (!this.subject) return output;
@@ -472,7 +466,6 @@ export default class RpPageSubject extends RpUtilsLanding {
    * 
    * @returns {Promise}
    */
-
   _getSubjectType() {
     try {
       for (let t of this.subject['@type']) {
@@ -489,4 +482,4 @@ export default class RpPageSubject extends RpUtilsLanding {
 
 }
 
-customElements.define('rp-page-subject', RpPageSubject);
+customElements.define('rp-page-concept', RpPageConcept);

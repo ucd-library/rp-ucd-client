@@ -1,5 +1,6 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const WorkStore = require('../stores/WorkStore');
+const queryUtils = require('../lib/query-utils');
 
 class WorkService extends BaseService {
 
@@ -20,13 +21,7 @@ class WorkService extends BaseService {
    */  
   async getWork(id) {
     return this.request({
-      url : this.baseUrl+'/'+encodeURIComponent(this.jsonContext+':pub/'+id),
-      fetchOptions : {
-        method : 'GET',
-        headers : {
-          'Content-Type' : 'application/json'
-        }
-      },
+      url : this.baseUrl+'/record/'+queryUtils.appendIdPrefix(id),
       checkCached : () => this.store.data.byWork[id],
       onLoading : request => this.store.setWorkLoading(id, request),
       onLoad : result => this.store.setWorkLoaded(id, result.body),
@@ -45,13 +40,7 @@ class WorkService extends BaseService {
    */
   async getAuthors(workId, authorArray) {
     return this.request({
-      url : `${this.baseUrl}/${authorArray.join(',')}`,
-      fetchOptions : {
-        method : 'GET',
-        headers : {
-          'Content-Type' : 'application/json'
-        }
-      },
+      url : `${this.baseUrl}/record/${authorArray.join(',')}`,
       checkCached : () => this.store.data.workAuthors[workId],
       onLoading : request => this.store.setAuthorLoading(workId, request),
       onLoad : result => this.store.setAuthorLoaded(workId, result.body),

@@ -31,12 +31,14 @@ class WorkModel extends BaseModel {
    * @returns {Object}
    */
   async getWork(id) {
-    let state = {state : WorkStore.STATE.INIT};
-    if( state.state === 'init' ) {
-      await this.service.getWork(id);
-    } else if( state.state === 'loading' ) {
+    let state = this.store.data.byWork[id];
+
+    if( state && state.request ) {
       await state.request;
+    } else {
+      await this.service.getWork(id);
     }
+
     return this.store.data.byWork[id];
   }
 
@@ -52,12 +54,14 @@ class WorkModel extends BaseModel {
    * @returns {Object}
    */
   async getAuthorsFullObject(workId, authors) {
-    let state = {state : WorkStore.STATE.INIT};
-    if( state.state === 'init' ) {
-      await this.service.getAuthors(workId, authors);
-    } else if( state.state === 'loading' ) {
+    let state = this.store.data.workAuthors[workId];
+
+    if( state && state.request ) {
       await state.request;
+    } else {
+      await this.service.getAuthors(workId, authors);
     }
+
     return this.store.data.workAuthors[workId];
   }
 
@@ -225,7 +229,7 @@ class WorkModel extends BaseModel {
         }
       }
     } catch (error) {
-      
+      console.error(error);
     }
     return "";
   }
@@ -259,14 +263,18 @@ class WorkModel extends BaseModel {
     
     // venue name
     try {
-      let venue = work.hasPublicationVenue['@id'];
-      if (venue && workType.toLowerCase() == 'academic article') {
-        venue = venue.replace(APP_CONFIG.data.jsonldContext + ":journal", "").replace(/-/g, " ");
-        venue += " (journal)"
+      if( work.hasPublicationVenue ) {
+        let venue = work.hasPublicationVenue['@id'];
+        if (venue && work['@type'].includes('academic article') ) {
+          venue = venue.replace(APP_CONFIG.data.jsonldContext + ":journal", "").replace(/-/g, " ");
+          venue += " (journal)";
+        }
+        if (venue) output.push({text: venue, class: 'venue'});
       }
-      if (venue) output.push({text: venue, class: 'venue'});
-      
-    } catch (error) {}
+        
+    } catch (error) {
+      console.error(error);
+    }
 
     // venue release
     try {
@@ -280,7 +288,9 @@ class WorkModel extends BaseModel {
         if (r) output.push({text: r, class: 'release'});
       }
       
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
 
     // publication date
     try {
@@ -288,7 +298,9 @@ class WorkModel extends BaseModel {
       let options = {year: 'numeric', month: 'long', day: 'numeric' };
       d = new Intl.DateTimeFormat('en-US', options).format(d);
       if (d) output.push({text: d, class: 'pub-date'});
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
 
     return output;
   }

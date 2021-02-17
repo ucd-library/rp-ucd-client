@@ -80,7 +80,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
     this.navLinks = [
       {text: 'People', page: 'people', href: '/people'},
-      {text: 'Subjects', page: 'subjects', href: '/subjects'},
+      {text: 'Subjects', page: 'concepts', href: '/concepts'},
       {text: 'Works', page: 'works', href: '/works'},
       {text: 'Help', page: 'help', href: '/help'}];
 

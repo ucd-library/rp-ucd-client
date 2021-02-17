@@ -24,7 +24,7 @@ export default class RpPageHelp extends Mixin(LitElement)
     this._injectModel('AppStateModel');
     
     this.visible = false;
-    this.isLoggedIn = false;
+    this.isLoggedIn = APP_CONFIG.user ? true : false;
     this.imgPath = '/images/faq/';
 
     this.AppStateModel.get().then(e => this._renderDelay(e));
@@ -37,6 +37,7 @@ export default class RpPageHelp extends Mixin(LitElement)
    * @param {Object} state 
    */
   async _onAppStateUpdate(state) {
+    if( state.page !== 'help' ) return;
     this._renderDelay(state);
   }
 
@@ -49,21 +50,12 @@ export default class RpPageHelp extends Mixin(LitElement)
    * @param {Object} state 
    */
   _renderDelay(state) {
-    requestAnimationFrame(async () => {
-      await this.updateComplete;
-
-      if (!this.visible) {
-        return;
-      }
-      
-      this.isLoggedIn = APP_CONFIG.user ? true : false;
-      
-      if (state.location.hash) {
+    if (state.location.hash) {
+      requestAnimationFrame(async () => {
         let pos = this.shadowRoot.getElementById(state.location.hash);
         if (pos) window.scrollTo(0, pos.getBoundingClientRect().top + window.pageYOffset);
-      }
-
-    });
+      });
+    }
   }
 
 }

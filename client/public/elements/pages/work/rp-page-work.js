@@ -14,8 +14,6 @@ export default class RpPageWork extends RpUtilsLanding {
     return {
       work: {type: Object},
       workStatus: {type: String},
-      grpsWithLinks: {type: String},
-      authorPath: {type: String},
       authors: {type: Array},
       universityAuthors: {type: Array},
       universityAuthorsStatus: {type: String},
@@ -37,8 +35,6 @@ export default class RpPageWork extends RpUtilsLanding {
     this.assetType = "work";
     this.work = {};
     this.workStatus = 'loading';
-    this.authorPath = "/individual/";
-    this.grpsWithLinks = ["vivo:FacultyMember"];
     this.authors = [];
     this.hasOtherAuthors = false;
     this.workType = "";
@@ -91,7 +87,7 @@ export default class RpPageWork extends RpUtilsLanding {
    * @param {Object} state 
    */
   async _onAppStateUpdate(state) {
-    requestAnimationFrame( () => this.doUpdate(state));
+    this.doUpdate(state);
   }
 
   /**
@@ -101,24 +97,17 @@ export default class RpPageWork extends RpUtilsLanding {
    * work path, then performs the MainQuery with assetId, this will rerender
    */
   async doUpdate(state) {
-    await this.updateComplete;
-    if (!this.visible) {
-      return;
-    }
-    console.log("Path:", state.location.path);
+    if( state.page !== 'work' ) return; 
 
     let path = state.location.path;
-    if (path.length == 1) {
-      this.AppStateModel.setLocation('/works');
-      return;
-    }
-    this.assetId = path[1];
-    if (!this.assetId) return;
+    this.assetId = state.location.path.slice(0,2).join('/');
+    if ( !this.assetId ) return;
 
     this._setActiveSection(path);
 
-    await Promise.all([this._doMainQuery(this.assetId)]);
-
+    await Promise.all([
+      this._doMainQuery(this.assetId)
+    ]);
   }
 
   /**

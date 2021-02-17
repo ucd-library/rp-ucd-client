@@ -2,6 +2,7 @@ import { html } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import "./avatar"
+import urlUtils from "../../src/lib/url-utils"
 
 export default function render() {
   return html`
@@ -72,7 +73,7 @@ export default function render() {
       ` : html``}
       ${this.showSubjects && this.getSubjects() ? html`
         <small class="badges">${this.getSubjects().map(subject => html`
-          <rp-badge class="my-1" href="/subject/${encodeURIComponent(subject['@id'])}">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
+          <rp-badge class="my-1" href="${urlUtils.idAsLocalUrlPath(subject['@id'])}">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
         `)}
         </small>
       ` : html``}

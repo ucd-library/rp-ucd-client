@@ -40,15 +40,15 @@ class AssetDefs {
           'citation.label']
       }, 
       {
-        id: 'subjects',
-        idSingular: 'subject',
+        id: 'concepts',
+        idSingular: 'concept',
         text: 'Subjects', 
-        es: TYPES.subjectArea,
+        es: TYPES.concept,
         baseFilter: {
           '@type': {
             type: "keyword", 
             op: "and", 
-            value: [TYPES.subjectArea]
+            value: [TYPES.concept]
           }
         },
         azField: "label.firstLetter",
@@ -73,16 +73,17 @@ class AssetDefs {
         id: 'works', 
         idSingular: 'work',
         text: 'Works', 
-        es: TYPES.publication,
+        es: TYPES.work,
         baseFilter: {
           "@type": {
             type: "keyword", 
             op: "and", 
-            value: [TYPES.publication]
+            value: [TYPES.work]
           }
         },
         azField: "label.firstLetter",
-        areaField: "hasSubjectArea",
+        // areaField: "hasSubjectArea.@id",
+        areaField: "_.allSubjectArea",
         facetedSearchFields: [
           "doi^10",
           "label.text^9",

@@ -1,17 +1,15 @@
-import { html } from 'lit-element';
-import render from "./rp-page-works.tpl.js"
+import render from "./rp-page-works.tpl.js";
 
 import RpUtilsCollection from "../../utils/rp-utils-collection";
 
 import "../../components/alert";
-import "../../components/person-preview"
+import "../../components/person-preview";
 
 
 export default class RpPageWorks extends RpUtilsCollection {
 
   static get properties() {
-    return {
-    }
+    return {}
   }
 
   constructor() {
@@ -28,7 +26,7 @@ export default class RpPageWorks extends RpUtilsCollection {
    * @param {Object} state 
    */
   async _onAppStateUpdate(state) {
-    requestAnimationFrame( () => this.doUpdate(state));
+    this.doUpdate(state);
   }
 
   /**
@@ -37,13 +35,15 @@ export default class RpPageWorks extends RpUtilsCollection {
    * @description collects the path and set the location to the
    * works path, then performs this with the state, this will rerender
    */
-  async doUpdate(state){
-    await this.updateComplete;
-    if (!this.visible) {
-      return;
-    }
+  async doUpdate(state) {
+    if( state.page !== 'works' ) return;
+
     this._parseUrlQuery(state);
-    await Promise.all([this._doMainQuery(), this._getFacets(), this._getAzAgg()]);
+    await Promise.all([
+      this._doMainQuery(), 
+      this._getFacets(), 
+      this._getAzAgg()
+    ]);
   }
 
   /**

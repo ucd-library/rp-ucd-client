@@ -37,7 +37,7 @@ export default class RpUtilsLanding extends Mixin(LitElement)
    * @returns {Array} - Array of objects with section details.
    */
   getPageSections() {
-    let baseHref = `/${this.assetType}/${this.assetId}`;
+    let baseHref = `/${this.assetId}`;
     let sections = [{id:"all", text: "All Info", href: baseHref}];
     if (this.assetType == 'work') {
       sections.push(
@@ -46,13 +46,13 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         {id: 'authors', text: 'Authors'}
       );
     }
-    if (this.assetType == 'individual') {
+    if (this.assetType == 'person') {
       sections.push(
         {id: 'about', text: 'About'},
         {id: 'publications', text: 'Publications'}
       );
     }
-    if (this.assetType == 'subject'){
+    if (this.assetType == 'concept'){
       sections.push(
         {id: 'about', text:'About'},
         {id: 'relatedSubjects', text:'Related Subjects'},

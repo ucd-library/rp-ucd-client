@@ -1,13 +1,12 @@
-import { LitElement, html } from 'lit-element';
-import render from "./rp-page-subjects.tpl.js"
+import render from "./rp-page-concepts.tpl.js";
 
 import RpUtilsCollection from "../../utils/rp-utils-collection";
-import "../../components/subject-preview"
+import "../../components/subject-preview";
 
 
 import "../../components/alert";
 
-export default class RpPageSubjects extends RpUtilsCollection {
+export default class RpPageConcepts extends RpUtilsCollection {
 
   static get properties(){
     return {
@@ -68,4 +67,4 @@ export default class RpPageSubjects extends RpUtilsCollection {
 
 }
 
-customElements.define('rp-page-subjects', RpPageSubjects);
+customElements.define('rp-page-concepts', RpPageConcepts);

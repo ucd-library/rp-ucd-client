@@ -200,7 +200,7 @@ return html`
           </rp-badge>
         `)}
         ${this.subjectsTotal > 10 ? html`
-          <rp-badge size="lg" class="my-1" max-width="280"  ellipsis href="/subjects"></rp-badge>
+          <rp-badge size="lg" class="my-1" max-width="280"  ellipsis href="/concepts"></rp-badge>
           ` : html``}
       </div>
       <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>

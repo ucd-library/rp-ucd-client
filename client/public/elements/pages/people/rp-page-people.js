@@ -1,10 +1,9 @@
-import { html } from 'lit-element';
-import render from "./rp-page-people.tpl.js"
+import render from "./rp-page-people.tpl.js";
 
 import RpUtilsCollection from "../../utils/rp-utils-collection";
 
 import "../../components/alert";
-import "../../components/person-preview"
+import "../../components/person-preview";
 
 
 export default class RpPagePeople extends RpUtilsCollection {
@@ -28,7 +27,7 @@ export default class RpPagePeople extends RpUtilsCollection {
    * 
    */
   async _onAppStateUpdate(state) {
-    requestAnimationFrame( () => this.doUpdate(state));
+    this.doUpdate(state);
   }
 
   /**
@@ -36,12 +35,8 @@ export default class RpPagePeople extends RpUtilsCollection {
    * @param {Object} state
    * @description reset props and update facets, this will rerender
    */
-
   async doUpdate(state){
-    await this.updateComplete;
-    if (!this.visible) {
-      return;
-    }
+    if( state.page !== 'people' ) return;
     this._parseUrlQuery(state);
     await Promise.all([this._doMainQuery(), this._getFacets(), this._getAzAgg()]);
   }

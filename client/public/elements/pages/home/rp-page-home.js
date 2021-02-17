@@ -262,10 +262,10 @@ export default class RpPageHome extends Mixin(LitElement)
           break;
         }
       }
-      if (facet == APP_CONFIG.data.types.subjectArea ) {
+      if (facet == APP_CONFIG.data.types.concept ) {
         this.subjectsTotal = this.facets[facet];
       }
-      if (facet == APP_CONFIG.data.types.publication ) {
+      if (facet == APP_CONFIG.data.types.work ) {
         this.academicWorksTotal = this.facets[facet];
       }
       if (facet == APP_CONFIG.data.types.person ) {

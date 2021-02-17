@@ -1,6 +1,7 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const PersonService = require('../services/PersonService');
 const PersonStore = require('../stores/PersonStore');
+const urlUtils = require('../lib/url-utils');
 
 class PersonModel extends BaseModel {
 
@@ -204,7 +205,7 @@ class PersonModel extends BaseModel {
    */
   getLandingPage(individual={}) {
     if ( !individual['@id'] ) return '';
-    return '/'+individual['@id'].replace(APP_CONFIG.data.prefix.ucdId+':', '');
+    return urlUtils.idAsLocalUrlPath(individual['@id']);
   }
 
   getEmailAddresses(individual){
@@ -235,7 +236,7 @@ class PersonModel extends BaseModel {
     if (!Array.isArray(subjects)) subjects = [subjects];
     for (const subject of subjects) {
       subject.bestLabel = subject.prefLabel ? subject.prefLabel : subject.label;
-      subject.href = `/subject/${encodeURIComponent(subject['@id'])}`;
+      subject.href = urlUtils.idAsLocalUrlPath(subject['@id']);
       out.push(subject);
     }
     return out;

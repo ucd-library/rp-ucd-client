@@ -42,7 +42,7 @@ export default class RpPagePerson extends RpUtilsLanding {
 
     this._injectModel('PersonModel', 'AppStateModel');
     
-    this.assetType = "individual";
+    this.assetType = "person";
 
     // TODO: make util
     this.isAdmin = APP_CONFIG.user && (APP_CONFIG.user.roles || []).includes('admin') ? true : false;
@@ -61,12 +61,12 @@ export default class RpPagePerson extends RpUtilsLanding {
   async _onAppStateUpdate(state) {
     if( state.page !== 'person' ) return;
 
-    if( state.location.length < 2 ) {
-      this.AppStateModel.setLocation('/people');
-    }
-
     let assetId = state.location.path.slice(0, 2).join('/');
-    if( this.assetId === assetId ) return;
+    if( this.assetId === assetId ) {
+      this._setActiveSection(state.location.path);
+      return;
+    }
+    
     this.assetId = assetId;
 
     this.getPageSections();
@@ -238,10 +238,15 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   getPubsByYear(pubType){
     let output = [];
-    if (!this.publicationOverview[pubType] || !this.retrievedPublications[pubType]) return output;
+
+    if (!this.publicationOverview[pubType] || !this.retrievedPublications[pubType] ) {
+      return output;
+    }
+    
     let minToShow = this.hasMultiplePubTypes ? 5 : 10;
     let nToShow = this.publicationOverview[pubType].displayedOffset;
     if (nToShow < minToShow) nToShow = minToShow;
+
     let pubs = this.retrievedPublications[pubType].slice(0, nToShow);
     let pubObj = {};
     let yrs = [];
@@ -262,6 +267,68 @@ export default class RpPagePerson extends RpUtilsLanding {
 
     return output;
   }
+
+  /**
+   * @method showMoreLessButton
+   * @description used to toggle pub buttons panel
+   * 
+   * @param {Object} pubType 
+   * 
+   * @returns {Boolean}
+   */
+  showMoreLessButton(pubType) {
+    return (this.showMoreButton(pubType)) || (this.showLessButton(pubType));
+    // return (pubType.displayedOffset > 10) || (pubType.displayedOffset + 10 <= Math.ceil(pubType.ct / 10) * 10);
+  }
+
+  /**
+   * @method showMoreButton
+   * @description used to toggle show more button
+   * 
+   * @param {Object} pubType 
+   * 
+   * @returns {Boolean}
+   */
+  showMoreButton(pubType) {
+    return pubType.displayedOffset < pubType.ct;
+  }
+
+  /**
+   * @method showMoreButton
+   * @description used to toggle show less button
+   * 
+   * @param {Object} pubType 
+   * 
+   * @returns {Boolean}
+   */
+  showLessButton(pubType) {
+    return pubType.displayedOffset > pubType.ct;
+  }
+
+  /**
+   * @method showMoreButton
+   * @description used to show more button value
+   * 
+   * @param {Object} pubType 
+   * 
+   * @returns {Number}
+   */
+  showMoreCount(pubType) {
+    return pubType.ct - pubType.displayedOffset < 10 ? pubType.ct - pubType.displayedOffset : 10;
+  }
+
+  /**
+   * @method showLessCount
+   * @description used to show less button value
+   * 
+   * @param {Object} pubType 
+   * 
+   * @returns {Number}
+   */
+  showLessCount(pubType) {
+    return pubType.displayedOffset > pubType.ct ? pubType.ct - (pubType.displayedOffset - 10) : 10;
+  }
+
 
   /**
    * @method getTitles

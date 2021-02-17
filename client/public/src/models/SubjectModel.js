@@ -1,8 +1,8 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const SubjectService = require('../services/SubjectService');
 const SubjectStore = require('../stores/SubjectStore');
-
 const CollectionModel = require('./CollectionModel');
+const urlUtils = require('../lib/url-utils');
 
 /**
  * @class SubjectModel
@@ -16,7 +16,7 @@ class SubjectModel extends BaseModel {
     this.store = SubjectStore;
     this.service = SubjectService;
     this.CollectionModel = CollectionModel;
-    this.UrlLanding = '/subject/';
+    this.UrlLanding = '/concept/';
     
     this.register('SubjectModel');
   }
@@ -30,12 +30,14 @@ class SubjectModel extends BaseModel {
    * @returns {Object}
    */
   async getSubject(id) {
-    let state = {state: SubjectStore.STATE.INIT};
-    if( state.state === 'init' ) {
+    let state = this.store.data.bySubject[id];
+
+    if( state && state.request ) {
+      await state.request;
+    } else {
       await this.service.getSubject(id);
-    } else if( state.state === 'loading' ){
-      await this.state.request;
     }
+
     return this.store.data.bySubject[id];
   }
 
@@ -70,12 +72,14 @@ class SubjectModel extends BaseModel {
    * @returns {Object}
    */
   async getResearchers(id) {
-    let state = {state: SubjectStore.STATE.INIT};
-    if( state.state === 'init' ) {
+    let state = this.store.data.researchersBySubject[id];
+
+    if( state && state.request ) {
+      await state.request;
+    } else {
       await this.service.getResearchers(id);
-    } else if( state.state === 'loading' ){
-      await this.state.request;
     }
+
     return this.store.data.researchersBySubject[id];
   }
 
@@ -88,12 +92,14 @@ class SubjectModel extends BaseModel {
    * @returns {Object}
    */
   async getPubOverview(id) {
-    let state = {state: SubjectStore.STATE.INIT};
-    if( state.state === 'init' ) {
+    let state = this.store.data.pubOverviewBySubject[id];
+
+    if( state && state.request ) {
+      await state.request;
+    } else {
       await this.service.getPubOverview(id);
-    } else if( state.state === 'loading' ){
-      await this.state.request;
     }
+
     return this.store.data.pubOverviewBySubject[id];
   }
 
@@ -109,13 +115,15 @@ class SubjectModel extends BaseModel {
    * @returns {Object}
    */
   async getPubs(id, pubType) {
-    let state = {state: SubjectStore.STATE.INIT};
-    let cacheId = JSON.stringify({subject: id, pub: pubType.id});
-    if( state.state === 'init' ) {
+    let cacheId = id+"-"+pubType.id;
+    let state = this.store.data.pubsById[cacheId];
+
+    if( state && state.request ) {
+      await state.request;
+    } else {
       await this.service.getPubs(id, cacheId, pubType);
-    } else if( state.state === 'loading' ){
-      await this.state.request;
     }
+
     return this.store.data.pubsById[cacheId];
   }
 
@@ -178,7 +186,7 @@ class SubjectModel extends BaseModel {
    */
   getLandingPage(subject){
     if (!subject || !subject['@id']) return "";
-    return `${this.UrlLanding}${encodeURIComponent(subject['@id'])}`
+    return urlUtils.idAsLocalUrlPath(subject['@id']);
   }
 
   /**
