@@ -4,7 +4,8 @@ export default function render() {
   return html`
   <style>
     :host {
-      display: inline-block;
+      display: block;
+      position: fixed;
     }
     .container {
       width: auto;
