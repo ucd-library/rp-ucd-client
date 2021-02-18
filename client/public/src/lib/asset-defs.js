@@ -118,13 +118,13 @@ class AssetDefs {
         },
         {
           id: 'non-academics', 
-          es: TYPES.facultyMember, 
+          es: TYPES.nonAcademic, 
           text: 'Non Academic', 
           baseFilter: {
             "@type": {
               type: "keyword", 
               op: "and", 
-              value: [TYPES.facultyMember]
+              value: [TYPES.nonAcademic]
             }
           }
         }
