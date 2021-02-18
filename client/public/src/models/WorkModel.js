@@ -265,11 +265,17 @@ class WorkModel extends BaseModel {
     try {
       if( work.hasPublicationVenue ) {
         let venue = work.hasPublicationVenue['@id'];
-        if (venue && work['@type'].includes('academic article') ) {
-          venue = venue.replace(APP_CONFIG.data.jsonldContext + ":journal", "").replace(/-/g, " ");
-          venue += " (journal)";
+        if( venue ) {
+          if( venue.startsWith(APP_CONFIG.data.prefix.ucdId + ':journal') ) {
+            venue = venue.replace(APP_CONFIG.data.prefix.ucdId + ':journal', '');
+            venue += " (journal)";
+          } else {
+            venue = venue.replace(new RegExp('^'+APP_CONFIG.data.prefix.ucdId+':.*/'), '');
+          }
+          venue = venue.replace(/[-:]/g, ' ');
+
+          output.push({text: venue, class: 'venue'});
         }
-        if (venue) output.push({text: venue, class: 'venue'});
       }
         
     } catch (error) {
