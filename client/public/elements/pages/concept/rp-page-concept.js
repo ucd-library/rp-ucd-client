@@ -34,7 +34,7 @@ export default class RpPageConcept extends RpUtilsLanding {
       urlPathId: {type: String},
       pub: {type: Boolean},
       about: {type: String}
-    }
+    };
   }
 
   constructor() {
@@ -141,7 +141,6 @@ export default class RpPageConcept extends RpUtilsLanding {
    *                      this._getRelatedSubjectsNarrow(), 
    *                      this._getRelatedSubjectsBroader()
    */
-
   async _doMainQuery(id){
     let data = await this.SubjectModel.getSubject(id);
 
@@ -169,7 +168,6 @@ export default class RpPageConcept extends RpUtilsLanding {
    * 
 
    */
-
   async _doAboutQuery(id){
     let data = await this.SubjectModel.getSubject(id);
 
@@ -227,13 +225,13 @@ export default class RpPageConcept extends RpUtilsLanding {
     }
     if (APP_CONFIG.verbose) console.log('pub overview:', data);
     let pubTypeCounts = data.payload.aggregations.facets['@type'];
-    let pubTypes = []
+    let pubTypes = [];
     for (const pubType of this.CollectionModel.subFacets.works) {
       if (!pubTypeCounts[pubType.es]) continue;
       pubTypes.push(pubType);
     }
 
-    this.publications = {}
+    this.publications = {};
     pubTypes.map(pt => this._doPubQuery(pt));
     this._toggleElements("publications", pubTypes);
 
@@ -463,7 +461,9 @@ export default class RpPageConcept extends RpUtilsLanding {
         if (!link.label || !link.url) continue;
         output.push(link);
       }
-    } catch (error) {}
+    } catch (error) {
+      return output;
+    }
 
     return output;
   }
@@ -482,7 +482,7 @@ export default class RpPageConcept extends RpUtilsLanding {
         }
       }
     } catch (error) {
-      
+      return "";
     }
     return "";
   }
