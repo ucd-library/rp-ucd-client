@@ -425,15 +425,23 @@ export default class RpPageConcept extends RpUtilsLanding {
 
   /**
    * @method _getYear
-   * @description returns the year after splitting the year from the query 
+   * @description returns the year of a publication if it hasn't been displayed yet
    * 
-   * @param {String} date
+   * @param {String} pub - A publication object
+   * @param {Number} i - index of publication
+   * @param {Object[]} pubs - Array of publications we're iterating
    * 
    * @returns {String}
    */
-  _getYear(date){
+  _getYear(pub, i, pubs){
+    let date = pub.publicationDate;
     if (!date) return '';
-    return date.split("-")[0];
+    let thisYr = date.split("-")[0];
+    if ( i > 0 ) {
+      let prevYr = pubs[i-1].publicationDate;
+      if ( prevYr && thisYr === prevYr.split("-")[0] )  return "";
+    }
+    return thisYr;
   }
 
   /**
