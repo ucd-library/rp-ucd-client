@@ -164,7 +164,7 @@ return html`
   #app-mobile-menu .greeting {
     font-size: var(--font-size-h2);
     font-weight: var(--font-weight-bold);
-    padding-bottom: 24px;
+    padding-bottom: 16px;
     padding-top: 15px;
   }
   #app-header-content {

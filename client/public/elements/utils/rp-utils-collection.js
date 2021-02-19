@@ -347,24 +347,25 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    * @param {Number} w - window width in pixels.
    */
   setPeopleWidth(w) {
+    let notFaceted = this.mainFacet == this.defaultFacetId;
     let pw = 250;
     let avatarWidth = 82;
     let screenPadding = 40;
-    let facetColumnWidth = 140;
+    let facetColumnWidth = notFaceted ? 0 : 140;
     let sectionPadding = 60;
     let grace = 10;
     if (w >= 1030) {
       let containerMaxWidth = 970;
-      sectionPadding = 180;
+      sectionPadding = notFaceted ? 120 : 180;
       pw = containerMaxWidth - sectionPadding - facetColumnWidth;
     }
     else if (w >= 800) {
       screenPadding = 60;
-      sectionPadding = 180;
+      sectionPadding = notFaceted ? 120 : 180;
       pw = w - screenPadding - sectionPadding - facetColumnWidth;
     }
     else if(w >= 480) {
-      sectionPadding = 60;
+      sectionPadding = notFaceted ? 40 : 60;
       pw = w - screenPadding - sectionPadding - facetColumnWidth;
     }
     else {
@@ -556,7 +557,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       `;
     }
 
-    if (assetType == 'subject') {
+    if (assetType == 'concept') {
       return html`
       <rp-subject-preview .data="${data}" class="my-3" show-snippet></rp-subject-preview>
       `;

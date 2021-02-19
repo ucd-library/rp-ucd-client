@@ -185,9 +185,9 @@ return html`
               <b style="font-size: 18px;">Broader Scope</b>   
             <br /> 
             ${this.broadRelatedSubjects.map(broad => html ` 
-                                                     <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(broad)}">
-                                                        ${(broad.prefLabel) ? broad.prefLabel: broad.label}
-                                                      </rp-badge>`)}`
+              <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(broad)}">
+                ${(broad.prefLabel) ? broad.prefLabel: broad.label}
+              </rp-badge>`)}`
        }
        <br />   
 
@@ -197,9 +197,9 @@ return html`
             <br /> 
 
             ${this.narrowRelatedSubjects.map(narrow => html ` 
-                                                      <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(narrow)}">
-                                                        ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
-                                                      </rp-badge>`)}`
+              <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(narrow)}">
+                ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
+              </rp-badge>`)}`
        }        
 
     </section>
@@ -224,13 +224,12 @@ return html`
         <div class="data">
           ${Object.entries(this.publications).map(([k, v]) => html`
             <h3>${this._publicationTitle(k)} (${v.total})</h3>
-            ${v.results.map(yr => html`
-                                  <div class="box-pubsyear">
-                                    <div class="year">${this._getYear(yr.publicationDate)}</div>
-                                    <div class="pubs"><rp-citation .data="${yr}"></rp-citation></div>
-                                  </div>          
-                          `)
-             }
+            ${v.results.map((pub, i, pubs) => html`
+              <div class="box-pubsyear">
+                <div class="year">${this._getYear(pub, i, pubs)}</div>
+                <div class="pubs"><rp-citation .data="${pub}"></rp-citation></div>
+              </div> 
+            `)}
             <div class="box-pub-buttons">
             <div class="padding"></div>
             ${ v.total > 5 ? 

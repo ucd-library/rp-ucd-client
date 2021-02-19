@@ -1,5 +1,4 @@
-import { LitElement } from 'lit-element';
-import render from "./rp-page-search.tpl.js"
+import render from "./rp-page-search.tpl.js";
 
 import RpUtilsCollection from "../../utils/rp-utils-collection";
 
@@ -8,11 +7,15 @@ import "../../components/link-list";
 import "../../components/pagination";
 
 
+/**
+ * @class RpPageSearch
+ * @description Element for displaying search page
+ */
 export default class RpPageSearch extends RpUtilsCollection {
 
   static get properties() {
     return {
-    }
+    };
   }
 
   constructor() {
@@ -38,7 +41,7 @@ export default class RpPageSearch extends RpUtilsCollection {
       for (let option of this.CollectionModel.mainFacets) {
         i++;
         if (option.id.toLowerCase() == this.mainFacet.toLowerCase()) {
-          isRecognizedFacet = true
+          isRecognizedFacet = true;
           this.mainFacetIndex = i;
           break;
         }
@@ -63,6 +66,7 @@ export default class RpPageSearch extends RpUtilsCollection {
 
   /**
    * @method doUpdate
+   * @param {Object} state
    * @description reset props and update facets, this will rerender
    * and promise to run MainQuery() and searchAggs()
    */
@@ -73,6 +77,7 @@ export default class RpPageSearch extends RpUtilsCollection {
     }
     this._parseUrlQuery(state);
     await Promise.all([this._doMainQuery(), this._getSearchAggs()]);
+    this.setPeopleWidth(window.innerWidth);
   }
 
 }

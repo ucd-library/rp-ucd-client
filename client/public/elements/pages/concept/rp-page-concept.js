@@ -34,7 +34,7 @@ export default class RpPageConcept extends RpUtilsLanding {
       urlPathId: {type: String},
       pub: {type: Boolean},
       about: {type: String}
-    }
+    };
   }
 
   constructor() {
@@ -141,7 +141,6 @@ export default class RpPageConcept extends RpUtilsLanding {
    *                      this._getRelatedSubjectsNarrow(), 
    *                      this._getRelatedSubjectsBroader()
    */
-
   async _doMainQuery(id){
     let data = await this.SubjectModel.getSubject(id);
 
@@ -169,7 +168,6 @@ export default class RpPageConcept extends RpUtilsLanding {
    * 
 
    */
-
   async _doAboutQuery(id){
     let data = await this.SubjectModel.getSubject(id);
 
@@ -227,13 +225,13 @@ export default class RpPageConcept extends RpUtilsLanding {
     }
     if (APP_CONFIG.verbose) console.log('pub overview:', data);
     let pubTypeCounts = data.payload.aggregations.facets['@type'];
-    let pubTypes = []
+    let pubTypes = [];
     for (const pubType of this.CollectionModel.subFacets.works) {
       if (!pubTypeCounts[pubType.es]) continue;
       pubTypes.push(pubType);
     }
 
-    this.publications = {}
+    this.publications = {};
     pubTypes.map(pt => this._doPubQuery(pt));
     this._toggleElements("publications", pubTypes);
 
@@ -425,15 +423,23 @@ export default class RpPageConcept extends RpUtilsLanding {
 
   /**
    * @method _getYear
-   * @description returns the year after splitting the year from the query 
+   * @description returns the year of a publication if it hasn't been displayed yet
    * 
-   * @param {String} date
+   * @param {String} pub - A publication object
+   * @param {Number} i - index of publication
+   * @param {Object[]} pubs - Array of publications we're iterating
    * 
    * @returns {String}
    */
-  _getYear(date){
+  _getYear(pub, i, pubs){
+    let date = pub.publicationDate;
     if (!date) return '';
-    return date.split("-")[0];
+    let thisYr = date.split("-")[0];
+    if ( i > 0 ) {
+      let prevYr = pubs[i-1].publicationDate;
+      if ( prevYr && thisYr === prevYr.split("-")[0] )  return "";
+    }
+    return thisYr;
   }
 
   /**
@@ -455,7 +461,9 @@ export default class RpPageConcept extends RpUtilsLanding {
         if (!link.label || !link.url) continue;
         output.push(link);
       }
-    } catch (error) {}
+    } catch (error) {
+      return output;
+    }
 
     return output;
   }
@@ -474,7 +482,7 @@ export default class RpPageConcept extends RpUtilsLanding {
         }
       }
     } catch (error) {
-      
+      return "";
     }
     return "";
   }
