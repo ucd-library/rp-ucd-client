@@ -1,42 +1,74 @@
 import { LitElement, html } from 'lit-element';
 import render from './work-preview.tpl.js';
 
+import previewUtils from "../../src/lib/preview-utils";
 
-export class RpWorkPreview extends LitElement {
+/**
+ * @class RpWorkPreview
+ * @description element for showing works in a list
+ */
+export class RpWorkPreview extends Mixin(LitElement)
+  .with(LitCorkUtils) {
+  
   static get properties() {
-  return {
-    data: {type: Object},
-    href: {type: String},
-    workPath: {type: String},
-    grpsWithLinks: {type: String},
-    authorPath: {type: String},
-    jsonldContext: {type: String}
-  };
+    return {
+      data: {type: Object},
+      showSnippet: {type: Boolean, attribute: 'show-snippet'},
+      authorCt: {type: Number},
+      snippet : {type: String},
+      title : {type: String}
+    };
   }
 
   constructor() {
     super();
-    this.workPath = "/work/";
-    this.authorPath = "/individual/";
-    this.grpsWithLinks = ["vivo:FacultyMember"];
-    this.jsonldContext = APP_CONFIG.data.jsonldContext;
+    this.data = {};
+    this.authorCt = 0;
+    this.showSnippet = false;
+    this._injectModel('WorkModel');
     this.render = render.bind(this);
   }
 
-  _renderTitleLink() {
-      let href = "";
-      if (this.href) {
-        href = this.href;
+  /**
+   * @method updated
+   * @description lit-element updated method
+   * 
+   * @param {Object} props 
+   */
+  updated(props) {
+    if( props.has('data') ) {
+      let result = previewUtils.getSnippetTitle(
+        this.WorkModel.getLabel(this.data),
+        this.WorkModel.getSnippet(this.data)
+      );
+
+      this.title = result.title;
+      if( result.showSnippet === false ) {
+        this.showSnippet = false;
       }
-      else {
-        try {
-            let id = this.data['@id'].split(`${this.jsonldContext}:publication`)[1];
-            href = this.workPath + id;
-        } catch (error) {
-            console.warn("Unable to construct work href.");
-        }
-      }
-      return html`<a class="title" href="${href}" ?disabled="${!href}">${this.data.label}</a>`;
+    }
+  }
+
+  getTitle(){
+    return this.WorkModel.getLabel(this.data);
+  }
+
+  getLink(){
+    return this.WorkModel.getLandingPage(this.data);
+  }
+
+  getAuthors(){
+    let authors = this.WorkModel.getAuthors(this.data);
+    this.authorCt = authors.length;
+    return authors;
+  }
+
+  getWorkType(){
+    return this.WorkModel.getWorkType(this.data);
+  }
+
+  getSnippet(){
+    return this.WorkModel.getSnippet(this.data);
   }
 
   _renderAuthors(){
@@ -57,17 +89,17 @@ export class RpWorkPreview extends LitElement {
         }
         author.href = "";
         try {
-            if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
-                author.identifiers = [author.identifiers]
+          if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
+            author.identifiers = [author.identifiers]
+          }
+          for (let id of author.identifiers) {
+            if (this.grpsWithLinks.includes(id['@type'])) {
+              author.href = this.authorPath + id['@id'].replace(this.jsonldContext + ":", "");
             }
-            for (let id of author.identifiers) {
-                if (this.grpsWithLinks.includes(id['@type'])) {
-                    author.href = this.authorPath + id['@id'].replace(this.jsonldContext + ":", "");
-                }
-            }
+          }
 
         } catch (error) {
-            console.warn("Unable to construct author href.");
+          console.warn("Unable to construct author href.");
         }
         authors.push(author);
       }
@@ -75,7 +107,7 @@ export class RpWorkPreview extends LitElement {
         return a['vivo:rank'] - b['vivo:rank'];
       });
     }
-return html`<div class="authors">${authors.map(author => html`<a class="author" href="${author.href}" ?disabled="${!author.href}">${author.nameLast}, ${author.nameFirst}</a>; `)}</div>`;
+    return html`<div class="authors">${authors.map(author => html`<a class="author" href="${author.href}" ?disabled="${!author.href}">${author.nameLast}, ${author.nameFirst}</a>; `)}</div>`;
   }
 }
 

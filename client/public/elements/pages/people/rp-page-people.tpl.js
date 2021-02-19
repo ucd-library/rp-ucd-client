@@ -5,10 +5,11 @@ export default function render() {
 return html`
 
 <style>
+  ${styles}
   :host {
     display: block;
   }
-  ${styles}
+  
 </style>
 <div class="collections container bg-light top">
   ${this._renderBrowseHeader('People')}
@@ -25,9 +26,17 @@ return html`
         <rp-alert>Error loading people.</rp-alert>
       </div>
       <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
-        ${this.data.map(person => html`
-          ${this._renderAssetPreview(person)}
-          <hr class="dotted">
+        ${this.data.map((person, i) => html`
+          <rp-person-preview
+            .data="${person}"
+            text-width="${this.peopleWidth}"
+            show-subjects
+            class="my-3">
+          </rp-person-preview>
+          ${this.data.length - i == 1 && this.dataTotal <= this.pgPer ? html`
+            ` : html`
+            <hr class="dotted">
+            `}
           `)}
         ${this._renderPagination(this.dataTotal)}
       </div>

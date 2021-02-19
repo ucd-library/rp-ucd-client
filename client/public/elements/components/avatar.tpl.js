@@ -9,12 +9,12 @@ export default function render() {
       display: inline-block;
     }
     iron-icon {
-      color: var(--tcolor-primary);
+      color: var(--color-blue);
       height: 50%;
       width: 50%;
     }
     .circle {
-      background-color: var(--tcolor-bg-primary);
+      background-color: var(--color-blue20);
       height: 70px;
       width: 70px;
       border-radius: 50%;
@@ -37,7 +37,7 @@ export default function render() {
     }
   </style>
   <div class="circle ${classMap(this.constructClasses())}" style="${styleMap(this.constructStyles())}">
-    ${this.renderFace()}
+    ${this._renderFace()}
   </div>
   `;
 }

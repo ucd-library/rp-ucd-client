@@ -33,21 +33,22 @@ export default function render() {
       width: 0;
       background-color: inherit;
     }
+    /**
     .container.opened input {
       animation-duration: .75s;
       animation-name: open;
-
-    }
-    input:focus {
-      outline: none;
-    }
-    input[hidden] {
-      display: none;
     }
     .container.closing input {
       animation-duration: .75s;
       animation-name: close;
       padding-right: 0 !important;
+    }
+     */
+    input:focus {
+      outline: none;
+    }
+    input[hidden] {
+      display: none;
     }
     .container.closing {
     }
@@ -60,12 +61,12 @@ export default function render() {
       }
 
       to {
-        width: 83%;
+        width: 100%;
         }
     }
     @keyframes close {
       from {
-        width: 90%;
+        width: 100%;
       }
 
       to {
@@ -73,9 +74,9 @@ export default function render() {
         }
     }
   </style>
-  <div class="container ${classMap(this.constructClasses())}">
+  <div class="container ${classMap(this._constructClasses())}">
     <input ?hidden="${!this.opened}" type="text" placeholder="${this.placeholder}"
-           style="${styleMap(this.constructInputStyles())}"
+           style="${styleMap(this._constructInputStyles())}"
            id="search-input"
            .value="${this.inputValue}"
            @animationend="${this._handleAnimationEnd}"

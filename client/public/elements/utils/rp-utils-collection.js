@@ -1,12 +1,20 @@
 import { LitElement, html } from 'lit-element';
 
 import "../components/a-z";
+import "../components/dropdown";
 import "../components/link-list";
-import "../components/organization-preview"
+import "../components/organization-preview";
 import "../components/pagination";
-import "../components/person-preview"
-import "../components/work-preview"
+import "../components/person-preview";
+import "../components/work-preview";
+import "../components/subject-preview";
 
+import AssetDefs from "../../src/lib/asset-defs";
+
+/**
+ * @class RpUtilsCollection
+ * Parent class for page elements that list multiple assets. ie. search and browse.
+ */
 export default class RpUtilsCollection extends Mixin(LitElement)
   .with(LitCorkUtils) {
 
@@ -19,7 +27,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       azDisabled: {type: Array},
       azOptions: {type: Set},
       urlQuery: {type: Object},
-      jsonldContext: {type: String},
       peopleWidth: {type: Number},
       visible: {type: Boolean},
       currentQuery: {type: Object},
@@ -28,16 +35,18 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       pgPer: {type: Number},
       pgCurrent: {type: Number},
       textQuery: {type: String},
-      dataFilters: {type: Array},
+      subjectFilter: {type: String},
       data: {type: Array},
       dataStatus: {type: String},
       dataTotal: {type: Number},
       mainFacetIndex: {type: Number},
       subFacet: {type: String},
       subFacetIndex: {type: Number},
-      subFacetStatus: {type: String}
+      subFacetStatus: {type: String},
+      subFacetsWithResultsCt: {type: Number},
+      defaultFacetId: {type: String}
 
-    }
+    };
   }
 
   constructor() {
@@ -47,7 +56,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.hasPagination = false;
     this.visible = false;
     this.urlQuery = {};
-    this.jsonldContext = APP_CONFIG.data.jsonldContext;
+    this.defaultFacetId = AssetDefs.defaultFacetId;
 
     this._resetQueryProperties();
 
@@ -56,25 +65,31 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   }
 
 
+  /**
+   * @method _resetQueryProperties
+   * @description Resets element properties to their default state.
+   * Called before a new browse/search query is executed.
+   */
   _resetQueryProperties(){
     this.data = [];
     this.dataStatus = 'loading';
     this.dataTotal = 0;
 
     this.currentQuery = {};
-    this.dataFilters = [];
+    this.subjectFilter = "";
 
     this.pgPer = 8;
     this.pgCurrent = 1;
 
-    this.mainFacet = 'none';
+    this.mainFacet = this.defaultFacetId;
     this.mainFacets = [];
     this.mainFacetIndex = 0;
 
-    this.subFacet = 'none';
+    this.subFacet = this.defaultFacetId;
     this.subFacetIndex = 0;
     this.subFacets = [];
     this.subFacetStatus = "loading";
+    this.subFacetsWithResultsCt = 0;
 
     this.textQuery = "";
 
@@ -85,31 +100,70 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
   }
 
+  /**
+   * @method updated
+   * @description Lit method called when element is updated
+   * 
+   * @param {Map} props - changed properties.
+   */
   updated(props) {
-    this.doUpdated(props);
-  }
-
-  doUpdated(props){
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
     }
+
+    // check how many subfacets have results
+    if (props.has('subFacetStatus') && this.subFacetStatus == "loaded") {
+      let subfacetCt = 0;
+      for (const subfacet of this.subFacets) {
+        if (subfacet.id=='none') continue;
+        if (subfacet.ct > 0) subfacetCt += 1;
+      }
+      this.subFacetsWithResultsCt = subfacetCt;
+    }
+
+    // get menu index of active subfilter
+    if ( props.has('subFacet') ) {
+      this.subFacetIndex = 0;
+      let i = 1;
+      for (const subfacet of AssetDefs.getSubFacetsByMainId(this.mainFacet)) {
+        if (subfacet.id == this.subFacet) {
+          this.subFacetIndex = i;
+          break;
+        }
+        i++;
+      }
+    }
   }
 
+  /**
+   * @method connectedCallback
+   * @description Lit method called when element enters the dom
+   */
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('resize', this._handleResize);
   }
 
+  /**
+   * @method disconnectedCallback
+   * @description Lit method called when element exits the dom
+   */
   disconnectedCallback() {
     window.removeEventListener('resize', this._handleResize);
     super.disconnectedCallback();
   }
 
+  /**
+   * @method _doMainQuery
+   * @description Performs primary browse/search query for page based on url path and parameters
+   * 
+   * @returns {Promise}
+   */
   async _doMainQuery(){
     let q = this.currentQuery;
     let data = await this.CollectionModel.query(q);
     let facetAggDoneHere = false;
-    if (this.textQuery && this.mainFacet == 'none' && this.subFacet == 'none') {
+    if (this.textQuery && this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
       this.subFacetStatus = data.state;
       facetAggDoneHere = true;
     }
@@ -127,22 +181,28 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (facetAggDoneHere) {
       this.CollectionModel.store.setSearchAggsLoaded(this.textQuery, data.payload);
       this.mainFacets = this.CollectionModel._getMainFacets(data.payload, this.currentQuery);
-      this.subFacets = this.CollectionModel._getSubFacets(this.mainFacet, data.payload, this.currentQuery);
+      this.subFacets = this.CollectionModel._getSubFacets(data.payload, this.currentQuery);
 
     }
     else {
       this.hasAz = true;
     }
     this.data = data.payload.results;
-    console.log("main query result:", data);
+    if (APP_CONFIG.verbose) console.log("main search/browse query result:", data);
+    
   }
 
-
+  /**
+   * @method _getSearchAggs
+   * @description Does query to retrieve the total counts for any facets/subfacets.
+   * 
+   * @returns {Promise}
+   */
   async _getSearchAggs() {
     if (!this.textQuery) {
       return;
     }
-    if (this.mainFacet == 'none' && this.subFacet == 'none') {
+    if (this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
       return; // agg retrieved by main query
     }
     let data = await this.CollectionModel.searchAggQuery(this.textQuery, this.mainFacet);
@@ -151,79 +211,70 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       return;
     }
     this.mainFacets = this.CollectionModel._getMainFacets(data.payload, this.currentQuery);
-    this.subFacets = this.CollectionModel._getSubFacets(this.mainFacet, data.payload, this.currentQuery);
+    this.subFacets = this.CollectionModel._getSubFacets(data.payload, this.currentQuery);
 
   }
 
 
+  /**
+   * @method _getAzAgg
+   * @description Does query to retrieve the total counts for all letters in the A-Z element
+   * 
+   * @returns {Promise}
+   */
   async _getAzAgg() {
-    let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet)
+    let data = await this.CollectionModel.azAggQuery(this.currentQuery.mainFacet, this.currentQuery.subFacet, this.currentQuery.subjectFilter);
     this.azStatus = data.state;
     if (data.state != 'loaded') {
       return;
     }
-    let aggKey = this.CollectionModel.getAzBaseFilter(this.currentQuery.mainFacet);
-    if (aggKey && aggKey.key) {
-      this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[aggKey.key]))].filter(x => x != 'all');
-    }
-    else {
-      this.azStatus = 'error';
+    let azAggField = AssetDefs.getAzAggField(this.currentQuery.mainFacet);
+    if (azAggField) {
+      this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[azAggField]))].filter(x => x != 'all');
     }
     console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`, data);
 
   }
 
+  /**
+   * @method _parseUrlQuery
+   * @description Parses url path and parameters and sets the currentQuery property.
+   * Called on app-state-update
+   * 
+   * Primary route structure:
+   *  Search: /search/<mainFacet>/<subFacet>?s=search&p=page
+   *  Browse: /<mainFacet>/<subFacet>?p=page
+   * There are some additional query parameters for special queries.
+   * @param {Object} state - App State
+   */
   _parseUrlQuery(state){
 
-    // get current location
-    if (!state) {
-      state = this.AppStateModel.store.data;
-    }
-    let path = state.location.path;
-    let query = state.location.query;
-
-    // start fresh
+    // reset element query properties
     this._resetQueryProperties();
 
-    // get primary facet of query
-    if (path.length < 1) {
-      return;
-    }
+    // get current app location
+    if (!state) state = this.AppStateModel.store.data;
+    let path = state.location.path;
+    let query = state.location.query;
+    if (path.length < 1) return;
 
-    let facetFromPath = "";
+    // get primary facet of query
     if (path[0] == 'search' && path.length > 1) {
-      facetFromPath = path[1].toLowerCase();
+      this.mainFacet = path[1].toLowerCase();
+    }
+    else if ( path[0] == 'search' ) {
+      this.mainFacet = this.defaultFacetId;
     }
     else {
-      facetFromPath = path[0].toLowerCase();
-    }
-    for (let f of this.CollectionModel.mainFacets) {
-      if (facetFromPath == f.id.toLowerCase() ) {
-        this.mainFacet = facetFromPath;
-        this.dataFilters.push(f.baseFilter);
-        break;
-      }
+      this.mainFacet = path[0].toLowerCase();
     }
 
-    let subFacetFromPath = "";
+    // get subfacet of query
     if (path[0] == 'search' && path.length > 2) {
-      subFacetFromPath = path[2].toLowerCase();
+      this.subFacet = path[2].toLowerCase();
     }
     else if (path[0] != 'search' && path.length > 1) {
-      subFacetFromPath = path[1].toLowerCase();
-    }
-    if (this.CollectionModel.subFacets[this.mainFacet]) {
-      let i = 1;
-      for (let f of this.CollectionModel.subFacets[this.mainFacet]) {
-        if (f.id == subFacetFromPath) {
-          this.subFacet = subFacetFromPath;
-          this.subFacetIndex = i;
-          this.dataFilters.push(f.baseFilter);
-          break;
-        }
-        i += 1;
-      }
-
+      this.subFacet = path[1].toLowerCase();
     }
 
     // get any query arguments
@@ -231,8 +282,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       if (arg == 's') {
         this.textQuery = query.s;
       }
-      else if (arg == 'filters') {
-        //this.dataFilters.push( JSON.parse(query[arg]) );
+      else if (arg == 'subject') {
+        this.subjectFilter = query.subject;
       }
       else if (arg == 'page' && !isNaN(query[arg])) {
         this.pgCurrent = query[arg];
@@ -243,10 +294,16 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
 
     this.currentQuery = this._constructQuery();
-    console.log( 'element query:', this.currentQuery);
+    if (APP_CONFIG.verbose) console.log( 'element query:', this.currentQuery);
 
   }
 
+  /**
+   * @method _constructQuery
+   * @description Constructs and returns a query object out of element properties.
+   * 
+   * @returns {Object} Query Object
+   */
   _constructQuery(){
     let q = {};
     if (this.textQuery) {
@@ -262,10 +319,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (this.azSelected) {
       q.azSelected = this.azSelected;
     }
+    if (this.subjectFilter) q.subjectFilter = this.subjectFilter;
 
-    if (this.dataFilters) {
-      q.filters = this.dataFilters;
-    }
     if (this.mainFacet && this.mainFacet != 'none') {
       q.mainFacet = this.mainFacet;
     }
@@ -276,157 +331,173 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     return q;
   }
 
+  /**
+   * @method _handleResize
+   * @description attached to window resize
+   */
   _handleResize() {
     if (!this.visible) return;
     let w = window.innerWidth;
     this.setPeopleWidth(w);
   }
 
-
+  /**
+   * @method setPeopleWidth
+   * @description Sets the width property on any person-preview elements.
+   * @param {Number} w - window width in pixels.
+   */
   setPeopleWidth(w) {
+    let notFaceted = this.mainFacet == this.defaultFacetId;
     let pw = 250;
     let avatarWidth = 82;
-    let screenPadding = 30;
-    pw = (w - screenPadding) * .7 - avatarWidth - 40;
+    let screenPadding = 40;
+    let facetColumnWidth = notFaceted ? 0 : 140;
+    let sectionPadding = 60;
+    let grace = 10;
+    if (w >= 1030) {
+      let containerMaxWidth = 970;
+      sectionPadding = notFaceted ? 120 : 180;
+      pw = containerMaxWidth - sectionPadding - facetColumnWidth;
+    }
+    else if (w >= 800) {
+      screenPadding = 60;
+      sectionPadding = notFaceted ? 120 : 180;
+      pw = w - screenPadding - sectionPadding - facetColumnWidth;
+    }
+    else if(w >= 480) {
+      sectionPadding = notFaceted ? 40 : 60;
+      pw = w - screenPadding - sectionPadding - facetColumnWidth;
+    }
+    else {
+      pw = w - screenPadding - sectionPadding;
+    }
+    pw = pw - avatarWidth - grace;
     this.peopleWidth = Math.floor(pw);
   }
 
+  /**
+   * @method _onUserAction
+   * @description Handles various user interactions when <a> tags aren't used.
+   * Constructs the new app url and sets the AppStateModel location
+   * @param {String} action - Type of user action.
+   * @param  {...any} args - Value of user action.
+   */
   _onUserAction(action, ...args) {
     if (!action) {
       return;
     }
-    let path = ""
+    let path = "";
     let q = {...this.currentQuery};
 
     // handle page change
     if (action == 'pagination' && this.hasPagination) {
-      q.pgCurrent = args[0]
-      path = this.CollectionModel.constructUrl(q)
+      q.pgCurrent = args[0];
+      path = this.CollectionModel.constructUrl(q);
     }
 
     // handle az change
     else if (action == 'az') {
-      q.azSelected = args[0]
-      path = this.CollectionModel.constructUrl(q, ['page'])
+      q.azSelected = args[0];
+      path = this.CollectionModel.constructUrl(q, ['page']);
     }
 
     if (path) this.AppStateModel.setLocation(path);
-
-
-    /*
-    let q = {...this.urlQuery};
-    if (!q.filters) {
-      q.filters = {};
-    }
-    if (q.s && q.filters["@type"]) {
-      q.filters = {};
-    }
-    console.log(q);
-    console.log("User action:", action);
-
-    // handle az
-    if (action == 'az') {
-      return;
-    }
-
-    // handle pagination
-    if (action == 'pagination' && this.hasPagination) {
-      this.pgCurrent = args[0];
-      q.offset = this.pgCurrent * this.urlQuery.limit - this.urlQuery.limit;
-    }
-
-    // handle facets
-    if (action.startsWith('facet_')) {
-      if (args[0].filters) {
-        q.filters = {...q.filters, ...args[0].filters}
-      }
-      else {
-        let f = action.slice('facet_'.length, );
-        if (q.filters[f]) {
-          delete q.filters[f];
-        }
-      }
-      q.offset = 0;
-    }
-
-    // construct new url and redirect
-    let p = "";
-    if (this.AppStateModel) {
-      p = "/" + this.AppStateModel.store.data.location.path.join("/")
-    }
-
-    p = p + this._urlEncode(q)
-    //console.log(p);
-    //return;
-    this.AppStateModel.setLocation(p);
-    */
   }
 
+  /**
+   * @method setDifference
+   * @description Gets the difference between two sets.
+   * @param {Set} setA 
+   * @param {Set} setB 
+   * 
+   * @returns {Set}
+   */
   _setDifference(setA, setB) {
-    let _difference = new Set(setA)
+    let _difference = new Set(setA);
     for (let elem of setB) {
-        _difference.delete(elem)
+      _difference.delete(elem);
     }
-    return _difference
-}
-
-_getAssetType(data) {
-  if (!data['@type']) {
-    return;
-  }
-  if (typeof data['@type'] === 'string') {
-    data['@type'] = [data['@type']];
-  }
-  if ( !Array.isArray(data['@type']) ) {
-    return;
+    return _difference;
   }
 
-  if (data['@type'].includes(this.jsonldContext + ":person")) {
-    return "person";
-  }
-  if (data['@type'].includes(this.jsonldContext + ":publication")) {
-    return "work";
-  }
-  if (data['@type'].includes(this.jsonldContext + ":organization")) {
-    return "organization";
+  /**
+   * @method _getAssetType
+   * @description Returns asset type based on data object returned in a query.
+   * @param {Object} data 
+   * 
+   * @returns {String}
+   */
+  _getAssetType(data) {
+    if (!data['@type']) {
+      return "";
+    }
+    if (typeof data['@type'] === 'string') {
+      data['@type'] = [data['@type']];
+    }
+    if ( !Array.isArray(data['@type']) ) {
+      return "";
+    }
+    for (const asset of AssetDefs.getMainFacets()) {
+      if ( data['@type'].includes(asset.es) ) {
+        return asset.idSingular;
+      }
+    }
+    return "";
   }
 
-  return;
-}
-
-_urlEncode(obj) {
-  let str = [];
-  for (let p in obj)
-    if (obj.hasOwnProperty(p)) {
+  /**
+   * @method _urlEncode
+   * @description Constructs encoded url parameters
+   * @param {Object} obj - key:value pairs of url arguments.
+   * 
+   * @returns {String}
+   */
+  _urlEncode(obj) {
+    let str = [];
+    for (let p in obj) {
       if (p == 'offset' && obj[p] == 0) {
         continue;
       }
-      if (p == 'filters' && Object.keys(obj[p]).length == 0) {
+      else if (p == 'filters' && Object.keys(obj[p]).length == 0) {
         continue;
       }
-      if (p == 'limit') {
+      else if (p == 'limit') {
         continue;
       }
       str.push(encodeURIComponent(p) + "=" + encodeURIComponent( JSON.stringify(obj[p]) ));
     }
-  if (!str.length) {
-    return ""
+          
+    if (!str.length) {
+      return "";
+    }
+    return "?" + str.join("&");
   }
-  return "?" + str.join("&");
-}
 
-/*
-*
-* RENDER FUNCTIONS
-*
-*/
 
+
+
+  /*
+  *
+  * RENDER FUNCTIONS
+  *
+  */
+
+  /**
+   * @method _renderBrowseHeader
+   * @description Renders the page header of browse pages
+   * @param {String} title - Page Title
+   * @param {String} Azselected - Selected letter in AZ index.
+   * 
+   * @returns {TemplateResult}
+   */
   _renderBrowseHeader(title, Azselected) {
     this.hasAz = true;
     if (Azselected) {
       this.azSelected = Azselected;
     }
     return html`
+    <h1 class="hidden-tablet-up mobile-browse-title mb-0">${title}</h1>
+    ${this._renderMobileSubFacets(true)}
     <div class="header flex align-items-center">
       <div class="col-facets">
         <h1>${title}</h1>
@@ -444,47 +515,57 @@ _urlEncode(obj) {
     `;
   }
 
+  /**
+   * @method _renderFacets
+   * @description Renders subfacet list
+   * 
+   * @returns {TemplateResult}
+   */
   _renderFacets() {
     if (!this.subFacets) {
       return html``;
     }
+
     return html`
     <rp-link-list
       has-header-link
       .links='${this.subFacets}'
-      current-link='${this.subFacetIndex}'
-      >
+      current-link='${this.subFacetIndex}'>
     </rp-link-list>
     `;
-    return html`${facets.map(facet => html`
-      <rp-link-list has-header-link
-                    .links='${facet.values}'
-                    current-link='${facet.activeIndex}'
-                    @changed-link="${e => this._onUserAction('facet_' + facet.id, e.target.links[e.target.currentLink])}">
-      </rp-link-list>
-      `)}
-    `
   }
 
+  /**
+   * @method _renderAssetPreview
+   * @description Renders the appropriate asset preview
+   * @param {Object} data - An asset data object.
+   * 
+   * @returns {TemplateResult}
+   */
   _renderAssetPreview(data) {
     let assetType = this._getAssetType(data);
 
     if (assetType == 'person') {
-      let person = this.CollectionModel._formatPerson(data);
       return html`
       <rp-person-preview
-        name="${person.name}"
-        href="${"/individual/" + person.id}"
-        title=${person.title}
+        .data="${data}"
+        show-snippet
+        show-subjects
         text-width="${this.peopleWidth}"
         class="my-3">
       </rp-person-preview>
       `;
     }
 
+    if (assetType == 'concept') {
+      return html`
+      <rp-subject-preview .data="${data}" class="my-3" show-snippet></rp-subject-preview>
+      `;
+    }
+
     if (assetType == 'work') {
       return html`
-      <rp-work-preview .data="${data}" class="my-3"></rp-work-preview>
+      <rp-work-preview .data="${data}" show-snippet class="my-3"></rp-work-preview>
       `;
     }
 
@@ -494,12 +575,72 @@ _urlEncode(obj) {
       `;
     }
 
-    return html``
+    return html``;
 
   }
 
+  /**
+   * @method _renderMobileSubFacets
+   * @description Renders the subfacet dropdown in the mobile view.
+   * @param {Boolean} isBrowsePage - Is this a browse or search page?
+   * 
+   * @returns {TemplateResult}
+   */
+  _renderMobileSubFacets(isBrowsePage=false){
+    if (this.data.length == 0 || this.mainFacet == 'none') return html``;
+
+    let singleFacetText = "";
+    if (!this.subFacetsWithResultsCt && this.subFacets.length > 0 ){
+      singleFacetText = this.subFacets[0].text;
+    }
+    else if (this.subFacetsWithResultsCt == 1) {
+      for (const subfacet of this.subFacets) {
+        if (subfacet.id=='none') continue;
+        if (subfacet.ct > 0) {
+          singleFacetText = subfacet.text;
+          break;
+        }
+      }
+    }
+
+    // Filter out options without results for mobile only
+    let facets = [];
+    let facetIndex = this.subFacetIndex;
+    if (!singleFacetText) {
+      let oldIndex = 0;
+      let newIndex = 0;
+      for (const facet of this.subFacets) {
+        if (oldIndex == this.subFacetIndex) facetIndex = newIndex;
+        if (facet.ct > 0) {
+          newIndex += 1;
+          facets.push(facet);
+        }
+        oldIndex += 1;
+      }
+    }
+
+    return html`
+    <div class="container">
+      <div class="hidden-tablet-up ${isBrowsePage ? 'is-browse-page' : ''}" id="mobile-subfacets">
+        ${this.subFacetsWithResultsCt > 1 ? html`
+          <rp-dropdown .choices=${facets} .chosen=${facetIndex} filter-icon use-links theme-color="${isBrowsePage ? 'bg-primary' : 'outline-primary'}"></rp-dropdown>
+        ` : html`
+          <p class="bold">${singleFacetText}</p>
+        `}
+      </div>
+    </div>
+    `;
+  }
+
+  /**
+   * @method _renderPagination
+   * @description Renders the pagination element
+   * @param {Number} totalResults - Total number of results of the current query.
+   * 
+   * @returns {TemplateResult}
+   */
   _renderPagination(totalResults) {
-    if (!totalResults) {
+    if (!totalResults || totalResults <= this.pgPer ) {
       return html``;
     }
     this.hasPagination = true;
@@ -510,7 +651,7 @@ _urlEncode(obj) {
                    @changed-page="${e => this._onUserAction("pagination", e.target.currentPage)}"
                    class="mt-3"
     ></rp-pagination>
-    `
+    `;
   }
 }
 

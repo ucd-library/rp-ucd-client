@@ -1,4 +1,5 @@
 import { html } from 'lit-element';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 //import { styleMap } from 'lit-html/directives/style-map';
 
 export default function render() {
@@ -10,15 +11,13 @@ export default function render() {
     .container {
       display: flex;
       flex-flow: row nowrap;
-      align-items: center;
+      align-items: flex-start;
     }
     .icon-container {
-      background-color: var(--tcolor-bg-primary);
       height: 70px;
       width: 70px;
       min-height: 70px;
       min-width: 70px;
-      border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -31,28 +30,49 @@ export default function render() {
     .text-container {
       margin-left: 12px;
       flex-grow: 1;
+      align-self: center;
     }
     .title {
       font-size: var(--font-size);
       color : var(--tcolor-link-text);
       font-weight : var(--font-weight-bold);
     }
-    .author {
-      color : var(--tcolor-link-text);
+    .below-title {
+      color : var(--tcolor-text);
+      font-size: var(--font-size-small);
     }
-    a[disabled] {
-      pointer-events: none;
-      text-decoration: none;
+    .snippet {
+      font-size : var(--font-size-small);
+      color: var(--tcolor-link-disabled-text);
     }
-    a[disabled]:hover {
-      color : var(--tcolor-link-text);
+    .snippet em {
+      font-weight: bold;
+      font-style: normal;
+    }
+    .title em {
+      font-weight: bold;
     }
   </style>
   <div class=container>
-    <div class="icon-container"><iron-icon icon="av:library-books"></iron-icon></div>
+    <div class="icon-container"><rp-icon icon="iron-description" theme-color='work' circle-bg size-icon="extralgIconWorks" size="extralg"></rp-icon></div>
     <div class="text-container">
-      ${this._renderTitleLink()}
-      ${this._renderAuthors()}
+      
+      <a class="title" 
+        href="${this.getLink()}" 
+        ?disabled="${!this.getLink()}">
+        ${unsafeHTML(this.title)}
+      </a>
+      
+      <div class="below-title">
+        <span class="work-type">${this.getWorkType()}</span>
+        ${this.getWorkType() ? html`<span class="mx-1">|</span>` : html``}
+        <span class="authors">${this.getAuthors().map((author, i) => html`
+        ${author.nameLast}, ${author.nameFirst}${this.authorCt > i + 1 ? '; ' : ''}
+        `)}</span>
+      </div>
+      ${this.showSnippet ? html`
+        <div class="snippet">${unsafeHTML(this.getSnippet())}</div>
+      ` : html``}
     </div>
   </div>
 

@@ -1,17 +1,15 @@
-import { html } from 'lit-element';
-import render from "./rp-page-works.tpl.js"
+import render from "./rp-page-works.tpl.js";
 
 import RpUtilsCollection from "../../utils/rp-utils-collection";
 
 import "../../components/alert";
-import "../../components/person-preview"
+import "../../components/person-preview";
 
 
 export default class RpPageWorks extends RpUtilsCollection {
 
   static get properties() {
-    return {
-    }
+    return {}
   }
 
   constructor() {
@@ -21,28 +19,50 @@ export default class RpPageWorks extends RpUtilsCollection {
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
+  /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
   async _onAppStateUpdate(state) {
-    requestAnimationFrame( () => this.doUpdate(state));
+    this.doUpdate(state);
   }
 
-  async doUpdate(state){
-    await this.updateComplete;
-    if (!this.visible) {
-      return;
-    }
+  /**
+   * @method doUpdate
+   * @param {Object} state
+   * @description collects the path and set the location to the
+   * works path, then performs this with the state, this will rerender
+   */
+  async doUpdate(state) {
+    if( state.page !== 'works' ) return;
+
     this._parseUrlQuery(state);
-    await Promise.all([this._doMainQuery(), this._getFacets(), this._getAzAgg()]);
+    await Promise.all([
+      this._doMainQuery(), 
+      this._getFacets(), 
+      this._getAzAgg()
+    ]);
   }
 
+  /**
+   * @method _getFacets
+   * @description load and render the current overview works facet list
+   * and sub facets from the CollectionModel
+   * 
+   */
   async _getFacets() {
     let activeFilters = {};
-    let facetAggs = await this.CollectionModel.overview('worksAggs');
+    let kwargs = {}
+    if (this.currentQuery.subjectFilter) kwargs.subjectFilter = this.currentQuery.subjectFilter;
+    let facetAggs = await this.CollectionModel.overview('worksAggs', kwargs);
     this.subFacetStatus = facetAggs.state;
     if (facetAggs.state != 'loaded') {
       return;
     }
     //console.log("peopleaggs", peopleAggs);
-    this.subFacets = this.CollectionModel._getSubFacets('works', facetAggs.payload, this.currentQuery);
+    this.subFacets = this.CollectionModel._getSubFacets(facetAggs.payload, this.currentQuery);
   }
 
 }

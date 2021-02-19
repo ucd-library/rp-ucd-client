@@ -1,12 +1,16 @@
 import { LitElement, html } from 'lit-element';
 import render from './avatar.tpl.js';
 
+/**
+ * @class RpAvatar
+ * @description UI component for displaying a user's avatar
+ */
 export class RpAvatar extends LitElement {
   static get properties() {
-  return {
-    size: {type: String},
-    src: {type: String}
-  };
+    return {
+      size: {type: String},
+      src: {type: String}
+    };
   }
 
   constructor() {
@@ -14,6 +18,12 @@ export class RpAvatar extends LitElement {
     this.render = render.bind(this);
   }
 
+  /**
+   * @method _constructClasses
+   * @description Constructs CSS classes based on element properties
+   * 
+   * @returns {Object}
+   */
   constructClasses() {
     let classes = {};
 
@@ -27,6 +37,12 @@ export class RpAvatar extends LitElement {
     return classes;
   }
 
+  /**
+   * @method _constructStyles
+   * @description Constructs CSS styles based on element properties
+   * 
+   * @returns {Object}
+   */
   constructStyles() {
     let styles = {};
 
@@ -36,10 +52,17 @@ export class RpAvatar extends LitElement {
     return styles;
   }
 
-  renderFace() {
+  /**
+   * @method _renderFace
+   * @description Renders iron icon placeholder if no avatar src
+   * 
+   * @returns {TemplateResult}
+   */
+  _renderFace() {
     if (!this.src || this.src == 'undefined') {
       return html`<iron-icon icon='face'></iron-icon>`;
     }
+    return html``;
   }
 }
 

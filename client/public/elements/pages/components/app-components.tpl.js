@@ -12,7 +12,6 @@ import "../../components/dropdown"
 import "../../components/hero-image"
 import "../../components/icon"
 import "../../components/link-list"
-import "../../components/link-list-counts"
 import "../../components/modal"
 import "../../components/organization-preview"
 import "../../components/pagination"
@@ -20,8 +19,9 @@ import "../../components/person-preview"
 import "../../components/quick-search"
 import "../../components/search"
 import "../../components/edit-profile"
-import "../../components/view-all"
 import "../../components/work-preview"
+import "../../components/subject-preview"
+
 
 export default function render() {
 return html`
@@ -199,6 +199,7 @@ Otherwise, a <code>new-selection</code> event will fire when an option is clicke
 <h2>Dropdown</h2>
 <p>A stylized dropdown. Listen with <code>@new-selection="\${e => console.log(e.target.choices[e.target.chosen])}</code></p>
 <rp-dropdown choices='["People",
+                       {"text": "Subjects"}
                        {"text": "Organizations"},
                        {"text": "Works"}]'
              @new-selection="${e => console.log(e.target.choices[e.target.chosen])}">
@@ -247,6 +248,11 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <p>Preface the <code>icon</code> attribute with "rp-" to use one of the custom icons</p>
 <rp-icon icon="rp-search" circle-bg is-link theme-color='secondary' size="lg"></rp-icon>
 <rp-icon icon="rp-qr" circle-bg is-link></rp-icon>
+<p>Can also be used in different sizes for different types of information representation.</p>
+<rp-icon icon="iron-description" theme-color='work' circle-bg sizeIcon="extralgIconWorks" size="extralg"></rp-icon>
+<rp-icon icon="rp-subject" circle-bg theme-color='subject' sizeIconSVG="extralgSVGIcon" size="extralg"></rp-icon>
+<rp-avatar></rp-avatar>
+
 </section>
 
 <section>
@@ -270,24 +276,6 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
                         {"text": "Disabled Link", "disabled": true} ]'>
   </rp-link-list>
 </div>
-</section>
-
-<section>
-<h2>Link List with Counts</h2>
-<p>Link list that will prepend counts. Listen with <code>@link-click="\${(e) => console.log(e.target.Clickedlink)}"</code></p>
-<p>Use the <code>view-all-links</code> and <code>header</code> attributes to enable these displays:</p>
-<rp-link-list-counts links='[{"text": "Academic Articles", "count": 3080},
-                             {"text": "Books", "count": 8},
-                             {"text": "Chapters", "count": 52},
-                             {"text": "Conference Papers", "count": 451},
-                             {"text": "Datasets", "count": 70},
-                             {"text": "Journals", "count": 960},
-                             {"text": "Reports", "count": 4}]'
-                      view-all-link='{"text": "View All Works"}'
-                      header='{"text": "Academic Works", "count": 8413}'
-                      @link-click="${(e) => console.log(e.target.Clickedlink)}"
-                      >
-</rp-link-list-counts>
 </section>
 
 <section>
@@ -400,18 +388,19 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 </section> 
 
 <section>
-<h1>View All</h1>
-<p>Dead simple element that displays a View All link. Use the <code>text</code> attribute to customize, and <code>justify</code> to control horizontal alignment.</p>
-<rp-view-all justify="start"></rp-view-all>
-<rp-view-all text="View All People"></rp-view-all>
-<rp-view-all text="Add an href to make it a normal link" href="https://google.com"></rp-view-all>
-</section>
-
-<section>
 <h1>Asset Preview (Work)</h1>
 <p>Card for the Work asset type - used in browse and search pages.</p>
 ${this.exampleWorks.map((work) => html`
   <rp-work-preview .data="${work}"></rp-work-preview>
+`)}
+
+</section>
+
+<section>
+<h1>Asset Preview (Subjects)</h1>
+<p>Card for the Subject asset type - used in browse and search pages.</p>
+${this.exampleSubjects.map((subject) => html`
+  <rp-subject-preview .data="${subject}"></rp-subject-preview>
 `)}
 
 </section>

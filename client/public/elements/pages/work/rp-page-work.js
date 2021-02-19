@@ -1,4 +1,3 @@
-import { LitElement, html } from 'lit-element';
 import render from "./rp-page-work.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
@@ -8,15 +7,16 @@ import "../../components/badge";
 import "../../components/link-list";
 import "../../components/person-preview";
 
-
+/**
+ * @class RpPageWork
+ * @description Element for displaying a single work page
+ */
 export default class RpPageWork extends RpUtilsLanding {
 
   static get properties() {
     return {
       work: {type: Object},
       workStatus: {type: String},
-      grpsWithLinks: {type: String},
-      authorPath: {type: String},
       authors: {type: Array},
       universityAuthors: {type: Array},
       universityAuthorsStatus: {type: String},
@@ -27,19 +27,17 @@ export default class RpPageWork extends RpUtilsLanding {
       fullTextLinks: {type: Array},
       isOwnWork: {type: Boolean},
       peopleWidth: {type: Number}
-    }
+    };
   }
 
   constructor() {
     super();
     this.render = render.bind(this);
-    this._injectModel('AppStateModel', 'WorkModel');
+    this._injectModel('AppStateModel', 'WorkModel', 'SubjectModel');
 
     this.assetType = "work";
     this.work = {};
     this.workStatus = 'loading';
-    this.authorPath = "/individual/";
-    this.grpsWithLinks = ["vivo:FacultyMember"];
     this.authors = [];
     this.hasOtherAuthors = false;
     this.workType = "";
@@ -52,49 +50,76 @@ export default class RpPageWork extends RpUtilsLanding {
     this.universityAuthors = [];
     this.universityAuthorsStatus = 'loading';
 
-
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
+  /**
+   * @method updated
+   * @description lit method called when props update
+   * 
+   * @param {Object} props 
+   */
   updated(props) {
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
     }
   }
 
+  /**
+   * @method connectedCallback
+   * @description lit method called when element is connected to dom
+   */
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('resize', this._handleResize);
   }
 
+  /**
+   * @method disconnectedCallback
+   * @description lit method called when element is disconnected to dom
+   */  
   disconnectedCallback() {
     window.removeEventListener('resize', this._handleResize);
     super.disconnectedCallback();
   }
 
+  /**
+   * @method _onAppStateUpdate
+   * @description bound to AppStateModel app-state-update event
+   * 
+   * @param {Object} state 
+   */
   async _onAppStateUpdate(state) {
-    requestAnimationFrame( () => this.doUpdate(state));
-   }
+    this.doUpdate(state);
+  }
 
-   async doUpdate(state) {
-    await this.updateComplete;
-    if (!this.visible) {
-      return;
-    }
+  /**
+   * @method doUpdate
+   * @param {Object} state
+   * @description collects the path and set the location to the
+   * work path, then performs the MainQuery with assetId, this will rerender
+   */
+  async doUpdate(state) {
+    if( state.page !== 'work' ) return; 
+
     let path = state.location.path;
-    if (path.length == 1) {
-      this.AppStateModel.setLocation('/works');
-      return;
-    }
-    this.assetId = path[1];
-    if (!this.assetId) return;
+    this.assetId = state.location.path.slice(0,2).join('/');
+    if ( !this.assetId ) return;
 
     this._setActiveSection(path);
 
-    await Promise.all([this._doMainQuery(this.assetId)]);
-
+    await Promise.all([
+      this._doMainQuery(this.assetId)
+    ]);
   }
 
+  /**
+   * @method _doMainQuery
+   * @param {String} id
+   * @description Performs primary browse/search query for the work model based on url path and parameters
+   * 
+   * @returns {Promise}
+   */
   async _doMainQuery(id){
     let data = await this.WorkModel.getWork(id);
     this.workStatus = data.state;
@@ -104,18 +129,31 @@ export default class RpPageWork extends RpUtilsLanding {
     this.work = data.payload;
     if (APP_CONFIG.verbose) console.log("work payload:", data);
 
-    this.authors = this._parseAuthors();
-    this.workType = this._getWorkType();
-    this.publishedArray = this._getPublishedArray();
-    this.subjects = this._getSubjects();
-    this.fullTextLinks = this._getFullTextLinks();
+    this.authors = this.WorkModel.getAuthors(this.work);
+    console.log(this.authors);
+    
+    this.isOwnWork = this.WorkModel.isUsersWork(this.work);
+    this.hasOtherAuthors = this.WorkModel.hasNonInstitutionAuthors(this.work);
+    this.workType = this.WorkModel.getWorkType(this.work);
+    this.publishedArray = this.WorkModel.getPublishedArray(this.work);
+    this.subjects = this.WorkModel.getSubjects(this.work);
+    this.fullTextLinks = this.WorkModel.getFullTextLinks(this.work);
     this._doAuthorQuery(id, this.authors);
+    console.log("Subjects:",this.subjects);
   }
 
+  /**
+   * @method _doAuthorQuery
+   * @description Performs primary browse/search query for the work model based on url path and parameters
+   * to get the authors for the works
+   * 
+   * @param {String} id
+   * @param {Object} authors
+   */
   async _doAuthorQuery(id, authors) {
     this.universityAuthors = [];
     let universityAuthors = authors.filter(author => author.isOtherUniversity == false).map(a => a.apiEndpoint);
-    let data = await this.WorkModel.getAuthors(id, universityAuthors);
+    let data = await this.WorkModel.getAuthorsFullObject(id, universityAuthors);
     this.universityAuthorsStatus = data.state;
     if (data.state != 'loaded') return;
     if (APP_CONFIG.verbose) console.log("university authors:", data);
@@ -129,6 +167,14 @@ export default class RpPageWork extends RpUtilsLanding {
     this.universityAuthors = universityAuthors;
   }
 
+  /**
+   * @method setPeopleWidth
+   * @description
+   * Sets the text-width property of the rp-work-preview elements on this page.
+   * It's the only way to get the ellipsis overflow on their titles. 
+   * 
+   * @param {Number} w - Window width (pixels)
+   */
   setPeopleWidth(w) {
     let pw = 250;
     let avatarWidth = 82;
@@ -137,159 +183,31 @@ export default class RpPageWork extends RpUtilsLanding {
     this.peopleWidth = Math.floor(pw);
   }
 
+  /**
+   * @method _handleResize
+   * @description bound to main window resize event
+   */
   _handleResize() {
     if (!this.visible) return;
     let w = window.innerWidth;
     this.setPeopleWidth(w);
   }
 
+  /**
+   * @method _hideStatusSection
+   * @description should a given UI section be hidden based on the
+   * state of this elements property
+   * 
+   * @param {String} section
+   * @param {String} statusProperty
+   * 
+   * @returns {Boolean}
+   */
   _hideStatusSection(section, statusProperty="workStatus") {
     if (section == this[statusProperty]) {
       return false;
     }
     return true;
-  }
-
-  _getFullTextLinks(){
-    let output = [];
-    if (!this.work) return output;
-
-    try {
-      let links = this.work.hasContactInfo.hasURL;
-      if (!Array.isArray(links)) {
-        links = [links];
-      }
-      for (let link of links) {
-        if (!link.label || !link.url) continue;
-        output.push(link);
-      }
-    } catch (error) {}
-
-    return output;
-  }
-
-  _getWorkType() {
-    try {
-      for (let t of this.work['@type']) {
-        for (const possibleType of this.WorkModel.getWorkTypes()) {
-          if (possibleType.es == t) return possibleType.text;
-        }
-      }
-    } catch (error) {
-      
-    }
-    return "";
-  }
-
-  _parseAuthors(){
-    let authors = [];
-    this.isOwnWork = false
-    this.hasOtherAuthors = false;
-    if (this.work.Authorship && typeof this.work.Authorship === 'object') {
-      let auths = this.work.Authorship;
-      if (!Array.isArray(auths)) {
-        auths = [auths];
-      }
-      for (let author of auths) {
-        if (!author.hasName) {
-          continue;
-        }
-        author.nameFirst = author.hasName.givenName;
-        author.nameLast = author.hasName.familyName;
-        if (!author['vivo:rank']) {
-          author['vivo:rank'] = Infinity;
-        }
-        author.href = "";
-        author.isOtherUniversity = true;
-        try {
-            if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
-                author.identifiers = [author.identifiers]
-            }
-            for (let id of author.identifiers) {
-                if (this.grpsWithLinks.includes(id['@type'])) {
-                  let authorId = id['@id'].replace(this.WorkModel.service.jsonContext + ":", "");
-                  author.apiEndpoint = id['@id'];
-                  try {
-                    if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
-                      this.isOwnWork = true;
-                    }
-                  } catch (error) {}
-                  author.href = this.authorPath + authorId;
-                  author.isOtherUniversity = false;
-                }
-            }
-
-        } catch (error) {
-            console.warn("Unable to construct author href.");
-        }
-        if (author.isOtherUniversity) {
-          this.hasOtherAuthors = true;
-          
-        }
-        authors.push(author);
-      }
-      authors.sort(function (a, b) {
-        return a['vivo:rank'] - b['vivo:rank'];
-      });
-    }
-    return authors;
-
-  }
-
-  _getPublishedArray() {
-    let output = [];
-    if (!this.work) return output;
-    
-    // venue name
-    try {
-      let venue = this.work.hasPublicationVenue['@id'];
-      if (venue && this.workType.toLowerCase() == 'academic article') {
-        venue = venue.replace(APP_CONFIG.data.jsonldContext + ":journal", "").replace(/-/g, " ");
-        venue += " (journal)"
-      }
-      if (venue) output.push({text: venue, class: 'venue'});
-      
-    } catch (error) {}
-
-    // venue release
-    try {
-      let r = "";
-      if (output.length > 0) {
-        if (this.work.volume) r += `Volume ${this.work.volume}`;
-        if (this.work.issue) {
-          if (r) r += ", ";
-          r += `Issue ${this.work.issue}`;
-        }
-        if (r) output.push({text: r, class: 'release'});
-      }
-      
-    } catch (error) {}
-
-    // publication date
-    try {
-      let d = new Date(this.work.publicationDate);
-      let options = {year: 'numeric', month: 'long', day: 'numeric' };
-      d = new Intl.DateTimeFormat('en-US', options).format(d);
-      if (d) output.push({text: d, class: 'pub-date'});
-    } catch (error) {}
-
-    return output;
-  }
-
-  _getSubjects() {
-    let output = [];
-    if (!this.work) return output;
-
-    try {
-      let s = this.work.hasSubjectArea;
-      if (!Array.isArray(s)) s = [s];
-      for (let subject of s) {
-        if (!subject.label) continue;
-        output.push(subject);
-      }
-    } catch (error) {}
-
-    return output;
   }
 
 }

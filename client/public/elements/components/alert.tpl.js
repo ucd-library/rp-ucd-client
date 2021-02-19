@@ -1,6 +1,5 @@
 import { html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { styleMap } from 'lit-html/directives/style-map';
 
 export default function render() {
   return html`
@@ -14,7 +13,7 @@ export default function render() {
       padding: 8px;
       font-size: var(--font-size-small);
     }
-    .container.danger {
+    .container.color-danger {
       background-color: var(--tcolor-light);
       border-width: 1px;
       border-style: solid;

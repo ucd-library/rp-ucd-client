@@ -1,6 +1,7 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const PersonService = require('../services/PersonService');
 const PersonStore = require('../stores/PersonStore');
+const urlUtils = require('../lib/url-utils');
 
 class PersonModel extends BaseModel {
 
@@ -10,67 +11,70 @@ class PersonModel extends BaseModel {
     this.store = PersonStore;
     this.service = PersonService;
     this.individualId = "";
-    this.jsonContext = APP_CONFIG.data.jsonldContext;
     this.register('PersonModel');
   }
 
-  async getIndividual(id) {
-    let state = {state : PersonStore.STATE.INIT};
-    if( state.state === 'init' ) {
-      await this.service.getIndividual(id);
-    } else if( state.state === 'loading' ) {
+  /**
+   * @method get
+   * @description get a person by id
+   * 
+   * @param {String} id
+   * 
+   * @returns {Object} 
+   */
+  async get(id) {
+    let state = this.store.data.byIndividual[id];
+
+    if( state && state.request ) {
       await state.request;
+    } else {
+      await this.service.get(id);
     }
+
     return this.store.data.byIndividual[id];
   }
 
-  async getPubOverview(personid) {
-    let state = {state : PersonStore.STATE.INIT};
-    if( state.state === 'init' ) {
-      await this.service.getPubsOverview(personid);
-    } else if( state.state === 'loading' ) {
+  /**
+   * @method getPubOverview
+   * @description get publication overview for person
+   * 
+   * @param {String} id
+   * 
+   * @returns {Promise}
+   */
+  async getPubOverview(id) {
+    let state = this.store.data.pubsOverview[id];
+
+    if( state && state.request ) {
       await state.request;
+    } else {
+      await this.service.getPubsOverview(id);
     }
-    return this.store.data.pubsOverview[personid];
+
+    return this.store.data.pubsOverview[id];
   }
 
-  async getPublications(personid, pubTypeObject, offset) {
+  /**
+   * @method getPublications
+   * @description get publications for a person
+   * 
+   * @param {String} id 
+   * @param {Object} pubTypeObject 
+   * @param {Number} offset
+   * 
+   * @returns {Promise} 
+   */
+  async getPublications(id, pubTypeObject, offset) {
+    let requestId = this.service.getPublicationsRequestId(id, pubTypeObject, offset);
 
-    // make sure master cache is set
-    if (!this.store.data.pubsByIndividual[personid]) this.store.data.pubsByIndividual[personid] = {};
-    if (!this.store.data.pubsByIndividual[personid][pubTypeObject.id]) this.store.data.pubsByIndividual[personid][pubTypeObject.id] = [];
-
-    // make request for specified args
-    let cacheObject = {personid: personid, pubType: pubTypeObject.id, offset: offset};
-    let cacheId = JSON.stringify(cacheObject)
-    let searchObject = {
-      offset: offset,
-      limit: 10,
-      sort: [{"publicationDate": {"order" : "desc"}}],
-      filters: {
-        'Authorship.identifiers.@id': {"type": "keyword", "op" : "and", "value": [`${this.jsonContext}:${personid}`]},
-        "@type": {"type": "keyword", "op": "and", "value": [`${pubTypeObject.es}`],
-        'publicationDate': {"type": "exists"}
-      }
-      },
-      facets: {}
-    };
-
-    let state = {state : PersonStore.STATE.INIT};
-    if( state.state === 'init' ) {
-      await this.service.getPublications(cacheId, searchObject);
-    } else if( state.state === 'loading' ) {
+    let state = this.store.data.pubsByRequest[requestId];
+    if( state && state.request ) {
       await state.request;
+    } else {
+      await this.service.getPublications(id,  pubTypeObject, offset);
     }
 
-    // link current request to master store and retrieve all pubs in master store
-    if (!this.store.data.pubsByIndividual[personid][pubTypeObject.id].includes(cacheId)) {
-      this.store.data.pubsByIndividual[personid][pubTypeObject.id].push(cacheId);
-    }
-    let masterStore = this.store.data.pubsByIndividual[personid][pubTypeObject.id];
-    masterStore = masterStore.map(id => JSON.parse(id)).sort(function(a,b){return a.offset - b.offset});
-    masterStore = masterStore.map(obj => this.store.data.pubsByRequest[JSON.stringify(obj)].payload.results).flat();
-    return {masterStore: masterStore, request: this.store.data.pubsByRequest[cacheId]};
+    return this.store.data.pubsByRequest[requestId];
   }
 
   getPublicationTypes(){
@@ -89,7 +93,7 @@ class PersonModel extends BaseModel {
   // however, these should really be individual ids IMO.
     // All these machinations are particular to the UI, and won't be  changed in
   // database IMO.  Joining contacts is pretty much a PPS thing.
-  getIndividualTitles(individual){
+  getTitles(individual){
     let titles = [];
     if (!individual) {
       return titles;
@@ -147,7 +151,7 @@ class PersonModel extends BaseModel {
   }
   getHeadlineTitle(individual) {
     let title=""
-    let best=this.getIndividualTitles(individual)[0];
+    let best=this.getTitles(individual)[0];
     if (best && best.title)
       title=best.title;
     if (best && best.orgs[0])
@@ -165,6 +169,44 @@ class PersonModel extends BaseModel {
     }
     return "";
     }
+
+  getNameObject(individual){
+    let out = {'fname': '', 'lname': ''};
+    if (!individual || !individual.hasContactInfo) {
+      return out;
+    }
+    let contactArray = Array.isArray(individual.hasContactInfo) ? individual.hasContactInfo : [individual.hasContactInfo];
+    for (const contactInfo of contactArray) {
+      if (out.fname && out.lname) return out;
+      if (contactInfo.familyName) out.lname = contactInfo.familyName;
+      if (contactInfo.givenName) out.fname = contactInfo.givenName;
+    }
+    return out;
+  }
+
+  getAvatarSrc(individual){
+    return "";
+  }
+
+  getSnippet(individual){
+    let out = "";
+    if (!individual || !individual._snippet) return out;
+    if (individual._snippet.value) out = individual._snippet.value;
+    return out;
+  }
+
+  /**
+   * @method getLandingPage
+   * @description returns the landing page url for a person
+   * 
+   * @param {Object} individual 
+   * 
+   * @returns {String}
+   */
+  getLandingPage(individual={}) {
+    if ( !individual['@id'] ) return '';
+    return urlUtils.idAsLocalUrlPath(individual['@id']);
+  }
 
   getEmailAddresses(individual){
     let out = []
@@ -184,6 +226,19 @@ class PersonModel extends BaseModel {
       
     }
 
+    return out;
+  }
+
+  getResearchSubjects(individual) {
+    let out = [];
+    if (!individual || !individual.hasResearchArea) return out;
+    let subjects = individual.hasResearchArea;
+    if (!Array.isArray(subjects)) subjects = [subjects];
+    for (const subject of subjects) {
+      subject.bestLabel = subject.prefLabel ? subject.prefLabel : subject.label;
+      subject.href = urlUtils.idAsLocalUrlPath(subject['@id']);
+      out.push(subject);
+    }
     return out;
   }
 

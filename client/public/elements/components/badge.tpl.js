@@ -6,7 +6,7 @@ return html`
   :host {
     display: inline-block;
   }
-  span {
+  span.main {
     display: inline-block;
     border: 2px solid;
     border-radius: 1em;
@@ -15,13 +15,24 @@ return html`
     border-color: var(--tcolor-accent0);
     transition: 0.3s;
   }
+  span.main.ellipsis {
+    border-color: var(--tcolor-bg-primary);
+    background-color: var(--tcolor-bg-primary);
+    color: var(--tcolor-primary);
+  }
   span.size-lg {
     padding: .55em .9em;
+    border-radius: 2em;
   }
-  a:hover span {
-      background-color: var(--tcolor-hover-bg);
-      color:  var(--tcolor-hover-text);
-      border-color: var(--tcolor-hover-bg);
+  span.main.has-max-width {
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
+  a:hover span.main {
+      background-color: var(--tcolor-hover-bg) !important;
+      color:  var(--tcolor-hover-text) !important;
+      border-color: var(--tcolor-hover-bg) !important;
   }
   span.color-0 {
     border-color: var(--tcolor-accent0);
@@ -55,6 +66,16 @@ return html`
   }
   a:active {
     color: var(--tcolor-text);
+  }
+  .dot {
+    width: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    height: 6px;
+    background-color: var(--tcolor-primary);
+  }
+  a:hover .dot {
+    background-color: #fff;
   }
 
 </style>

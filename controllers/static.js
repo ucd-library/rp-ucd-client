@@ -6,7 +6,7 @@ import config from '../lib/config.js';
 import esmUtils from '../lib/esm-utils.js';
 import rpNodeUtils from '@ucd-lib/rp-node-utils';
 
-const {logger, auth, elasticSearch} = rpNodeUtils;
+const {logger, auth, elasticSearch, redis} = rpNodeUtils;
 const {__dirname} = esmUtils.moduleLocation(import.meta);
 const assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
 const loaderPath = path.join(assetsDir, 'loader', 'loader.js');
@@ -18,11 +18,13 @@ if( fs.existsSync(loaderPath) ) {
   logger.warn(`JS loaded not found on disk! ${loaderPath}`);
 }
 
-
-let esClient; 
 (async function (){
-  esClient = await elasticSearch.connect();
+  await elasticSearch.connect();
+  redis.connect();
 })();
+
+const USER_AUTH_PROPS = ['departmentnumber', 'displayname', 'edupersonaffiliation',
+'edupersonprincipalname', 'givenname', 'mail', 'ou', 'sn', 'title', 'uid'];
 
 const bundle = `
   <script>
@@ -42,7 +44,7 @@ export default (app) => {
     assetsDir,
     appRoutes : config.client.appRoutes,
     versions : config.client.versions
-  })
+  });
 
   /**
    * Setup SPA app routes
@@ -59,23 +61,56 @@ export default (app) => {
       if( token ) {
         try {
           user = await auth.verifyToken(token);
-          try{
-            user.hasProfile = await esClient.exists({index: token})//await esClient.exist -wrap in try/catch (set to true false)
-          }catch(e){
-            console.log("error")
+
+          // set has profile flag
+          try {
+            user.hasProfile = await userExists(user.username);
+          } catch(e) {
+            user.hasProfile = false;
           }
+
+          // fetch additional user properties
+          let authProps = await redis.client.get(config.redis.prefixes.authProperties+user.username);
+          if( authProps ) {
+            authProps = JSON.parse(authProps);
+            USER_AUTH_PROPS.forEach(prop => user[prop] = authProps[prop]);
+          }
+
         } catch(e) {
-          console.log("error")
+          logger.error('error parsing jwt token: ', e);
         }
       }
 
+      // check for admin impersonation
+      if( user && req.cookies.impersonate && (user.roles || []).includes('admin') ) {
+        logger.info(`user ${user.username} is impersonating: ${req.cookies.impersonate}`);
+        user = {
+          impersonatedBy : user,
+          username : req.cookies.impersonate,
+          roles : [],
+          hasProfile : await userExists(req.cookies.impersonate)
+        };
+
+        // fetch additional user properties
+        let authProps = await redis.client.get(config.redis.prefixes.authProperties+user.username);
+        if( authProps ) {
+          authProps = JSON.parse(authProps);
+          USER_AUTH_PROPS.forEach(prop => user[prop] = authProps[prop]);
+        }
+      }
 
       next({
         user,
         appRoutes : config.client.appRoutes,
         theme : config.client.theme,
         data : config.client.data,
-        verbose : config.client.verbose
+        verbose : config.client.verbose,
+        env : {
+          CLIENT_TAG : process.env.CLIENT_TAG || '',
+          VESSEL_TAG : process.env.VESSEL_TAG || '',
+          APP_VERSION : process.env.APP_VERSION || '',
+          BUILD_TIME : process.env.BUILD_TIME || ''
+        }
       });
     },
     template : (req, res, next) => {
@@ -88,4 +123,16 @@ export default (app) => {
    * Setup static asset dir
    */
   app.use(express.static(assetsDir));
+};
+
+async function userExists(email) {
+  try {
+    return await elasticSearch.client.exists({
+      index: config.elasticSearch.indexAlias,
+      id: 'ucdrp:'+email.replace(/@.*/, '')
+    });
+  } catch(e) {
+    logger.info(e);
+  }
+  return false;
 }

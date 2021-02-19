@@ -1,25 +1,43 @@
 import { LitElement, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { styleMap } from 'lit-html/directives/style-map';
 import render from './badge.tpl.js';
 
+/**
+ * @class RpBadge
+ * @description A badge UI component - primarily used for research subjects.
+ * Cycles through different border colors if previous element is also rp-badge.
+ * Uses a slot to render text of badge.
+ */
 export class RpBadge extends LitElement {
   static get properties() {
-  return {
-    size: {type: String},
-    href: {type: String},
-    colorSequence: {type: Number,
-                    attribute: 'color-sequence'},
-  };
+    return {
+      size: {type: String},
+      href: {type: String},
+      maxWidth: {type: Number, attribute: 'max-width'},
+      ellipsis: {type: Boolean},
+      colorSequence: {type: Number, attribute: 'color-sequence'},
+    };
   }
 
   constructor() {
     super();
     this.maxColor = 6;
+    this.href = "";
+    this.maxWidth = 0;
+    this.ellipsis = false;
     this.render = render.bind(this);
   }
 
-  constructClasses() {
-    let classes = {};
+  /**
+   * @method _constructClasses
+   * @description Makes a class map object based on element properties/attributes. 
+   * Classes are applied to the element.
+   * 
+   * @returns {Object} - {class1: true, class2: false}
+   */
+  _constructClasses() {
+    let classes = {'main': true};
 
     if (this.size) {
       classes['size-' + this.size] = true;
@@ -28,6 +46,9 @@ export class RpBadge extends LitElement {
     if (this.colorSequence) {
       let n = Math.floor(this.colorSequence);
       classes['color-' + n.toString()] = true;
+    }
+    else if ( this.ellipsis ) {
+      classes['ellipsis'] = true;
     }
     else {
       let siblings = [...this.parentNode.childNodes].filter(n => n.tagName === this.tagName);
@@ -42,21 +63,50 @@ export class RpBadge extends LitElement {
 
     }
 
-    return classes
+    if (this.maxWidth > 0) classes['has-max-width'] =  true;
+    
+    return classes;
   }
 
+  /**
+   * @method _constructStyles
+   * @description Constructs CSS styles based on element properties
+   * 
+   * @returns {Object}
+   */
+  _constructStyles(){
+    let styles = {};
+    if (this.maxWidth > 0) styles['max-width'] = `${this.maxWidth}px`;
+    return styles;
+  }
+
+  /**
+   * @method _renderBadge
+   * @description Renders badge as a link or not.
+   * 
+   * @returns {TemplateResult}
+   */
   _renderBadge() {
     if (this.href) {
-      return html`<a href=${this.href}>${this._renderSpan()}</a>`;
+      return html`<a style="color:inherit;" href=${this.href}>${this._renderSpan()}</a>`;
     }
-    else {
-      return html`${this._renderSpan()}`;
-    }
+    return html`${this._renderSpan()}`;
   }
 
+  /**
+   * @method _renderSpan
+   * @description Renders the badge content
+   * 
+   * @returns {TemplateResult}
+   */
   _renderSpan() {
-    return html`<span class=${classMap(this.constructClasses())}>
-      <slot></slot>
+    return html`<span class=${classMap(this._constructClasses())} style=${styleMap(this._constructStyles())}>
+      ${this.ellipsis ? html`
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      ` : html`<slot></slot>`}
+      
     </span>`;
   }
 

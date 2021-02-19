@@ -96,7 +96,7 @@ export default function render() {
       <iron-dropdown id="dropdown" scroll-action="cancel" vertical-align="top" vertical-offset="${this.pixels}" horizontal-align="${this.dropOnLeft ? 'left' : 'right'}">
         <div slot="dropdown-content" id="dropdown-content">
           <div class="title">${this.title}</div>
-          <ul>${this.choices.map((choice, i) => this._renderChoices(choice, i))}</ul>
+          <ul>${this.choices.map((choice, i) => this._renderChoice(choice, i))}</ul>
         </div>
     </iron-dropdown>
       

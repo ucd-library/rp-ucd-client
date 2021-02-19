@@ -1,6 +1,8 @@
 import { html } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import "./avatar"
+import urlUtils from "../../src/lib/url-utils"
 
 export default function render() {
   return html`
@@ -11,11 +13,12 @@ export default function render() {
     .container {
       display: flex;
       flex-flow: row nowrap;
-      align-items: center;
+      align-items: flex-start;
     }
     .text-container {
       margin-left: 12px;
       flex-grow: 1;
+      align-self: center;
     }
     .name {
       font-size: var(--font-size);
@@ -45,15 +48,36 @@ export default function render() {
       line-height: 1.4;
     }
     small.badges {
-      margin-top: 5px;
+      margin-top: 10px;
+    }
+    .snippet {
+      font-size : var(--font-size-small);
+      color: var(--tcolor-link-disabled-text);
+    }
+    .snippet em {
+      font-weight: bold;
+      font-style: normal;
     }
   </style>
   <div class=container>
-    <rp-avatar size="${this._parsedData.avatarSize}" src="${this._parsedData.avatarSrc}"></rp-avatar>
+    <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth})}">
-      <a class="name" href="${this._parsedData.href}" ?disabled="${!this._parsedData.href}">${this._parsedData.name}</a>
-      <small>${this._parsedData.title}</small>
-      <small class="badges">${this.badges.map(b => this._renderBadge(b))}</small>
+      <a class="name" 
+        href="${this.getLandingPage()}" 
+        ?disabled="${!this.getLandingPage()}">
+        ${unsafeHTML(this.title)}
+      </a>
+      <small>${this.getTitle()}</small>
+      ${this.showSnippet && this.getSnippet() ? html`
+        <div class="snippet">${unsafeHTML(this.getSnippet())}</div>
+      ` : html``}
+      ${this.showSubjects && this.getSubjects() ? html`
+        <small class="badges">${this.getSubjects().map(subject => html`
+          <rp-badge class="my-1" href="${urlUtils.idAsLocalUrlPath(subject['@id'])}">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
+        `)}
+        </small>
+      ` : html``}
+      
     </div>
   </div>
 

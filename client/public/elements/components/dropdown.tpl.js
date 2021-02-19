@@ -13,16 +13,42 @@ export default function render() {
     }
     .container {
       font-size: var(--font-size-small);
+      display: flex;
+      align-items: center;
+    }
+    .container.color-bg-primary {
+      background-color: var(--tcolor-bg-primary);
+      color: var(--tcolor-text);
+    }
+    .container.color-outline-primary {
+      color: var(--tcolor-primary70);
+      background-color: var(--tcolor-light);
+    }
+    rp-icon {
+      padding-left: 10px;
+    }
+    .color-bg-primary .line {
+      background-color: #fff;
+    }
+    .line {
+      background-color: var(--tcolor-primary10);
+      width: 1px;
+      height: 34px;
+      margin: 0 8px;
     }
     #button {
       cursor: pointer;
+      flex-grow: 1;
       display: flex;
       flex-flow: row nowrap;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       height: 44px;
       padding-left: 15px;
       padding-right: 10px;
+    }
+    .has-filter-icon #button {
+      padding-left: 3px;
     }
     .nopadding #button {
       padding-left: 0;
@@ -30,10 +56,6 @@ export default function render() {
     }
     #input::placeholder {
       color: var(--tcolor-placeholder-text);
-    }
-    .container.outline-primary {
-      color: var(--tcolor-primary70);
-      background-color: var(--tcolor-light);
     }
     ul {
       list-style-type: none;
@@ -49,18 +71,22 @@ export default function render() {
       cursor: auto;
       font-weight: var(--font-weight-bold);
     }
+    li a {
+      display: block;
+      width: 100%;
+      text-decoration: none;
+      color: var(--tcolor-primary);
+    }
     iron-icon {
       margin-top: 2px;
     }
-    .container.outline-primary li:hover {
-      background-color: var(--tcolor-primary10);
+    .color-outline-primary li:hover, .color-bg-primary li:hover {
+      background-color: var(--tcolor-primary10) !important;
     }
-    .container.outline-primary ul {
+    .color-outline-primary ul, .color-bg-primary ul{
       border-style: solid;
       border-width: 1px;
       border-color: var(--tcolor-primary70);
-    }
-    .container.outline-primary ul {
       background-color: var(--tcolor-light);
     }
     .container.upper {
@@ -68,13 +94,17 @@ export default function render() {
     }
   </style>
   <div class="container ${classMap(this._constructClasses())}">
+    ${this.filterIcon ? html`
+      <rp-icon icon=rp-filter></rp-icon>
+      <div class="line"></div>
+    ` : html``}
    <div id="button"
         @click="${this.openDropdown}">
         <span id="button-text">${this.stickyTitle ? this.stickyTitle : this._parseChoices()[this.chosen].text}</span>
         <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
    </div>
     <iron-dropdown id="dropdown" scroll-action="cancel" vertical-align="top" vertical-offset=${this.stickyTitle ? "35" : "0"}>
-      <ul slot="dropdown-content">${this._parseChoices().map(choice => this._renderChoices(choice))}</ul>
+      <ul slot="dropdown-content">${this._parseChoices().map(choice => this._renderChoice(choice))}</ul>
     </iron-dropdown>
   </div>
   `;

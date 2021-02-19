@@ -1,12 +1,16 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement } from 'lit-element';
 import render from './accordian.tpl.js';
 
+/**
+ * @class RpAccordian
+ * @description UI component for making an FAQ-style accordian element
+ */
 export class RpAccordian extends LitElement {
   static get properties() {
-  return {
-    titleText: {type: String, attribute: "title-text"},
-    expanded: {type: Boolean, reflect: true}
-  };
+    return {
+      titleText: {type: String, attribute: "title-text"},
+      expanded: {type: Boolean, reflect: true}
+    };
   }
 
   constructor() {
@@ -15,11 +19,10 @@ export class RpAccordian extends LitElement {
     this.expanded = false;
   }
 
-  constructClasses() {
-    let classes = {};
-    return classes;
-  }
-
+  /**
+   * @method toggle
+   * @description Expands/collapses element inner text
+   */
   toggle(){
     this.expanded = !this.expanded;
   }

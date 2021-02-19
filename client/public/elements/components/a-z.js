@@ -1,14 +1,19 @@
 import { LitElement, html } from 'lit-element';
 import render from './a-z.tpl.js';
 
+/**
+ * @class RpAZ
+ * @description UI component that displays an A-Z list
+ * Emits 'changed-letter' event when a new item is selected.
+ */
 export class RpAZ extends LitElement {
   static get properties() {
-  return {
-    hideAll: {type: Boolean, attribute: 'hide-all'},
-    disabledLetters: {type: Array},
-    disabledLettersFmt: {type: Array},
-    selectedLetter: {type: String, attribute: 'selected-letter'},
-  };
+    return {
+      hideAll: {type: Boolean, attribute: 'hide-all'},
+      disabledLetters: {type: Array},
+      disabledLettersFmt: {type: Array},
+      selectedLetter: {type: String, attribute: 'selected-letter'},
+    };
   }
 
   constructor() {
@@ -26,24 +31,54 @@ export class RpAZ extends LitElement {
     });
   }
 
+  /**
+   * @method updated
+   * @description Lit method called when element is updated
+   * @param {Map} props - Element properties that have changed.
+   */
   updated(props) {
     if (props.has('disabledLetters')) {
       this.disabledLettersFmt = this.disabledLetters.map(x => x.toUpperCase());
     }
   }
 
+  /**
+   * @method firstUpdated
+   * @description Lit method called when element is updated for first time.
+   */
+  firstUpdated() {
+    if (!this.hideAll) {
+      this.azlist.unshift('All');
+      this.requestUpdate();
+    }
+  }
+
+  /**
+   * @method _renderAz
+   * @description Renders a single letter.
+   * @param {*} letter 
+   * 
+   * @returns {TemplateResult}
+   */
   _renderAz(letter) {
     let selected = "";
     if (this.selectedLetter) {
       if (this.selectedLetter.toLowerCase() === letter.toLowerCase()) {
-        selected = "selected"
+        selected = "selected";
       }
     }
     return html`<div @click="${this.handleClick}"
                      ?disabled="${this.disabledLettersFmt.includes(letter)}"
                      class="letter ${selected}"
-                     letter="${letter}">${letter}</div>`
+                     letter="${letter}">${letter}</div>`;
   }
+
+  /**
+   * @method handleClick
+   * @description Attached to letter click listener
+   * Emits 'changed-letter' event if letter changes
+   * @param {Event} e 
+   */
   handleClick(e) {
     let new_letter = e.target.getAttribute('letter').toLowerCase();
     if (new_letter != this.selectedLetter && !e.target.hasAttribute('disabled')) {
@@ -52,12 +87,6 @@ export class RpAZ extends LitElement {
     }
   }
 
-  firstUpdated(changedProperties) {
-    if (!this.hideAll) {
-      this.azlist.unshift('All');
-      this.requestUpdate();
-    }
-  }
 }
 
 customElements.define('rp-a-z', RpAZ);

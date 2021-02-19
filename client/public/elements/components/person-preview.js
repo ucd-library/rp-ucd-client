@@ -1,124 +1,145 @@
 import { LitElement, html } from 'lit-element';
 import render from './person-preview.tpl.js';
 
+import previewUtils from "../../src/lib/preview-utils";
 import "./badge";
 
-export class RpPersonPreview extends LitElement {
+export class RpPersonPreview extends Mixin(LitElement)
+  .with(LitCorkUtils) {
+
   static get properties() {
-  return {
-    data: {type: Object},
-    name: {type: String},
-    _parsedData: {type: Object},
-    href: {type: String},
-    title: {type: String},
-    badges: {type: Array},
-    avatarSize: {type: String, attribute: 'avatar-size'},
-    avatarSrc: {type: String, attribute: 'avatar-src'},
-    textWidth: {type: String, attribute: 'text-width'}
-  };
+    return {
+      data: {type: Object},
+      showSnippet: {type: Boolean, attribute: 'show-snippet'},
+      showSubjects: {type: Boolean, attribute: 'show-subjects'},
+      subjectCt: {type: Number, attribute: 'subject-ct'},
+      avatarSize: {type: String, attribute: 'avatar-size'},
+      textWidth: {type: String, attribute: 'text-width'},
+      title: {type: String}
+    };
   }
 
   constructor() {
     super();
     this.render = render.bind(this);
-
-    this.badges = [];
-    this.name = "";
-    this._name = "";
-    this.href = "";
-    this.title = "";
-    this.avatarSize = "";
-    this.avatarSrc = "";
+    this._injectModel('PersonModel');
     this.data = {};
-    this._parsedData = {name: "", href: "", title: "", avatarSize: "", avatarSrc: ""};
+    this.showSnippet = false;
+    this.showSubjects = false;
+    this.subjectCt = 4;
+    this.avatarSize = "md";
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
   }
 
+  /**
+   * @method updated
+   * @description lit-element updated method
+   * 
+   * @param {Object} props 
+   */
   updated(props) {
-    
-    // allow individual attributes to override data object (if it exists)
-    if (props.has('name')) {
-      this._parsedData.name = this.name;
-      this.requestUpdate();
-    }
-    if (props.has('href')) {
-      this._parsedData.href = this.href
-      this.requestUpdate();
-    }
-    if (props.has('title')) {
-      this._parsedData.title = this.title
-      this.requestUpdate();
-    }
-    if (props.has('avatarSize')) {
-      this._parsedData.avatarSize = this.avatarSize
-      this.requestUpdate();
-    }
-    if (props.has('avatarSrc')) {
-      this._parsedData.avatarSrc = this.avatarSrc
-      this.requestUpdate();
-    }
-    if (props.has('data') && Object.keys(this.data).includes('@id')) this._parseData();
-    
-  }
+    if( props.has('data') ) {
+      let result = previewUtils.getSnippetTitle(
+        this.getLastName()+', '+this.getFirstName(),
+        this.PersonModel.getSnippet(this.data)
+      );
 
-  _parseData() {
-    this._parsedData.name = this._parseName();
-    this._parsedData.title = this._parseTitle();
-    this._parsedData.href = this._parseHref();
-  }
-
-  _parseName(){
-    if (this.name) return this.name;
-    let label = this.data.label;
-    if (Array.isArray(label)) return label.sort((a,b)=> a.length - b.length)[0];
-    return label;
-  }
-
-  _parseTitle(){
-    if (this.title) return this.title;
-    try {
-      let title = "";
-      if (Array.isArray(this.data.hasContactInfo)) {
-        title = [...this.data.hasContactInfo].sort((a,b)=>(a.rank?a.rank:100)-(b.rank?b.rank:100))[0].title;
-      } else{
-        title = this.data.hasContactInfo.title;
+      this.title = result.title;
+      if( result.showSnippet === false ) {
+        this.showSnippet = false;
       }
-      if (Array.isArray(title)) return title.join(", ");
-      if (!title) return "";
-      return title;
-    } catch (error) {
-      return "";
     }
   }
 
-  _parseHref(){
-    if (this.href) return this.href;
-    try {
-      let personId = this.data['@id'].replace(APP_CONFIG.data.jsonldContext + ":", "");
-      return `/individual/${personId}`;
-    } catch (error) {
-      return "";
-    }
+  /**
+   * @method getName
+   * @description calls the getBestLabel function gets the 
+   * preferred the person label if it exists 
+   * 
+   * @returns {String}  
+   */
+  getName() {
+    if (!this.data) return "";
+    return this.PersonModel.getBestLabel(this.data);
   }
 
-  _renderBadge(badge) {
-    if (typeof badge === 'string') {
-      return html`<rp-badge>${badge}</rp-badge>`;
-    }
-    else if (typeof badge === 'object'){
-      let t = badge.text;
-      if (!t) {
-        return html``;
-      }
-      let href = badge.href;
-      if (href) {
-        return html`<rp-badge href="${href}">${t}</rp-badge>`;
-      }
-      return html`<rp-badge>${t}</rp-badge>`;
-    }
-    else {
-      return html``;
-    }
+  /**
+   * @method getFirstName
+   * @description calls the getFirstName function gets the 
+   * first name of the person from the person object
+   * 
+   * @returns {String}  
+   */
+  getFirstName() {
+    return this.PersonModel.getNameObject(this.data).fname;
+  }
+
+  /**
+   * @method getLastName
+   * @description calls the getLastName function gets the 
+   * last name of the person from the person object
+   * 
+   * @returns {String}  
+   */
+  getLastName() {
+    return this.PersonModel.getNameObject(this.data).lname;
+  }
+
+  /**
+   * @method getAvatar
+   * @description calls the getAvatar function gets the 
+   * avatar type of the person from the person object
+   * 
+   * @returns {Object}  
+   */
+  getAvatar() {
+    return this.PersonModel.getAvatarSrc(this.data);
+  }
+
+  /**
+   * @method getLandingPage
+   * @description calls the getLandingPage function and 
+   * creates the url and from the person id
+   * 
+   * @returns {URL}  
+   */
+  getLandingPage() {
+    return this.PersonModel.getLandingPage(this.data);
+  }
+
+  /**
+   * @method getTitle
+   * @description calls the getTitle function gets the 
+   * headline title of the person from the person object
+   * 
+   * @returns {String}  
+   */
+  getTitle(){
+    return this.PersonModel.getHeadlineTitle(this.data);
+  }
+
+  /**
+   * @method getSnippet
+   * @description calls the getSnippet function gets the 
+   * description of the person from the person object
+   * 
+   * @returns {String}  
+   */
+  getSnippet(){
+    return this.PersonModel.getSnippet(this.data);
+  }
+
+  /**
+   * @method getSubjects
+   * @description calls the getResearchSubjects function gets the 
+   * research subjects associated with the person from the 
+   * person object
+   * 
+   * @returns {Object}   
+   */
+  getSubjects(){
+    let subjects = this.PersonModel.getResearchSubjects(this.data);
+    return subjects.slice(0, this.subjectCt);
   }
 }
 

@@ -1,5 +1,4 @@
 import { html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
 import { styleMap } from 'lit-html/directives/style-map';
 
 export default function render() {
@@ -15,8 +14,8 @@ export default function render() {
       background-size: cover;
     }
     .slot {
-      margin-left: 10px;
-      margin-right: 10px;
+      margin-left: 20px;
+      margin-right: 20px;
     }
     #top {
       height: 30px;
@@ -32,8 +31,14 @@ export default function render() {
       flex-flow: row nowrap;
       align-items: center;
     }
+    @media (min-width: 800px) {
+      .slot {
+      margin-left: 30px;
+      margin-right: 30px;
+    }
+    }
   </style>
-  <div class="container ${classMap(this.constructClasses())}" style="${styleMap(this.constructStyles())}">
+  <div class="container"  style="${styleMap(this.constructStyles())}">
       <div class="slot" id="top"><slot name="top"></slot></div>
       <div class="slot" id="main"><slot name="main"></slot></div>
       <div class="slot" id="bottom"><slot name="bottom"></slot></div>
