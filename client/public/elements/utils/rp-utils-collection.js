@@ -556,7 +556,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       `;
     }
 
-    if (assetType == 'subject') {
+    if (assetType == 'concept') {
       return html`
       <rp-subject-preview .data="${data}" class="my-3" show-snippet></rp-subject-preview>
       `;

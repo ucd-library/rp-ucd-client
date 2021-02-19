@@ -240,6 +240,7 @@ class AssetDefs {
       "_.organizationLabel.text^6",
       "_.personLabel.text^6",
       "_.publicationLabel.text^6",
+      "_.conceptLabel.text",
       "_.subjectAreaLabel.text^2",
       "hasSubjectArea.label.text^5",
       "abstract",

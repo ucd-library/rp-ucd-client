@@ -7,7 +7,10 @@ import "../../components/badge";
 import "../../components/link-list";
 import "../../components/person-preview";
 
-
+/**
+ * @class RpPageWork
+ * @description Element for displaying a single work page
+ */
 export default class RpPageWork extends RpUtilsLanding {
 
   static get properties() {
