@@ -105,8 +105,7 @@ return html`
 
       <section id="records" class="bg-light mt-3" ?hidden="${this._hidePageSection('records')}">
         <h1 class="weight-regular mt-0">Publication Records</h1>
-        ${ (this.WorkModel.getAdditionalLinks(this.work).length > 0 ||
-           this.fullTextLinks) ? 
+        ${ (this.WorkModel.getAdditionalLinks(this.work).length > 0) ? 
            html`
         <h2>Full Text</h2>
           <ul class="pub-links">
@@ -115,18 +114,9 @@ return html`
               <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
               `)
             }
-            ${this.fullTextLinks && false ? 
-              html`
-                ${this.fullTextLinks.map(link => html`
-                <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="${link.url}">${link.label}</a></li>
-              `)
-            }
-              `
-              :html``
-            }
           </ul>
            `
-           :html`<div>No known full text links exist.</div>`
+           :html``
           }
         ${this.isOwnWork ? 
           html`
