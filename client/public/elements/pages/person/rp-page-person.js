@@ -422,7 +422,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @returns {Array}
    */
   getPubExports() {
-    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/${this.assetId}`}];
+    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/ucdrp:${this.assetId}`}];
   }
 
   /**
