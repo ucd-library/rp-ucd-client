@@ -64,10 +64,8 @@ export default (app) => {
 
           // set has profile flag
           try {
-            user.hasProfile = await userExists(user.username);
-          } catch(e) {
-            user.hasProfile = false;
-          }
+            user.expertsId = await getExpertsId(user.uid || (user.username || '').split('@')[0] );
+          } catch(e) {}
 
           // fetch additional user properties
           let authProps = await redis.client.get(config.redis.prefixes.authProperties+user.username);
@@ -86,9 +84,9 @@ export default (app) => {
         logger.info(`user ${user.username} is impersonating: ${req.cookies.impersonate}`);
         user = {
           impersonatedBy : user,
-          username : req.cookies.impersonate,
           roles : [],
-          hasProfile : await userExists(req.cookies.impersonate)
+          username : '',
+          expertsId : req.cookies.impersonate
         };
 
         // fetch additional user properties
@@ -97,6 +95,12 @@ export default (app) => {
           authProps = JSON.parse(authProps);
           USER_AUTH_PROPS.forEach(prop => user[prop] = authProps[prop]);
         }
+      }
+
+      // try to get a nice name from experts record if we don't have one from some reason
+      if( !user.displayname ) {
+        let record = await getExpertRecord(user.expertsId);
+        user.displayname = record.label || '';
       }
 
       next({
@@ -125,12 +129,39 @@ export default (app) => {
   app.use(express.static(assetsDir));
 };
 
-async function userExists(email) {
+
+async function getExpertRecord(id) {
   try {
-    return await elasticSearch.client.exists({
+    let resp = await elasticSearch.client.get({
       index: config.elasticSearch.indexAlias,
-      id: 'ucdrp:'+email.replace(/@.*/, '')
+      id : 'ucdrp:'+id
     });
+    return resp._source;
+  } catch(e) {
+    logger.info(e);
+  }
+  return {};
+}
+
+async function getExpertsId(casId) {
+  try {
+    let resp = await elasticSearch.client.search({
+      index: config.elasticSearch.indexAlias,
+      body : {
+        query : {
+          bool : {
+            filter : [
+              {term : {casId}},
+            ]
+          }
+        }
+      }
+    });
+
+    if( resp.hits && resp.hits.hits && resp.hits.hits.length ) {
+      return resp.hits.hits[0]._source['@id'].replace('ucdrp:', '');
+    }
+
   } catch(e) {
     logger.info(e);
   }

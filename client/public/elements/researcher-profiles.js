@@ -76,7 +76,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.mobileMenuPage = "";
 
     this.isSearch = false;
-    this.hasProfile = this.user && this.user.hasProfile;
+    this.hasProfile = (this.user && this.user.expertsId);
     this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
     this.navLinks = [
       {text: 'People', page: 'people', href: '/people'},
@@ -89,7 +89,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       this.accountLinks.unshift({text: "Stop Impersonating", action: 'stop-impersonating'}); 
     }
     if( this.hasProfile ){
-      this.accountLinks.unshift({text: "My Profile", href: "/person/" + this.user.username.split('@')[0]}); 
+      this.accountLinks.unshift({text: "My Profile", href: this.user.expertsId}); 
     }
 
 
