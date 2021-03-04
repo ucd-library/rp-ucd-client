@@ -220,7 +220,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   _isOwnProfile() {
     try {
-      if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === this.assetId.toLowerCase()) {
+      if (APP_CONFIG.user.expertsId === this.assetId) {
         return true;
       }
     } catch (error) {
@@ -431,7 +431,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    * and start refresh
    */
   _onImpersonateClick() {
-    document.cookie = 'impersonate='+this.individual['@id'].split(':')[1]+'@ucdavis.edu; path=/';
+    document.cookie = 'impersonate='+this.individual['@id'].split(':')[1]+'; path=/';
     location.reload();
   }
 
