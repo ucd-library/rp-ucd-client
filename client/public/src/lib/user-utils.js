@@ -35,8 +35,10 @@ class UserUtils {
    */
   getUserId(user) {
     if( !user ) return '';
-    if (user.uid) return user.uid;
-    return user.username.split('@')[0];
+    // if (user.uid) return user.uid;
+    if (user['@id']) return user['@id'];
+    if (user.expertsId) return user.expertsId;
+    return user.username;
   }
 
   /**
@@ -53,6 +55,9 @@ class UserUtils {
 
     let fname = user.givenname;
     if ( fname ) return fname;
+
+    let displayName = this.getUserDisplayName(user);
+    if( displayName ) return displayName;
 
     if ( !fallback ) fallback = [];
     if ( !Array.isArray(fallback) ) fallback = [fallback];
