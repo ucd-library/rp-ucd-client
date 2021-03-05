@@ -98,7 +98,7 @@ export default (app) => {
       }
 
       // try to get a nice name from experts record if we don't have one from some reason
-      if( !user.displayname ) {
+      if( user && !user.displayname ) {
         let record = await getExpertRecord(user.expertsId);
         user.displayname = record.label || '';
       }
