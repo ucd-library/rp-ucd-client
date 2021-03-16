@@ -185,7 +185,7 @@ class WorkModel extends BaseModel {
           author.identifiers = [author.identifiers]
         }
         for (let id of author.identifiers) {
-          if (this.grpsWithLinks.includes(id['@type'])) {
+          if (this.grpsWithLinks.includes(id['@type']) && id['@id'].match("^"+this.service.jsonContext+":")) {
             let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
             author.apiEndpoint = id['@id'];
             author.href = this.urlAuthor + authorId;
