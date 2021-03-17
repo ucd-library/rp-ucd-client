@@ -130,7 +130,6 @@ export default class RpPageWork extends RpUtilsLanding {
     if (APP_CONFIG.verbose) console.log("work payload:", data);
 
     this.authors = this.WorkModel.getAuthors(this.work);
-    console.log(this.authors);
     
     this.isOwnWork = this.WorkModel.isUsersWork(this.work);
     this.hasOtherAuthors = this.WorkModel.hasNonInstitutionAuthors(this.work);
