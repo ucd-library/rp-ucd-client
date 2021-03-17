@@ -359,7 +359,7 @@ return html`
     </div>
     ${this.user ? html`
     <div class="container account">
-      <div class="text-default italic">Logged in as <span class="bold">${this.userId}</span></div>
+      <!-- <div class="text-default italic">Logged in as <span class="bold">${this.userFirstName}</span></div> -->
       <div class="greeting">Hello, ${this.userName}!</div>
       <div class="nav-links">
         ${this.accountLinks.map((link, i) => link.href ? 

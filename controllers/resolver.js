@@ -34,13 +34,11 @@ async function resolveId(req, res, next) {
         res.redirect(newPath);
         return;
       }
-    } else {
-      res.status(404);
     }
 
   } catch(e) {
     logger.error(e);
   }
-  // TODO
+
   next();
 }

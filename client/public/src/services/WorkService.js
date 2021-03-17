@@ -9,7 +9,7 @@ class WorkService extends BaseService {
     this.store = WorkStore;
 
     this.baseUrl = APP_CONFIG.data.apiUrl;
-    // this.jsonContext = APP_CONFIG.data.context.publication;
+    this.jsonContext = APP_CONFIG.data.prefix.ucdId;
   }
  
   /**

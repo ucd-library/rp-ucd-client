@@ -15,7 +15,7 @@ class WorkModel extends BaseModel {
 
     this.UrlLanding = '/work/';
     this.urlBrowse = '/works';
-    this.urlAuthor = "/individual/";
+    this.urlAuthor = "/person/";
 
     this.grpsWithLinks = ["vivo:FacultyMember"];
 
@@ -188,7 +188,7 @@ class WorkModel extends BaseModel {
           if (this.grpsWithLinks.includes(id['@type']) && id['@id'].match("^"+this.service.jsonContext+":")) {
             let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
             author.apiEndpoint = id['@id'];
-            author.href = this.urlAuthor + authorId;
+            author.href = '/' + authorId;
             author.isOtherUniversity = false;
           }
         }
