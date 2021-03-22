@@ -170,7 +170,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       console.log('app state:', e);
     }
     
-    if ( e.location.query.s ) {
+    if ( e.location.query && e.location.query.s ) {
       this.isSearch = true;
       this.textQuery = e.location.query.s;
     }
