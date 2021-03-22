@@ -10,8 +10,16 @@ class AppStateModelImpl extends AppStateModel {
     this.store = AppStateStore;
   }
 
+  /**
+   * @method show404Page
+   * @description set the app state to the virtual 404 page
+   */
+  show404Page() {
+    this.set({page: '404'});
+  }
+
   set(update) {
-    if (update.location) {
+    if (update.location && !update.page) {
       update.page = update.location.path ? update.location.path[0] || this.defaultPage : this.defaultPage;
     }
     

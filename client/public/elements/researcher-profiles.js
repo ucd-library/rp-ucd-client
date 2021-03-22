@@ -101,6 +101,24 @@ export default class ResearcherProfiles extends Mixin(LitElement)
 
     this._injectModel('AppStateModel', 'CollectionModel');
     this._onResize = this._onResize.bind(this);
+
+    this._init404();
+  }
+
+  /**
+   * @method _init404
+   * @description check if is404 flag set in APP_CONFIG, additional register 404 
+   * event handler.  Either condition will show the 404 page
+   */
+  async _init404() {
+    if( APP_CONFIG.is404 ) {
+      // await this.loadPage('404');
+      this.AppStateModel.show404Page();
+    }
+    window.addEventListener('404', async () => {
+      // await this.loadPage('404');
+      this.AppStateModel.show404Page();
+    });
   }
 
   /**
@@ -194,6 +212,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       return import(/* webpackChunkName: "page-components" */ "./pages/components/app-components");
     } else if( page === 'help' ) {
       return import(/* webpackChunkName: "page-help" */ "./pages/help/rp-page-help");
+    } else if( page === '404' ) {
+      return import(/* webpackChunkName: "page-404" */ "./pages/404/rp-page-404");
     }
     console.warn('No code chunk loaded for this page');
     return false;
