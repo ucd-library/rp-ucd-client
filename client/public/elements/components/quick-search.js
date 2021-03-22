@@ -13,7 +13,10 @@ export class RpQuickSearch extends LitElement {
       inputValue: {type: String, attribute: "input-value", reflect: true},
       placeholder: {type: String},
       opened: {type: Boolean},
-      closing: {type: Boolean}
+      closing: {type: Boolean},
+      role: {type: String, reflect: true},
+      ariaPressed: {type: String, attribute: 'aria-pressed', reflect: true},
+      ariaLabel: {type: String, attribute: 'aria-label', reflect: true}
     };
   }
 
@@ -26,6 +29,9 @@ export class RpQuickSearch extends LitElement {
     this.inputValue = "";
     this.preventOpen = false;
     this.closing = false;
+    this.role = 'button';
+    this.ariaPressed = "false";
+    this.ariaLabel = "Press to open sitewide search input";
 
     this._newSearch = new CustomEvent('new-search', {
       detail: {
@@ -55,6 +61,10 @@ export class RpQuickSearch extends LitElement {
         this.inputWidth = w;
         let i = this.shadowRoot.getElementById('search-input');
         i.focus();
+        this.ariaPressed = "true";
+      }
+      else {
+        this.ariaPressed = "false";
       }
       this.dispatchEvent(this._inputStatus);
     }
