@@ -261,6 +261,12 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     }
   }
 
+  _onQuickSearchKeyup(e){
+    if (e.keyCode === 13 && !e.target.opened) {
+      e.target.opened = true;
+    }
+  }
+
   /**
    * @method _onResize
    * @description bound to window resize.

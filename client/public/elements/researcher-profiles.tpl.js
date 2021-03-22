@@ -329,7 +329,16 @@ return html`
         <a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration ${link.page == 'help' ? 'hidden-mobile' : ''}">${link.text}</a>`)}
       </div>
       <div id="nav-right" class="flex align-items-center">
-        <rp-quick-search id="quick-search" @input-status="${this._onQuickSearchClick}" @new-search="${this._onSearch}" input-value="${this.textQuery}" ?opened="${this.textQuery}" input-width="${this.quickSearchWidth}"></rp-quick-search>
+        <rp-quick-search 
+          id="quick-search" 
+          tabindex="0"
+          @keyup="${this._onQuickSearchKeyup}"
+          @input-status="${this._onQuickSearchClick}" 
+          @new-search="${this._onSearch}" 
+          input-value="${this.textQuery}" 
+          ?opened="${this.textQuery}" 
+          input-width="${this.quickSearchWidth}">
+        </rp-quick-search>
       </div>
     </div>
   </div>
