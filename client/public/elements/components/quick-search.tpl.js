@@ -78,6 +78,8 @@ export default function render() {
     <input ?hidden="${!this.opened}" type="text" placeholder="${this.placeholder}"
            style="${styleMap(this._constructInputStyles())}"
            id="search-input"
+           role="search" 
+           aria-label="Sitewide"
            .value="${this.inputValue}"
            @animationend="${this._handleAnimationEnd}"
            @keyup="${this._handleKeyup}"
