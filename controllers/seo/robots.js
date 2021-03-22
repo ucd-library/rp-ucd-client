@@ -14,10 +14,11 @@ export default app => {
  */
 function render(req, res) {
   if( config.server.env.match(/^prod/i) ) {
-    return res.send(`User-agent: *
+    res.send(`User-agent: *
 Allow: /
 
 Sitemap: ${config.server.url}/sitemap.xml`);
+    return;
   }
 
   res.send(`User-agent: *

@@ -4,4 +4,4 @@ import sitemapController from './sitemap.js';
 export default app => {
   robotController(app);
   sitemapController(app);
-}
+};
