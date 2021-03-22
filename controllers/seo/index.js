@@ -1,5 +1,7 @@
-import robotsController from './robots.js'
+import robotController from './robots.js';
+import sitemapController from './sitemap.js';
 
 export default app => {
-  robotsController(app);
-}
+  robotController(app);
+  sitemapController(app);
+};
