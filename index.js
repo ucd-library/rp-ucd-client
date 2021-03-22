@@ -1,6 +1,6 @@
 import express from 'express';
-import resolveController from './controllers/resolver.js';
-import staticController from './controllers/static.js';
+import {register as resolveController} from './controllers/resolver.js';
+import staticController from './controllers/static/index.js';
 import authStaticController from './controllers/static-auth.js';
 import controller from './controllers/index.js';
 import config from './lib/config.js';

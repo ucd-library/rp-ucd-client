@@ -11,34 +11,69 @@ const MATCHES = {
   PERSON : /^\/person\/.+/
 };
 
-export default app => {
-  app.get(MATCHES.DOI, resolveId);
-  app.get(MATCHES.ORCID, resolveId);
-  app.get(MATCHES.EMAIL, resolveId);
-  app.get(MATCHES.PERSON, resolveId);
-};
+/**
+ * @method register
+ * @description provided an express application, register routes based on regex
+ * MATCHES to handle the resolving of ids
+ * 
+ * @param {Object} app 
+ */
+async function register(app) {
+  for( let key in MATCHES ) {
+    app.get(MATCHES[key], middleware);
+  }
+}
 
-async function resolveId(req, res, next) {
+/**
+ * @method middleware
+ * @description main middleware function handling the resolving of
+ * external ids to aggie expert ids in url paths
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next 
+ */
+async function middleware(req, res, next) {
   let id = req.path
     .replace(/^\/(person|work)\//, '')
     .replace(/^\//, '');
 
+  let newPath = await resolveId(id);
+  if( newPath && newPath !== req.path ) {
+    logger.info(`resolved: ${req.path} to ${newPath}`);
+    res.redirect(newPath);
+    return;
+  }
+
+  next();
+}
+
+/**
+ * @method resolveId
+ * @description given a aggie experts unique id (email, orcid, doi, person id) resolve to actual id.
+ * Returns path to resource
+ * 
+ * @param {String} id 
+ * 
+ * @returns {String|null}
+ */
+async function resolveId(id) {
   try {
     let resp = await fetch(`${config.gateway.serviceHosts.api}/api/resolve/${id}`);
     resp = await resp.json();
 
     if( resp.success ) {
-      let newPath = '/'+resp['@id'].replace(new RegExp('^'+config.client.data.prefix.ucdId+':'), '');
-      if( newPath !== req.path ) {
-        logger.info(`resolved: ${req.path} to ${newPath}`);
-        res.redirect(newPath);
-        return;
-      }
+      return '/'+resp['@id'].replace(new RegExp('^'+config.client.data.prefix.ucdId+':'), '');
     }
 
   } catch(e) {
     logger.error(e);
   }
 
-  next();
+  return null;
 }
+
+export {
+  register,
+  resolveId
+};
