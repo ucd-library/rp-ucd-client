@@ -203,19 +203,19 @@ return html`
     <div class="sections container">
       <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
         <h1 class="weight-regular mt-0">About</h1>
-        <h2 hidden>Overview</h2>
-        <p hidden>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-        ex ea commodo consequat. </p>
+          <h2 hidden>Overview</h2>
+          <p hidden>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+          et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+          ex ea commodo consequat. </p>
         <div class="cols">
           <div>
             <div>
-              <h3 class="mb-2">Positions</h3>
+              <h2 class="h3 mb-2">Positions</h2>
               ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
             </div>
             ${this._showSubSection('contact') ? html`
-              <div
-                ><h3 class="mb-2">Contact</h3>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
+              <div>
+                <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
               </div>
             ` : html``}
             
@@ -223,7 +223,7 @@ return html`
           <div>
             ${this._showSubSection('websites') ? html`
               <div>
-                <h3 class="mb-2">Websites</h3>
+                <h2 class="h3 mb-2">Websites</h2>
                 ${this.getWebsites().map(site => html`
                   <div class="site">
                     <a href="${site.href}">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
