@@ -42,6 +42,16 @@ export default function render() {
       min-width: 1px;
       height: 34px;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
   </style>
   <div class="container">
     <rp-dropdown .choices="${this.getDropdownOptions()}"
@@ -50,6 +60,7 @@ export default function render() {
                  @new-selection="${e => this.activeFacet = e.target.chosen}">
     </rp-dropdown>
     <div class="line"></div>
+    <label for="input" class="sr-only">Search the registry</label>
     <input type="text"
           .value="${this.inputValue}"
            placeholder="${this.placeholder}"

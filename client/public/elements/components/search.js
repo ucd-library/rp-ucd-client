@@ -15,7 +15,9 @@ export class RpSearch extends LitElement {
       allOption: {type: Object},
       inputValue: {type: String, attribute: "input-value", reflect: true},
       placeholder: {type: String},
-      activeFacet: {type: Number, attribute: 'active-facet', reflect: true}
+      activeFacet: {type: Number, attribute: 'active-facet', reflect: true},
+      role: {type: String, reflect: true},
+      ariaLabel: {type: String, attribute: "aria-label", reflect: true}
     };
   }
 
@@ -28,6 +30,8 @@ export class RpSearch extends LitElement {
     this.inputValue = "";
     this.includeAllOption = false;
     this.allOption = {text: 'ALL', id: 'all'};
+    this.role = "search";
+    this.ariaLabel = "Faceted site-wide search";
 
 
     this._newSearch = new CustomEvent('new-search', {
@@ -45,6 +49,9 @@ export class RpSearch extends LitElement {
   updated(props) {
     if (props.has('inputValue') || props.has('activeFacet')) {
       this.searchObject = {search: this.inputValue, facet: this.getDropdownOptions()[this.activeFacet]};
+    }
+    if ( props.has('activeFacet') ) {
+      this.shadowRoot.getElementById('input').focus();
     }
   }
 
@@ -76,7 +83,7 @@ export class RpSearch extends LitElement {
    * @param {Event} e 
    */
   _handleKeyup(e) {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 || e.code === 'Enter') {
       e.preventDefault();
       this.doSearch();
     }

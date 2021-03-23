@@ -4,6 +4,10 @@ import render from './person-preview.tpl.js';
 import previewUtils from "../../src/lib/preview-utils";
 import "./badge";
 
+/**
+ * @class RpPersonPreview
+ * @description UI layout class for displaying a preview of a person (e.g. in a search result)
+ */
 export class RpPersonPreview extends Mixin(LitElement)
   .with(LitCorkUtils) {
 
@@ -49,6 +53,22 @@ export class RpPersonPreview extends Mixin(LitElement)
         this.showSnippet = false;
       }
     }
+    if (props.has('textWidth')) this.setBadgeTabIndex();
+  }
+
+  /**
+   * @method setBadgeTabIndex
+   * @description Hides any overflow badges from tab positioning
+   */
+  async setBadgeTabIndex(){
+    await this.updated;
+    let containerWidth = this.textWidth;
+    let cumWidth = 0;
+    this.shadowRoot.querySelectorAll('rp-badge').forEach(badge => {
+      cumWidth += badge.offsetWidth;
+      badge.hideFromTab = cumWidth > containerWidth;
+    });
+
   }
 
   /**

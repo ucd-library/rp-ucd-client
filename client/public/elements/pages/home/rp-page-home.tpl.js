@@ -120,7 +120,7 @@ return html`
 </style>
 <div class="hero">
   <div class="container flex">
-  <img src="${this.theme.homeHeroImage}">
+  <img src="${this.theme.homeHeroImage}" alt="">
   <div class="text flex flex-column">
     <div class="text-default mt-0 h1 bold mb-3">${this.theme.homeHeroTitle}</div>
     <div class="flex flex-column justify-content-between flex-grow-1 content">
@@ -200,7 +200,7 @@ return html`
           </rp-badge>
         `)}
         ${this.subjectsTotal > 10 ? html`
-          <rp-badge size="lg" class="my-1" max-width="280"  ellipsis href="/concepts"></rp-badge>
+          <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/concepts"></rp-badge>
           ` : html``}
       </div>
       <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
