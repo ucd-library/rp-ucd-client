@@ -88,7 +88,12 @@ export class RpBadge extends LitElement {
    */
   _renderBadge() {
     if (this.href) {
-      return html`<a style="color:inherit;" href=${this.href}>${this._renderSpan()}</a>`;
+      return html`
+      <a 
+        style="color:inherit;"
+        href=${this.href}>
+        ${this._renderSpan()}
+      </a>`;
     }
     return html`${this._renderSpan()}`;
   }
@@ -105,6 +110,7 @@ export class RpBadge extends LitElement {
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
+        <span class="sr-only">See more subjects</span>
       ` : html`<slot></slot>`}
       
     </span>`;
