@@ -30,13 +30,9 @@ export default function render() {
     .button {
       cursor: pointer;
     }
-    #main-toggle:hover, .choice:hover .icon-dl {
-      background-color: var(--tcolor-hover-bg);
-      color: var(--tcolor-light);
-    }
     #main-toggle.opened, #main-toggle.opened:hover {
-      background-color: var(--tcolor-primary);
-      color: var(--tcolor-bg-primary);
+      --rp-icon-bg-color: var(--tcolor-primary);
+      --rp-icon-color: var(--tcolor-bg-primary);
     }
     #dropdown-content {
       background-color: var(--tcolor-light);
@@ -84,14 +80,13 @@ export default function render() {
     
   </style>
   <div class="container">
-      <div role="button"
-        class="${classMap({'icon-dl': true, button: true, opened: this.opened})}"
+      <rp-icon icon="iron-icons:file-download" 
         id="main-toggle"
-        aria-pressed="${this.opened}"
-        @click="${this._onMainClick}"
-        style="${styleMap({width: this.size, height: this.size, minHeight: this.size, minWidth: this.size})}">
-        <iron-icon icon="file-download"></iron-icon>
-      </div>
+        class="${classMap({opened: this.opened})}"
+        circle-bg is-link has-text size="lg" 
+        @click="${this._onMainClick}">
+        <div slot="tooltip">Download Publications</div>
+      </rp-icon>
 
       <iron-dropdown id="dropdown" scroll-action="cancel" vertical-align="top" vertical-offset="${this.pixels}" horizontal-align="${this.dropOnLeft ? 'left' : 'right'}">
         <div slot="dropdown-content" id="dropdown-content">
