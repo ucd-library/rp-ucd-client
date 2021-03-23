@@ -58,7 +58,7 @@ export default function render() {
     <div class="text-container">
       
       <a class="title" 
-        href="${this.getLink()}" 
+        href="${this.getLink()}-bad" 
         ?disabled="${!this.getLink()}">
         ${unsafeHTML(this.title)}
       </a>
