@@ -50,6 +50,9 @@ export class RpSearch extends LitElement {
     if (props.has('inputValue') || props.has('activeFacet')) {
       this.searchObject = {search: this.inputValue, facet: this.getDropdownOptions()[this.activeFacet]};
     }
+    if ( props.has('activeFacet') ) {
+      this.shadowRoot.getElementById('input').focus();
+    }
   }
 
   /**
@@ -80,7 +83,7 @@ export class RpSearch extends LitElement {
    * @param {Event} e 
    */
   _handleKeyup(e) {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 || e.code === 'Enter') {
       e.preventDefault();
       this.doSearch();
     }

@@ -29,7 +29,7 @@ return html`
     overflow-x: hidden;
     text-overflow: ellipsis;
   }
-  a:hover span.main {
+  a:hover span.main, a:focus span.main {
       background-color: var(--tcolor-hover-bg) !important;
       color:  var(--tcolor-hover-text) !important;
       border-color: var(--tcolor-hover-bg) !important;
