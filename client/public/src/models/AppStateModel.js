@@ -14,8 +14,11 @@ class AppStateModelImpl extends AppStateModel {
   /**
    * @method show404Page
    * @description set the app state to the virtual 404 page
+   * Might use the state object later for better description...
+   * 
+   * @param {Object} state Optionally pass in state object with error.
    */
-  show404Page() {
+  show404Page(state) {
     this.set({page: '404'});
   }
 

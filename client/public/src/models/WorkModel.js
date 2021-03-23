@@ -33,10 +33,14 @@ class WorkModel extends BaseModel {
   async getWork(id) {
     let state = this.store.data.byWork[id];
 
-    if( state && state.request ) {
-      await state.request;
-    } else {
-      await this.service.getWork(id);
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } else {
+        await this.service.getWork(id);
+      }
+    } catch(e) {
+      // silence is golden
     }
 
     return this.store.data.byWork[id];
@@ -56,10 +60,14 @@ class WorkModel extends BaseModel {
   async getAuthorsFullObject(workId, authors) {
     let state = this.store.data.workAuthors[workId];
 
-    if( state && state.request ) {
-      await state.request;
-    } else {
-      await this.service.getAuthors(workId, authors);
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } else {
+        await this.service.getAuthors(workId, authors);
+      }
+    } catch(e) {
+      // silence is golden
     }
 
     return this.store.data.workAuthors[workId];

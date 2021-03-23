@@ -122,6 +122,10 @@ export default class RpPageWork extends RpUtilsLanding {
    */
   async _doMainQuery(id){
     let data = await this.WorkModel.getWork(id);
+    if( data.state === 'error' ) {
+      return this.AppStateModel.show404Page(data);
+    }
+
     this.workStatus = data.state;
     if (data.state != 'loaded') {
       return;
