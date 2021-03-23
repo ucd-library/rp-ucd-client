@@ -183,6 +183,7 @@ export class RpIcon extends LitElement {
    * @return {HTML} 
    */
   renderIcon() {
+    console.log(this.icon);
     if ( (!this.icon ) || (this.icon == "iron-") ) {
       return html``;
     }
