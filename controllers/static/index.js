@@ -42,6 +42,7 @@ export default (app) => {
     env: config.client.env,
     assetsDir,
     appRoutes : config.client.appRoutes,
+    modelRoutes : config.client.modelRoutes,
     versions : config.client.versions
   });
 
@@ -59,6 +60,7 @@ export default (app) => {
       let appConfig = {
         user: await userAuthController.handleRequest(req),
         appRoutes : config.client.appRoutes,
+        modelRoutes : config.client.modelRoutes,
         theme : config.client.theme,
         data : config.client.data,
         verbose : config.client.verbose,
