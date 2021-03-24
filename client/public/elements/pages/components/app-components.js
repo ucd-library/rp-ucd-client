@@ -31,6 +31,7 @@ export class AppPageComponents extends Mixin(LitElement)
   }
 
   async doUpdate(state){
+    console.log(state);
     await this.updateComplete;
     if (!this.visible) {
       return;

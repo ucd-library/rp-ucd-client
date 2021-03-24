@@ -8,7 +8,7 @@ return html`
   :host {
     display: block;
   }
-  ${styles}
+  ${styles} 
 </style>
 <div class="collections works container bg-light top">
   ${this._renderBrowseHeader('Works')}
