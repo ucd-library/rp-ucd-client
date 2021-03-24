@@ -1,5 +1,8 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const { getTransformByType } = require('../../../../lib/schema-org-transforms');
+const PersonModel = require('./PersonModel');
+const WorkModel = require('./WorkModel');
+const SubjectModel = require('./SubjectModel');
 
 /**
  * @class SeoModel
@@ -10,7 +13,21 @@ class SeoModel extends BaseModel {
 
   constructor() {
     super();
-    this.EventBus.on('app-state-update', e => this.reset());
+
+    this.currentPath = '';
+
+    this.EventBus.on('app-state-update', e => {
+      if( e.location.fullpath === this.currentPath ) {
+        return;
+      }
+
+      this.currentPath = e.location.fullpath;
+      this.reset();
+
+      if( !APP_CONFIG.modelRoutes.includes(e.page) ) return;
+
+      this.getModel(e.page, this.currentPath.replace(/^\//, ''));
+    });
   }
 
   /**
@@ -22,6 +39,32 @@ class SeoModel extends BaseModel {
   }
 
   /**
+   * @method getModel
+   * @description given a type and id, load the record from the
+   * correct app model, then pass to transform loader
+   * 
+   * @param {String} type model type, ex: person, work 
+   * @param {String} id id of record
+   * 
+   * @returns {Promise}
+   */
+  async getModel(type, id) {
+    switch(type) {
+    case 'concept':
+      this.updateFromModel(await SubjectModel.getSubject(id));
+      break;
+    case 'person':
+      this.updateFromModel(await PersonModel.get(id));
+      break;
+    case 'work':
+      this.updateFromModel(await WorkModel.getWork(id));
+      break;
+    default:
+      console.warn('unknown model type', type, id);
+    }
+  }
+
+  /**
    * @method updateFromModel
    * @description given an aggie experts model, run the schema.org transform
    * and update the jsonld script tag
@@ -29,6 +72,8 @@ class SeoModel extends BaseModel {
    * @param {Object} model 
    */
   updateFromModel(model) {
+    if( model.payload ) model = model.payload;
+
     let transform = getTransformByType(model['@type']);
     if( !transform ) {
       this.reset();
