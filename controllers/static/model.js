@@ -56,7 +56,7 @@ class StaticModelController {
     if( !transform ) return jsonld;
 
     try {
-      jsonld = JSON.stringify(transform(jsonld), '  ', '  ');
+      jsonld = JSON.stringify(transform(model), '  ', '  ');
     } catch(e) {
       logger.error(`failed to transform model: ${model['@id']}`, e);
     }
