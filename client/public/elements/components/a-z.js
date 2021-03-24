@@ -13,6 +13,8 @@ export class RpAZ extends LitElement {
       disabledLetters: {type: Array},
       disabledLettersFmt: {type: Array},
       selectedLetter: {type: String, attribute: 'selected-letter'},
+      role: {type: String, reflect: true},
+      ariaLabel: {type: String, attribute: "aria-label", reflect: true}
     };
   }
 
@@ -24,6 +26,8 @@ export class RpAZ extends LitElement {
     this.disabledLetters = [];
     this.disabledLettersFmt = [];
     this.selectedLetter = 'All';
+    this.role = "navigation";
+    this.ariaLabel = "Filter content by first letter.";
     this._changedLetter = new CustomEvent('changed-letter', {
       detail: {
         message: 'A new letter has been selected.'
@@ -67,21 +71,47 @@ export class RpAZ extends LitElement {
         selected = "selected";
       }
     }
-    return html`<div @click="${this.handleClick}"
-                     ?disabled="${this.disabledLettersFmt.includes(letter)}"
-                     class="letter ${selected}"
-                     letter="${letter}">${letter}</div>`;
+    return html`
+    <div 
+      @click="${this.handleClick}"
+      @keyup="${this._onKeyup}"
+      ?disabled="${this.disabledLettersFmt.includes(letter)}"
+      class="letter ${selected}"
+      tabindex="${this.disabledLettersFmt.includes(letter) ? "-1": "0"}"
+      letter="${letter}">
+      ${letter}
+      </div>`;
   }
 
   /**
    * @method handleClick
    * @description Attached to letter click listener
-   * Emits 'changed-letter' event if letter changes
    * @param {Event} e 
    */
   handleClick(e) {
-    let new_letter = e.target.getAttribute('letter').toLowerCase();
-    if (new_letter != this.selectedLetter && !e.target.hasAttribute('disabled')) {
+    this._onInteraction(e.target);
+  }
+
+  /**
+   * @method _onKeyup
+   * @description Bound to Enter keypress event on letter div
+   * @param {Event} e 
+   */
+  _onKeyup(e) {
+    if (e.keyCode === 13 || e.code === 'Enter') {
+      e.preventDefault();
+      this._onInteraction(e.composedPath()[0]);
+    }
+  }
+
+  /**
+   * @method _onInteraction
+   * @description Emits 'changed-letter' event if letter changes
+   * @param {Element} target - letter div that was selected by user.
+   */
+  _onInteraction(target){
+    let new_letter = target.getAttribute('letter').toLowerCase();
+    if (new_letter != this.selectedLetter && !target.hasAttribute('disabled')) {
       this.selectedLetter = new_letter;
       this.dispatchEvent(this._changedLetter);
     }

@@ -29,7 +29,7 @@ return html`
     overflow-x: hidden;
     text-overflow: ellipsis;
   }
-  a:hover span.main {
+  a:hover span.main, a:focus span.main {
       background-color: var(--tcolor-hover-bg) !important;
       color:  var(--tcolor-hover-text) !important;
       border-color: var(--tcolor-hover-bg) !important;
@@ -76,6 +76,16 @@ return html`
   }
   a:hover .dot {
     background-color: #fff;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
   }
 
 </style>

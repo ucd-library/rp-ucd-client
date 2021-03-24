@@ -530,7 +530,10 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     <rp-link-list
       has-header-link
       .links='${this.subFacets}'
-      current-link='${this.subFacetIndex}'>
+      current-link='${this.subFacetIndex}'
+      role="navigation"
+      aria-label='${"filter " + this.mainFacet}'
+      >
     </rp-link-list>
     `;
   }

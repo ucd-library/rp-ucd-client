@@ -17,6 +17,7 @@ export class RpBadge extends LitElement {
       maxWidth: {type: Number, attribute: 'max-width'},
       ellipsis: {type: Boolean},
       colorSequence: {type: Number, attribute: 'color-sequence'},
+      hideFromTab: {type: Boolean}
     };
   }
 
@@ -26,6 +27,7 @@ export class RpBadge extends LitElement {
     this.href = "";
     this.maxWidth = 0;
     this.ellipsis = false;
+    this.hideFromTab = false;
     this.render = render.bind(this);
   }
 
@@ -88,7 +90,13 @@ export class RpBadge extends LitElement {
    */
   _renderBadge() {
     if (this.href) {
-      return html`<a style="color:inherit;" href=${this.href}>${this._renderSpan()}</a>`;
+      return html`
+      <a 
+        style="color:inherit;"
+        tabindex="${this.hideFromTab ? "-1": "0"}"
+        href=${this.href}>
+        ${this._renderSpan()}
+      </a>`;
     }
     return html`${this._renderSpan()}`;
   }
@@ -105,6 +113,7 @@ export class RpBadge extends LitElement {
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
+        <span class="sr-only">See more subjects</span>
       ` : html`<slot></slot>`}
       
     </span>`;

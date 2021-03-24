@@ -305,12 +305,13 @@ return html`
       <div class="small bold hlist" id="desktop-menu">
         <a class="no-decoration" href="/help">Help</a>
         ${this.user ? html`     
-              <rp-dropdown no-padding
-                sticky-title="${this.userFirstName}"
-                use-links
-                .choices= ${this.accountLinks}
-                @new-selection=${this._handleUserDropdownSelection}>
-              </rp-dropdown>
+          <rp-dropdown 
+            no-padding
+            sticky-title="${this.userFirstName}"
+            use-links
+            .choices= ${this.accountLinks}
+            @new-selection=${this._handleUserDropdownSelection}>
+          </rp-dropdown>
           ` : html`
           <a class="no-decoration" href="/auth/login">Login</a>
           `}

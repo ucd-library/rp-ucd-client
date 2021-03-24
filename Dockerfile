@@ -29,13 +29,14 @@ COPY client/public/login.html client/public/login.html
 COPY client/public/src client/public/src
 COPY client/public/elements client/public/elements
 
-# build dist client
-RUN npm run dist
-
 # add server code
 COPY index.js .
 COPY lib lib
 COPY controllers controllers
+
+# build dist client
+# requires above lib dir
+RUN npm run dist
 
 # set build tags
 ARG CLIENT_TAG
