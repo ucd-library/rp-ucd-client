@@ -196,7 +196,7 @@ return html`
     min-height: 56px;
   }
   #nav-left a {
-    padding: 15px 10px;
+    padding: 15px 8px;
     text-transform: uppercase;
   }
   #nav-left a:first-child {
@@ -294,7 +294,7 @@ return html`
 
 <div id="app-header">
   ${this._renderMasthead()}
-  <div id="app-header-content" class="bg-light text-primary">
+  <div id="app-header-content" class="bg-light text-primary" ?hidden="${this.page === 'app-mobile-menu'}">
     <div class="container flex align-items-center justify-content-between">
       <a href="/" class="no-decoration">
         <h1>

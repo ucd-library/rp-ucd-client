@@ -68,6 +68,20 @@ class UserUtils {
     return "";
   }
 
+  /**
+   * @method isAdmin
+   * @description checks if user is a site admin
+   * 
+   * @param {Object} user 
+   * 
+   * @returns {Boolean}
+   */
+  isAdmin(user) {
+    if ( !user ) return false;
+    if ( Array.isArray(user.roles) && user.roles.includes('admin')) return true;
+    return false;
+  }
+
 }
 
 module.exports = new UserUtils();

@@ -2,7 +2,12 @@ const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const PersonService = require('../services/PersonService');
 const PersonStore = require('../stores/PersonStore');
 const urlUtils = require('../lib/url-utils');
+const AssetDefs = require('../lib/asset-defs');
 
+/**
+ * @class PersonModel
+ * @description Model for working with person data
+ */
 class PersonModel extends BaseModel {
 
   constructor() {
@@ -25,10 +30,14 @@ class PersonModel extends BaseModel {
   async get(id) {
     let state = this.store.data.byIndividual[id];
 
-    if( state && state.request ) {
-      await state.request;
-    } else {
-      await this.service.get(id);
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } else {
+        await this.service.get(id);
+      }
+    } catch (error) {
+      // error is recorded in store
     }
 
     return this.store.data.byIndividual[id];
@@ -45,10 +54,14 @@ class PersonModel extends BaseModel {
   async getPubOverview(id) {
     let state = this.store.data.pubsOverview[id];
 
-    if( state && state.request ) {
-      await state.request;
-    } else {
-      await this.service.getPubsOverview(id);
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } else {
+        await this.service.getPubsOverview(id);
+      }
+    } catch (error) {
+      // error is recorded in store
     }
 
     return this.store.data.pubsOverview[id];
@@ -66,33 +79,39 @@ class PersonModel extends BaseModel {
    */
   async getPublications(id, pubTypeObject, offset) {
     let requestId = this.service.getPublicationsRequestId(id, pubTypeObject, offset);
-
     let state = this.store.data.pubsByRequest[requestId];
-    if( state && state.request ) {
-      await state.request;
-    } else {
-      await this.service.getPublications(id,  pubTypeObject, offset);
+
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } else {
+        await this.service.getPublications(id,  pubTypeObject, offset);
+      }
+    } catch (error) {
+      // error is recorded in store
     }
 
     return this.store.data.pubsByRequest[requestId];
   }
 
+  /**
+   * @method getPublicationTypes
+   * @description Returns types of publications for subfaceting
+   * 
+   * @returns {Object[]}
+   */
   getPublicationTypes(){
-    return [
-      {id: 'article', es: 'bibo:AcademicArticle', label: 'Academic Articles'},
-      {id: 'book', es: 'bibo:Book', label: 'Books'},
-      {id: 'chapter', es: 'bibo:Chapter', label: 'Chapters'},
-      {id: 'conferencepaper', es: 'vivo:ConferencePaper', label: 'Conference Papers'}
-    ]
+    return AssetDefs.getSubFacetsByMainId('works');
   }
 
-  // These UI Helper commands are moved here so they can be used for both
-  // the individual and collection pages.  Unlike the rest of the commands in the
-  // model, these take a complete record.  I did this becuase in the
-  // rp-page-individual.js file, these are synchronous, and I wanted to keep that,
-  // however, these should really be individual ids IMO.
-    // All these machinations are particular to the UI, and won't be  changed in
-  // database IMO.  Joining contacts is pretty much a PPS thing.
+
+  /**
+   * @method getTitles
+   * @description - Returns ordered array of titles for individual.
+   * @param {Object} individual 
+   * 
+   * @returns {Object[]} {title:string,orgs:["string"]}
+   */
   getTitles(individual){
     let titles = [];
     if (!individual) {
@@ -101,44 +120,43 @@ class PersonModel extends BaseModel {
     if (typeof individual.hasContactInfo === 'object') {
       let contactInfo = [];
       if (Array.isArray(individual.hasContactInfo)) {
-        contactInfo = [...individual.hasContactInfo].sort((a,b)=>(a["vivo:rank"]?a["vivo:rank"]:100)-(b["vivo:rank"]?b["vivo:rank"]:100));
+        contactInfo = [...individual.hasContactInfo]
+          .sort((a,b)=>(a["vivo:rank"]?a["vivo:rank"]:100)-(b["vivo:rank"]?b["vivo:rank"]:100));
       }
       else {
         contactInfo = [individual.hasContactInfo];
       }
       // If first contact is odr, than only use odr,
-      let identifier_match=null
+      let identifier_match=null;
       if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^odr/)) {
-        identifier_match=/^odr/
+        identifier_match=/^odr/;
       } else if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^pps/)) {
-        identifier_match=/^pps/    // If first is pps only include pps
+        identifier_match=/^pps/;    // If first is pps only include pps
       } else {                 // Otherwise include them all
-        identifier_match=null
+        identifier_match=null;
       }
       // Next join every organization with a common title, where titles are organized
       // by rank.
       for (let c of contactInfo) {
-        if (!(c.title && (! identifier_match || (c.identifier && c.identifier.match(identifier_match)))))
+        if (!(c.title && ( !identifier_match || (c.identifier && c.identifier.match(identifier_match)))))
           continue;
-        if (! Array.isArray(c.title)) { c.title=[c.title] }
+        if ( !Array.isArray(c.title)) c.title=[c.title];
         for (const t of c.title) {
-          let ind=titles.findIndex((have)=>have.title===t)
+          let ind=titles.findIndex((have)=>have.title===t);
           if (ind > -1) {
             if (c.organization) {
-              if (! Array.isArray(c.organization))
-                c.organization=[c.organization]
+              if ( !Array.isArray(c.organization) ) c.organization=[c.organization];
               for (const o of c.organization) {
-                if (titles[ind].orgs.findIndex((have)=>have===o) === -1)
-                  titles[ind].orgs.push(o)
+                if (titles[ind].orgs.findIndex((have)=>have===o) === -1) titles[ind].orgs.push(o);
               }
             }
           } else {
-            let new_title={title:t,orgs:[]}
-            if (c.organization) {
-              if (Array.isArray(c.organization)) {
-                new_title.orgs.push(...c.organization)
+            let new_title={title: t, orgs: []};
+            if ( c.organization ) {
+              if ( Array.isArray(c.organization) ) {
+                new_title.orgs.push(...c.organization);
               } else {
-                new_title.orgs.push(c.organization)
+                new_title.orgs.push(c.organization);
               }
             }
             titles.push(new_title);
@@ -146,30 +164,51 @@ class PersonModel extends BaseModel {
         }
       }
     }
-    // titles are objects; {title:string,orgs:["string"]}
     return titles;
   }
+
+  /**
+   * @method getHeadlineTitle
+   * @description Returns a single (first) title for an individual
+   * @param {Object} individual 
+   * 
+   * @returns (String) - title, org
+   */
   getHeadlineTitle(individual) {
-    let title=""
+    let title="";
     let best=this.getTitles(individual)[0];
     if (best && best.title)
       title=best.title;
     if (best && best.orgs[0])
-      title+=`, ${best.orgs[0]}`
+      title+=`, ${best.orgs[0]}`;
     return title;
   }
 
+  /**
+   * @method getBestLabel
+   * @description Returns the name of an individual.
+   * @param {Object} individual
+   * 
+   * @returns {String}
+   */
   getBestLabel(individual) {
     if (individual && individual.label) {
       if (Array.isArray(individual.label)) {
         // Prefer the shortest one? This prefers fname lname over lname, fname
-        return individual.label.sort((a,b)=> a.length - b.length)[0]
+        return individual.label.sort((a,b)=> a.length - b.length)[0];
       }
-      return individual.label
+      return individual.label;
     }
     return "";
-    }
+  }
 
+  /**
+   * @method getNameObject
+   * @description Returns name of individual as an object
+   * @param {Object} individual 
+   * 
+   * @returns {Object} {'fname': '', 'lname': ''}
+   */
   getNameObject(individual){
     let out = {'fname': '', 'lname': ''};
     if (!individual || !individual.hasContactInfo) {
@@ -184,10 +223,25 @@ class PersonModel extends BaseModel {
     return out;
   }
 
+  /**
+   * @method getAvatarSrc
+   * @description placeholder method for retrieving a person's thumbnail
+   * @param {Object} individual 
+   * 
+   * @returns {String}
+   */
   getAvatarSrc(individual){
+    if (!individual) return "";
     return "";
   }
 
+  /**
+   * @method getSnippet
+   * @description Returns highlighted search snippet for individual.
+   * @param {Object} individual 
+   * 
+   * @returns {String}
+   */
   getSnippet(individual){
     let out = "";
     if (!individual || !individual._snippet) return out;
@@ -208,8 +262,15 @@ class PersonModel extends BaseModel {
     return urlUtils.idAsLocalUrlPath(individual['@id']);
   }
 
+  /**
+   * @method getEmailAddresses
+   * @description Returns array of email addresses for individual.
+   * @param {Object} individual
+   * 
+   * @returns {String[]}
+   */
   getEmailAddresses(individual){
-    let out = []
+    let out = [];
     if (!individual) {
       return out;
     }
@@ -217,18 +278,24 @@ class PersonModel extends BaseModel {
       if (Array.isArray(individual.hasContactInfo.hasEmail)) {
         return individual.hasContactInfo.hasEmail.map(e => e.email);
       }
-      return [individual.hasContactInfo.hasEmail.email]
+      return [individual.hasContactInfo.hasEmail.email];
     }
     if (Array.isArray(individual.hasContactInfo)) {
       for (const contact of individual.hasContactInfo) {
-        if (contact.hasEmail && contact.hasEmail.email && !out.includes(contact.hasEmail.email)) out.push(contact.hasEmail.email);
+        if (contact.hasEmail && contact.hasEmail.email && !out.includes(contact.hasEmail.email)) {
+          out.push(contact.hasEmail.email);}
       }
-      
     }
-
     return out;
   }
 
+  /**
+   * @method getResearchSubjects
+   * @description Returns research subjects of individual
+   * @param {Object} individual
+   * 
+   * @returns {Object[]} {bestLabel: "use me", href: "subject landing page"}
+   */
   getResearchSubjects(individual) {
     let out = [];
     if (!individual || !individual.hasResearchArea) return out;
@@ -242,18 +309,29 @@ class PersonModel extends BaseModel {
     return out;
   }
 
+  /**
+   * @method getWebsites
+   * @description Returns array of individual's websites
+   * @param {Object} individual
+   * 
+   * @returns {Object[]} {text: "friendly text", href: "url of website", icon: "optional path to icon"}
+   */
   getWebsites(individual) {
     let out = [];
     if (!individual) {
       return out;
     }
     if (individual.orcidId) {
-      out.push({'text': individual.orcidId['@id'], 'href': individual.orcidId['@id'], 'icon': '/images/orcid_16x16.png'})
+      out.push({
+        text: individual.orcidId['@id'], 
+        href: individual.orcidId['@id'], 
+        icon: '/images/orcid_16x16.png'});
     }
     if (individual.scopusId) {
-      out.push({'text': 'Scopus', 'href': `https://www.scopus.com/authid/detail.uri?authorId=${individual.scopusId}`})
+      out.push({
+        text: 'Scopus', 
+        href: `https://www.scopus.com/authid/detail.uri?authorId=${individual.scopusId}`});
     }
-
     return out;
   }
 
