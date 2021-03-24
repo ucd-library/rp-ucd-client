@@ -9,6 +9,16 @@ return html`
   :host {
     display: block;
   }
+  .data.loading #hero {
+    min-height: 450px;
+  }
+  .data #hero rp-loading {
+    height: 100%;
+  }
+  .data section rp-loading {
+    height: 150px;
+    --rp-loading-color: var(--tcolor-primary);
+  }
   .herotop {
     display: flex;
     flex-flow: row nowrap;
@@ -142,6 +152,12 @@ return html`
     display: flex;
     flex-grow: 1;
   }
+  section .load-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+  }
   @media (min-width: 800px){
     .own-profile .box-title {
       flex-flow: row nowrap;
@@ -161,37 +177,36 @@ return html`
 
 
 <div class="individual top ${this.isOwnProfile ? "own-profile" : ""}">
-  <div ?hidden="${this.individualStatus == 'error' || this.individualStatus == 'loaded' }" class="flex align-items-center justify-content-center">
-    <div class="loading1">loading</div>
-  </div>
-  <div ?hidden="${this.individualStatus == 'loading' || this.individualStatus == 'loaded' }" class="flex align-items-center justify-content-center">
-    <rp-alert>Error loading individual.</rp-alert>
-  </div>
-  <div class="data" ?hidden="${this.individualStatus == 'loading' || this.individualStatus == 'error' }">
+  <div class="data ${this.individualStatus}" ?hidden="${!this.showPage() }">
     <div class="page-header container-wide">
       <rp-hero-image id="hero">
-        <div class="hidden" slot="top" class="herotop">
-          <rp-icon icon="iron-link" circle-bg is-link style="margin-right:5px;"></rp-icon>
-          <rp-icon icon="rp-qr" circle-bg is-link></rp-icon>
-        </div>
-        <div slot="main" class="heromain">
-          <rp-avatar size="lg"></rp-avatar>
-          <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
-          <p class="text-light h3 mb-2 mt-1 text-center">${this.getHeadlineTitle()}</p>
-          ${this.getResearchSubjects(1).length > 0 ? html`
-            <div>
-              <p class="text-light h3 text-center bold">My research areas include:</p>
-              <div class="flex flex-wrap justify-content-center align-items-center">
-                ${this.getResearchSubjects(4).map(subject => html`
-                  <rp-badge size="lg" class="text-light my-1" href="${subject.href}">${subject.bestLabel}</rp-badge>
-                `)}
-              </div>
-            </div>
-          ` : html``}
-          <div ?hidden="${!this.isAdmin}" style="margin-top: 20px">
-            <button @click="${this._onImpersonateClick}" class="load-pubs more">Impersonate</button>
+        ${this.individualStatus === 'loaded' ? html`
+          <div class="hidden" slot="top" class="herotop">
+            <rp-icon icon="iron-link" circle-bg is-link style="margin-right:5px;"></rp-icon>
+            <rp-icon icon="rp-qr" circle-bg is-link></rp-icon>
           </div>
-        </div>
+          <div slot="main" class="heromain">
+            <rp-avatar size="lg"></rp-avatar>
+            <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
+            <p class="text-light h3 mb-2 mt-1 text-center">${this.getHeadlineTitle()}</p>
+            ${this.getResearchSubjects(1).length > 0 ? html`
+              <div>
+                <p class="text-light h3 text-center bold">My research areas include:</p>
+                <div class="flex flex-wrap justify-content-center align-items-center">
+                  ${this.getResearchSubjects(4).map(subject => html`
+                    <rp-badge size="lg" class="text-light my-1" href="${subject.href}">${subject.bestLabel}</rp-badge>
+                  `)}
+                </div>
+              </div>
+            ` : html``}
+            <div ?hidden="${!this.isAdmin}" style="margin-top: 20px">
+              <button @click="${this._onImpersonateClick}" class="load-pubs more">Impersonate</button>
+            </div>
+          </div>
+        ` : html`
+          <rp-loading slot="main">Loading Aggie Expert</rp-loading>
+        `}
+
       </rp-hero-image>
       <rp-link-list class="bg-light p-3"
                     direction="horizontal"
@@ -203,35 +218,40 @@ return html`
     <div class="sections container">
       <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
         <h1 class="weight-regular mt-0">About</h1>
+        ${this.individualStatus === 'loaded' ? html`
           <h2 hidden>Overview</h2>
-          <p hidden>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-          et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-          ex ea commodo consequat. </p>
-        <div class="cols">
-          <div>
+            <p hidden>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+            ex ea commodo consequat. </p>
+          <div class="cols">
             <div>
-              <h2 class="h3 mb-2">Positions</h2>
-              ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
+              <div>
+                <h2 class="h3 mb-2">Positions</h2>
+                ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
+              </div>
+              ${this._showSubSection('contact') ? html`
+                <div>
+                  <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
+                </div>
+              ` : html``}
+              
             </div>
-            ${this._showSubSection('contact') ? html`
-              <div>
-                <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
-              </div>
-            ` : html``}
-            
+            <div>
+              ${this._showSubSection('websites') ? html`
+                <div>
+                  <h2 class="h3 mb-2">Websites</h2>
+                  ${this.getWebsites().map(site => html`
+                    <div class="site">
+                      <a href="${site.href}">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
+                    </div>`)}
+                </div>
+              ` : html``}
+            </div>
           </div>
-          <div>
-            ${this._showSubSection('websites') ? html`
-              <div>
-                <h2 class="h3 mb-2">Websites</h2>
-                ${this.getWebsites().map(site => html`
-                  <div class="site">
-                    <a href="${site.href}">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
-                  </div>`)}
-              </div>
-            ` : html``}
-          </div>
-        </div>
+        ` : html`
+          <rp-loading></rp-loading>
+        `}
+
       </section>
 
       <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
@@ -262,35 +282,46 @@ return html`
             </rp-modal>
           </div>
         </div>
-        <h2 class="mb-0">Selected Publications</h2>
-        <div class="data">
-          ${ Object.values(this.publicationOverview).map(pubType => html`
-            <h3>${pubType.label} (${pubType.ct})</h3>
-            ${this.getPubsByYear(pubType.id).map(yr => html`
-              <div class="box-pubsyear">
-                <div class="year">${yr.year}</div>
-                <div class="pubs">${yr.pubs.map(pub => html`
-                  <rp-citation .data="${pub}"></rp-citation>
-                `)}</div>
+        ${this.publicationOverviewStatus === 'loaded' ? html`
+          <h2 class="mb-0">Selected Publications</h2>
+          <div class="data">
+            ${ Object.values(this.publicationOverview).map(pubType => html`
+              <h3>${pubType.text} (${pubType.ct})</h3>
+              ${this.getPubsByYear(pubType.id).map(yr => html`
+                <div class="box-pubsyear">
+                  <div class="year">${yr.year}</div>
+                  <div class="pubs">${yr.pubs.map(pub => html`
+                    <rp-citation .data="${pub}"></rp-citation>
+                  `)}</div>
+                </div>
+              `)}
+
+              <div class="box-pub-buttons" ?hidden="${!this.showMoreButton(pubType)}">
+                <div class="padding"></div>
+                <div class="buttons">
+                  <button type="button" 
+                    ?hidden="${!this.showLessButton(pubType)}"
+                    @click="${e => this._loadPubs(pubType.id, false)}" 
+                    class="load-pubs less">Show ${this.showLessCount(pubType)} less</button>
+
+                  <button type="button" 
+                    ?hidden="${!this.showMoreButton(pubType)}"
+                    @click="${e => this._loadPubs(pubType.id, true)}" 
+                    class="load-pubs more">Show ${this.showMoreCount(pubType)} more</button>
+                </div>
               </div>
             `)}
-
-            <div class="box-pub-buttons" ?hidden="${!this.showMoreButton(pubType)}">
-              <div class="padding"></div>
-              <div class="buttons">
-                <button type="button" 
-                  ?hidden="${!this.showLessButton(pubType)}"
-                  @click="${e => this._loadPubs(pubType.id, false)}" 
-                  class="load-pubs less">Show ${this.showLessCount(pubType)} less</button>
-
-                <button type="button" 
-                  ?hidden="${!this.showMoreButton(pubType)}"
-                  @click="${e => this._loadPubs(pubType.id, true)}" 
-                  class="load-pubs more">Show ${this.showMoreCount(pubType)} more</button>
-              </div>
-            </div>
-          `)}
-        </div>
+          </div>
+        ` : html``}
+        ${this.publicationOverviewStatus === 'loading' ? html`
+          <rp-loading>Loading publications</rp-loading>
+        ` : html``}
+        ${this.publicationOverviewStatus === 'error' ? html`
+          <div class="load-error">
+            <rp-alert>Error loading publications. Try again later.</rp-alert>
+          </div>
+        ` : html``}
+        
 
       </section>
     </div>
