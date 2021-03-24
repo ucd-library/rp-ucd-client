@@ -11,7 +11,7 @@ return html`
   }
   
 </style>
-<div class="collections container bg-light top">
+<div class="collections container bg-light top ${this.dataStatus}">
   ${this._renderBrowseHeader('People')}
   <hr class="mb-0">
   <div class="body flex">

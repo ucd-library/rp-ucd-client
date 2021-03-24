@@ -1,6 +1,7 @@
 import render from "./rp-page-person.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
+import UserUtils from "../../../src/lib/user-utils";
  
 import "../../components/alert";
 import "../../components/avatar";
@@ -11,6 +12,7 @@ import "../../components/hero-image";
 import "../../components/icon";
 import "../../components/link-list";
 import "../../components/modal";
+import "../../components/rp-loading";
 
 
 /**
@@ -44,8 +46,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     
     this.assetType = "person";
 
-    // TODO: make util
-    this.isAdmin = APP_CONFIG.user && (APP_CONFIG.user.roles || []).includes('admin') ? true : false;
+    this.isAdmin = UserUtils.isAdmin(APP_CONFIG.user);
 
     this._resetEleProps();
 
@@ -145,12 +146,16 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doMainQuery(id){
     let data = await this.PersonModel.get(id);
+    if( data.state === 'error' ) {
+      return this.AppStateModel.show404Page(data);
+    }
     this.individualStatus = data.state;
     if (data.state != 'loaded') {
-      return;
+      return false;
     }
     this.individual = data.payload;
     if (APP_CONFIG.verbose) console.log(data);
+    return false;
   }
 
   /** 
@@ -163,7 +168,12 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @returns {Promise}
    */
   async _doPubOverviewQuery(id) {
+    this.publicationOverviewStatus = 'loading';
     let data = await this.PersonModel.getPubOverview(id);
+    if( data.state === 'error' ) {
+      this.publicationOverviewStatus = 'error';
+      return;
+    }
     if (data.state != 'loaded') {
       return;
     }
@@ -175,7 +185,11 @@ export default class RpPagePerson extends RpUtilsLanding {
       let ct = data.payload.aggregations.facets['@type'][possiblePubType.es];
       if (ct) {
         totalPubs += ct;
-        pubTypes[possiblePubType.id] = {...possiblePubType, ct: ct, displayedOffset: 0, dataStatus: 'loading'};
+        pubTypes[possiblePubType.id] = {
+          ...possiblePubType, 
+          ct: ct, 
+          displayedOffset: 0, 
+          dataStatus: 'loading'};
       }
     }
     this.hasMultiplePubTypes = Object.keys(pubTypes).length > 1;
@@ -186,7 +200,10 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.totalPublications = totalPubs;
     this.publicationOverview  = pubTypes;
 
-    Object.values(pubTypes).map(pt => this._doPubQuery(pt));
+    await Promise.all(Object.values(pubTypes).map(pt => this._doPubQuery(pt)));
+    if ( this.publicationOverviewStatus !== 'error' ) {
+      this.publicationOverviewStatus = 'loaded';
+    }
   }
 
   /**
@@ -199,9 +216,12 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @returns {Promise}
    */
   async _doPubQuery(pubTypeObject, offset=0){
-
     let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
     this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
+    if( data.state === 'error' ) {
+      this.publicationOverviewStatus = 'error';
+      return;
+    }
     if (data.state != 'loaded') return;
 
     if( !this.retrievedPublications[pubTypeObject.id] ) {
@@ -226,6 +246,17 @@ export default class RpPagePerson extends RpUtilsLanding {
     } catch (error) {
       console.warn("Error parsing username.");
     }
+    return false;
+  }
+
+  /**
+   * @method showPage
+   * @description Shows normal content template for page.
+   * 
+   * @returns {Boolean}
+   */
+  showPage() {
+    if ( this.individualStatus === 'loaded' || this.individualStatus === 'loading' ) return true;
     return false;
   }
 
