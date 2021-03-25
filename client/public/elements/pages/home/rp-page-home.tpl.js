@@ -69,6 +69,18 @@ return html`
   #subjects {
     padding-bottom: 15px;
   }
+  rp-loading {
+    --rp-loading-color: var(--tcolor-primary);
+  }
+  .data.loading rp-loading {
+    height: 100vh;
+  }
+  .error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
 
   @media (min-width: 800px){
     .people-container {
@@ -100,6 +112,12 @@ return html`
     }
     #subjects {
       padding-bottom: 15px;
+    }
+    .data.loading rp-loading {
+      height: 590px;
+    }
+    .error {
+      height: 590px;
     }
   }
 
@@ -137,12 +155,14 @@ return html`
   </div>
 </div>
 
-<div class="data bg-light">
-  <div class="container flex">
+<div class="data bg-light ${this.pageStatus}">
+  <rp-loading ?hidden="${this._hideStatusSection('loading')}">Loading ${this.theme.siteTitle}</rp-loading>
+  <div ?hidden="${this._hideStatusSection('error')}" class="error">
+    <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
+  </div>
+  <div class="container flex" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="col-l">
-      <div ?hidden="${this._hideStatusSection('loading', 'facetsStatus')}" class="loading1">loading</div>
-      <rp-alert  ?hidden="${this._hideStatusSection('error', 'facetsStatus')}">Error loading academic works</rp-alert>
-      <div id="works" ?hidden="${this._hideStatusSection('loaded', 'facetsStatus')}">
+      <div id="works">
         <div class="list-count">
           <div class="row">
             <div class="count"><h2 class="mt-0">${this.academicWorksTotal}</h2></div>
@@ -162,9 +182,7 @@ return html`
       </div>
     </div>
     <div class="col-r flex-grow-1">
-      <div ?hidden="${this._hideStatusSection('loading', 'peopleStatus')}" class="loading1">loading</div>
-      <rp-alert  ?hidden="${this._hideStatusSection('error', 'peopleStatus')}">Error loading people</rp-alert>
-      <div class="people" id="people" ?hidden="${this._hideStatusSection('loaded', 'peopleStatus')}">
+      <div class="people" id="people">
         <h2 class="mt-0">
           <span class="bold mr-2">${this.peopleTotal}</span>
           <span class="weight-regular">People</span>

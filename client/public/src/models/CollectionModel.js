@@ -92,13 +92,19 @@ class CollectionModel extends BaseModel {
       queryObject.facets["@type"] = {"type" : "facet"};
     }
 
-    let current = this.store.data.overview[id];
-    if( current && current.request ) {
-      await current.request;
-    } 
-    else {
-      await this.service.overview(id, queryObject);
+    let state = this.store.data.overview[id];
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } 
+      else {
+        await this.service.overview(id, queryObject);
+      }
+    } catch (error) {
+      // error is recorded in store
     }
+
+
     return this.store.data.overview[id];
   }
 
