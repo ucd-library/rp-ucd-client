@@ -1,5 +1,5 @@
 import { LitElement } from 'lit-element';
-import render from "./app-components.tpl.js"
+import render from "./app-components.tpl.js";
 //import { colorStyles } from '../../styles/site.js';
 
 
@@ -13,7 +13,7 @@ export class AppPageComponents extends Mixin(LitElement)
       exampleSubjects : {type: Array},
       visible: {type: Boolean}
     };
-    }
+    } 
   constructor() {
     super();
     this._injectModel('CollectionModel', 'AppStateModel');
@@ -31,6 +31,7 @@ export class AppPageComponents extends Mixin(LitElement)
   }
 
   async doUpdate(state){
+    console.log(state);
     await this.updateComplete;
     if (!this.visible) {
       return;
