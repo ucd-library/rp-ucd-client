@@ -13,7 +13,9 @@ export class RpPagination extends LitElement {
       maxPage: {converter: parseInt, attribute: 'max-page', reflect: true},
       minPage: {converter: parseInt, attribute: 'min-page', reflect: true},
       pagesPerSide: {converter: parseInt, attribute: 'pages-per-side'},
-      centerPages: {type: Array}
+      centerPages: {type: Array},
+      role: {type: String, reflect: true},
+      ariaLabel: {type: String, attribute: 'aria-label', reflect: true}
     };
   }
 
@@ -25,6 +27,8 @@ export class RpPagination extends LitElement {
     this.currentPage = this.minPage;
     this.maxPage = this.currentPage;
     this.centerPages = [];
+    this.role = "navigation";
+    this.ariaLabel = "pagination";
 
     this._changedPage = new CustomEvent('changed-page', {
       detail: {
@@ -79,7 +83,16 @@ export class RpPagination extends LitElement {
     if (direction == 'left') {
       if ( this.centerPages.length >= 1 && this.minPage < this.centerPages[0].page ) {
         return html`
-          <div @click="${this.handleClick}" class="page" page="${this.minPage}">${this.minPage}</div>
+          <div 
+            @click="${e => this.handleClick(e.target)}"
+            @keyup="${e => {if (e.code === 'Enter') this.handleClick(e.target);}}"
+            tabindex="0"
+            role="button"
+            aria-label="Go to page ${this.minPage}"
+            class="page" 
+            page="${this.minPage}">
+            ${this.minPage}
+          </div>
           <div class="ellipsis">...</div>`;
       }
     }
@@ -87,7 +100,16 @@ export class RpPagination extends LitElement {
       if ( this.centerPages.length >= 1 && this.maxPage > this.centerPages.slice(-1)[0].page ) {
         return html`
           <div class="ellipsis">...</div>
-          <div @click="${this.handleClick}" class="page" page="${this.maxPage}">${this.maxPage}</div>`;
+          <div 
+            @click="${e => this.handleClick(e.target)}" 
+            @keyup="${e => {if (e.code === 'Enter') this.handleClick(e.target);}}"
+            tabindex="0"
+            role="button"
+            aria-label="Go to page ${this.minPage}"
+            class="page" 
+            page="${this.maxPage}">
+            ${this.maxPage}
+          </div>`;
       }
     }
     return html``;
@@ -101,11 +123,19 @@ export class RpPagination extends LitElement {
    */
   _renderCenter() {
     if (!this._hasValidLogic()) {
-      return html`<div class="${classMap({page: true, selected: true})}" page="${this.currentPage}">${this.currentPage}</div>`;
+      return html`
+        <div 
+          class="${classMap({page: true, selected: true})}" 
+          page="${this.currentPage}">${this.currentPage}
+        </div>`;
     }
     return html`${this.centerPages.map(page => html`
       <div 
-        @click="${this.handleClick}"
+        @click="${e => this.handleClick(e.target)}"
+        @keyup="${e => {if (e.code === 'Enter') this.handleClick(e.target);}}"
+        tabindex="0"
+        role="button"
+        aria-label="Go to page ${page.page}"
         class="${classMap({"page": true, selected: page.selected})}"
         page="${page.page}">${page.page}
       </div>`)}`;
@@ -173,10 +203,10 @@ export class RpPagination extends LitElement {
    * @description Event handler for element click. Changes the active page.
    * Dispatches the 'changed-page' event
    * 
-   * @param {Event} e - Click event on page numbers or arrow icons
+   * @param {Event} target - element that was clicked on
    */
-  handleClick(e) {
-    let new_page = parseInt(e.target.getAttribute('page'));
+  handleClick(target) {
+    let new_page = parseInt(target.getAttribute('page'));
     if (new_page != this.currentPage) {
       this.currentPage = new_page;
       this.dispatchEvent(this._changedPage);

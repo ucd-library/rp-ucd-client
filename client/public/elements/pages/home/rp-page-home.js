@@ -7,6 +7,7 @@ import "../../components/alert";
 import "../../components/badge";
 import "../../components/person-preview";
 import "../../components/search";
+import "../../components/rp-loading";
 
 /**
  * @class RpPageHome
@@ -18,6 +19,7 @@ export default class RpPageHome extends Mixin(LitElement)
   static get properties() {
     return {
       theme: {type: Object},
+      pageStatus: {type: String},
       facetsStatus: {type: String},
       facets: {type: Object},
       academicWorks: {type: Array},
@@ -60,6 +62,7 @@ export default class RpPageHome extends Mixin(LitElement)
     this.people = [];
     this.academicWorks = [];
     this.subjects = [];
+    this.pageStatus = 'loading';
     this.facetsStatus = 'loading';
     this.peopleStatus = 'loading';
     this.subjectsStatus = 'loading';
@@ -71,12 +74,15 @@ export default class RpPageHome extends Mixin(LitElement)
    * 
    * @param {Object} props 
    */
-  updated(props) {
+  async updated(props) {
     if (props.has('facetsStatus')) {
       if (this.facetsStatus == 'loaded') {
-        this._getPeople();
-        this._getSubjects();
+        await Promise.all([
+          this._getPeople(),
+          this._getSubjects()
+        ]);
       }
+      this.setPageStatus();
     }
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
@@ -112,6 +118,21 @@ export default class RpPageHome extends Mixin(LitElement)
     }
     this.resetProperties();
     await this._getFacets();
+  }
+
+  /**
+   * @method setPageStatus
+   * @description Sets status of page based on API call status
+   * 
+   * @returns {String}
+   */
+  setPageStatus(){
+    if ( 
+      this.facetsStatus === 'loaded' && 
+      this.peopleStatus === 'loaded' &&
+      this.subjectsStatus === 'loaded'
+    ) this.pageStatus = 'loaded';
+    return "error";
   }
 
   /**
@@ -208,7 +229,7 @@ export default class RpPageHome extends Mixin(LitElement)
    * 
    * @returns {Boolean}
    */
-  _hideStatusSection(status, field="status") {
+  _hideStatusSection(status, field="pageStatus") {
     if (status == this[field]) return false;
     return true;
   }
@@ -237,6 +258,7 @@ export default class RpPageHome extends Mixin(LitElement)
    */
   async _getSubjects() {
     let subjects = await this.SubjectModel.getRandomSubjects(10);
+    this.subjectsStatus = subjects.state;
     this.subjects = subjects.payload;
     if (APP_CONFIG.verbose) console.log('subjects: ', this.subjects);
   }
