@@ -61,8 +61,8 @@ export default function render() {
       }
     }
   </style>
-  <div class="container ${classMap(this._constructClasses())}">
+  <div class="container ${classMap(this._constructClasses())} ">
     ${this.links.map((link, index) => this._renderLink(link, index))}
   </div>
   `;
-}
+} 
