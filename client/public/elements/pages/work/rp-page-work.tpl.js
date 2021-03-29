@@ -168,6 +168,9 @@ return html`
         <div ?hidden="${this._hideStatusSection('error', 'universityAuthorsStatus')}" class="flex align-items-center justify-content-center">
           <rp-alert>Error loading authors.</rp-alert>
         </div>
+        <div ?hidden="${this._hideStatusSection('none-found', 'universityAuthorsStatus')}" >
+          None
+        </div>
         <div class="data" ?hidden="${this._hideStatusSection('loaded', 'universityAuthorsStatus')}">
           ${this.universityAuthors.map(author => html`
             <rp-person-preview
