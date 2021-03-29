@@ -33,7 +33,7 @@ class StaticModelController {
 
     // first check that item exists
     model = await this.getExpertRecord(
-      req.originalUrl.replace(/^\//, '').split('/').splice(0,2).join('/')
+      req.originalUrl.replace(/^\//, '').replace(/\/_\/*/)
     );
     if( !model ) {
       return {is404Model: true, isModel: true};

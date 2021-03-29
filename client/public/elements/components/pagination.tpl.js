@@ -65,20 +65,30 @@ export default function render() {
     }
   </style>
   <div class=container>
-    <iron-icon ?disabled="${this.currentPage == this.minPage || !this._hasValidLogic() }"
-               @click="${this.handleClick}"
-               page="${this.currentPage - 1}"
-               icon="arrow-back">
+    <iron-icon 
+      ?disabled="${this.currentPage == this.minPage || !this._hasValidLogic() }"
+      @click="${e => this.handleClick(e.target)}"
+      page="${this.currentPage - 1}"
+      @keyup="${e => {if (e.code === 'Enter') this.handleClick(e.target);}}"
+      tabindex="0"
+      role="button"
+      aria-label="Go to previous page"
+      icon="arrow-back">
     </iron-icon>
     <div class="container-center">
       ${this._renderEdge('left')}
       ${this._renderCenter()}
       ${this._renderEdge('right')}
     </div>
-    <iron-icon ?disabled="${this.currentPage == this.maxPage || !this._hasValidLogic() }"
-               @click="${this.handleClick}"
-               page="${this.currentPage + 1}"
-               icon="arrow-forward">
+    <iron-icon 
+      ?disabled="${this.currentPage == this.maxPage || !this._hasValidLogic() }"
+      @click="${e => this.handleClick(e.target)}"
+      page="${this.currentPage + 1}"
+      @keyup="${e => {if (e.code === 'Enter') this.handleClick(e.target);}}"
+      tabindex="0"
+      role="button"
+      aria-label="Go to next page"
+      icon="arrow-forward">
     </iron-icon>
   </div>
   `;
