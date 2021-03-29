@@ -6,7 +6,7 @@ class OrganizationModel extends BaseModel {
 
   constructor() {
     super();
-
+ 
     this.store = OrganizationStore;
     this.service = OrganizationService;
       
@@ -14,11 +14,11 @@ class OrganizationModel extends BaseModel {
   }
 
   async getOrganization(id) {
-    let state = {state : OrganizationStore.STATE.INIT};
-    if( state.state === 'init' ) {
-      await this.service.getOrganization(id);
-    } else if( state.state === 'loading' ) {
+    let state = this.store.data.byOrganization[id];
+    if( state && state.request ) {
       await state.request;
+    } else if( state.state === 'loading' ) {
+      await this.service.getOrganization(id);
     }
     return this.store.data.byOrganization[id];
   }
