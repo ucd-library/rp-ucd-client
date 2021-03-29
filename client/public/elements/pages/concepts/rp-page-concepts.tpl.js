@@ -7,6 +7,7 @@ return html`
   :host {
     display: block;
   } 
+
   ${styles}
 </style>
 <div class="collections container bg-light top ${this.dataStatus}">

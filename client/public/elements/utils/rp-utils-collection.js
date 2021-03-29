@@ -78,7 +78,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.currentQuery = {};
     this.subjectFilter = "";
 
-    this.pgPer = 8;
+    this.pgPer = 16;
     this.pgCurrent = 1;
 
     this.mainFacet = this.defaultFacetId;
