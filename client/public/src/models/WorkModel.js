@@ -190,7 +190,7 @@ class WorkModel extends BaseModel {
       author.isOtherUniversity = true;
       try {
         if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
-          author.identifiers = [author.identifiers]
+          author.identifiers = [author.identifiers];
         }
         for (let id of author.identifiers) {
           if (this.grpsWithLinks.includes(id['@type']) && id['@id'].match("^"+this.service.jsonContext+":")) {
