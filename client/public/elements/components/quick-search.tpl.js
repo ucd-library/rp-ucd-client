@@ -76,16 +76,27 @@ export default function render() {
   </style>
   <div class="container ${classMap(this._constructClasses())}">
     <input ?hidden="${!this.opened}" type="text" placeholder="${this.placeholder}"
-           style="${styleMap(this._constructInputStyles())}"
-           id="search-input"
-           role="search" 
-           aria-label="Sitewide"
-           .value="${this.inputValue}"
-           @animationend="${this._handleAnimationEnd}"
-           @keyup="${this._handleKeyup}"
-           @blur="${this._handleBlur}"
-           @input="${(e) => this.inputValue = e.target.value}">
-    <rp-icon @click="${this._handleClick}" icon="rp-search" circle-bg ?is-link="${this._activateLink()}" theme-color='secondary' size="lg"></rp-icon>
+      style="${styleMap(this._constructInputStyles())}"
+      id="search-input"
+      role="search" 
+      aria-label="Sitewide"
+      .value="${this.inputValue}"
+      @animationend="${this._handleAnimationEnd}"
+      @keyup="${this._handleKeyup}"
+      @blur="${this._handleBlur}"
+      @input="${(e) => this.inputValue = e.target.value}" />
+
+    <rp-icon @click="${this._handleClick}" 
+      icon="rp-search" 
+      role="button"
+      tabindex="0"
+      aria-label="${this.label}"
+      aria-pressed="${this.opened ? 'true' : 'false'}"
+      circle-bg 
+      ?is-link="${this._activateLink()}" 
+      theme-color='secondary' 
+      size="lg">
+    </rp-icon>
   </div>
   `;
 }
