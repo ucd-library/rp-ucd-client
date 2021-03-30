@@ -428,9 +428,11 @@ class CollectionModel extends BaseModel {
       // Apply faceting to query
       query.facets = QueryUtils.defaultTypeFacet;
     }
-    // No search text query. Just sort by title
+    // No search text query. Just sort by label
     else {
-      query.sort = QueryUtils.defaultBrowseSort;
+      let s = {};
+      s[AssetDefs.getBrowseSortField(mainFacet)] = 'asc';
+      query.sort = [s];
     }
 
     // Apply pagination
