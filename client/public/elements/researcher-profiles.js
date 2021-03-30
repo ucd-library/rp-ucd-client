@@ -344,7 +344,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       <div id="masthead" class="text-light flex align-items-center" style="${styleMap(styles)}">
         <div class="container content">
           ${this.theme.universityLogo? html`
-          <a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html`<div></div>`}
+          <a href="${this.theme.universityUrl}"><img class="logo" alt="UC Davis Logo" src="${this.theme.universityLogo}"></a>` : html`<div></div>`}
           <iron-icon 
             tabindex="0" 
             icon="${this.page == 'app-mobile-menu' ? 'close' : 'menu'}" 

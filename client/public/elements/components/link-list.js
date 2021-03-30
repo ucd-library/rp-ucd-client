@@ -78,23 +78,25 @@ export class RpLinkList extends LitElement {
 
     if (href) {
       return html`
-        <a 
+        <li role="none"><a 
           link="${index}" 
           class="${classMap(classes)}"
+          role="menuitem"
           tabindex="${classes.disabled ? "-1": "0"}"
           href="${href}">
           ${text}
-        </a>`;
+        </a></li>`;
     }
 
     if (text) {
       return html`
-        <div 
+        <li 
           @click="${this.handleClick}" 
           link="${index}"
+          role="menuitem"
           tabindex="${classes.disabled ? "-1": "0"}"
           class=${classMap(classes)}>${text}
-        </div>`;
+        </li>`;
     }
 
     return html``;
