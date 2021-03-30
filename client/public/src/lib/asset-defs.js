@@ -8,6 +8,7 @@ class AssetDefs {
   constructor() {
     this.defaultFacetId = 'none';
     this.defaultAzId = 'all';
+    this.defaultSortField = 'label';
   }
 
   /**
@@ -23,6 +24,7 @@ class AssetDefs {
         idSingular: 'person',
         text: 'People', 
         es: TYPES.person,
+        defaultSortField: this.defaultSortField,
         baseFilter: {
           '@type': {
             type: "keyword", 
@@ -44,6 +46,7 @@ class AssetDefs {
         idSingular: 'concept',
         text: 'Subjects', 
         es: TYPES.concept,
+        defaultSortField: 'prefLabel',
         baseFilter: {
           '@type': {
             type: "keyword", 
@@ -51,9 +54,10 @@ class AssetDefs {
             value: [TYPES.concept]
           }
         },
-        azField: "label.firstLetter",
+        azField: "prefLabel.firstLetter",
         facetedSearchFields: [
-          "label.text^10"
+          "label.text^10",
+          "prefLabel.text^10"
         ]
       },
       /*
@@ -74,6 +78,7 @@ class AssetDefs {
         idSingular: 'work',
         text: 'Works', 
         es: TYPES.work,
+        defaultSortField: this.defaultSortField,
         baseFilter: {
           "@type": {
             type: "keyword", 
@@ -361,6 +366,18 @@ class AssetDefs {
    */
   addContext(text) {
     return `${this.jsonldContext}:${text}`;
+  }
+
+  /**
+   * @method getBrowseSortField
+   * @description Returns the field to sort by in a standard browse query.
+   * @param {String} facet - id of primary facet.
+   * 
+   * @returns {String} - es field.
+   */
+  getBrowseSortField(facet) {
+    if ( !facet || !this.facetExists(facet) ) return this.defaultSortField;
+    return this.getMainFacetById(facet).defaultSortField;
   }
 }
 
