@@ -89,7 +89,9 @@ return html`
   <div class="data" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="page-header container-wide">
       <div class="hero">
-        <div class="title mb-0"> <h2 class="text-secondary h1 bold mb-0 text-center">${this.work.label}</h2></div>
+        <div class="title mb-0"> 
+          <h1 class="text-secondary h1 bold mb-0 text-center" aria-label="Work title">${this.work.label}</h1>
+        </div>
         <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.map((author, i) => html`
           <span>${author.nameFirst} ${author.nameLast}</span>${i + 1 < this.authors.length ? html`<span>, </span>` : html``}
         `)}</p></div>
