@@ -14,9 +14,7 @@ export class RpQuickSearch extends LitElement {
       placeholder: {type: String},
       opened: {type: Boolean},
       closing: {type: Boolean},
-      role: {type: String, reflect: true},
-      ariaPressed: {type: String, attribute: 'aria-pressed', reflect: true},
-      ariaLabel: {type: String, attribute: 'aria-label', reflect: true}
+      label: {type: String}
     };
   }
 
@@ -29,21 +27,7 @@ export class RpQuickSearch extends LitElement {
     this.inputValue = "";
     this.preventOpen = false;
     this.closing = false;
-    this.role = 'button';
-    this.ariaPressed = "false";
-    this.ariaLabel = "Press to open sitewide search input";
-
-    this._newSearch = new CustomEvent('new-search', {
-      detail: {
-        message: 'A new search has been triggered'
-      }
-    });
-
-    this._inputStatus = new CustomEvent('input-status', {
-      detail: {
-        message: 'The input has either been expanded or collapsed.'
-      }
-    });
+    this.label = "Press to open sitewide search input";
   }
 
 
@@ -61,12 +45,13 @@ export class RpQuickSearch extends LitElement {
         this.inputWidth = w;
         let i = this.shadowRoot.getElementById('search-input');
         i.focus();
-        this.ariaPressed = "true";
       }
-      else {
-        this.ariaPressed = "false";
-      }
-      this.dispatchEvent(this._inputStatus);
+
+      this.dispatchEvent(new CustomEvent('input-status', {
+        detail: {
+          message: 'The input has either been expanded or collapsed.'
+        }
+      }));
     }
   }
 
@@ -144,7 +129,7 @@ export class RpQuickSearch extends LitElement {
       if (!this.validateSearchText()) {
         return;
       }
-      this.dispatchEvent(this._newSearch);
+      this.dispatchEvent(this._newSearchEvent());
     }
 
     else {
@@ -213,8 +198,22 @@ export class RpQuickSearch extends LitElement {
       if (!this.validateSearchText()) {
         return;
       }
-      this.dispatchEvent(this._newSearch);
+      this.dispatchEvent(this._newSearchEvent());
     }
+  }
+
+  /**
+   * @method _newSearchEvent
+   * @description create new custom search event
+   * 
+   * @returns {CustomEvent}
+   */
+  _newSearchEvent() {
+    return new CustomEvent('new-search', {
+      detail: {
+        message: 'A new search has been triggered'
+      }
+    });
   }
 }
 

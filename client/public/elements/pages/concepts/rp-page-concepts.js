@@ -10,7 +10,7 @@ export default class RpPageConcepts extends RpUtilsCollection {
 
   static get properties(){
     return {
-    }
+    };
   } 
  
   constructor(){
@@ -54,7 +54,7 @@ export default class RpPageConcepts extends RpUtilsCollection {
    */
   
   async _getFacets() {
-    let activeFilters = {};
+    //let activeFilters = {};
     let subjectsAggs = await this.CollectionModel.overview('subjectsAggs');
     this.subFacetStatus = subjectsAggs.state;
     if (subjectsAggs.state != 'loaded'){

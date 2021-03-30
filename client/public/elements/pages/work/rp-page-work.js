@@ -156,6 +156,13 @@ export default class RpPageWork extends RpUtilsLanding {
   async _doAuthorQuery(id, authors) {
     this.universityAuthors = [];
     let universityAuthors = authors.filter(author => author.isOtherUniversity == false).map(a => a.apiEndpoint);
+    
+    // don't render
+    if( universityAuthors.length === 0 ) {
+      this.universityAuthorsStatus = 'none-found';
+      return;
+    }
+    
     let data = await this.WorkModel.getAuthorsFullObject(id, universityAuthors);
     this.universityAuthorsStatus = data.state;
     if (data.state != 'loaded') return;

@@ -14,7 +14,7 @@ export default function render() {
       align-items: center;
       justify-content: space-between;
     }
-    .container-center {
+    .container-center { 
       display: flex;
       flex-flow: row nowrap;
       align-items: center;

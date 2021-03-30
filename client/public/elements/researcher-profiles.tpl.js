@@ -195,6 +195,11 @@ return html`
   #nav-container {
     min-height: 56px;
   }
+  #nav-left {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
   #nav-left a {
     padding: 15px 8px;
     text-transform: uppercase;
@@ -323,16 +328,17 @@ return html`
     </div>
 
 
-    <div id="nav-container" class="container flex flex-wrap align-items-center justify-content-between">
+    <nav id="nav-container"  class="container flex flex-wrap align-items-center justify-content-between">
       <rp-icon @click="${this.closeQuickSearch}" ?hidden="${!this.hideMainNav}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
-      <div id="nav-left" class="flex align-items-center bold" ?hidden="${this.hideMainNav}">
+      <ul id="nav-left" role="menubar" aria-label="primary navigation" class="flex align-items-center bold" ?hidden="${this.hideMainNav}">
         ${this.navLinks.map(link => html`
-        <a href=${link.href} ?this-page="${link.page == this.page}" class="text-primary no-decoration ${link.page == 'help' ? 'hidden-mobile' : ''}">${link.text}</a>`)}
-      </div>
+        <li role="none">
+          <a href=${link.href} role="menuitem" ?this-page="${link.page == this.page}" class="text-primary no-decoration ${link.page == 'help' ? 'hidden-mobile' : ''}">${link.text}</a>
+        </li>`)}
+      </ul>
       <div id="nav-right" class="flex align-items-center">
         <rp-quick-search 
           id="quick-search" 
-          tabindex="0"
           @keyup="${this._onQuickSearchKeyup}"
           @input-status="${this._onQuickSearchClick}" 
           @new-search="${this._onSearch}" 
@@ -341,7 +347,7 @@ return html`
           input-width="${this.quickSearchWidth}">
         </rp-quick-search>
       </div>
-    </div>
+    </nav>
   </div>
 </div>
 
