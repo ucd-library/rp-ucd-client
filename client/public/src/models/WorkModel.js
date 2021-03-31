@@ -17,7 +17,9 @@ class WorkModel extends BaseModel {
     this.urlBrowse = '/works';
     this.urlAuthor = "/person/";
 
-    this.grpsWithLinks = ["vivo:FacultyMember"];
+    // TODO: JM - this needs to be fixed, I don't think it indicates a 'UCD Author'
+    // as shown in the UI.
+    this.grpsWithLinks = ["vivo:FacultyMember", "vivo:NonAcademic"];
 
     this.register('WorkModel');
   }
@@ -181,8 +183,8 @@ class WorkModel extends BaseModel {
       if (!author.hasName) {
         continue;
       }
-      author.nameFirst = author.hasName.givenName;
-      author.nameLast = author.hasName.familyName;
+      author.nameFirst = getFirstValue(author.hasName).givenName;
+      author.nameLast = getFirstValue(author.hasName).familyName;
       if (!author['vivo:rank']) {
         author['vivo:rank'] = Infinity;
       }
@@ -193,7 +195,9 @@ class WorkModel extends BaseModel {
           author.identifiers = [author.identifiers];
         }
         for (let id of author.identifiers) {
-          if (this.grpsWithLinks.includes(id['@type']) && id['@id'].match("^"+this.service.jsonContext+":")) {
+          if (
+            this.grpsWithLinks.some(type => asArray(id['@type']).includes(type) ) && 
+            id['@id'].match("^"+this.service.jsonContext+":") ) {
             let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
             author.apiEndpoint = id['@id'];
             author.href = '/' + authorId;
@@ -402,6 +406,17 @@ class WorkModel extends BaseModel {
   }
 
 
+}
+
+// TODO: merge with steve VIVO utils library
+function getFirstValue(obj) {
+  if( Array.isArray(obj) ) return obj[0];
+  return obj;
+}
+
+function asArray(obj) {
+  if( Array.isArray(obj) ) return obj;
+  return [obj];
 }
 
 module.exports = new WorkModel();

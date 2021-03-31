@@ -61,7 +61,7 @@ export default function render() {
   </style>
   <div class=container>
     <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
-    <div class="text-container" style="${styleMap({"max-width" : this.textWidth})}">
+    <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}" >
       <a class="name" 
         href="${this.getLandingPage()}" 
         ?disabled="${!this.getLandingPage()}">
