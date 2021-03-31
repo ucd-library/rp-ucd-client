@@ -122,12 +122,12 @@ class WorkModel extends BaseModel {
     try {
       let authors = this.getAuthors(work);
       for (let author of authors) {
-        for (let id of author.identifiers) {
-          let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
-          if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
-            return true;
-          }
+        // for (let id of author.identifiers) {
+        let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
+        if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
+          return true;
         }
+        // }
       }
     } catch (error) {
       console.error('Error checking isUsersWork', error);
