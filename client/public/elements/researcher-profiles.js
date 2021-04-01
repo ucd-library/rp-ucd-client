@@ -337,7 +337,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   _renderMasthead(){
     if (!this.theme.masthead) {
       return html``;
-    }
+    } 
     let styles = {};
     styles['background-image'] = `url(${this.theme.masthead})`;
     return html`
