@@ -128,7 +128,7 @@ export default class RpPageWork extends RpUtilsLanding {
 
     this.workStatus = data.state;
     if (data.state != 'loaded') {
-      return;
+      return false;
     }
     this.work = data.payload;
     if (APP_CONFIG.verbose) console.log("work payload:", data);
@@ -143,6 +143,8 @@ export default class RpPageWork extends RpUtilsLanding {
     this.fullTextLinks = this.WorkModel.getFullTextLinks(this.work);
     this._doAuthorQuery(id, this.authors);
     console.log("Subjects:",this.subjects);
+
+    return false;
   }
 
   /**

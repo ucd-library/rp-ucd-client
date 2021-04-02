@@ -140,13 +140,17 @@ export default class RpPageConcept extends RpUtilsLanding {
    *                      this._getFullTextLinks(),
    *                      this._getRelatedSubjectsNarrow(), 
    *                      this._getRelatedSubjectsBroader()
+   * @returns {Promise} AppStateModel
    */
   async _doMainQuery(id){
     let data = await this.SubjectModel.getSubject(id);
 
     this.subjectStatus = data.state;
+    if( data.state === 'error' ) {
+      return this.AppStateModel.show404Page(data);
+    }
     if (data.state != 'loaded') {
-      return;
+      return false;
     }
     this.subject = data.payload;
     if (APP_CONFIG.verbose) console.log("subject payload:", data);
@@ -158,6 +162,7 @@ export default class RpPageConcept extends RpUtilsLanding {
     if(this._isEmpty(this.narrowRelatedSubjects) && this._isEmpty(this.broadRelatedSubjects)){
       this._toggleElements("relatedSubjects", this.narrowRelatedSubjects);
     }
+    return false;
   }
 
   /**

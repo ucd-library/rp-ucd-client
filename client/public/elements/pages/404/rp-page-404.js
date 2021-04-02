@@ -1,5 +1,5 @@
 import { LitElement } from 'lit-element';
-import render from "./rp-page-404.tpl.js"
+import render from "./rp-page-404.tpl.js";
 
 
 export default class RpPage404 extends LitElement {
@@ -7,7 +7,7 @@ export default class RpPage404 extends LitElement {
   static get properties() {
     return {
       
-    }
+    };
   }
 
   constructor() {

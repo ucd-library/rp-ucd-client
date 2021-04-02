@@ -59,6 +59,20 @@ return html`
         Your name, title and affiliation appear as they are shown in the UC Davis online directory or in UC Path. To change them, update the <a href="https://org.ucdavis.edu/odr/">campus directory</a> listing, and once the changes are approved by directory administrators, they will be reflected in Aggie Experts at the next update. More information on the UC Davis Directory can be found <a href="https://org.ucdavis.edu/directory/index.html">here</a>. If you are not able to change the information already in the directory, you will need to contact HR directly.
         </div>
       </rp-accordian>
+      <rp-accordian title-text="How do I edit my research areas?" id="edit-area">
+        <div>
+          <div>You can select Fields of Research in your Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a>. Log in into the system and go to your profile.</div>
+          <img class="fw" src="${this.imgPath}faq-profile-goto.jpg" alt="Go to profile screenshot">
+          Scroll down to the Fields of Research heading and click on the pencil icon.
+          <img class="fw" src="${this.imgPath}faq-about-edit.jpg" alt="Go to edit profile screenshot">
+          You will see a search and select interface for the available research are options.
+          <img class="fw" src="${this.imgPath}faq-research-fields-edit.jpg" alt="Go to research field edit screenshot">
+          After you select all relevant fields by clicking  on them and seeing them appear in the column on the right, remember to click the save button at the bottom of the pop-up window.  Closing the window by clicking on the X in the upper right corner will not save your selections.
+          <img class="fw" src="${this.imgPath}faq-research-fields-selection-edit.jpg" alt="Go to research field selection screenshot">
+          The Publication Management System is currently implementing a controlled vocabulary developed by the Australian Bureau of Statistics. We are in the testing stages of adding a more in-depth vocabulary to the list of options.<br />
+          Note that at the present time once you make your selections in the Publication Management System, your Aggie Experts research areas will be updated after the next data reload, which happens weekly. Also, once the research fields selections coming from the System are detected, they will replace the automatically-generated Aggie Experts research areas with your selections.
+        </div>
+      </rp-accordian>
       <rp-accordian title-text="How do I add more information to what you already have in the registry?">
         <div>
           <div>Most of the data we add to Aggie Experts come from authoritative sources, and changing and updating the data in them is addressed in separate questions, eg. “<a href="#change-bio">How do I change my name/title/affiliation</a>” and “<a href="#change-pub">How do I edit my publication record</a>”. An exception is the “About” section in your profile. Currently, you can add more websites by logging into UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your profile.</div>
@@ -107,7 +121,15 @@ return html`
           <div>You can also contact us for assistance with further refining the search parameters for your publications if you are missing a significant number or if you have a lot of publications that are not yours in your pending queue.</div>
         </div>
       </rp-accordian>
-      <rp-accordian title-text="How do I hide a publication?">
+      <rp-accordian title-text="How do I change the visibility of the fields in my profile?">
+        <div>
+          <div>You have granular control over the visibility of the fields in your profile. To do so, log into the UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your account (for step-by-step instructions, see <a href="#change-pub">here</a>). Next to every information segment that you have filled out, you will see an icon with an option to make a public segment internal.</div>
+          <img class="fw" src="${this.imgPath}faq-edit-mode-visibile.jpg" alt="Go to edit mode screenshot">
+          <div>You can also control the visibility of each publication displayed in Aggie Experts, as explained <a href="#visible-publication">here</a>.<br />
+               If you change the visibility of the entire profile, Aggie Experts will not display any of the information from there, but you will still have a stub entry with your name and title, similar to how you would be shown on UC Davis People pages. To completely remove your profile from Aggie Experts, refer to <a href="#delete-profile">this answer</a>.</div>
+        </div>
+      </rp-accordian>
+      <rp-accordian title-text="How do I change the visibility of a publication?" id="visible-publication">
         <div>
           <div>Log into your UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your profile. </div>
           <img class="fw" src="${this.imgPath}faq-profile-goto.jpg" alt="Go to profile screenshot">
@@ -120,9 +142,11 @@ return html`
       <rp-accordian title-text="Can I export data ${this.isLoggedIn && false ? "for import into MIV": ""}?">
         ${this.isLoggedIn && false ? "Currently only publications can be exported for MyInfoVault, but we are planning to expand the options to include other data, such as grants. You must be logged into your profile to access the download functionality. In the Publications section of your profile, you will find a download button located to the left of your publication count in the upper right-hand corner. One of the available format options is RIS. This file can be imported into MIV." : "We only allow downloads for each user's own publications.  Once logged into the system, the Publications section of your profile includes a download button located to the left of your publication count in the upper right-hand corner." }
       </rp-accordian>
-      <rp-accordian title-text="How do I delete my profile?">
+      <rp-accordian title-text="How do I delete my profile?" id="delete-profile">
         <div>
-        Please, <a href="mailto:experts@library.ucdavis.edu">contact us.</a>
+          <div>To completely hide your data from view, update your <a href="https://org.ucdavis.edu/odr/">campus directory.</a> listing and uncheck all boxes under WWW visibility. Note that this change will affect the discovery of your UC Davis pages as well.</div>
+
+          <img class="fw" src="${this.imgPath}faq-delete-profile.jpg" alt="Go to delete profile screenshot">
         </div>
       </rp-accordian>
     </div>
