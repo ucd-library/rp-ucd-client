@@ -24,7 +24,6 @@ return html`
     <hr class="light">
 
     <div>
-    ${console.log(this.imgPath)}
       <rp-accordian title-text="What is Aggie Experts?">
         <div>
         Aggie Experts is a joint pilot project between the Office of the Provost and the UC Davis Library.
