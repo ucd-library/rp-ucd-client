@@ -57,6 +57,7 @@ export default (app) => {
     static : {dir : assetsDir},
     enable404 : true,
     template : async (req, res, next) => {
+
       let appConfig = {
         user: await userAuthController.handleRequest(req),
         appRoutes : config.client.appRoutes,
@@ -64,6 +65,8 @@ export default (app) => {
         theme : config.client.theme,
         data : config.client.data,
         verbose : config.client.verbose,
+        includeGrants : config.client.includeGrants,
+        defaultTypes : config.client.defaultTypes,
         env : {
           CLIENT_TAG : process.env.CLIENT_TAG || '',
           VESSEL_TAG : process.env.VESSEL_TAG || '',

@@ -117,6 +117,12 @@ class CollectionModel extends BaseModel {
    */
   async query(elementQuery={}){
     let queryObject = this.convertElementQuery(elementQuery);
+
+    // in no type specified, use our default types
+    if( !queryObject.filters['@type'] ) {
+      queryObject.filters['@type'] = QueryUtils.getKeywordFilter(APP_CONFIG.defaultTypes, 'or');
+    }
+
     let id = QueryUtils.getQueryId(queryObject);
 
     let current = this.store.data.queryById[id];
