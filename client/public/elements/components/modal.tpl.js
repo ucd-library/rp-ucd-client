@@ -8,7 +8,7 @@ export default function render() {
       position: fixed;
     }
     .container {
-      width: auto;
+      width: 100%;
       height: 100vh;
       position: fixed;
       left: 0;
@@ -33,6 +33,7 @@ export default function render() {
     .box-content {
         background-color: var(--tcolor-light);
         width: 85%;
+        max-width: 910px;
         min-height: 200px;
         z-index: 100;
     }
@@ -68,8 +69,9 @@ export default function render() {
     }
     .button {
         color: var(--tcolor-primary);
-        padding: 10px;
-        background-color: var(--tcolor-bg-primary);
+        padding: 8px;
+        background-color: var(--tcolor-light);
+        border: 2px solid var(--tcolor-bg-primary);
         cursor: pointer;
         transition: .3s;
         margin: 5px;
@@ -77,6 +79,7 @@ export default function render() {
     .button:hover {
         background-color: var(--tcolor-hover-bg);
         color: var(--tcolor-hover-text);
+        border: 2px solid var(--tcolor-hover-bg);
     }
   </style>
   <div class="container" ?hidden="${!this.visible}">
@@ -90,8 +93,8 @@ export default function render() {
         <div class="body-content"><slot></slot></div>
         <hr>
         <div class="footer">
-        <slot name="confirmButton"></slot>
         <div class="button" @click="${e => this.hide()}">${this.dismissText}</div>
+        <slot name="confirmButton"></slot>
         </div>
     </div>
       

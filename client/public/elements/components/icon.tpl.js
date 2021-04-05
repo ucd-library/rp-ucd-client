@@ -29,7 +29,7 @@ export default function render() {
       width: 24px;
     }
     .container {
-      color: var(--tcolor-primary);
+      color: var(--rp-icon-color, var(--tcolor-primary));
       height: 30px;
       width: 30px;
       display: flex;
@@ -51,10 +51,13 @@ export default function render() {
       position: absolute;
       z-index: 1;
     }
+    /* .tooltiptext{
+      display: none;
+    } */
 
     .container.circle {
       border-radius: 50%;
-      background-color: var(--tcolor-bg-primary);
+      background-color: var(--rp-icon-bg-color, var(--tcolor-bg-primary));
     }
     .container.noicon {
       display: none;

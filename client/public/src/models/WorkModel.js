@@ -130,12 +130,12 @@ class WorkModel extends BaseModel {
     try {
       let authors = this.getAuthors(work);
       for (let author of authors) {
-        for (let id of author.identifiers) {
-          let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
-          if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
-            return true;
-          }
+        // for (let id of author.identifiers) {
+        let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
+        if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
+          return true;
         }
+        // }
       }
     } catch (error) {
       console.error('Error checking isUsersWork', error);
@@ -191,19 +191,26 @@ class WorkModel extends BaseModel {
       author.href = "";
       author.isOtherUniversity = true;
       try {
-        if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
-          author.identifiers = [author.identifiers];
+        if( author['@type'].includes('foaf:Person') ) {
+          let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
+          author.apiEndpoint = author['@id'];
+          author.href = '/' + authorId;
+          author.isOtherUniversity = false;
         }
-        for (let id of author.identifiers) {
-          if (
-            this.grpsWithLinks.some(type => asArray(id['@type']).includes(type) ) && 
-            id['@id'].match("^"+this.service.jsonContext+":") ) {
-            let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
-            author.apiEndpoint = id['@id'];
-            author.href = '/' + authorId;
-            author.isOtherUniversity = false;
-          }
-        }
+
+        // if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
+        //   author.identifiers = [author.identifiers];
+        // }
+        // for (let id of author.identifiers) {
+        //   if (
+        //     this.grpsWithLinks.some(type => asArray(id['@type']).includes(type) ) && 
+        //     id['@id'].match("^"+this.service.jsonContext+":") ) {
+        //     let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
+        //     author.apiEndpoint = id['@id'];
+        //     author.href = '/' + authorId;
+        //     author.isOtherUniversity = false;
+        //   }
+        // }
       } catch (error) {
         console.warn("Unable to construct author href.");
       }

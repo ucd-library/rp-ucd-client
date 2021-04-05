@@ -89,6 +89,7 @@ export class RpWorkPreview extends Mixin(LitElement)
         }
         author.href = "";
         try {
+          debugger;
           if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
             author.identifiers = [author.identifiers]
           }
