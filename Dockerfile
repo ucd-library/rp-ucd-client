@@ -24,6 +24,7 @@ RUN cd client/public && ln -s node_modules/\@ucd-lib/cork-app-load/lib loader
 
 # ucd client code
 COPY client/public/images client/public/images
+COPY client/public/fonts client/public/fonts
 COPY client/public/index.html client/public/index.html
 COPY client/public/login.html client/public/login.html
 COPY client/public/src client/public/src
