@@ -19,6 +19,12 @@ const MATCHES = {
  * @param {Object} app 
  */
 async function register(app) {
+  // strip ucdrp
+  app.get(/\/ucdrp:.*/, (req, res) => {
+    console.log(req.path.replace(/\/ucdrp:/, '/'));
+    res.redirect(req.path.replace(/\/ucdrp:/, '/'));
+  });
+
   for( let key in MATCHES ) {
     app.get(MATCHES[key], middleware);
   }
