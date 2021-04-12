@@ -262,13 +262,12 @@ export default class RpPagePerson extends RpUtilsLanding {
   }
 
   /**
-   * @method changeLocation
-   * @description changes the location of the page
-   * @param {location} location
+   * @method _todo
+   * @description needs to get uid for user
    * 
    */ 
-  changeLocation(location){
-    window.location = location;
+  _todo(){
+    alert('TODO: need to send user to: https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=[ElementsId]')
   }
 
 
