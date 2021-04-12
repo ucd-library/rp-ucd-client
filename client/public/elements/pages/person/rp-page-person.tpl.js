@@ -158,7 +158,7 @@ return html`
     justify-content: center;
     height: 150px;
   }
-  #showMore{
+  /* #showMore{
     display:block;
     margin:0 auto; 
     padding:10px; 
@@ -172,7 +172,7 @@ return html`
     background-color: var(--tcolor-hover-bg);
     color: var(--tcolor-hover-text);
     border-color: var(--tcolor-hover-bg);
-  }
+  } */
 
   @media (min-width: 800px){
     .own-profile .box-title {
