@@ -1,13 +1,15 @@
 import { html } from 'lit-element';
+import styles from "../../styles/site.html";
 
 export default function render() { 
 return html`
 
 <style>
+  ${styles}
   :host {
     height:100%;
   }
-  .container.error{
+  .container-error{
     text-align:center;
     background-color:white;
     height:800px;
@@ -17,8 +19,6 @@ return html`
     -moz-background-size: cover;
     -o-background-size: cover;
     width:100%;
-    
-
   }
   .fw{
     width:100%;
@@ -55,15 +55,14 @@ return html`
     width: 500px;
     /* margin: 40px auto; */
     margin-top:40px;
-
   }
 
 </style>  
-<div class="container error">
+<div class="container-error">
   <div class="content-space">
     <div class="topic">404</div>
     <div class="subtext1">Oh no! This page has bolted away!</div>
-    <div class="subtext2">Don't worry, we'll get you <a href="#">home</a></div>
+    <div class="subtext2">Don't worry, we'll get you <a href="/">home</a></div>
 
     <img class="horseImg" src="/images/gunrock-running.png" alt="Horse Image"> 
   </div>

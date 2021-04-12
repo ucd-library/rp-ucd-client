@@ -2,21 +2,26 @@ import { LitElement, html, svg } from 'lit-element';
 import render from './icon.tpl.js';
 import { styleMap } from 'lit-html/directives/style-map';
 
+/**
+ * @class RpIcon
+ * @description iron-icon wrapper with additional stylings
+ */
 export class RpIcon extends LitElement {
+  
   static get properties() {
-  return {
-    size: {type: String},
-    icon: {type: String},
-    themeColor: {type: String, attribute: 'theme-color'},
-    isLink: {type: Boolean, attribute: 'is-link'},
-    circleBg: {type: Boolean, attribute: 'circle-bg'},
-    hasText: {type: Boolean, attribute: 'has-text'},
-    sizeIcon: {type: String, attribute: 'size-icon'},
-    sizeIconSVG:  {type: String, attribute: 'size-icon-svg'},
-    _customIcons: {type: Object},
-    iconPixelSize: {type: Number},
-    circlePixelSize: {type: Number}
-  };
+    return {
+      size: {type: String},
+      icon: {type: String},
+      themeColor: {type: String, attribute: 'theme-color'},
+      isLink: {type: Boolean, attribute: 'is-link'},
+      circleBg: {type: Boolean, attribute: 'circle-bg'},
+      hasText: {type: Boolean, attribute: 'has-text'},
+      sizeIcon: {type: String, attribute: 'size-icon'},
+      sizeIconSVG:  {type: String, attribute: 'size-icon-svg'},
+      _customIcons: {type: Object},
+      iconPixelSize: {type: Number},
+      circlePixelSize: {type: Number}
+    };
   }
 
   constructor() {
