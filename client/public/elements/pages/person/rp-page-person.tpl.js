@@ -30,6 +30,9 @@ return html`
     flex-flow: column nowrap;
     align-items: center;
   }
+  #researchLabelChild {
+    text-align: center;
+  }
   #about .cols {
     display: flex;
     flex-wrap: wrap;
@@ -210,19 +213,27 @@ return html`
                 <p class="text-light h3 text-center bold">
                     My research areas include:
                     ${this.isOwnProfile ? html`
-                      &nbsp;&nbsp;<rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this.changeLocation("#")}">
+                      &nbsp;&nbsp;<rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this._todo()}">
                       ` : html``
                     }
 
                 </p>
                   <div id="researchLabel" class="flex flex-wrap justify-content-center align-items-center">
                     <div id="researchLabelChild">
-                    ${this.getResearchSubjects(4).map(subject => html`
-                      <rp-badge size="lg" class="text-light my-1" href="${subject.href}">${subject.bestLabel}</rp-badge>
-                    `)} <br />
+                    ${this.getResearchSubjects(this.showResearchSubjectCount).map(subject => html`
+                      <rp-badge size="lg" class="text-light my-1" href="${subject.href}">
+                        ${subject.bestLabel}
+                      </rp-badge>
+                    `)} 
+                    <rp-badge size="lg" 
+                      ellipsis
+                      ?hidden="${(this.showResearchSubjectCount >= this.getResearchSubjects().length)}" 
+                      @click="${this._showAllResearchSubjects}">See more
+                    </rp-badge>
+                    <br />
                     </div>
                   </div>
-
+                  
               </div>
             ` : html``}
             <div ?hidden="${!this.isAdmin}" style="margin-top: 20px">
@@ -255,7 +266,9 @@ return html`
                 <div>
                   <h2 class="h3 mb-2">Positions&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
-                      <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this.changeLocation("https://org.ucdavis.edu/odr/")}">
+                      <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
+                        <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg">
+                      </a>
                       ` : html``
                     }
                   </h2>
@@ -277,7 +290,7 @@ return html`
                   <h2 class="h3 mb-2">Websites</h2>
                   ${this.getWebsites().map(site => html`
                     <div class="site">
-                      <a href="${site.href}">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
+                      <a href="${site.href}" target="_blank" rel="noopener">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
                     </div>`)}
                 </div>
               ` : html``}
@@ -310,7 +323,7 @@ return html`
               Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
               redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
               <div slot="confirmButton">
-                <a style = "text-decoration:none;" href='https://oapolicy.universityofcalifornia.edu/objects.html?as=3&am=false&cid=1&ipr=false&iqf=true'>
+                <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/objects.html?as=3&am=false&cid=1&ipr=false&iqf=true'>
                 <div class="button">Edit Publications</div>
                 </a>
               </div> 
