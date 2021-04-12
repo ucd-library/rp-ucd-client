@@ -136,6 +136,7 @@ export default class RpPagePerson extends RpUtilsLanding {
 
   }
 
+
   /**
    * @method _doMainQuery
    * @description Retrieves data for individual on AppStateUpdate. Rerenders.
@@ -259,6 +260,17 @@ export default class RpPagePerson extends RpUtilsLanding {
     if ( this.individualStatus === 'loaded' || this.individualStatus === 'loading' ) return true;
     return false;
   }
+
+  /**
+   * @method changeLocation
+   * @description changes the location of the page
+   * @param {location} location
+   * 
+   */ 
+  changeLocation(location){
+    window.location = location;
+  }
+
 
   /**
    * @method getPubsByYear
@@ -422,6 +434,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   getResearchSubjects(limit=-1) {
     let subjects = this.PersonModel.getResearchSubjects(this.individual);
+    if (limit == -1) return subjects;
     return subjects.slice(0, limit);
   }
 

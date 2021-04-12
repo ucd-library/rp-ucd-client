@@ -195,7 +195,6 @@ return html`
             html `
               <b style="font-size: 18px; ">Narrower Scope</b>   
             <br /> 
-
             ${this.narrowRelatedSubjects.map(narrow => html ` 
               <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(narrow)}">
                 ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
