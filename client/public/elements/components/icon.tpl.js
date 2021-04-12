@@ -7,6 +7,9 @@ export default function render() {
   <style>
     :host {
       display: inline-block;
+      font-size: var(--rp-icon-font-size, var(--font-size));
+      padding: var(--rp-icon-padding, 0);
+      margin: var(--rp-icon-margin, 0);
     }
     .icon {
       height: 24px;
