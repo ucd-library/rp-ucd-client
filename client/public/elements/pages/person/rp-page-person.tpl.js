@@ -220,12 +220,20 @@ return html`
                 </p>
                   <div id="researchLabel" class="flex flex-wrap justify-content-center align-items-center">
                     <div id="researchLabelChild">
-                    ${this.getResearchSubjects(4).map(subject => html`
-                      <rp-badge size="lg" class="text-light my-1" href="${subject.href}">${subject.bestLabel}</rp-badge>
-                    `)} <br />
+                    ${this.getResearchSubjects(this.showResearchSubjectCount).map(subject => html`
+                      <rp-badge size="lg" class="text-light my-1" href="${subject.href}">
+                        ${subject.bestLabel}
+                      </rp-badge>
+                    `)} 
+                    <rp-badge size="lg" 
+                      ellipsis
+                      ?hidden="${(this.showResearchSubjectCount >= this.getResearchSubjects().length)}" 
+                      @click="${this._showAllResearchSubjects}">See more
+                    </rp-badge>
+                    <br />
                     </div>
                   </div>
-
+                  
               </div>
             ` : html``}
             <div ?hidden="${!this.isAdmin}" style="margin-top: 20px">

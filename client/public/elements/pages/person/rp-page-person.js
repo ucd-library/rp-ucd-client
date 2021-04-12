@@ -33,7 +33,9 @@ export default class RpPagePerson extends RpUtilsLanding {
       totalPublications: {type: Number},
       isOwnProfile: {type: Boolean},
       submitText: {type: String, attribute: 'submitText'},
-      isAdmin: {type: Boolean}
+      isAdmin: {type: Boolean},
+      showResearchSubjectCount : {type: Number},
+      defaultResearchSubjectCount : {type: Number}
     };
   }
 
@@ -45,6 +47,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this._injectModel('PersonModel', 'AppStateModel');
     
     this.assetType = "person";
+    this.defaultResearchSubjectCount = 4;
 
     this.isAdmin = UserUtils.isAdmin(APP_CONFIG.user);
 
@@ -111,6 +114,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.emailArray = [];
     this.websitesArray = [];
     this.publicationOverviewStatus = 'loading';
+    this.showResearchSubjectCount = this.defaultResearchSubjectCount;
   }
 
   /**
@@ -435,6 +439,10 @@ export default class RpPagePerson extends RpUtilsLanding {
     let subjects = this.PersonModel.getResearchSubjects(this.individual);
     if (limit == -1) return subjects;
     return subjects.slice(0, limit);
+  }
+
+  _showAllResearchSubjects() {
+    this.showResearchSubjectCount = this.getResearchSubjects().length;
   }
 
   /**
