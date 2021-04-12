@@ -158,6 +158,22 @@ return html`
     justify-content: center;
     height: 150px;
   }
+  #showMore{
+    display:block;
+    margin:0 auto; 
+    padding:10px; 
+    border-radius: 20px;
+    color:white;
+    background-color: transparent;
+    border-color:white;
+  }
+
+  #showMore:hover{
+    background-color: var(--tcolor-hover-bg);
+    color: var(--tcolor-hover-text);
+    border-color: var(--tcolor-hover-bg);
+  }
+
   @media (min-width: 800px){
     .own-profile .box-title {
       flex-flow: row nowrap;
@@ -191,12 +207,22 @@ return html`
             <p class="text-light h3 mb-2 mt-1 text-center">${this.getHeadlineTitle()}</p>
             ${this.getResearchSubjects(1).length > 0 ? html`
               <div>
-                <p class="text-light h3 text-center bold">My research areas include:</p>
-                <div class="flex flex-wrap justify-content-center align-items-center">
-                  ${this.getResearchSubjects(4).map(subject => html`
-                    <rp-badge size="lg" class="text-light my-1" href="${subject.href}">${subject.bestLabel}</rp-badge>
-                  `)}
-                </div>
+                <p class="text-light h3 text-center bold">
+                    My research areas include:
+                    ${this.isOwnProfile ? html`
+                      &nbsp;&nbsp;<rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this.changeLocation("#")}">
+                      ` : html``
+                    }
+
+                </p>
+                  <div id="researchLabel" class="flex flex-wrap justify-content-center align-items-center">
+                    <div id="researchLabelChild">
+                    ${this.getResearchSubjects(4).map(subject => html`
+                      <rp-badge size="lg" class="text-light my-1" href="${subject.href}">${subject.bestLabel}</rp-badge>
+                    `)} <br />
+                    </div>
+                  </div>
+
               </div>
             ` : html``}
             <div ?hidden="${!this.isAdmin}" style="margin-top: 20px">
@@ -226,7 +252,16 @@ return html`
           <div class="cols">
             <div>
               <div>
-                <h2 class="h3 mb-2">Positions</h2>
+                <div>
+                  <h2 class="h3 mb-2">Positions&nbsp;&nbsp;
+                    ${this.isOwnProfile ? html`
+                      <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this.changeLocation("https://org.ucdavis.edu/odr/")}">
+                      ` : html``
+                    }
+                  </h2>
+              </div>
+
+
                 ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
               </div>
               ${this._showSubSection('contact') ? html`
