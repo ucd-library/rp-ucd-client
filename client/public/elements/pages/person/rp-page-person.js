@@ -266,12 +266,13 @@ export default class RpPagePerson extends RpUtilsLanding {
   }
 
   /**
-   * @method _todo
-   * @description needs to get uid for user
+   * @method _getOAId
+   * @description get the open access policy (elements) id for a user
    * 
+   * @returns {String}
    */ 
-  _todo(){
-    alert('TODO: need to send user to: https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=[ElementsId]')
+  _getOAId(){
+    return this.PersonModel.getIdentifier(this.individual, 'oapolicy');
   }
 
 

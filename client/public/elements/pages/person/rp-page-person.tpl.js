@@ -31,7 +31,10 @@ return html`
     align-items: center;
   }
   #researchLabelChild {
-    text-align: center;
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+    justify-content: center;
   }
   #about .cols {
     display: flex;
@@ -212,11 +215,6 @@ return html`
               <div>
                 <p class="text-light h3 text-center bold">
                     My research areas include:
-                    ${this.isOwnProfile ? html`
-                      &nbsp;&nbsp;<rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this._todo()}">
-                      ` : html``
-                    }
-
                 </p>
                   <div id="researchLabel" class="flex flex-wrap justify-content-center align-items-center">
                     <div id="researchLabelChild">
@@ -228,8 +226,20 @@ return html`
                     <rp-badge size="lg" 
                       ellipsis
                       ?hidden="${(this.showResearchSubjectCount >= this.getResearchSubjects().length)}" 
-                      @click="${this._showAllResearchSubjects}">See more
+                      @click="${this._showAllResearchSubjects}">
                     </rp-badge>
+                    ${this.isOwnProfile ? html`
+                      &nbsp;&nbsp;
+                        <a href="https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=${this._getOAId()}&em=true" target="_blank" rel="noopener">
+                          <rp-icon style="vertical-align:middle;" 
+                          icon="iron-editor:mode-edit" 
+                          role="button"
+                          circle-bg 
+                          is-link 
+                          size="lg"></rp-icon>
+                        </a>
+                      ` : html``
+                    }
                     <br />
                     </div>
                   </div>

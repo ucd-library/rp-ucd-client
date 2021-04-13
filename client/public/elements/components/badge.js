@@ -98,7 +98,24 @@ export class RpBadge extends LitElement {
         ${this._renderSpan()}
       </a>`;
     }
-    return html`${this._renderSpan()}`;
+    return html`<a 
+      style="color:inherit;"
+      tabindex="${this.hideFromTab ? "-1": "0"}"
+      @keyup="${this._onKeyUp}">
+      ${this._renderSpan()}
+    </a>`;
+  }
+
+  /**
+   * @method _onKeyUp
+   * @description fake click events on keyup in no href
+   * 
+   * @param {*} e 
+   * @returns 
+   */
+  _onKeyUp(e) {
+    if( e.which !== 13 ) return;
+    this.dispatchEvent(new CustomEvent('click'));
   }
 
   /**

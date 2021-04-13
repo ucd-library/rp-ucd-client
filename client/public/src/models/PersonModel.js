@@ -3,6 +3,7 @@ const PersonService = require('../services/PersonService');
 const PersonStore = require('../stores/PersonStore');
 const urlUtils = require('../lib/url-utils');
 const AssetDefs = require('../lib/asset-defs');
+const rdfUtils = require('../lib/rdf-utils').default;
 
 /**
  * @class PersonModel
@@ -333,6 +334,23 @@ class PersonModel extends BaseModel {
         href: `https://www.scopus.com/authid/detail.uri?authorId=${individual.scopusId}`});
     }
     return out;
+  }
+
+  /**
+   * @method getIdentifier
+   * @description given a person object and a scheme return the
+   * identifier for the scheme.  Example: 'orcid' or 'oapolicy'
+   * 
+   * @param {Object} person 
+   * @param {String} scheme 
+   * @returns {String}
+   */
+  getIdentifier(person, scheme) {
+    let id = rdfUtils
+      .asArray(person.identifier)
+      .find(id => id.scheme === scheme);
+    if( !id ) return '';
+    return id.value || '';
   }
 
 }
