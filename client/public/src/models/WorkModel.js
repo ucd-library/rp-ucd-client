@@ -1,6 +1,7 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const WorkService = require('../services/WorkService');
 const WorkStore = require('../stores/WorkStore');
+const rdfUtils = require('../lib/rdf-utils').default;
 
 const CollectionModel = require('./CollectionModel');
 
@@ -128,14 +129,16 @@ class WorkModel extends BaseModel {
     if( !APP_CONFIG.user.username ) return false;
 
     try {
-      let authors = this.getAuthors(work);
-      for (let author of authors) {
-        // for (let id of author.identifiers) {
-        let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-        if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
-          return true;
+      let workAuthors = this.getAuthors(work);
+      for( let type in workAuthors ) {
+        let authors = workAuthors[type];
+
+        for (let author of authors) {
+          let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
+          if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
+            return true;
+          }
         }
-        // }
       }
     } catch (error) {
       console.error('Error checking isUsersWork', error);
@@ -155,71 +158,133 @@ class WorkModel extends BaseModel {
    * @returns {Boolean}
    */
   hasNonInstitutionAuthors(work){
-    let authors = this.getAuthors(work);
-    for (let author of authors) {
-      if (author.isOtherUniversity) return true;
+    let workAuthors = this.getAuthors(work);
+    for( let type in workAuthors ) {
+      let authors = workAuthors[type];
+      for (let author of authors) {
+        if (author._client.aggieExpertsAuthor === false) return true;
+      }
     }
+
     return false;
     
   }
 
   /**
    * @method getAuthors
-   * @description query the work object and get the authors
-   * from the work object into a formatted structure Object
+   * @description given a work object and get the authors
+   * from the work object, sorted with unranked authors removed.
+   * 
+   * Only ever use the authorships that have a rank, and only ever 
+   * use the #vcard associated with those authorship.
+   * 
+   * The unranked authorship should only ever be used to add citations 
+   * to the a expert or add an expert to a authorship. Unranked authorships 
+   * should never affect the citation *formatting* in anyway.
    * 
    * @param {Object} work
    * 
-   * @returns {Object}
+   * @returns {Object} {ranked: [], unranked: []}
    */  
   getAuthors(work) {
-    let authors = [];
-    if (typeof work !== 'object' || typeof work.Authorship !== 'object' ) return authors;
-    let auths = work.Authorship;
-    if (!Array.isArray(auths)) {
-      auths = [auths];
+    let resp = {ranked: [], unranked: []};
+
+    if (typeof work !== 'object' || typeof work.Authorship !== 'object' ) {
+      return authors;
     }
-    for (let author of auths) {
-      if (!author.hasName) {
-        continue;
-      }
-      author.nameFirst = getFirstValue(author.hasName).givenName;
-      author.nameLast = getFirstValue(author.hasName).familyName;
-      if (!author['vivo:rank']) {
-        author['vivo:rank'] = Infinity;
-      }
-      author.href = "";
-      author.isOtherUniversity = true;
-      try {
-        if( author['@type'].includes('foaf:Person') ) {
-          let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-          author.apiEndpoint = author['@id'];
-          author.href = '/' + authorId;
-          author.isOtherUniversity = false;
+
+    let authors = rdfUtils.asArray(work.Authorship);
+    for (let author of authors) {
+      let name = this._getAuthorVcardName(author.hasName) || {};
+
+      if( !author._client ) {
+        author._client = {
+          givenName : name.givenName || '',
+          familyName : name.familyName || '',
+          citationText : this._getAuthorCitationTextName(name)
+        };
+
+        // if the author has no name, ignore them... for now.
+        if( !author._client.citationText ) {
+          console.warn('Ignoring authorship without name: ', author);
+          continue;
         }
 
-        // if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
-        //   author.identifiers = [author.identifiers];
-        // }
-        // for (let id of author.identifiers) {
-        //   if (
-        //     this.grpsWithLinks.some(type => asArray(id['@type']).includes(type) ) && 
-        //     id['@id'].match("^"+this.service.jsonContext+":") ) {
-        //     let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
-        //     author.apiEndpoint = id['@id'];
-        //     author.href = '/' + authorId;
-        //     author.isOtherUniversity = false;
-        //   }
-        // }
-      } catch (error) {
-        console.warn("Unable to construct author href.");
+
+        author._client.href = "";
+        author._client.aggieExpertsAuthor = false;
+
+        try {
+          if( author['@type'].includes('foaf:Person') ) {
+            let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
+            author._client.apiEndpoint = author['@id'];
+            author._client.href = '/' + authorId;
+            author._client.aggieExpertsAuthor = true;
+          }
+        } catch (error) {
+          console.warn("Unable to construct author href.");
+        }
       }
-      authors.push(author);
+
+      if ( author['vivo:rank'] !== undefined ) {
+        resp.ranked.push(author);
+      } else {
+        resp.unranked.push(author);
+      }
+
     }
-    authors.sort(function (a, b) {
-      return a['vivo:rank'] - b['vivo:rank'];
-    });
-    return authors;
+
+    resp.ranked.sort((a, b) => a['vivo:rank'] - b['vivo:rank']);
+    return resp;
+  }
+
+  /**
+   * @method _getAuthorVcardName
+   * @description given a authors hasName object/array, return the
+   * vcard entry or null
+   * 
+   * @param {Object|Array} names 
+   * 
+   * @returns {Object}
+   */
+  _getAuthorVcardName(names) {
+    names = rdfUtils.asArray(names);
+    let vcard = names.find(name => (typeof name === 'object' && name['@id'].match(/#vcard-name$/)));
+    if( vcard ) return vcard;
+    if( names.length > 0 && typeof names[0] === 'object' ) return names[0];
+    return null;
+  }
+
+
+  /**
+   * @method _getAuthorCitationTextName
+   * @description given an author name object attempt
+   * to construct citation text string
+   * 
+   * @param {String} name 
+   * @returns {String}
+   */
+  _getAuthorCitationTextName(name) {
+    if( !name.givenName && !name.familyName) return '';
+
+    if( !name.givenName || !name.familyName ) {
+      let parts;
+      if( name.familyName ) {
+        parts = name.familyName.split(' ');
+      } else {
+        parts = name.givenName.split(' ');
+      }
+      name.givenName = parts[0];
+      name.familyName = parts[1];
+    }
+
+    if( name.givenName && name.familyName ) {
+      return name.familyName +' '+name.givenName.split("")
+        .filter(letter => letter === letter.toUpperCase() && letter != " ").join("");
+    }
+
+    if( name.familyName ) return name.familyName;
+    return name.givenName || '';
   }
 
   /**
@@ -415,15 +480,5 @@ class WorkModel extends BaseModel {
 
 }
 
-// TODO: merge with steve VIVO utils library
-function getFirstValue(obj) {
-  if( Array.isArray(obj) ) return obj[0];
-  return obj;
-}
-
-function asArray(obj) {
-  if( Array.isArray(obj) ) return obj;
-  return [obj];
-}
 
 module.exports = new WorkModel();
