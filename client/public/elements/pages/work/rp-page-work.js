@@ -38,7 +38,7 @@ export default class RpPageWork extends RpUtilsLanding {
     this.assetType = "work";
     this.work = {};
     this.workStatus = 'loading';
-    this.authors = [];
+    this.authors = {ranked:[], unranked: []};
     this.hasOtherAuthors = false;
     this.workType = "";
     this.publishedArray = [];
@@ -131,7 +131,7 @@ export default class RpPageWork extends RpUtilsLanding {
       return false;
     }
     this.work = data.payload;
-    if (APP_CONFIG.verbose) console.log("work payload:", data);
+    // if (APP_CONFIG.verbose) console.log("work payload:", data);
 
     this.authors = this.WorkModel.getAuthors(this.work);
     
@@ -142,7 +142,6 @@ export default class RpPageWork extends RpUtilsLanding {
     this.subjects = this.WorkModel.getSubjects(this.work);
     this.fullTextLinks = this.WorkModel.getFullTextLinks(this.work);
     this._doAuthorQuery(id, this.authors);
-    console.log("Subjects:",this.subjects);
 
     return false;
   }
@@ -157,7 +156,15 @@ export default class RpPageWork extends RpUtilsLanding {
    */
   async _doAuthorQuery(id, authors) {
     this.universityAuthors = [];
-    let universityAuthors = authors.filter(author => author.isOtherUniversity == false).map(a => a.apiEndpoint);
+    let universityAuthors = [];
+
+    for( let type in authors ) {
+      universityAuthors = [... universityAuthors, ...authors[type]
+        .filter(author => author._client.aggieExpertsAuthor === true)
+        .map(a => a._client.apiEndpoint)
+      ];
+    }
+
     
     // don't render
     if( universityAuthors.length === 0 ) {
@@ -168,7 +175,7 @@ export default class RpPageWork extends RpUtilsLanding {
     let data = await this.WorkModel.getAuthorsFullObject(id, universityAuthors);
     this.universityAuthorsStatus = data.state;
     if (data.state != 'loaded') return;
-    if (APP_CONFIG.verbose) console.log("university authors:", data);
+    // if (APP_CONFIG.verbose) console.log("university authors:", data);
     if (Array.isArray(data.payload)) {
       universityAuthors = data.payload;
     }

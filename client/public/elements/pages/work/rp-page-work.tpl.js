@@ -92,8 +92,8 @@ return html`
         <div class="title mb-0"> 
           <h1 class="text-secondary h1 bold mb-0 text-center" aria-label="Work title">${this.work.label}</h1>
         </div>
-        <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.map((author, i) => html`
-          <span>${author.nameFirst} ${author.nameLast}</span>${i + 1 < this.authors.length ? html`<span>, </span>` : html``}
+        <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.ranked.map((author, i) => html`
+          <span>${author._client.givenName} ${author._client.familyName}</span>${i + 1 < this.authors.ranked.length ? html`<span>, </span>` : html``}
         `)}</p></div>
         <div class="type text-center">${this.workType}</div>
       </div>
@@ -185,8 +185,8 @@ return html`
         ${this.hasOtherAuthors ? 
         html`
           <h1 class="weight-regular">Other Authors</h1>
-          ${this.authors.filter(author => author.isOtherUniversity).map(author => html`
-            <div><span class="name">${author.nameLast}, ${author.nameFirst}</span></div>
+          ${this.authors.ranked.filter(author => !author._client.aggieExpertsAuthor).map(author => html`
+            <div><span class="name">${author._client.givenName}, ${author._client.familyName}</span></div>
           `)}
         ` 
         :html``}

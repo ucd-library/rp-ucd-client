@@ -164,11 +164,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onAppStateUpdate(e) {
-    if ( APP_CONFIG.verbose ) {
-      console.log('');
-      console.log('=======---  APP STATE CHANGE ---=======');
-      console.log('app state:', e);
-    }
+    rpLogger.log('_onAppStateUpdate', e);
     
     if ( e.location.query && e.location.query.s ) {
       this.isSearch = true;
