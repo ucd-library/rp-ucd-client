@@ -229,7 +229,15 @@ return html`
                       @click="${this._showAllResearchSubjects}">
                     </rp-badge>
                     ${this.isOwnProfile ? html`
-                      &nbsp;&nbsp;<rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this._todo()}">
+                      &nbsp;&nbsp;
+                        <a href="https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=${this._getOAId()}&em=true" target="_blank" rel="noopener">
+                          <rp-icon style="vertical-align:middle;" 
+                          icon="iron-editor:mode-edit" 
+                          role="button"
+                          circle-bg 
+                          is-link 
+                          size="lg"></rp-icon>
+                        </a>
                       ` : html``
                     }
                     <br />
