@@ -271,7 +271,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    * 
    */ 
   _todo(){
-    alert('TODO: need to send user to: https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=[ElementsId]')
+    alert('TODO: need to send user to: https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=[ElementsId]');
   }
 
 
