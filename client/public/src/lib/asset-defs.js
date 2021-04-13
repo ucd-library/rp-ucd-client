@@ -258,7 +258,7 @@ class AssetDefs {
       '_.lastCitation.label^15'
     ];
   }
-
+ 
   /**
    * @method getAzAggField
    * @description Returns field for performing AZ aggregations

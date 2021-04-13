@@ -82,6 +82,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       {text: 'People', page: 'people', href: '/people'},
       {text: 'Subjects', page: 'concepts', href: '/concepts'},
       {text: 'Works', page: 'works', href: '/works'},
+      // {text: 'Grants', page: 'grants', href: '/grants'},
       {text: 'Help', page: 'help', href: '/help'}];
 
 
@@ -214,7 +215,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       return import(/* webpackChunkName: "page-help" */ "./pages/help/rp-page-help");
     } else if( page === '404' ) {
       return import(/* webpackChunkName: "page-404" */ "./pages/404/rp-page-404");
-    }
+    } 
     console.warn('No code chunk loaded for this page');
     return false;
   }
