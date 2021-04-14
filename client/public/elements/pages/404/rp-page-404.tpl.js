@@ -7,66 +7,66 @@ return html`
 <style>
   ${styles}
   :host {
-    height:100%;
+    display: block;
+    /* height: 100%; */
   }
-  .container-error{
-    text-align:center;
+  .container-error {
     background-color:white;
-    height:800px;
     background-image: url("/images/watercolorbg.png") ;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    width:100%;
+    padding: 0 20px 40px 20px;
   }
-  .fw{
-    width:100%;
-  }
+
   .topic{
     color: var(--color-blue);
     font-size: 100px;
-
+    margin: 40px 0 0 0;
   }
   .subtext1{
     font-size: 26px;
-    margin-top: 20px;
+    margin-top: 40px;
     margin-bottom: 20px;
-
+    text-align: center;
   }
   .subtext2{
     font-size: 16px;
-    font-weight:normal;
-
-
+    font-weight: normal;
+    margin-bottom: 40px;
+    text-align: center;
   }
+
   .content-space{
-    position:absolute;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-
-    font-family: "Proxima Nova","Lucida Grande","Lucida Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-weight:bolder;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .horseImg{
+  .horseImg {
     width: 500px;
-    /* margin: 40px auto; */
-    margin-top:40px;
+    max-width: 100%;
   }
 
+  @media(max-width: 600px) {
+    .topic {
+      margin: 20px 0 0 0;
+    }
+    .subtext1 {
+      margin-top: 20px;
+    }
+  }
 </style>  
 <div class="container-error">
   <div class="content-space">
-    <div class="topic">404</div>
+    <h1 class="topic">404</h1>
     <div class="subtext1">Oh no! This page has bolted away!</div>
     <div class="subtext2">Don't worry, we'll get you <a href="/">home</a></div>
 
     <img class="horseImg" src="/images/gunrock-running.png" alt="Horse Image"> 
   </div>
-  <!-- <img class="fw" src="/images/watercolorbg.png" alt="Watercolor background"> -->
 </div>
 
 `;}
