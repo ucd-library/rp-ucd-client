@@ -102,11 +102,10 @@ export default class RpPageWork extends RpUtilsLanding {
   async doUpdate(state) {
     if( state.page !== 'work' ) return; 
 
-    let path = state.location.path;
-    this.assetId = state.location.path.slice(0,2).join('/');
+    this.assetId = state.location.path.join('/');
     if ( !this.assetId ) return;
 
-    this._setActiveSection(path);
+    this._setActiveSection(state.location.hash);
 
     await Promise.all([
       this._doMainQuery(this.assetId)

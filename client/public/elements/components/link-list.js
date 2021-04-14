@@ -12,7 +12,8 @@ export class RpLinkList extends LitElement {
       links: {type: Array},
       currentLink:  {type: Number, attribute: 'current-link', reflect: true},
       direction: {type: String, attribute: 'direction'},
-      hasHeaderLink: {type: Boolean, attribute: 'has-header-link'}
+      hasHeaderLink: {type: Boolean, attribute: 'has-header-link'},
+      useHash: {type: Boolean, attribute: 'use-hash', reflect: true}
     };
   }
 
@@ -76,7 +77,11 @@ export class RpLinkList extends LitElement {
     }
     classes['disabled'] = disabled;
 
-    if (href) {
+    if (href !== undefined) {
+      if( this.useHash ) {
+        href = "#"+href;
+      }
+
       return html`
         <li role="none"><a 
           link="${index}" 

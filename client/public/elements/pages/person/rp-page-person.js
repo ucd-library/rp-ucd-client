@@ -65,16 +65,16 @@ export default class RpPagePerson extends RpUtilsLanding {
   async _onAppStateUpdate(state) {
     if( state.page !== 'person' ) return;
 
-    let assetId = state.location.path.slice(0, 2).join('/');
+    let assetId = state.location.path.join('/');
     if( this.assetId === assetId ) {
-      this._setActiveSection(state.location.path);
+      this._setActiveSection(state.location.hash);
       return;
     }
     
     this.assetId = assetId;
 
     this.getPageSections();
-    this._setActiveSection(state.location.path);
+    this._setActiveSection(state.location.hash);
     this._resetEleProps();
 
     await Promise.all([

@@ -113,13 +113,11 @@ export default class RpPageConcept extends RpUtilsLanding {
   async doUpdate(state) {
     if( state.page !== 'concept' ) return;
 
-    let path = state.location.path;
-
-    this.urlPathId = path.slice(0, 3).join('/');
+    this.urlPathId = state.location.path.join('/');
     this.assetId = this.urlPathId;
     if ( !this.assetId ) return;
 
-    this._setActiveSection(path, 3);
+    this._setActiveSection(state.location.hash);
 
     await Promise.all([
       this._doMainQuery(this.assetId), 
@@ -323,13 +321,15 @@ export default class RpPageConcept extends RpUtilsLanding {
   _toggleElements(type, arrayCheck) {
     if(this._isEmpty(arrayCheck)){
       this.shadowRoot.getElementById(type).style.display = "none";
-      let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
+      // let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
+      let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelectorAll('a');
       for(let i = 0; i < data.length; i++){
         if(data[i].href.includes(type)) data[i].style.display = "none";
       }
     } else {
       this.shadowRoot.getElementById(type).style.display = "block";
-      let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
+      // let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
+      let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelectorAll('a');
       for(let i = 0; i < data.length; i++){
         if(data[i].href.includes(type)) data[i].style.display = "block";
       }
