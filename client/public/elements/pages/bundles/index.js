@@ -1,6 +1,6 @@
 const defs = {
-  search : ['people', 'works', 'organizations', 'concepts', 'search'],
-  landing : ['person', 'work', 'organization', 'concept']
+  search : ['people', 'works', 'organizations', 'concepts', 'grants','search'],
+  landing : ['person', 'work', 'organization', 'grant','concept']
 };
 
 export default defs;

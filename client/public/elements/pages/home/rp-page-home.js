@@ -6,6 +6,7 @@ import "@ucd-lib/cork-app-utils";
 import "../../components/alert";
 import "../../components/badge";
 import "../../components/person-preview";
+import "../../components/grant-preview";
 import "../../components/search";
 import "../../components/rp-loading";
 
@@ -24,6 +25,9 @@ export default class RpPageHome extends Mixin(LitElement)
       facets: {type: Object},
       academicWorks: {type: Array},
       academicWorksTotal: {type: Number},
+      grants: {type: Array},
+      grantsTotal: {type: Number},
+      grantsStatus: {type: String},
       peopleStatus: {type: String},
       people: {type: Array},
       peopleTotal: {type: Number},
@@ -44,6 +48,7 @@ export default class RpPageHome extends Mixin(LitElement)
     this.facets = {};
     this.visible = false;
     this.academicWorksTotal = 0;
+    this.grantsTotal = 0;
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
     this.setPeopleWidth(window.innerWidth);
@@ -60,12 +65,15 @@ export default class RpPageHome extends Mixin(LitElement)
    */
   resetProperties(){
     this.people = [];
+    this.grants = [];
     this.academicWorks = [];
     this.subjects = [];
     this.pageStatus = 'loading';
     this.facetsStatus = 'loading';
     this.peopleStatus = 'loading';
     this.subjectsStatus = 'loading';
+    this.grantsStatus = 'loading';
+
   }
 
   /**
@@ -251,6 +259,22 @@ export default class RpPageHome extends Mixin(LitElement)
   }
 
   /**
+   * @method _getGrants
+   * @description load and render a random list of grants
+   * 
+   * @returns {Promise}
+   */
+  async _getGrants() {
+    let grantsList = await this.CollectionModel.overview('randomGrants', {limit: 4, total: this.grantsTotal});
+    this.grantsStatus = grantsList.state;
+    if (grantsList.state != "loaded") {
+      return;
+    }
+    this.grants = grantsList.payload.results;
+    if (APP_CONFIG.verbose) console.log('grants: ', this.grants);
+  }
+
+  /**
    * @method _getSubjects
    * @description load and render a random list of subjects
    * 
@@ -292,6 +316,9 @@ export default class RpPageHome extends Mixin(LitElement)
       }
       if (facet == APP_CONFIG.data.types.person ) {
         this.peopleTotal = this.facets[facet];
+      }
+      if (facet == APP_CONFIG.data.types.grant ) {
+        this.grantsTotal = this.facets[facet];
       }
     }
 
