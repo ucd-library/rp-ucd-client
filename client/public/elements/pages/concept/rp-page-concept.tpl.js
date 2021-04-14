@@ -166,6 +166,7 @@ return html`
       <rp-link-list id="navbar" class="bg-light p-3"
         direction="horizontal"
         .links="${this.getPageSections()}"
+        use-hash
         current-link="${this.activeSection.index}">
       </rp-link-list>
     </div>

@@ -16,6 +16,7 @@
     "cookie-parser": "^1.4.5",
     "deepmerge": "^4.2.2",
     "express": "^4.17.1",
+    "lit-element": "^2.4.0",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {

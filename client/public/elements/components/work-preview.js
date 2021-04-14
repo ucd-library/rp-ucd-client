@@ -59,8 +59,8 @@ export class RpWorkPreview extends Mixin(LitElement)
 
   getAuthors(){
     let authors = this.WorkModel.getAuthors(this.data);
-    this.authorCt = authors.length;
-    return authors;
+    this.authorCt = authors.ranked.length;
+    return authors.ranked;
   }
 
   getWorkType(){

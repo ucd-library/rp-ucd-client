@@ -137,23 +137,26 @@ return html`
   
 </style>
 <div class="hero">
-  <div class="container flex">
-  <img src="${this.theme.homeHeroImage}" alt="">
-  <div class="text flex flex-column">
-    <div class="text-default mt-0 h1 bold mb-3">${this.theme.homeHeroTitle}</div>
-    <div class="flex flex-column justify-content-between flex-grow-1 content">
-      <div>${unsafeHTML(this.theme.homeHeroContentTop)}</div>
-      <div>${unsafeHTML(this.theme.homeHeroContentBottom)}</div>
+  <div class="container flex" style="text-align: center; max-width: 600px">
+    <!-- <img src="${this.theme.homeHeroImage}" alt=""> -->
+    <div class="text flex flex-column">
+      <div class="text-default mt-0 h1 bold mb-3">${this.theme.homeHeroTitle}</div>
+      <div class="flex flex-column justify-content-between flex-grow-1 content">
+        <div>${unsafeHTML(this.theme.homeHeroContentTop)}</div>
+        <div>${unsafeHTML(this.theme.homeHeroContentBottom)}</div>
+        <div style="margin-top: 50px;">
+          <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
+        </div>
+      </div>
     </div>
-  </div>
   </div>
 </div>
 
-<div class="search bg-primary">
+<!-- <div class="search bg-primary">
   <div class="container flex justify-content-center">
     <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
   </div>
-</div>
+</div> -->
 
 <div class="data bg-light ${this.pageStatus}">
   <rp-loading ?hidden="${this._hideStatusSection('loading')}">Loading ${this.theme.siteTitle}</rp-loading>

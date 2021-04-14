@@ -155,8 +155,6 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this._resizeQuickSearch();
   }
 
-
-
   /**
    * @method _onAppStateUpdate
    * @description bound to AppStateModel app-state-update event

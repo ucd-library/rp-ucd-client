@@ -256,9 +256,10 @@ return html`
 
       </rp-hero-image>
       <rp-link-list class="bg-light p-3"
-                    direction="horizontal"
-                    .links="${this.getPageSections()}"
-                    current-link="${this.activeSection.index}">
+        direction="horizontal"
+        .links="${this.getPageSections()}"
+        use-hash
+        current-link="${this.activeSection.index}">
       </rp-link-list>
     </div>
 

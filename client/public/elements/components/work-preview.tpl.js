@@ -67,7 +67,7 @@ export default function render() {
         <span class="work-type">${this.getWorkType()}</span>
         ${this.getWorkType() ? html`<span class="mx-1">|</span>` : html``}
         <span class="authors">${this.getAuthors().map((author, i) => html`
-        ${author.nameLast}, ${author.nameFirst}${this.authorCt > i + 1 ? '; ' : ''}
+        ${author._client.familyName}, ${author._client.givenName}${this.authorCt > i + 1 ? '; ' : ''}
         `)}</span>
       </div>
       ${this.showSnippet ? html`
