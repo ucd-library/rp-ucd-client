@@ -1,6 +1,6 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
-import {unsafeHTML} from 'lit-html/directives/unsafe-html.js';
+import {renderHTML} from '../../../src/lib/santize-html.js';
 
 export default function render() {
 return html`
@@ -90,7 +90,7 @@ return html`
     <div class="page-header container-wide">
       <div class="hero">
         <div class="title mb-0"> 
-          <h1 class="text-secondary h1 bold mb-0 text-center" aria-label="Work title">${this.work.label}</h1>
+          <h1 class="text-secondary h1 bold mb-0 text-center" aria-label="Work title">${renderHTML(this.work.label)}</h1>
         </div>
         <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.ranked.map((author, i) => html`
           <span>${author._client.givenName} ${author._client.familyName}</span>${i + 1 < this.authors.ranked.length ? html`<span>, </span>` : html``}
@@ -136,7 +136,7 @@ return html`
         ${this.work.abstract ? 
           html`
           <h2>Abstract</h2>
-          <div>${unsafeHTML(this.work.abstract)}</div>
+          <div>${renderHTML(this.work.abstract)}</div>
           ` 
           :html``
         }

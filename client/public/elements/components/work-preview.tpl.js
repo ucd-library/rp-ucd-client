@@ -1,5 +1,5 @@
 import { html } from 'lit-element';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { renderHTML } from '../../src/lib/santize-html.js';
 //import { styleMap } from 'lit-html/directives/style-map';
 
 export default function render() {
@@ -60,7 +60,7 @@ export default function render() {
       <a class="title" 
         href="${this.getLink()}" 
         ?disabled="${!this.getLink()}">
-        ${unsafeHTML(this.title)}
+        ${renderHTML(this.title)}
       </a>
       
       <div class="below-title">
@@ -71,7 +71,7 @@ export default function render() {
         `)}</span>
       </div>
       ${this.showSnippet ? html`
-        <div class="snippet">${unsafeHTML(this.getSnippet())}</div>
+        <div class="snippet">${renderHTML(this.getSnippet())}</div>
       ` : html``}
     </div>
   </div>

@@ -1,5 +1,5 @@
 import { html } from 'lit-element';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { renderHTML } from '../../../src/lib/santize-html.js';
 import styles from "../../styles/site.html"
 
 export default function render() {
@@ -142,8 +142,8 @@ return html`
     <div class="text flex flex-column">
       <div class="text-default mt-0 h1 bold mb-3">${this.theme.homeHeroTitle}</div>
       <div class="flex flex-column justify-content-between flex-grow-1 content">
-        <div>${unsafeHTML(this.theme.homeHeroContentTop)}</div>
-        <div>${unsafeHTML(this.theme.homeHeroContentBottom)}</div>
+        <div>${renderHTML(this.theme.homeHeroContentTop)}</div>
+        <div>${renderHTML(this.theme.homeHeroContentBottom)}</div>
         <div style="margin-top: 50px;">
           <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
         </div>
