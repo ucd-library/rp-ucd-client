@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import render from "./researcher-profiles.tpl.js";
 import { styleMap } from 'lit-html/directives/style-map';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import {renderHTML} from '../src/lib/santize-html.js';
 
 // sets globals Mixin and EventInterface
 import "@ucd-lib/cork-app-utils";
@@ -369,7 +369,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
         columnTemplates.push(
           html`<div class="footer-column">
             ${this.theme[col].title ? html`<div class="title">${this.theme[col].title}</div>` : html``}
-            ${this.theme[col].content ? html`${this.theme[col].content.map(line => html`<div class="col-item">${unsafeHTML(line)}</div>`)}` : html``}
+            ${this.theme[col].content ? html`${this.theme[col].content.map(line => html`<div class="col-item">${renderHTML(line)}</div>`)}` : html``}
           </div>`
         );
       }

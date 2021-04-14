@@ -250,9 +250,27 @@ class WorkModel extends BaseModel {
   _getAuthorVcardName(names) {
     names = rdfUtils.asArray(names);
     let vcard = names.find(name => (typeof name === 'object' && name['@id'].match(/#vcard-name$/)));
-    if( vcard ) return vcard;
-    if( names.length > 0 && typeof names[0] === 'object' ) return names[0];
+    if( vcard ) return this._correctName(vcard);
+    if( names.length > 0 && typeof names[0] === 'object' ) {
+      return this._correctName(names[0]);
+    }
     return null;
+  }
+
+  _correctName(name) {
+    if( !name.givenName && !name.familyName) return '';
+
+    if( !name.givenName || !name.familyName ) {
+      let parts;
+      if( name.familyName ) {
+        parts = name.familyName.split(' ');
+      } else {
+        parts = name.givenName.split(' ');
+      }
+      name.givenName = parts[0];
+      name.familyName = parts[parts.length-1];
+    }
+    return name;
   }
 
 
@@ -265,18 +283,7 @@ class WorkModel extends BaseModel {
    * @returns {String}
    */
   _getAuthorCitationTextName(name) {
-    if( !name.givenName && !name.familyName) return '';
-
-    if( !name.givenName || !name.familyName ) {
-      let parts;
-      if( name.familyName ) {
-        parts = name.familyName.split(' ');
-      } else {
-        parts = name.givenName.split(' ');
-      }
-      name.givenName = parts[0];
-      name.familyName = parts[1];
-    }
+    name = this._correctName(name);
 
     if( name.givenName && name.familyName ) {
       return name.familyName +' '+name.givenName.split("")
@@ -408,8 +415,7 @@ class WorkModel extends BaseModel {
     if (!work) return output;
 
     try {
-      let s = work.hasSubjectArea;
-      if (!Array.isArray(s)) s = [s];
+      let s = rdfUtils.asArray(work.hasSubjectArea);
       for (let subject of s) {
         if (!subject.label) continue;
         output.push(subject);

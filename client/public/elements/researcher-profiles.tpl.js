@@ -1,5 +1,5 @@
 import { html } from 'lit-element';
-import {unsafeHTML} from 'lit-html/directives/unsafe-html.js';
+import {renderHTML} from '../src/lib/santize-html.js';
 import styles from "./styles/site.html"
 
 export default function render() {
@@ -411,7 +411,7 @@ return html`
       <div>
         ${this.theme.libraryLogo? html`<a href="${this.theme.libraryUrl}"><img class="logo" alt="Logo" src="${this.theme.libraryLogo}"></a>` : html``}
         <div class="address mt-4">
-        ${this.theme.libraryAddress? this.theme.libraryAddress.map(line => html`<div>${unsafeHTML(line)}</div>`) : html`` }
+        ${this.theme.libraryAddress? this.theme.libraryAddress.map(line => html`<div>${renderHTML(line)}</div>`) : html`` }
         </div>
         ${this.theme.libraryEmail ? html`<div class="mt-4"><a href="mailto:${this.theme.libraryEmail}">${this.theme.libraryEmail}</a></div>`: html`` }
       </div>
@@ -422,7 +422,7 @@ return html`
       ${this.theme.universityLogo? html`<a href="${this.theme.universityUrl}"><img class="logo" alt="Logo" src="${this.theme.universityLogo}"></a>` : html``}
       <hr class="flex-grow-1">
     </div>
-    ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center flex-wrap justify-content-center mb-3">${unsafeHTML(line)}</div>`) : html``}
+    ${this.theme.footerLines? this.theme.footerLines.map(line => html`<div class="flex align-items-center flex-wrap justify-content-center mb-3">${renderHTML(line)}</div>`) : html``}
     <div ?hidden="${!this.showVersion}">
       <div>${APP_CONFIG.env.APP_VERSION}</div>
       <div>Build Time: ${APP_CONFIG.env.BUILD_TIME}</div>
