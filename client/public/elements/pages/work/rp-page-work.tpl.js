@@ -183,14 +183,14 @@ return html`
             </rp-person-preview>
           `)}
         </div>
-        ${this.hasOtherAuthors ? 
+        <!-- ${this.hasOtherAuthors ? 
         html`
           <h1 class="weight-regular">Other Authors</h1>
           ${this.authors.ranked.filter(author => !author._client.aggieExpertsAuthor).map(author => html`
-            <div><span class="name">${author._client.givenName}, ${author._client.familyName}</span></div>
+            <div><span class="name">${author._client.familyName}, ${author._client.givenName}</span></div>
           `)}
         ` 
-        :html``}
+        :html``} -->
      </section>
 
     </div>
