@@ -180,6 +180,14 @@ return html`
     border-color: var(--tcolor-hover-bg);
   } */
 
+  rp-modal ol li:before, rp-modal ol li::marker {
+    text-align: left !important;
+    width: 15px !important;
+  }
+  rp-modal ol li {
+    padding-left: 5px;
+  }
+
   @media (min-width: 800px){
     .own-profile .box-title {
       flex-flow: row nowrap;
@@ -198,9 +206,19 @@ return html`
 </style>
 
 
-<rp-modal content-title='Edit "Keywords"' id="modal-keyword-edit">
-  Keyword information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Keywords" button below will 
-  redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
+<rp-modal content-title='Edit Keywords' id="modal-keyword-edit">
+  Keywords are managed via the "Fields of Research" section of your <b>UC Publication Management System</b> profile. 
+  Clicking the "Edit Keywords" button below will redirect you to the UC Publication Management System. Any changes 
+  made there will be reflected on your Aggie Experts profile. 
+
+  <div style="margin-top: 15px"><b>Steps to Add/Delete Keywords:</b></div>
+  <ol style="margin-top: 5px; padding-left: 20px;">
+    <li>In the "About" block, select the "Edit" button located just to the right of the "Fields of Research" label.</li>
+    <li>To add keywords, search for and select a subject from "Available values." To remove keywords, select an item 
+      from the "Your Selection" list.</li>
+    <li>Select "Save" to confirm your changes.</li>
+  </ol>
+
   <div slot="confirmButton">
     <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=${this._getOAId()}&em=true'>
     <div class="button">Edit Keywords</div>
