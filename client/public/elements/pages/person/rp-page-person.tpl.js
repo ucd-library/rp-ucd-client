@@ -220,7 +220,20 @@ return html`
           <div slot="main" class="heromain">
             <rp-avatar size="lg"></rp-avatar>
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
-            <p class="text-light h3 mb-2 mt-1 text-center">${this.getHeadlineTitle()}</p>
+
+            <div class="text-light h3 mb-2 mt-1 text-center">
+              ${this.getHeadlineTitle()}
+              <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
+                <rp-icon style="vertical-align:middle;" 
+                  icon="iron-editor:mode-edit" 
+                  has-text 
+                  circle-bg 
+                  is-link size="lg">
+                  <div slot="tooltip">Edit Positions</div>
+                </rp-icon> 
+              </a>
+            </div>
+
             ${this.getResearchSubjects(1).length > 0 ? html`
               <div>
                 <p class="text-light h3 text-center bold">
@@ -284,7 +297,7 @@ return html`
             ex ea commodo consequat. </p>
           <div class="cols">
             <div>
-              <div>
+              <!-- <div>
                 <div>
                   <h2 class="h3 mb-2">Positions&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
@@ -296,11 +309,13 @@ return html`
                       ` : html``
                     }
                   </h2>
-              </div>
+                </div> 
 
 
                 ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
-              </div>
+
+                
+              </div>  -->
               ${this._showSubSection('contact') ? html`
                 <div>
                   <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
