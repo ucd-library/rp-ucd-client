@@ -192,7 +192,7 @@ return html`
     .own-profile .box-title {
       flex-flow: row nowrap;
       justify-content: space-between;
-  }
+    }
     .own-profile .box-title-icons {
       justify-content: unset;
     }
