@@ -11,7 +11,7 @@ return html`
     display: block;
   }
   .hero {
-    background: url(images/homepage-hero.jpg) no-repeat center center;
+    background: url(/images/homepage-hero.jpg) no-repeat center center;
     background-size: cover;
     color: var(--tcolor-light);
   }
@@ -103,9 +103,7 @@ return html`
       order: unset;
     }
     .hero .container {
-      flex-flow: row;
       padding: 50px 0;
-      align-items: flex-start;
     }
     .hero img {
       padding-top: 0;
@@ -142,9 +140,9 @@ return html`
   
 </style>
 <div class="hero">
-  <div class="container flex" style="text-align: center; max-width: 600px">
+  <div class="container flex">
     <!-- <img src="${this.theme.homeHeroImage}" alt=""> -->
-    <div class="text flex flex-column">
+    <div class="text flex flex-column" style="text-align: center; max-width: 600px">
       <h2>${this.theme.homeHeroTitle}</h2>
       <div class="flex flex-column justify-content-between flex-grow-1 content">
         <div>${renderHTML(this.theme.homeHeroContentTop)}</div>
