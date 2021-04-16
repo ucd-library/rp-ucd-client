@@ -19,6 +19,7 @@ return html`
     border-color: var(--tcolor-bg-primary);
     background-color: var(--tcolor-bg-primary);
     color: var(--tcolor-primary);
+    padding: 5px .7em;
   }
   span.size-lg {
     padding: .55em .9em;

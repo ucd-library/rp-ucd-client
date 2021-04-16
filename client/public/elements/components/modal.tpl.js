@@ -6,6 +6,7 @@ export default function render() {
     :host {
       display: block;
       position: fixed;
+      z-index: 1000;
     }
     .container {
       width: 100%;
