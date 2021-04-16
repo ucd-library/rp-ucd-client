@@ -9,7 +9,7 @@ import "./icon";
 export class RpQuickSearch extends LitElement {
   static get properties() {
     return {
-      inputWidth: {type: Number, attribute: "input-width"},
+      // inputWidth: {type: Number, attribute: "input-width"},
       inputValue: {type: String, attribute: "input-value", reflect: true},
       placeholder: {type: String},
       opened: {type: Boolean},
@@ -23,7 +23,7 @@ export class RpQuickSearch extends LitElement {
     this.render = render.bind(this);
     this.placeholder = "Search the registry";
     this.opened = false;
-    this.inputWidth = 220;
+    // this.inputWidth = 220;
     this.inputValue = "";
     this.preventOpen = false;
     this.closing = false;
@@ -40,9 +40,9 @@ export class RpQuickSearch extends LitElement {
 
     if (props.has('opened')) {
       if (this.opened) {
-        let w = this.inputWidth;
-        this.inputWidth = 0;
-        this.inputWidth = w;
+        // let w = this.inputWidth;
+        // this.inputWidth = 0;
+        // this.inputWidth = w;
         let i = this.shadowRoot.getElementById('search-input');
         i.focus();
       }

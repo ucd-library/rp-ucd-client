@@ -287,6 +287,11 @@ return html`
       margin-top: 0;
     }
   }
+  @media( max-width: 565px)  {
+    .hide-help {
+      display: none;
+    }
+  }
 
 
 </style>
@@ -328,23 +333,24 @@ return html`
     </div>
 
 
-    <nav id="nav-container"  class="container flex flex-wrap align-items-center justify-content-between">
+    <nav id="nav-container"  class="container flex align-items-center justify-content-between">
       <rp-icon @click="${this.closeQuickSearch}" ?hidden="${!this.hideMainNav}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
+
       <ul id="nav-left" role="menubar" aria-label="primary navigation" class="flex align-items-center bold" ?hidden="${this.hideMainNav}">
         ${this.navLinks.map(link => html`
         <li role="none">
-          <a href=${link.href} role="menuitem" ?this-page="${link.page == this.page}" class="text-primary no-decoration ${link.page == 'help' ? 'hidden-mobile' : ''}">${link.text}</a>
+          <a href=${link.href} role="menuitem" ?this-page="${link.page == this.page}" class="text-primary no-decoration ${link.page == 'help' ? 'hide-help' : ''}">${link.text}</a>
         </li>`)}
       </ul>
-      <div id="nav-right" class="flex align-items-center">
+
+      <div id="nav-right" >
         <rp-quick-search 
           id="quick-search" 
           @keyup="${this._onQuickSearchKeyup}"
           @input-status="${this._onQuickSearchClick}" 
           @new-search="${this._onSearch}" 
           input-value="${this.textQuery}" 
-          ?opened="${this.textQuery}" 
-          input-width="${this.quickSearchWidth}">
+          ?opened="${this.textQuery}">
         </rp-quick-search>
       </div>
     </nav>
@@ -363,6 +369,7 @@ return html`
       <h1 class="dot one">.</h1><h1 class="dot two">.</h1><h1 class="dot three">.</h1>
     </div>
   </div>
+  
   <div id="app-mobile-menu">
     <div class="container bg-primary search-box">
       <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
@@ -390,6 +397,7 @@ return html`
     </div>
     `}
   </div>
+
   <app-page-components id="components"></app-page-components>
   <rp-page-home id="home"></rp-page-home>
   <rp-page-people id="people"></rp-page-people>
