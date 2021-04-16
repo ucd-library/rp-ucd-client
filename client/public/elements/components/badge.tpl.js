@@ -19,6 +19,7 @@ return html`
     border-color: var(--tcolor-bg-primary);
     background-color: var(--tcolor-bg-primary);
     color: var(--tcolor-primary);
+    padding: 5px .7em;
   }
   span.size-lg {
     padding: .55em .9em;
@@ -70,13 +71,13 @@ return html`
   a:active {
     color: var(--tcolor-text);
   }
-  .dot {
+  /* .dot {
     width: 6px;
     border-radius: 50%;
     display: inline-block;
     height: 6px;
     background-color: var(--tcolor-primary);
-  }
+  } */
   a:hover .dot {
     background-color: #fff;
   }

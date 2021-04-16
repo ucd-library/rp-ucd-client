@@ -198,6 +198,16 @@ return html`
 </style>
 
 
+<rp-modal content-title='Edit "Keywords"' id="modal-keyword-edit">
+  Keyword information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Keywords" button below will 
+  redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
+  <div slot="confirmButton">
+    <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=${this._getOAId()}&em=true'>
+    <div class="button">Edit Keywords</div>
+    </a>
+  </div> 
+</rp-modal>
+
 <div class="individual top ${this.isOwnProfile ? "own-profile" : ""}">
   <div class="data ${this.individualStatus}" ?hidden="${!this.showPage() }">
     <div class="page-header container-wide">
@@ -210,7 +220,20 @@ return html`
           <div slot="main" class="heromain">
             <rp-avatar size="lg"></rp-avatar>
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
-            <p class="text-light h3 mb-2 mt-1 text-center">${this.getHeadlineTitle()}</p>
+
+            <div class="text-light h3 mb-2 mt-1 text-center">
+              ${this.getHeadlineTitle()}
+              <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
+                <rp-icon style="vertical-align:middle;" 
+                  icon="iron-editor:mode-edit" 
+                  has-text 
+                  circle-bg 
+                  is-link size="lg">
+                  <div slot="tooltip">Edit Positions</div>
+                </rp-icon> 
+              </a>
+            </div>
+
             ${this.getResearchSubjects(1).length > 0 ? html`
               <div>
                 <p class="text-light h3 text-center bold">
@@ -230,14 +253,15 @@ return html`
                     </rp-badge>
                     ${this.isOwnProfile ? html`
                       &nbsp;&nbsp;
-                        <a href="https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=${this._getOAId()}&em=true" target="_blank" rel="noopener">
-                          <rp-icon style="vertical-align:middle;" 
-                          icon="iron-editor:mode-edit" 
-                          role="button"
-                          circle-bg 
-                          is-link 
-                          size="lg"></rp-icon>
-                        </a>
+                      <rp-icon style="vertical-align:middle;"
+                        @click="${e => this.shadowRoot.getElementById('modal-keyword-edit').toggle()}"
+                        icon="iron-editor:mode-edit" 
+                        role="button"
+                        circle-bg 
+                        is-link has-text
+                        size="lg">
+                        <div slot="tooltip">Edit Keywords</div>
+                      </rp-icon>
                       ` : html``
                     }
                     <br />
@@ -273,21 +297,25 @@ return html`
             ex ea commodo consequat. </p>
           <div class="cols">
             <div>
-              <div>
+              <!-- <div>
                 <div>
                   <h2 class="h3 mb-2">Positions&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
                       <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
-                        <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg">
+                        <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
+                          <div slot="tooltip">Edit Positions</div>
+                        </rp-icon>
                       </a>
                       ` : html``
                     }
                   </h2>
-              </div>
+                </div> 
 
 
                 ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
-              </div>
+
+                
+              </div>  -->
               ${this._showSubSection('contact') ? html`
                 <div>
                   <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}

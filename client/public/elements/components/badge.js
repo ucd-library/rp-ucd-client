@@ -127,9 +127,7 @@ export class RpBadge extends LitElement {
   _renderSpan() {
     return html`<span class=${classMap(this._constructClasses())} style=${styleMap(this._constructStyles())}>
       ${this.ellipsis ? html`
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+        <iron-icon icon="more-horiz"></iron-icon>
         <span class="sr-only">See more subjects</span>
       ` : html`<slot></slot>`}
       

@@ -173,7 +173,6 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       this.isSearch = false;
     }
 
-
     let page = e.page;
     if( this.page === page ) return;
 

@@ -11,7 +11,9 @@ return html`
     display: block;
   }
   .hero {
-    background-color: var(--tcolor-bg-primary);
+    background: url(/images/homepage-hero.jpg) no-repeat center center;
+    background-size: cover;
+    color: var(--tcolor-light);
   }
   .hero .container {
     padding-bottom: 30px;
@@ -30,6 +32,9 @@ return html`
   .hero .content {
     font-size: var(--font-size);
     line-height: 23px;
+  }
+  .hero h2 {
+    color: var(--tcolor-secondary)
   }
   .search .container {
     padding: 30px 0;
@@ -98,9 +103,7 @@ return html`
       order: unset;
     }
     .hero .container {
-      flex-flow: row;
       padding: 50px 0;
-      align-items: flex-start;
     }
     .hero img {
       padding-top: 0;
@@ -137,10 +140,10 @@ return html`
   
 </style>
 <div class="hero">
-  <div class="container flex" style="text-align: center; max-width: 600px">
+  <div class="container flex">
     <!-- <img src="${this.theme.homeHeroImage}" alt=""> -->
-    <div class="text flex flex-column">
-      <div class="text-default mt-0 h1 bold mb-3">${this.theme.homeHeroTitle}</div>
+    <div class="text flex flex-column" style="text-align: center; max-width: 600px">
+      <h2>${this.theme.homeHeroTitle}</h2>
       <div class="flex flex-column justify-content-between flex-grow-1 content">
         <div>${renderHTML(this.theme.homeHeroContentTop)}</div>
         <div>${renderHTML(this.theme.homeHeroContentBottom)}</div>
