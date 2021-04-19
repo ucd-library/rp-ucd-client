@@ -95,7 +95,7 @@ export default function render() {
         <hr>
         <div class="footer">
         <div class="button" @click="${e => this.hide()}">${this.dismissText}</div>
-        <slot name="confirmButton"></slot>
+        <slot name="confirmButton" @click="${this._onConfirmClicked}"></slot>
         </div>
     </div>
       
