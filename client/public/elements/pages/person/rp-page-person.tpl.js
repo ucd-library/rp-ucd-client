@@ -376,7 +376,7 @@ return html`
 
             <div class="pub-count">${this.totalPublications}</div>
           
-            <rp-modal content-title='Edit "Publications"' id="modal-pub-edit">
+            <rp-modal content-title='Edit Publications' id="modal-pub-edit">
               Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
               redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
               <div slot="confirmButton">
