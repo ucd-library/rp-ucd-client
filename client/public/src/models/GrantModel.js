@@ -15,7 +15,7 @@ class GrantModel extends BaseModel {
 
     this.UrlLanding = '/grant/';
     this.urlBrowse = '/grants';
-    this.urlAuthor = "/person/";
+    this.urlContributor = "/person/";
 
     // TODO: JM - this needs to be fixed, I don't think it indicates a 'UCD Author'
     // as shown in the UI.
@@ -51,30 +51,30 @@ class GrantModel extends BaseModel {
   }
 
   /**
-   * @method getAuthorsFullObject
+   * @method getContributorsFullObject
    * @description query the work object from the ID and
    * the authors associated with it, and the service 
    * depending on the state of the work object
    * 
    * @param {String} grantId
-   * @param {Array} authors 
+   * @param {Array} contributors 
    * 
    * @returns {Object}
    */
-  async getAuthorsFullObject(grantId, authors) {
-    let state = this.store.data.grantAuthors[grantId];
+  async getContributorsFullObject(grantId, contributors) {
+    let state = this.store.data.grantContributors[grantId];
 
     try {
       if( state && state.request ) {
         await state.request;
       } else {
-        await this.service.getAuthors(grantId, authors);
+        await this.service.getContributors(grantId, contributors);
       }
     } catch(e) {
       // silence is golden
     }
 
-    return this.store.data.workAuthors[grantId];
+    return this.store.data.grantContributors[grantId];
   }
 
 
@@ -93,11 +93,11 @@ class GrantModel extends BaseModel {
     if( !APP_CONFIG.user.username ) return false;
 
     try {
-      let authors = this.getAuthors(grant);
-      for (let author of authors) {
+      let contributors = this.getContributors(grant);
+      for (let grantContribute of contributors) {
         // for (let id of author.identifiers) {
-        let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-        if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
+        let contributorId = grantContribute['@id'].replace(this.service.jsonContext + ":", "");
+        if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === contributorId.toLowerCase()) {
           return true;
         }
         // }
@@ -110,35 +110,16 @@ class GrantModel extends BaseModel {
   }
 
   /**
-   * @method hasNonInstitutionAuthors
-   * @description query the grant object sent in params and 
-   * send it into getAuthors function determine if the authors
-   * are or are not part of another university. 
-   * 
-   * @param {Object} grant
-   * 
-   * @returns {Boolean}
-   */
-  hasNonInstitutionAuthors(grant){
-    let authors = this.getAuthors(grant);
-    for (let author of authors) {
-      if (author.isOtherUniversity) return true;
-    }
-    return false;
-    
-  }
-
-  /**
-   * @method getAuthors
-   * @description query the grant object and get the authors
+   * @method getContributors
+   * @description query the grant object and get the contributors
    * from the grant object into a formatted structure Object
    * 
    * @param {Object} grant
    * 
    * @returns {Object}
    */  
-  getAuthors(grant) {
-    let authors = [];
+  getContributors(grant) {
+    let contributor = [];
     if (typeof grant !== 'object' || typeof grant.Authorship !== 'object' ) return authors;
     let auths = grant.Authorship;
     if (!Array.isArray(auths)) {
@@ -177,7 +158,7 @@ class GrantModel extends BaseModel {
         //   }
         // }
       } catch (error) {
-        console.warn("Unable to construct author href.");
+        console.warn("Unable to construct contributors href.");
       }
       authors.push(author);
     }

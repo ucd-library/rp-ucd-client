@@ -77,4 +77,4 @@ export class RpSubjectPreview extends Mixin(LitElement)
 
 }
 
-customElements.define('rp-subject-preview', RpSubjectPreview);
+customElements.define('rp-subject-preview', RpSubjectPreview); 
