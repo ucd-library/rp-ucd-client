@@ -65,6 +65,17 @@ class CollectionModel extends BaseModel {
         queryObject.offset = randomOffset;
       }
     }
+    else if (id == "randomGrants") {
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('grants').baseFilter);
+      queryObject.limit = 10;
+      if (kwargs.limit) {
+        queryObject.limit = kwargs.limit;
+      }
+      if (kwargs.total) {
+        let randomOffset = Math.floor(Math.random() * (kwargs.total - queryObject.limit));
+        queryObject.offset = randomOffset;
+      }
+    }
     else if (id == "peopleAggs") {
       Object.assign(queryObject.filters, AssetDefs.getMainFacetById('people').baseFilter);
       queryObject.limit = 0;
@@ -88,6 +99,11 @@ class CollectionModel extends BaseModel {
     }
     else if (id == "organizationsAggs") {
       Object.assign(queryObject.filters, AssetDefs.getMainFacetById('organizations').baseFilter);
+      queryObject.limit = 0;
+      queryObject.facets["@type"] = {"type" : "facet"};
+    }
+    else if (id == "grantsAggs") {
+      Object.assign(queryObject.filters, AssetDefs.getMainFacetById('grants').baseFilter);
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
@@ -298,6 +314,19 @@ class CollectionModel extends BaseModel {
         href: this.constructUrl(elementQuery, urlParamsToIgnore)
       });
     }    
+
+    else if (mainFacet == 'grants') {
+      subFacets.push({
+        id: AssetDefs.defaultFacetId, 
+        ct: dataTotal, 
+        text: `All Grants (${dataTotal})`, 
+        href: this.constructUrl(elementQuery, urlParamsToIgnore)
+      });
+
+      for (let facet of AssetDefs.getSubFacetsByMainId('grants')) {
+        subFacets.push(this._fmtSubFacetMenuObject(facet, counts, elementQuery));
+      }
+    }
 
     else if (mainFacet == 'organizations') {
       subFacets.push({

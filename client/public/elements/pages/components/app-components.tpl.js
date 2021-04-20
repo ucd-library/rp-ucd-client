@@ -21,6 +21,8 @@ import "../../components/search"
 import "../../components/edit-profile"
 import "../../components/work-preview"
 import "../../components/subject-preview"
+import "../../components/grant-preview"
+
 
 
 export default function render() {

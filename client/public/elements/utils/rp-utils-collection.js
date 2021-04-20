@@ -8,6 +8,7 @@ import "../components/pagination";
 import "../components/person-preview";
 import "../components/work-preview";
 import "../components/subject-preview";
+import "../components/grant-preview";
 
 import AssetDefs from "../../src/lib/asset-defs";
 
@@ -577,6 +578,13 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       <rp-organization-preview .data="${data}" class="my-3"></rp-organization-preview>
       `;
     }
+
+    if (assetType == 'grant') {
+      return html`
+      <rp-grant-preview .data="${data}" class="my-3"></rp-grant-preview>
+      `;
+    }
+  
 
     return html``;
 

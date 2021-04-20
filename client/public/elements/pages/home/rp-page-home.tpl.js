@@ -167,6 +167,31 @@ return html`
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
   <div class="container flex" ?hidden="${this._hideStatusSection('loaded')}">
+
+  <!--Grant Works-->
+
+  <!-- <div class="col-l">
+      <div id="grants">
+        <div class="list-count">
+          <div class="row">
+            <div class="count"><h2 class="mt-0">${this.grantsTotal}</h2></div>
+            <div class="text"><h2 class="weight-regular mt-0">Grants</h2></div>
+          </div>
+          ${this.grants.map(grant => html`
+          <div class="row item">
+            <div class=count>${grant.count}</div>
+            <div class="text"><a href="${grant.href}">${grant.text}</a></div>
+          </div>
+          `)}
+        </div>
+
+        <div class="flex view-all-row">
+          <a href="/grants" class="view-all"><span>View All Grants</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
+        </div>
+      </div>
+    </div> -->
+
+
     <div class="col-l">
       <div id="works">
         <div class="list-count">
@@ -187,6 +212,9 @@ return html`
         </div>
       </div>
     </div>
+
+
+
     <div class="col-r flex-grow-1">
       <div class="people" id="people">
         <h2 class="mt-0">
@@ -207,6 +235,7 @@ return html`
             </div>
         </div>
       </div>
+      
       <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
       <div id="subjects">
         <h2>
@@ -229,6 +258,9 @@ return html`
       </div>
       <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
     </div>
+
+
+
   </div>
 </div>
  
