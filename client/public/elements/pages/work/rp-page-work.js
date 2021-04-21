@@ -228,6 +228,18 @@ export default class RpPageWork extends RpUtilsLanding {
     return true;
   }
 
+  /**
+   * @method _hasRecords
+   * @description called by rp-utils-landing._hidePageSection when the section
+   * is 'records'.  Indicates if data is available or should the section should be hidden.
+   * 
+   * @returns 
+   */
+  _hasRecords() {
+    return (this.isOwnWork || this.WorkModel.getAdditionalLinks(this.work).length > 0);
+  }
+
+
 }
 
 customElements.define('rp-page-work', RpPageWork);
