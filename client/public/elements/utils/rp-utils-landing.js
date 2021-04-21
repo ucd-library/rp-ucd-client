@@ -85,7 +85,6 @@ export default class RpUtilsLanding extends Mixin(LitElement)
    */
   _hidePageSection(section) {
     let hasData = this._sectionHasData(section);
-    if( section === 'records' ) console.log(section, !hasData);
     if( !hasData ) return true;
 
     if (this.activeSection.index == 0) {

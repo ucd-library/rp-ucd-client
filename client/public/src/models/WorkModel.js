@@ -126,7 +126,7 @@ class WorkModel extends BaseModel {
    */
   isUsersWork(work) {
     if( !APP_CONFIG.user ) return false;
-    if( !APP_CONFIG.user.username ) return false;
+    if( !APP_CONFIG.user.expertsId ) return false;
 
     try {
       let workAuthors = this.getAuthors(work);
@@ -135,7 +135,7 @@ class WorkModel extends BaseModel {
 
         for (let author of authors) {
           let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-          if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
+          if (APP_CONFIG.user.expertsId === authorId.toLowerCase()) {
             return true;
           }
         }
