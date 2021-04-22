@@ -88,6 +88,10 @@ export default function render() {
       background-color: var(--color-rec-pool);
       color: var(--color-blue);
     }
+    .container.grant {
+      background-color: var(--color-thiebaud-icing);
+      color: var(--color-blue);
+    }
     .container.circle.secondary {
       background-color: var(--tcolor-secondary);
     }

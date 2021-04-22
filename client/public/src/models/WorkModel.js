@@ -34,7 +34,6 @@ class WorkModel extends BaseModel {
    */
   async getWork(id) {
     let state = this.store.data.byWork[id];
-
     try {
       if( state && state.request ) {
         await state.request;

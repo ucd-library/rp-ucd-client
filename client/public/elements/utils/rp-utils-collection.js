@@ -163,6 +163,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   async _doMainQuery(){
     let q = this.currentQuery;
     let data = await this.CollectionModel.query(q);
+
+    console.log("q:", q);
+
     let facetAggDoneHere = false;
     if (this.textQuery && this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
       this.subFacetStatus = data.state;

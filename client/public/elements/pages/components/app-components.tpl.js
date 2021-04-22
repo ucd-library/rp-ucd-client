@@ -411,7 +411,7 @@ ${this.exampleSubjects.map((subject) => html`
 <h1>Asset Preview (Grants)</h1>
 <p>Card for the Grant asset type - used in browse and search pages.</p>
 ${this.exampleGrants.map((grant) => html`
-  <rp-subject-preview .data="${grant}"></rp-subject-preview>
+  <rp-grant-preview .data="${grant}"></rp-grant-preview>
 `)}
 
 </section>

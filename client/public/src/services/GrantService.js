@@ -22,6 +22,12 @@ class GrantService extends BaseService {
   async getGrant(id) {
     return this.request({
       url : this.baseUrl+'/record/'+queryUtils.appendIdPrefix(id),
+      fetchOptions : {
+        method : 'GET',
+        headers : {
+          'Content-Type' : 'application/json'
+        }
+      },
       checkCached : () => this.store.data.byGrant[id],
       onLoading : request => this.store.setGrantLoading(id, request),
       onLoad : result => this.store.setGrantLoaded(id, result.body),
@@ -41,6 +47,12 @@ class GrantService extends BaseService {
   async getContributors(grantId, contributorArray) {
     return this.request({
       url : `${this.baseUrl}/record/${contributorArray.join(',')}`,
+      fetchOptions : {
+        method : 'GET',
+        headers : {
+          'Content-Type' : 'application/json'
+        }
+      },
       checkCached : () => this.store.data.grantContributors[grantId],
       onLoading : request => this.store.setContributorLoading(grantId, request),
       onLoad : result => this.store.setContributorLoaded(grantId, result.body),

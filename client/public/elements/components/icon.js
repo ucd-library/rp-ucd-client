@@ -75,12 +75,16 @@ export class RpIcon extends LitElement {
     else if (this.sizeIconSVG == 'extralgIconWorks' || this.sizeIcon == 'extralgIconWorks') {
       size = 37;
     }
+    else if (this.sizeIconSVG == 'extralgIconGrants' || this.sizeIcon == 'extralgIconGrants') {
+      size = 38;
+    }
     else if (this.sizeIcon == 'lg') {
       size = 34;
     }
     else if (this.sizeIconSVG == 'extralgSVGIcon' || this.sizeIcon == 'extralgSVGIcon') {
       size = 40;
     }
+
 
     return size;
   }

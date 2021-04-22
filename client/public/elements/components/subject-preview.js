@@ -65,7 +65,7 @@ export class RpSubjectPreview extends Mixin(LitElement)
   }
 
   /**
-   * @method getTitle
+   * @method getSnippet
    * @description calls the getSnippet function in subject
    * model and returns it based on subject
    * 

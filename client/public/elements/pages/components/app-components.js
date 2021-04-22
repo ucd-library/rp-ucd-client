@@ -44,7 +44,6 @@ export class AppPageComponents extends Mixin(LitElement)
   async getWorks(){
     let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["experts:publication"]}}};
     let data = await this.CollectionModel.query(q);
-    console.log("WORKS:",data);
 
     if (data.state != 'loaded') {
       return;
@@ -56,7 +55,6 @@ export class AppPageComponents extends Mixin(LitElement)
   async getSubjects(){
     let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["experts:subjectArea"]}}};
     let data = await this.CollectionModel.query(q);
-    console.log("SUBJECTS:",data);
 
     if (data.state != 'loaded') {
       return;
@@ -68,7 +66,6 @@ export class AppPageComponents extends Mixin(LitElement)
   async getGrants(){
     let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["experts:grant"]}}};
     let data = await this.CollectionModel.query(q);
-    console.log("GRANTS:",data);
     if (data.state != 'loaded') {
       return;
     }
@@ -79,7 +76,6 @@ export class AppPageComponents extends Mixin(LitElement)
   async getOrgs(){
     let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["experts:organization"]}}};
     let data = await this.CollectionModel.query(q);
-    console.log("ORGS:",data);
 
     if (data.state != 'loaded') {
       return;

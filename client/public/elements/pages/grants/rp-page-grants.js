@@ -36,7 +36,7 @@ export default class RpPageGrants extends RpUtilsCollection {
    * @description reset props and update facets, this will rerender
    */
   async doUpdate(state){
-    if( state.page !== 'people' ) return;
+    if( state.page !== 'grants' ) return;
     this._parseUrlQuery(state);
     await Promise.all([this._doMainQuery(), this._getFacets(), this._getAzAgg()]);
   }
@@ -50,6 +50,7 @@ export default class RpPageGrants extends RpUtilsCollection {
   async _getFacets() {
     //let activeFilters = {};
     let grantsAggs = await this.CollectionModel.overview('grantsAggs');
+    console.log("grantsAggs:", grantsAggs);
     this.subFacetStatus = grantsAggs.state;
     if (grantsAggs.state != 'loaded') {
       return;
