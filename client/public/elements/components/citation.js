@@ -89,8 +89,6 @@ export class RpCitation extends Mixin(LitElement)
     labels.sort((a,b) => a.length < b.length);
     let shortest = labels[0].length;
 
-    console.log(labels);
-
     // many labels are in all caps or have very long titles
     // attempt to find shortest, no caps, label.
     let best = labels
