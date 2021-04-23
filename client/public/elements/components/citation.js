@@ -94,7 +94,7 @@ export class RpCitation extends Mixin(LitElement)
     let best = labels
       .filter(item => item.length <= shortest)
       .filter(item => !item.match(/^[A-Z :_-]*$/));
-    if( best.length ) return best;
+    if( best.length ) return best[0];
 
     // return first (shortest) label, capitalize in case all caps
     return unsafeHTML(`<span style="text-transform:capitalize">${labels[0].toLowerCase()}</span>`);
