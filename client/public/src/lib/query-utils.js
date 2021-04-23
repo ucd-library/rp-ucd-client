@@ -18,7 +18,7 @@ class QueryUtils {
     return {
       offset: 0,
       limit: 8,
-      sort: [{}],
+      sort: [],
       filters: {},
       facets: {}
     };

@@ -24,7 +24,7 @@ class AssetDefs {
         idSingular: 'person',
         text: 'People', 
         es: TYPES.person,
-        defaultSortField: this.defaultSortField,
+        defaultSortField: 'hasContactInfo.familyName',
         baseFilter: {
           '@type': {
             type: "keyword", 
