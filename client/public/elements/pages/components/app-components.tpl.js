@@ -105,6 +105,11 @@ return html`
   ${styles}
 </style>
 
+<h1 class="text-primary">Graph</h1>
+<section>
+  <rp-graph></rp-graph>
+</section>
+
 <h1 class="text-primary">Site Components</h1>
 <p>These don't connect to the main bus, and they don't inherit any shared styles (other than site variables).
 You control them with attributes, and build more complicated (bus-connected) elements with them.
