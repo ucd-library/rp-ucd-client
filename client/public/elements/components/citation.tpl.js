@@ -21,8 +21,8 @@ export default function render() {
   ${this.citationStyle == 'rp' ? html`
     <a href="${this.href}">${this.title}</a>
     <span class="authors">
-      ${this.authors.map((author, i) => html`
-      <span class="author">${author.text}</span>${i + 1 < this.authors.length ? html`<span>, </span>` : html`<span>.</span>`}
+      ${this.authors.ranked.map((author, i) => html`
+        <span class="author">${author._client.citationText}</span>${i+1 < this.authors.ranked.length ? html`<span>, </span>` : html`<span>.</span>`}
       `)}
     </span>
     ${this.venue ? html`

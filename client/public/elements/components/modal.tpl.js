@@ -6,6 +6,7 @@ export default function render() {
     :host {
       display: block;
       position: fixed;
+      z-index: 1000;
     }
     .container {
       width: 100%;
@@ -94,7 +95,7 @@ export default function render() {
         <hr>
         <div class="footer">
         <div class="button" @click="${e => this.hide()}">${this.dismissText}</div>
-        <slot name="confirmButton"></slot>
+        <slot name="confirmButton" @click="${this._onConfirmClicked}"></slot>
         </div>
     </div>
       

@@ -30,7 +30,7 @@ export default function render() {
       border: 0;
       font-size: var(--font-size);
       padding-left: 10px;
-      width: 0;
+      width: 100%;
       background-color: inherit;
     }
     /**

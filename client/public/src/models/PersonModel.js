@@ -3,6 +3,7 @@ const PersonService = require('../services/PersonService');
 const PersonStore = require('../stores/PersonStore');
 const urlUtils = require('../lib/url-utils');
 const AssetDefs = require('../lib/asset-defs');
+const rdfUtils = require('../lib/rdf-utils').default;
 
 /**
  * @class PersonModel
@@ -355,18 +356,43 @@ class PersonModel extends BaseModel {
     if (!individual) {
       return out;
     }
-    if (individual.orcidId) {
+
+    let orcid = this.getIdentifier(individual, 'orcid');
+    if( orcid ){
       out.push({
-        text: individual.orcidId['@id'], 
-        href: individual.orcidId['@id'], 
-        icon: '/images/orcid_16x16.png'});
+        text: orcid, 
+        href: 'https://orcid.org/'+orcid, 
+        icon: '/images/orcid_16x16.png'
+      });
     }
-    if (individual.scopusId) {
+    
+    let scopusId = this.getIdentifier(individual, 'scopus-author-id');
+    if( scopusId ){
       out.push({
         text: 'Scopus', 
-        href: `https://www.scopus.com/authid/detail.uri?authorId=${individual.scopusId}`});
+        href: `https://www.scopus.com/authid/detail.uri?authorId=${scopusId}`,
+        icon: '/images/scopus_32x32.png'
+      });
     }
+    
     return out;
+  }
+
+  /**
+   * @method getIdentifier
+   * @description given a person object and a scheme return the
+   * identifier for the scheme.  Example: 'orcid' or 'oapolicy'
+   * 
+   * @param {Object} person 
+   * @param {String} scheme 
+   * @returns {String}
+   */
+  getIdentifier(person, scheme) {
+    let id = rdfUtils
+      .asArray(person.identifier)
+      .find(id => id.scheme === scheme);
+    if( !id ) return '';
+    return id.value || '';
   }
 
 }

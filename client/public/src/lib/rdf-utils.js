@@ -1,4 +1,5 @@
 class RdfUtils {
+
   /**
    * @method asArray
    * @description given object property, ensure it's an
@@ -14,6 +15,8 @@ class RdfUtils {
     }
     return property;
   }
+
+
   /**
    * @method getFirstValue
    * @description return the first value in an array
@@ -28,5 +31,7 @@ class RdfUtils {
     }
     return obj || null;
   }
+
 }
+
 export default new RdfUtils();
