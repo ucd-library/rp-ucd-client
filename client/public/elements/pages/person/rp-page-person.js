@@ -27,10 +27,15 @@ export default class RpPagePerson extends RpUtilsLanding {
       individual: {type: Object},
       individualStatus: {type: String},
       publicationOverviewStatus: {type: String},
+      grantOverviewStatus: {type: String},
       publicationOverview: {type: Object},
+      grantOverview: {type: Object},
       hasMultiplePubTypes: {type: Boolean},
+      hasMultipleGrantTypes: {type: Boolean},
       retrievedPublications: {type: Object},
+      retrievedGrants: {type: Object},
       totalPublications: {type: Number},
+      totalGrants: {type: Number},
       isOwnProfile: {type: Boolean},
       submitText: {type: String, attribute: 'submitText'},
       isAdmin: {type: Boolean},
@@ -79,7 +84,8 @@ export default class RpPagePerson extends RpUtilsLanding {
 
     await Promise.all([
       this._doMainQuery(this.assetId),
-      this._doPubOverviewQuery(this.assetId)
+      this._doPubOverviewQuery(this.assetId),
+      this._doGrantQuery(this.assetId)
     ]);
 
     this.isOwnProfile = this._isOwnProfile();
@@ -108,6 +114,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.individualStatus = 'loading';
     this.retrievedPublications = {};
     this.totalPublications = 0;
+    this.totalGrants = 0;
     this.isOwnProfile = false;
     this.publicationOverview = {};
     this.hasMultiplePubTypes = false;
@@ -204,12 +211,14 @@ export default class RpPagePerson extends RpUtilsLanding {
     }
     this.totalPublications = totalPubs;
     this.publicationOverview  = pubTypes;
-
     await Promise.all(Object.values(pubTypes).map(pt => this._doPubQuery(pt)));
     if ( this.publicationOverviewStatus !== 'error' ) {
       this.publicationOverviewStatus = 'loaded';
     }
   }
+
+
+  
 
   /**
    * @method _doPubQuery
@@ -237,6 +246,35 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.requestUpdate();
   }
 
+
+  /**
+   * @method _doGrantQuery
+   * @description Retrieves grants in chronological order. Rerenders.
+   * 
+   * @param {Object} pubTypeObject - Object containing metadata about the publication type.
+   * @param {Number} offset - Offsets query by this value.
+   * 
+   * @returns {Promise}
+   */
+  async _doGrantQuery(){
+    let data = await this.PersonModel.getGrants(this.assetId);
+    console.log("Grant query:",data);
+    // this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
+    // if( data.state === 'error' ) {
+    //   this.publicationOverviewStatus = 'error';
+    //   return;
+    // }
+    // if (data.state != 'loaded') return;
+
+    // if( !this.retrievedPublications[pubTypeObject.id] ) {
+    //   this.retrievedPublications[pubTypeObject.id] = [];
+    // }
+
+    // this.retrievedPublications[pubTypeObject.id].push(...data.payload.results);
+    // console.log("RP:", this.retrievedPublications);
+    this.requestUpdate();
+  }
+  
   /**
    * @method _isOwnProfile
    * @description Determines if currently loaded page is the logged in user's

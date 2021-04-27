@@ -1,6 +1,7 @@
 import render from "./rp-page-grant.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
+import rdfUtils from "../../../src/lib/rdf-utils";
 
 import "../../components/alert";
 import "../../components/badge";
@@ -11,6 +12,7 @@ import "../../components/icon";
 import "../../components/link-list";
 import "../../components/person-preview";
 import "../../components/grant-preview";
+import { data } from "../../../src/stores/GrantStore.js";
 
 /**
  * @class RpPageGrant
@@ -22,12 +24,18 @@ export default class RpPageGrant extends RpUtilsLanding {
       grant: {type: Object},
       grantStatus: {type: String},
       grantType: {type: String},
-      fullTextLinks: {type: Array},
       isOwnWork: {type: Boolean},
       peopleWidth: {type: Number},
-      tempResearch: {},
       urlPathId: {type: String},
-      about: {type: String}
+      purpose: {type: String},
+      dateInterval: {type: Object},
+      grantAwardStatus: {type: String},
+      grantUrl: {type: String},
+      grantAmount: {type: String},
+      awardedByLabel: {type: String},
+      contributors: {type: Array},
+      grantNumber: {type:String},
+      role: {type:String}
     };
   }
 
@@ -41,12 +49,20 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.grantStatus = 'loading';
     this.urlPathId = "";
     this.grantType = "";
-    this.fullTextLinks = [];
     this.isOwnWork = false;
     this.setPeopleWidth(window.innerWidth);
     this._handleResize = this._handleResize.bind(this); 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
-    this.about = "";
+    this.purpose = "";
+    this.dateInterval = {};
+    this.grantAwardStatus = "Active";
+    this.grantUrl = "";
+    this.grantAmount = "$0";
+    this.awardedByLabel = "";
+    this.grantNumber ="";
+    this.contributors= [];
+    this.role = "";
+
   }
 
   /**
@@ -98,7 +114,7 @@ export default class RpPageGrant extends RpUtilsLanding {
                                              this._doPubOverviewQuery(this.assetId)])
    */
   async doUpdate(state) {
-    if( state.page !== 'concept' ) return;
+    if( state.page !== 'grant' ) return;
 
     let path = state.location.path;
 
@@ -107,7 +123,6 @@ export default class RpPageGrant extends RpUtilsLanding {
     if ( !this.assetId ) return;
 
     this._setActiveSection(path, 3);
-
     await Promise.all([
       this._doMainQuery(this.assetId), 
       this._doAboutQuery(this.assetId),
@@ -122,10 +137,7 @@ export default class RpPageGrant extends RpUtilsLanding {
    * @description Retrieves the grant from the id given and saves in this.grant array
    * Called on AppStateUpdate
    * 
-   * Calls the functions: this._getSubjectType(), 
-   *                      this._getFullTextLinks(),
-   *                      this._getRelatedSubjectsNarrow(), 
-   *                      this._getRelatedSubjectsBroader()
+
    * @returns {Promise} AppStateModel
    */
   async _doMainQuery(id){
@@ -141,9 +153,20 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.grant = data.payload;
     if (APP_CONFIG.verbose) console.log("grant payload:", data);
 
-    this.grantType = this._getGrantType();
-    this.fullTextLinks = this._getFullTextLinks();
+    // Gets the relate Ids from gran and checks to make sure inheresIn has it with the
+    // ["@id"] or the item itself has ["@id"] then filters if item has ucdrp
+    this.role = this.grant.relates[0]["@id"].split("/")[0].split(":")[1];
+    let relateIds = this.grant.relates
+      .map(item => item.inheresIn ? item.inheresIn["@id"] : item["@id"] )
+      .filter(item => item.match(/^ucdrp:/));
 
+    // set is created from the related IDs array and 
+    relateIds = Array.from(new Set(relateIds));
+    this.contributors = rdfUtils.asArray((await this.GrantModel.getContributors(this.grant["@id"], relateIds)).payload);
+    
+    this.grantType = this._getGrantType();
+    // this.dateStart = this._dateInterval("start");
+    // this.dateEnd = this._dateInterval("end");
     return false;
   }
 
@@ -156,29 +179,144 @@ export default class RpPageGrant extends RpUtilsLanding {
 
    */
   async _doAboutQuery(id){
-    let data = await this.SubjectModel.getSubject(id);
 
+    let data = await this.GrantModel.getGrant(id);
     //Add location of the description and add to array if there is none
-    this.about = data.payload.description;
+    this.purpose = data.payload.description;
 
     //delete this when description is added
-    if(!this.about){ 
-      this.about = `Lorem ipsum dolor sit amet, consectetur 
-                    adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua. 
-                    Ut enim ad minim veniam, quis nostrud 
-                    exercitation ullamco laboris nisi ut aliquip 
-                    ex ea commodo consequat.`;
-    }
+    // if(!this.about){ 
+    //   this.purpose = `Lorem ipsum dolor sit amet, consectetur 
+    //                 adipiscing elit, sed do eiusmod tempor 
+    //                 incididunt ut labore et dolore magna aliqua. 
+    //                 Ut enim ad minim veniam, quis nostrud 
+    //                 exercitation ullamco laboris nisi ut aliquip 
+    //                 ex ea commodo consequat.Lorem ipsum dolor 
+    //                 sit amet, consectetur adipiscing elit, sed 
+    //                 do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+    //                 Ut enim ad minim veniam, quis nostrud 
+    //                 exercitation ullamco laboris nisi ut aliquip 
+    //                 ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur 
+    //                 adipiscing elit, sed do eiusmod tempor 
+    //                 incididunt ut labore et dolore magna aliqua. 
+    //                 Ut enim ad minim veniam, quis nostrud 
+    //                 exercitation ullamco laboris nisi ut aliquip 
+    //                 ex ea commodo consequat.`;
+    // }
     
+    this.grantAwardStatus = this._grantAwardStatus();
+    this.grantUrl = this._grantUrl();
+    this.grantAmount = this._grantAmount();
+    this.awardedByLabel = this._awardedByLabel();
+    this.grantNumber = this._grantNumber();
 
     if (APP_CONFIG.verbose) console.log("description:", data);
 
-    this._toggleElements("about", this.about);
+    // this._toggleElements("about", this.about);
     
   }
 
+  /**
+   * @method _dateInterval
+   * @description returns the date interval that is displayed in the header.
+   * @param {String} type
+   * 
+   * @returns {String}
+   */
+  _dateInterval(type){
+    if(type == "start") return this.grant.dateTimeInterval.start.dateTime;
+    else if(type == "end") return this.grant.dateTimeInterval.end.dateTime;
+    return "Unavaliable";
+  }
 
+  /**
+   * @method _grantAwardStatus
+   * @description returns the status of the grant award as a string based on 
+   * on the interval.
+   * 
+   * @returns {String}
+   */
+  _grantAwardStatus(){
+    this.dateStart = this.grant.dateTimeInterval.start.dateTime;
+    this.dateEnd = this.grant.dateTimeInterval.end.dateTime;
+
+
+    let today = new Date();
+    let endDate = new Date(this.dateEnd);
+
+    if(today > endDate){
+      return 'Inactive';
+    } else if(today <= endDate){
+      return 'Active';
+    }
+
+    return 'Undetermined';
+
+  }
+
+  /**
+   * @method _grantUrl
+   * @description returns the grant URL for the specified grant ID as
+   * a string
+   * 
+   * @returns {String}
+   */
+  _grantUrl(){
+    return this.grant.url;
+  }
+
+  /**
+   * @method _grantNumber
+   * @description returns the grant Number for the specified grant ID 
+   * as a string
+   * 
+   * @returns {String}
+   */
+  _grantNumber(){
+    if (this.grant.sponsorAwardId == undefined) return "Not Listed";
+    return this.grant.sponsorAwardId;
+  }
+
+  /**
+   * @method _grantAmount
+   * @description returns the grant Amount for the specified grant ID 
+   * as a string
+   * 
+   * @returns {String}
+   */
+  _grantAmount(){
+    var formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+    if (this.grant.totalAwardAmount == undefined) return "Not Listed";
+    return formatter.format(parseFloat(this.grant.totalAwardAmount));
+  }
+
+  /**
+   * @method _awardedByLabel
+   * @description returns the organization that is funding the grant as
+   * a string
+   * 
+   * @returns {String}
+   */
+  _awardedByLabel(){
+    if (this.grant.assignedBy.label == undefined) return "Not Listed";
+    return this.grant.assignedBy.label;
+  }
+
+
+  /**
+   * @method _labelTitle
+   * @description returns the prefLabel to screen if it exists, otherwise 
+   * it returns the stated label
+   * 
+   * @returns {String}
+   */
+  _labelTitle(){
+    if(this.grant.prefLabel) return this.grant.prefLabel;
+    return this.grant.label;
+  }
 
   /**
    * @method setPeopleWidth
@@ -206,43 +344,45 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.setPeopleWidth(w);
   }
 
-  /**
-   * @method _pubRedirect
-   * @description creates the href that specifies the subject and 
-   * type of document for the publication redirect
-   * 
-   * @param {String} k
-   */
-  _pubRedirect(k){
-    let href = '/works/' + k + "?" + "subject=" + this.urlPathId;
-    this.AppStateModel.setLocation(href);
-  }
 
 
-  /**
-   * @method _toggleElements
-   * @description checks if the object is empty it would take away the
-   * section and the nav bar
-   * 
-   * @param {String} type
-   * @param {Array} arrayCheck 
-   */
-  _toggleElements(type, arrayCheck) {
-    if(this._isEmpty(arrayCheck)){
-      this.shadowRoot.getElementById(type).style.display = "none";
-      let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
-      for(let i = 0; i < data.length; i++){
-        if(data[i].href.includes(type)) data[i].style.display = "none";
-      }
-    } else {
-      this.shadowRoot.getElementById(type).style.display = "block";
-      let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
-      for(let i = 0; i < data.length; i++){
-        if(data[i].href.includes(type)) data[i].style.display = "block";
-      }
-    }
-  } 
+//   /**
+//    * @method _toggleElements
+//    * @description checks if the object is empty it would take away the
+//    * section and the nav bar
+//    * 
+//    * @param {String} type
+//    * @param {Array} arrayCheck 
+//    */
+//   _toggleElements(type, arrayCheck) {
+//     if(this._isEmpty(arrayCheck)){
+//       this.shadowRoot.getElementById(type).style.display = "none";
+//       let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
+//       for(let i = 0; i < data.length; i++){
+//         if(data[i].href.includes(type)) data[i].style.display = "none";
+//       }
+//     } else {
+//       this.shadowRoot.getElementById(type).style.display = "block";
+//       let data = this.shadowRoot.getElementById("navbar").shadowRoot.querySelector("div").querySelectorAll("[href]");
+//       for(let i = 0; i < data.length; i++){
+//         if(data[i].href.includes(type)) data[i].style.display = "block";
+//       }
+//     }
+//   } 
  
+//   /**
+//    * @method _isEmpty
+//    * @description checks if the object has any values for it to 
+//    * show the object or not
+//    * 
+//    * @param {Object} obj
+//    * 
+//    * @returns {Boolean}
+//    */
+//   _isEmpty(obj={}) {
+//     return Object.keys(obj).length === 0;
+//   }
+
 
   /**
    * @method _hideStatusSection
@@ -263,38 +403,12 @@ export default class RpPageGrant extends RpUtilsLanding {
 
 
   /**
-   * @method _getFullTextLinks
-   * @description returns the full text links for the grant queried
-   * 
-   * @returns text links output
-   */
-  _getFullTextLinks(){
-    let output = [];
-    if (!this.grant) return output;
-
-    try {
-      let links = this.grant.hasContactInfo.hasURL;
-      if (!Array.isArray(links)) {
-        links = [links];
-      }
-      for (let link of links) {
-        if (!link.label || !link.url) continue;
-        output.push(link);
-      }
-    } catch (error) {
-      return output;
-    }
-
-    return output;
-  }
-
-  /**
-   * @method _getGrantTypes
-   * @description load and render a list of subject type
+   * @method _getGrantType
+   * @description load and render a list of grant type
    * 
    * @returns {Promise}
    */
-  _getGrantTypes() {
+  _getGrantType() {
     try {
       for (let t of this.grant['@type']) {
         for (const possibleType of this.GrantModel.getGrantTypes()) {

@@ -63,6 +63,7 @@ class PersonService extends BaseService {
     return this.request({
       url : `${this.baseUrl}/search`,
       fetchOptions : {
+        
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
@@ -80,9 +81,46 @@ class PersonService extends BaseService {
     return `${id}-${pubTypeObject.id}-${offset}`;
   }
 
+  getGrantsRequestId(id) {
+    return `${id}`;
+  }
+
+  async getGrants(id) {
+    let cacheId = this.getGrantsRequestId(id);
+    console.log(queryUtils.appendIdPrefix(id));
+    let query = {
+      filters: {
+        'relates[1].@id': {
+          type: "keyword", 
+          op : "and", 
+          value: [queryUtils.appendIdPrefix(id)]
+        },
+      },
+      facets: {"@type": {type : "facet"}}
+    };
+
+    return this.request({
+      url : `${this.baseUrl}/search`,
+      fetchOptions : {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(query)
+      },
+      checkCached : () => this.store.data.grantsByRequest[cacheId],
+      onLoading : request => this.store.setGrantsLoading(cacheId, request),
+      onLoad : result => this.store.setGrantsLoaded(cacheId, result.body),
+      onError : e => this.store.setGrantsError(cacheId, e)
+    });
+
+    
+  }
+
   async getPublications(id, pubTypeObject, offset) {
     let cacheId = this.getPublicationsRequestId(id, pubTypeObject, offset);
 
+    
     let query = {
       offset,
       limit: 10,

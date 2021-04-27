@@ -50,12 +50,10 @@ export default class RpPageGrants extends RpUtilsCollection {
   async _getFacets() {
     //let activeFilters = {};
     let grantsAggs = await this.CollectionModel.overview('grantsAggs');
-    console.log("grantsAggs:", grantsAggs);
     this.subFacetStatus = grantsAggs.state;
     if (grantsAggs.state != 'loaded') {
       return;
     }
-    console.log("grantsAggs", grantsAggs);
     this.subFacets = this.CollectionModel._getSubFacets(grantsAggs.payload, this.currentQuery);
   }
 

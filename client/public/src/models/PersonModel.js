@@ -67,6 +67,7 @@ class PersonModel extends BaseModel {
     return this.store.data.pubsOverview[id];
   }
 
+
   /**
    * @method getPublications
    * @description get publications for a person
@@ -90,9 +91,42 @@ class PersonModel extends BaseModel {
     } catch (error) {
       // error is recorded in store
     }
+    console.log("State:",state);
+
+    console.log("Has Request:",this.store.data.pubsByRequest[requestId]);
 
     return this.store.data.pubsByRequest[requestId];
   }
+
+  /**
+   * @method getGrants
+   * @description get publications for a person
+   * 
+   * @param {String} id 
+   * @param {Object} pubTypeObject 
+   * @param {Number} offset
+   * 
+   * @returns {Promise} 
+   */
+  async getGrants(id) {
+    let requestId = this.service.getGrantsRequestId(id);
+    let state = this.store.data.grantsByRequest[requestId];
+
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } else {
+        await this.service.getGrants(id);
+      }
+    } catch (error) {
+      // error is recorded in store
+    }
+
+    console.log("Has Grant:",this.store.data.grantsByRequest[requestId]);
+
+    return this.store.data.grantsByRequest[requestId];
+  }
+
 
   /**
    * @method getPublicationTypes

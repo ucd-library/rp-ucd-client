@@ -3,6 +3,8 @@ const GrantService = require('../services/GrantService');
 const GrantStore = require('../stores/GrantStore');
 
 const CollectionModel = require('./CollectionModel');
+const PersonModel = require('./PersonModel');
+
 
 class GrantModel extends BaseModel {
 
@@ -12,6 +14,7 @@ class GrantModel extends BaseModel {
     this.store = GrantStore;
     this.service = GrantService;
     this.CollectionModel = CollectionModel;
+    this.PersonModel = PersonModel;
 
     this.UrlLanding = '/grant/';
     this.urlBrowse = '/grants';
@@ -109,8 +112,36 @@ class GrantModel extends BaseModel {
     return false;
   }
 
+
   /**
    * @method getContributors
+   * @description query the grant object from the ID and
+   * the authors associated with it, and the service 
+   * depending on the state of the work object
+   * 
+   * @param {String} grantId
+   * @param {Array} authors 
+   * 
+   * @returns {Object}
+   */
+  async getContributors(grantId, authors) {
+    let state = this.store.data.grantContributors[grantId];
+
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } else {
+        await this.service.getContributors(grantId, authors);
+      }
+    } catch(e) {
+      // silence is golden
+    }
+
+    return this.store.data.grantContributors[grantId];
+  }
+
+  /**
+   * @method getContributorsOld
    * @description query the grant object and get the contributors
    * from the grant object into a formatted structure Object
    * 
@@ -118,54 +149,45 @@ class GrantModel extends BaseModel {
    * 
    * @returns {Object}
    */  
-  getContributors(grant) {
+  async getContributorsOld(grant) {
     let contributor = [];
-    if (typeof grant !== 'object' || typeof grant.Authorship !== 'object' ) return authors;
-    let auths = grant.Authorship;
+    if (typeof grant !== 'object' || typeof grant.relates !== 'object' ) return contributor;
+    let auths = grant.relates;
     if (!Array.isArray(auths)) {
       auths = [auths];
     }
-    for (let author of auths) {
-      if (!author.hasName) {
-        continue;
-      }
-      author.nameFirst = getFirstValue(author.hasName).givenName;
-      author.nameLast = getFirstValue(author.hasName).familyName;
-      if (!author['vivo:rank']) {
-        author['vivo:rank'] = Infinity;
-      }
-      author.href = "";
-      author.isOtherUniversity = true;
-      try {
-        if( author['@type'].includes('foaf:Person') ) {
-          let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-          author.apiEndpoint = author['@id'];
-          author.href = '/' + authorId;
-          author.isOtherUniversity = false;
-        }
 
-        // if (typeof author.identifiers == 'object' && !Array.isArray(author.identifiers)) {
-        //   author.identifiers = [author.identifiers];
-        // }
-        // for (let id of author.identifiers) {
-        //   if (
-        //     this.grpsWithLinks.some(type => asArray(id['@type']).includes(type) ) && 
-        //     id['@id'].match("^"+this.service.jsonContext+":") ) {
-        //     let authorId = id['@id'].replace(this.service.jsonContext + ":", "");
-        //     author.apiEndpoint = id['@id'];
-        //     author.href = '/' + authorId;
-        //     author.isOtherUniversity = false;
-        //   }
-        // }
-      } catch (error) {
-        console.warn("Unable to construct contributors href.");
-      }
-      authors.push(author);
+    for (let author of auths) {
+      let id = author.inheresIn["@id"].split(":")[1];
+      let person = await this.PersonModel.get(id);
+      console.log(person);
+
+    //   if (!author.hasName) {
+    //     continue;
+    //   }
+    //   author.nameFirst = getFirstValue(author.hasName).givenName;
+    //   author.nameLast = getFirstValue(author.hasName).familyName;
+    //   if (!author['vivo:rank']) {
+    //     author['vivo:rank'] = Infinity;
+    //   }
+    //   author.href = "";
+    //   author.isOtherUniversity = true;
+    //   try {
+    //     if( author['@type'].includes('foaf:Person') ) {
+    //       let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
+    //       author.apiEndpoint = author['@id'];
+    //       author.href = '/' + authorId;
+    //       author.isOtherUniversity = false;
+    //     }
+    //   } catch (error) {
+    //     console.warn("Unable to construct contributors href.");
+    //   }
+    //   contributor.push(author);
     }
-    authors.sort(function (a, b) {
-      return a['vivo:rank'] - b['vivo:rank'];
-    });
-    return authors;
+    // contributor.sort(function (a, b) {
+    //   return a['vivo:rank'] - b['vivo:rank'];
+    // });
+    return contributor;
   }
 
   /**

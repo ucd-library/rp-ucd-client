@@ -78,13 +78,20 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.isSearch = false;
     this.hasProfile = (this.user && this.user.expertsId);
     this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
-    this.navLinks = [
+    this.navLinks_Grant = [
       {text: 'People', page: 'people', href: '/people'},
       {text: 'Subjects', page: 'concepts', href: '/concepts'},
       {text: 'Works', page: 'works', href: '/works'},
-      // {text: 'Grants', page: 'grants', href: '/grants'},
+      {text: 'Grants', page: 'grants', href: '/grants'},
       {text: 'Help', page: 'help', href: '/help'}];
 
+    this.navLinks_NonGrant = [
+      {text: 'People', page: 'people', href: '/people'},
+      {text: 'Subjects', page: 'concepts', href: '/concepts'},
+      {text: 'Works', page: 'works', href: '/works'},
+      {text: 'Help', page: 'help', href: '/help'}];
+ 
+    this.navLinks = APP_CONFIG.includeGrants ? this.navLinks_Grant : this.navLinks_NonGrant;
 
     if( APP_CONFIG.user && APP_CONFIG.user.impersonatedBy ) {
       this.accountLinks.unshift({text: "Stop Impersonating", action: 'stop-impersonating'}); 

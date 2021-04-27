@@ -163,9 +163,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   async _doMainQuery(){
     let q = this.currentQuery;
     let data = await this.CollectionModel.query(q);
-
-    console.log("q:", q);
-
     let facetAggDoneHere = false;
     if (this.textQuery && this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
       this.subFacetStatus = data.state;
@@ -551,7 +548,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    */
   _renderAssetPreview(data) {
     let assetType = this._getAssetType(data);
-    // console.log("DATA: ",assetType);
     if (assetType == 'person') {
       return html`
       <rp-person-preview

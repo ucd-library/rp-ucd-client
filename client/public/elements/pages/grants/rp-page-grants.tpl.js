@@ -18,7 +18,6 @@ return html`
     <div class="col-facets mt-3">
       ${this._renderFacets()}
     </div>
-    ${console.log(this.data)}
     <div class="col-main">
       <div ?hidden="${this.dataStatus == 'error' || this.dataStatus == 'loaded' }" class="flex align-items-center justify-content-center">
         <div class="loading1">loading</div>

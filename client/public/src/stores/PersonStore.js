@@ -9,6 +9,7 @@ class PersonStore extends BaseStore {
       byIndividual: {},
       pubsByIndividual: {},
       pubsByRequest: {},
+      grantsByRequest: {},
       pubsOverview: {}
     };
     this.events = {};
@@ -90,6 +91,32 @@ class PersonStore extends BaseStore {
   _setPubsState(state) {
     //if( !this.stateChanged(this.data.overview[id], state) ) return;
     this.data.pubsByRequest[state.id] = state;
+  }
+
+  setGrantsLoading(id, request) {
+    this._setGrantsState({
+      state: this.STATE.LOADING,
+      id, request
+    });
+  }
+
+  setGrantsLoaded(id, payload) {
+    this._setGrantsState({
+      state: this.STATE.LOADED,
+      id, payload
+    });
+  }
+
+  setGrantsError(id, error) {
+    this._setGrantsState({
+      state: this.STATE.ERROR,
+      id, error
+    });
+  }
+
+  _setGrantsState(state) {
+    //if( !this.stateChanged(this.data.overview[id], state) ) return;
+    this.data.grantsByRequest[state.id] = state;
   }
 
 }

@@ -66,8 +66,6 @@ class CollectionModel extends BaseModel {
     }
     else if (id == "randomGrants") {
       Object.assign(queryObject.filters, AssetDefs.getMainFacetById('grants').baseFilter);
-      console.log("AD:", AssetDefs.getMainFacetById('grants').baseFilter);
-
       queryObject.limit = 10;
       if (kwargs.limit) {
         queryObject.limit = kwargs.limit;

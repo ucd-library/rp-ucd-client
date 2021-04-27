@@ -43,7 +43,7 @@ export default class RpPageHome extends Mixin(LitElement)
     super();
     this.render = render.bind(this);
 
-    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel');
+    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel', 'GrantModel');
     this.resetProperties();
     this.facets = {};
     this.visible = false;
@@ -301,7 +301,6 @@ export default class RpPageHome extends Mixin(LitElement)
     if (facetList.state != 'loaded') {
       return;
     }
-    console.log("FacetList:",facetList);
     this.facets = facetList.payload.aggregations.facets['@type'];
     if (APP_CONFIG.verbose) console.log('facets: ', this.facets);
     for (let facet in this.facets) {

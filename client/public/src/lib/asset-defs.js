@@ -328,7 +328,6 @@ class AssetDefs {
    */
   getMainFacetById(id){
     for (const f of this.getMainFacets()) {
-      console.log("SampMainFacet:",f);
       if (id === f.id) return f;
     }
     return {};
