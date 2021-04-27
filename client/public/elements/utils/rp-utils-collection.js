@@ -548,7 +548,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    */
   _renderAssetPreview(data) {
     let assetType = this._getAssetType(data);
-
     if (assetType == 'person') {
       return html`
       <rp-person-preview

@@ -38,7 +38,6 @@ class CollectionModel extends BaseModel {
    */
   async overview(id, kwargs={}) {
     let queryObject = QueryUtils.getBaseQueryObject();
-
     if (id == "facets") {
       queryObject.facets["@type"] = {"type" : "facet"};
       queryObject.limit = 0;
@@ -133,7 +132,6 @@ class CollectionModel extends BaseModel {
    */
   async query(elementQuery={}){
     let queryObject = this.convertElementQuery(elementQuery);
-
     // in no type specified, use our default types
     if( !queryObject.filters['@type'] ) {
       queryObject.filters['@type'] = QueryUtils.getKeywordFilter(APP_CONFIG.defaultTypes, 'or');
@@ -389,7 +387,7 @@ class CollectionModel extends BaseModel {
       if (!Object.keys(counts).includes(facetOption.es)) facetOption.disabled = true;
       mainFacets.push(facetOption);
     }
-
+    console.log("MainFacet:", mainFacets);
     if (APP_CONFIG.verbose) console.log("Main facet menu:", mainFacets);
     return mainFacets;
 

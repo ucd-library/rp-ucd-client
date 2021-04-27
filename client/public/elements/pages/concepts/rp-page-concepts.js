@@ -64,7 +64,7 @@ export default class RpPageConcepts extends RpUtilsCollection {
     this.subFacets = this.CollectionModel._getSubFacets(subjectsAggs.payload, this.currentQuery);
   }
 
-
+ 
 }
 
 customElements.define('rp-page-concepts', RpPageConcepts);

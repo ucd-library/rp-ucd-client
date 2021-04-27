@@ -11,6 +11,7 @@ export class AppPageComponents extends Mixin(LitElement)
       exampleWorks: {type: Array},
       exampleOrgs: {type: Array},
       exampleSubjects : {type: Array},
+      exampleGrants : {type: Array},
       visible: {type: Boolean}
     };
     } 
@@ -21,6 +22,7 @@ export class AppPageComponents extends Mixin(LitElement)
     this.exampleWorks = [];
     this.exampleSubjects = [];
     this.exampleOrgs = [];
+    this.exampleGrants = [];
     this.render = render.bind(this);
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
@@ -36,12 +38,13 @@ export class AppPageComponents extends Mixin(LitElement)
     if (!this.visible) {
       return;
     }
-    await Promise.all([this.getWorks(), this.getSubjects() ,this.getOrgs()]);
+    await Promise.all([this.getWorks(), this.getSubjects() ,this.getOrgs(), this.getGrants()]);
   }
 
   async getWorks(){
-    let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["ucdrp:publication"]}}};
+    let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["experts:publication"]}}};
     let data = await this.CollectionModel.query(q);
+
     if (data.state != 'loaded') {
       return;
     }
@@ -50,8 +53,9 @@ export class AppPageComponents extends Mixin(LitElement)
   }
 
   async getSubjects(){
-    let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["ucdrp:subjectArea"]}}};
+    let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["experts:subjectArea"]}}};
     let data = await this.CollectionModel.query(q);
+
     if (data.state != 'loaded') {
       return;
     }
@@ -59,9 +63,20 @@ export class AppPageComponents extends Mixin(LitElement)
     console.log(this.exampleSubjects);
   }
 
-  async getOrgs(){
-    let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["ucdrp:organization"]}}};
+  async getGrants(){
+    let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["experts:grant"]}}};
     let data = await this.CollectionModel.query(q);
+    if (data.state != 'loaded') {
+      return;
+    }
+    this.exampleGrants = data.payload.results;
+    console.log(this.exampleGrants);
+  }
+
+  async getOrgs(){
+    let q = {filters: {"@type": {"type": "keyword", "op": "and", "value": ["experts:organization"]}}};
+    let data = await this.CollectionModel.query(q);
+
     if (data.state != 'loaded') {
       return;
     }

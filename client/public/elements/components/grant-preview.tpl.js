@@ -58,7 +58,7 @@ export default function render() {
     </style>
 
     <div class=container>
-      <div class="icon-container"><rp-icon icon="rp-grant" circle-bg theme-color='grant' size-icon-svg="extralgSVGIcon" size="extralg"></rp-icon></div>
+      <div class="icon-container"><rp-icon icon="iron-receipt" circle-bg theme-color='grant' size-icon="extralgIconGrants" size="extralg"></rp-icon></div>
       <div class="text-container">
         <a class="title" href="${this.getLink()}">${unsafeHTML(this.title)}</a>
         <div class="below-title">

@@ -408,6 +408,15 @@ ${this.exampleSubjects.map((subject) => html`
 </section>
 
 <section>
+<h1>Asset Preview (Grants)</h1>
+<p>Card for the Grant asset type - used in browse and search pages.</p>
+${this.exampleGrants.map((grant) => html`
+  <rp-grant-preview .data="${grant}"></rp-grant-preview>
+`)}
+
+</section>
+
+<section>
 <h1>Asset Preview (Organization)</h1>
 <p>Card for the Organization asset type - used in browse and search pages.</p>
 ${this.exampleOrgs.map((org) => html`

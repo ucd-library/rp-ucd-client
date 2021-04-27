@@ -43,7 +43,7 @@ export default class RpPageHome extends Mixin(LitElement)
     super();
     this.render = render.bind(this);
 
-    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel');
+    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel', 'GrantModel');
     this.resetProperties();
     this.facets = {};
     this.visible = false;
@@ -87,7 +87,8 @@ export default class RpPageHome extends Mixin(LitElement)
       if (this.facetsStatus == 'loaded') {
         await Promise.all([
           this._getPeople(),
-          this._getSubjects()
+          this._getSubjects(),
+          this._getGrants()
         ]);
       }
       this.setPageStatus();
@@ -284,6 +285,7 @@ export default class RpPageHome extends Mixin(LitElement)
     let subjects = await this.SubjectModel.getRandomSubjects(10);
     this.subjectsStatus = subjects.state;
     this.subjects = subjects.payload;
+
     if (APP_CONFIG.verbose) console.log('subjects: ', this.subjects);
   }
 

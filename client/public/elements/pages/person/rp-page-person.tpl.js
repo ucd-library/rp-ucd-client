@@ -429,6 +429,34 @@ return html`
         
 
       </section>
+
+      <div ?hidden="${!APP_CONFIG.includeGrants}">
+
+      <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('grants')}">
+        <div class="box-title">
+          <h1 class="weight-regular mt-0">Grants</h1>
+          <div class="box-title-icons">
+            <div class="pub-icons">
+              ${this.isOwnProfile ? html`
+                  <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
+                    <div slot="tooltip">Edit Publications</div>
+                  </rp-icon>
+                  <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
+
+                ` : html``
+              }
+            </div>
+
+            <div class="pub-count">${this.totalGrants}</div>
+        
+          </div>
+        </div>
+        <h2 class="mb-0">Selected Grants</h2>
+
+      </section>
+
+      </div>
+
     </div>
   </div>
 </div>

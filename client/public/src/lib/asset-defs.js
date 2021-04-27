@@ -96,6 +96,31 @@ class AssetDefs {
           "hasPublicationVenue.label.text^7",
           "hasPublicationVenue.issn^5"
         ]
+      },
+      {
+        id: 'grants', 
+        idSingular: 'grant',
+        text: 'Grants', 
+        es: TYPES.grant,
+        defaultSortField: this.defaultSortField,
+        baseFilter: {
+          "@type": {
+            type: "keyword", 
+            op: "and", 
+            value: [TYPES.grant]
+          }
+        },
+        azField: "label.firstLetter",
+        facetedSearchFields: [
+          "label.text^9",
+          "assignedBy.label.text^8",
+          "sponsorAwardId.text^10",
+          "totalAwardAmount^7",
+          "dateTimeInterval.start.dateTime^10",
+          "dateTimeInterval.end.dateTime^10",
+          "relates.hasContactInfo.familyName^10",
+          "relates.hasContactInfo.givenName^10",
+        ]
       }
     ];
   }
@@ -223,6 +248,9 @@ class AssetDefs {
             }
           }
         }
+      ],
+      grants: [
+        // TODO: SB No SubFacets that I am aware of.
       ]
     };
   }
@@ -247,6 +275,7 @@ class AssetDefs {
       "_.publicationLabel.text^6",
       "_.conceptLabel.text",
       "_.subjectAreaLabel.text^2",
+      "_.grantLabel.text^6",
       "hasSubjectArea.label.text^5",
       "abstract",
       'hasContactInfo.title.text',
@@ -255,7 +284,10 @@ class AssetDefs {
       "hasPublicationVenue.label.text",
       'citation.label^10',
       '_.top20Citation.label^15',
-      '_.lastCitation.label^15'
+      '_.lastCitation.label^15',
+      'relates.hasContactInfo.familyName^10',
+      'relates.hasContactInfo.givenName^10',
+      'assignedBy.label^10',
     ];
   }
  
