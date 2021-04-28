@@ -355,20 +355,9 @@ class WorkModel extends BaseModel {
     // venue name
     try {
       if( work.hasPublicationVenue ) {
-        let venue = work.hasPublicationVenue['@id'];
-        if( venue ) {
-          if( venue.startsWith(APP_CONFIG.data.prefix.ucdId + ':journal') ) {
-            venue = venue.replace(APP_CONFIG.data.prefix.ucdId + ':journal', '');
-            venue += " (journal)";
-          } else {
-            venue = venue.replace(new RegExp('^'+APP_CONFIG.data.prefix.ucdId+':.*/'), '');
-          }
-          venue = venue.replace(/[-:]/g, ' ');
-
-          output.push({text: venue, class: 'venue'});
-        }
+        let label = this.getVenue(rdfUtils.getFirstValue(work.hasPublicationVenue));
+        output.push({text: label.toLowerCase(), class: 'venue'});
       }
-        
     } catch (error) {
       console.error(error);
     }
@@ -400,6 +389,30 @@ class WorkModel extends BaseModel {
     }
 
     return output;
+  }
+
+  /**
+   * @method getVenue
+   * @description Formats venue from hasPublicationVenue work property
+   * @param {Object} venue
+   * 
+   * @returns {String}
+   */
+  getVenue(venue={}){
+    let labels = rdfUtils.asArray(venue.label);
+    if( labels.length === 0 ) return '';
+
+    labels.sort((a,b) => a.length < b.length);
+    let shortest = labels[0].length;
+
+    // many labels are in all caps or have very long titles
+    // attempt to find shortest, no caps, label.
+    let best = labels
+      .filter(item => item.length <= shortest)
+      .filter(item => !item.match(/^[A-Z :_-]*$/));
+    if( best.length ) return best[0];
+
+    return labels[0];
   }
 
   /**

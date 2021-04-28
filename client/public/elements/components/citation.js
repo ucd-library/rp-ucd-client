@@ -83,24 +83,10 @@ export class RpCitation extends Mixin(LitElement)
    * @returns {String}
    */
   _getVenue(venue={}){
-    let labels = rdfUtils.asArray(venue.label);
-    if( labels.length === 0 ) return '';
+    let label = this.WorkModel.getVenue(venue);
 
-    labels.sort((a,b) => a.length < b.length);
-    let shortest = labels[0].length;
-
-    // many labels are in all caps or have very long titles
-    // attempt to find shortest, no caps, label.
-    let best = labels
-      .filter(item => item.length <= shortest)
-      .filter(item => !item.match(/^[A-Z :_-]*$/));
-    if( best.length ) return best[0];
-
-    // return first (shortest) label, capitalize in case all caps
-    return unsafeHTML(`<span style="text-transform:capitalize">${labels[0].toLowerCase()}</span>`);
-
-    // if( venue.issn  ) return venue.issn;
-    // return venue['@id'].replace(APP_CONFIG.data.prefix.ucdId + ':venue/(issn:)?', '');
+    // return first (shortest) label, capitalize in case all cap
+    return unsafeHTML(`<span style="text-transform:capitalize">${label.toLowerCase()}</span>`);
   }
 
   // /**
