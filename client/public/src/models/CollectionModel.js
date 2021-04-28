@@ -92,13 +92,19 @@ class CollectionModel extends BaseModel {
       queryObject.facets["@type"] = {"type" : "facet"};
     }
 
-    let current = this.store.data.overview[id];
-    if( current && current.request ) {
-      await current.request;
-    } 
-    else {
-      await this.service.overview(id, queryObject);
+    let state = this.store.data.overview[id];
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } 
+      else {
+        await this.service.overview(id, queryObject);
+      }
+    } catch (error) {
+      // error is recorded in store
     }
+
+
     return this.store.data.overview[id];
   }
 
@@ -111,6 +117,12 @@ class CollectionModel extends BaseModel {
    */
   async query(elementQuery={}){
     let queryObject = this.convertElementQuery(elementQuery);
+
+    // in no type specified, use our default types
+    if( !queryObject.filters['@type'] ) {
+      queryObject.filters['@type'] = QueryUtils.getKeywordFilter(APP_CONFIG.defaultTypes, 'or');
+    }
+
     let id = QueryUtils.getQueryId(queryObject);
 
     let current = this.store.data.queryById[id];
@@ -169,13 +181,18 @@ class CollectionModel extends BaseModel {
     if ( subjectFilter ) id = `${id}__${subjectFilter}`;
 
     // Filter by facets if applicable
-    let mainFacetType = AssetDefs.getMainFacetById(mainFacet).es;
+    let mainFacetDef = AssetDefs.getMainFacetById(mainFacet) || {};
+    let mainFacetType = mainFacetDef.es;
     let subFacetType = AssetDefs.getSubFacetById(mainFacet, subFacet).es;
     if ( subFacetType ) {
       q.filters['@type'] = QueryUtils.getKeywordFilter([mainFacetType, subFacetType]);
     }
     else if( mainFacetType ) {
       q.filters['@type'] = QueryUtils.getKeywordFilter(mainFacetType);
+    }
+
+    if( mainFacetDef.defaultSortField ) {
+      q.sort.push({[mainFacetDef.defaultSortField]: 'asc'});
     }
 
     // Filter by subject id if applicable
@@ -422,9 +439,11 @@ class CollectionModel extends BaseModel {
       // Apply faceting to query
       query.facets = QueryUtils.defaultTypeFacet;
     }
-    // No search text query. Just sort by title
+    // No search text query. Just sort by label
     else {
-      query.sort = QueryUtils.defaultBrowseSort;
+      let s = {};
+      s[AssetDefs.getBrowseSortField(mainFacet)] = 'asc';
+      query.sort = [s];
     }
 
     // Apply pagination

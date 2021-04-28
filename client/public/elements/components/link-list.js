@@ -12,7 +12,8 @@ export class RpLinkList extends LitElement {
       links: {type: Array},
       currentLink:  {type: Number, attribute: 'current-link', reflect: true},
       direction: {type: String, attribute: 'direction'},
-      hasHeaderLink: {type: Boolean, attribute: 'has-header-link'}
+      hasHeaderLink: {type: Boolean, attribute: 'has-header-link'},
+      useHash: {type: Boolean, attribute: 'use-hash', reflect: true}
     };
   }
 
@@ -76,12 +77,31 @@ export class RpLinkList extends LitElement {
     }
     classes['disabled'] = disabled;
 
-    if (href) {
-      return html`<a link="${index}" class="${classMap(classes)}" href="${href}">${text}</a>`;
+    if (href !== undefined) {
+      if( this.useHash ) {
+        href = "#"+href;
+      }
+
+      return html`
+        <li role="none"><a 
+          link="${index}" 
+          class="${classMap(classes)}"
+          role="menuitem"
+          tabindex="${classes.disabled ? "-1": "0"}"
+          href="${href}">
+          ${text}
+        </a></li>`;
     }
 
     if (text) {
-      return html`<div @click="${this.handleClick}" link="${index}" class=${classMap(classes)}>${text}</div>`;
+      return html`
+        <li 
+          @click="${this.handleClick}" 
+          link="${index}"
+          role="menuitem"
+          tabindex="${classes.disabled ? "-1": "0"}"
+          class=${classMap(classes)}>${text}
+        </li>`;
     }
 
     return html``;

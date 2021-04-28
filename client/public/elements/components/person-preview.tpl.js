@@ -1,6 +1,6 @@
 import { html } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { renderHTML } from '../../src/lib/santize-html.js';
 import "./avatar"
 import urlUtils from "../../src/lib/url-utils"
 
@@ -61,15 +61,15 @@ export default function render() {
   </style>
   <div class=container>
     <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
-    <div class="text-container" style="${styleMap({"max-width" : this.textWidth})}">
+    <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}" >
       <a class="name" 
         href="${this.getLandingPage()}" 
         ?disabled="${!this.getLandingPage()}">
-        ${unsafeHTML(this.title)}
+        ${renderHTML(this.title)}
       </a>
       <small>${this.getTitle()}</small>
       ${this.showSnippet && this.getSnippet() ? html`
-        <div class="snippet">${unsafeHTML(this.getSnippet())}</div>
+        <div class="snippet">${renderHTML(this.getSnippet())}</div>
       ` : html``}
       ${this.showSubjects && this.getSubjects() ? html`
         <small class="badges">${this.getSubjects().map(subject => html`

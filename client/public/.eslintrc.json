@@ -3,6 +3,7 @@
   "globals": {
     "LitCorkUtils": "readonly",
     "Mixin": "readonly",
-    "APP_CONFIG": "readonly"
+    "APP_CONFIG": "readonly",
+    "rpLogger": "readonly"
   }
 }

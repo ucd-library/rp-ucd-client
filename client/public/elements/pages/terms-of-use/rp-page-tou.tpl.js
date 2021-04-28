@@ -29,13 +29,13 @@ return html`
     Framework (RDF) data from VIVO at The Regents of the University of
     California, Davis campus is intended for public use and is distributed under
     the terms of the <a href="http://creativecommons.org/licenses/by-nc/4.0/"
-    target="_blank" title="creative commons">Creative Commons CC-BY-NC 4.0</a>
+    target="_blank" rel="noopener" title="creative commons">Creative Commons CC-BY-NC 4.0</a>
     license which allows you to copy, distribute, display and make derivatives
     of this information for non-commercial use only provided you give credit to
     The Regents of the University of California, Davis campus. Any
     non-copyrightable information is available to you under a <a
     href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank"
-    title="cco waiver">CC0 waiver</a>.  However, source documents, images or web
+    rel="noopener" title="cco waiver">CC0 waiver</a>.  However, source documents, images or web
     pages attached to or linked from VIVO may contain copyrighted information
     and should only be used or distributed under terms included with each source
     or in accordance with the principles of fair use.  </p>

@@ -7,7 +7,6 @@
 class QueryUtils {
   constructor(){
     this.defaultTypeFacet = {"@type": {"type" : "facet"}};
-    this.defaultBrowseSort = [{"label": "asc"}];
   }
 
   /**
@@ -19,7 +18,7 @@ class QueryUtils {
     return {
       offset: 0,
       limit: 8,
-      sort: [{}],
+      sort: [],
       filters: {},
       facets: {}
     };
@@ -68,6 +67,10 @@ class QueryUtils {
     let f = this.getEmptyFilter('keyword', op);
     f.value = value;
     return f;
+  }
+
+  getBrowseSort() {
+    
   }
 
   /**

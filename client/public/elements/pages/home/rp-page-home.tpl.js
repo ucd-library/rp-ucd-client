@@ -1,5 +1,5 @@
 import { html } from 'lit-element';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { renderHTML } from '../../../src/lib/santize-html.js';
 import styles from "../../styles/site.html"
 
 export default function render() {
@@ -11,7 +11,9 @@ return html`
     display: block;
   }
   .hero {
-    background-color: var(--tcolor-bg-primary);
+    background: url(/images/homepage-hero.jpg) no-repeat center center;
+    background-size: cover;
+    color: var(--tcolor-light);
   }
   .hero .container {
     padding-bottom: 30px;
@@ -30,6 +32,9 @@ return html`
   .hero .content {
     font-size: var(--font-size);
     line-height: 23px;
+  }
+  .hero h2 {
+    color: var(--tcolor-secondary)
   }
   .search .container {
     padding: 30px 0;
@@ -69,6 +74,18 @@ return html`
   #subjects {
     padding-bottom: 15px;
   }
+  rp-loading {
+    --rp-loading-color: var(--tcolor-primary);
+  }
+  .data.loading rp-loading {
+    height: 100vh;
+  }
+  .error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
 
   @media (min-width: 800px){
     .people-container {
@@ -86,9 +103,7 @@ return html`
       order: unset;
     }
     .hero .container {
-      flex-flow: row;
       padding: 50px 0;
-      align-items: flex-start;
     }
     .hero img {
       padding-top: 0;
@@ -100,6 +115,12 @@ return html`
     }
     #subjects {
       padding-bottom: 15px;
+    }
+    .data.loading rp-loading {
+      height: 590px;
+    }
+    .error {
+      height: 590px;
     }
   }
 
@@ -120,29 +141,34 @@ return html`
 </style>
 <div class="hero">
   <div class="container flex">
-  <img src="${this.theme.homeHeroImage}">
-  <div class="text flex flex-column">
-    <div class="text-default mt-0 h1 bold mb-3">${this.theme.homeHeroTitle}</div>
-    <div class="flex flex-column justify-content-between flex-grow-1 content">
-      <div>${unsafeHTML(this.theme.homeHeroContentTop)}</div>
-      <div>${unsafeHTML(this.theme.homeHeroContentBottom)}</div>
+    <!-- <img src="${this.theme.homeHeroImage}" alt=""> -->
+    <div class="text flex flex-column" style="text-align: center; max-width: 600px">
+      <h2>${this.theme.homeHeroTitle}</h2>
+      <div class="flex flex-column justify-content-between flex-grow-1 content">
+        <div>${renderHTML(this.theme.homeHeroContentTop)}</div>
+        <div>${renderHTML(this.theme.homeHeroContentBottom)}</div>
+        <div style="margin-top: 50px;">
+          <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
+        </div>
+      </div>
     </div>
-  </div>
   </div>
 </div>
 
-<div class="search bg-primary">
+<!-- <div class="search bg-primary">
   <div class="container flex justify-content-center">
     <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
   </div>
-</div>
+</div> -->
 
-<div class="data bg-light">
-  <div class="container flex">
+<div class="data bg-light ${this.pageStatus}">
+  <rp-loading ?hidden="${this._hideStatusSection('loading')}">Loading ${this.theme.siteTitle}</rp-loading>
+  <div ?hidden="${this._hideStatusSection('error')}" class="error">
+    <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
+  </div>
+  <div class="container flex" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="col-l">
-      <div ?hidden="${this._hideStatusSection('loading', 'facetsStatus')}" class="loading1">loading</div>
-      <rp-alert  ?hidden="${this._hideStatusSection('error', 'facetsStatus')}">Error loading academic works</rp-alert>
-      <div id="works" ?hidden="${this._hideStatusSection('loaded', 'facetsStatus')}">
+      <div id="works">
         <div class="list-count">
           <div class="row">
             <div class="count"><h2 class="mt-0">${this.academicWorksTotal}</h2></div>
@@ -162,9 +188,7 @@ return html`
       </div>
     </div>
     <div class="col-r flex-grow-1">
-      <div ?hidden="${this._hideStatusSection('loading', 'peopleStatus')}" class="loading1">loading</div>
-      <rp-alert  ?hidden="${this._hideStatusSection('error', 'peopleStatus')}">Error loading people</rp-alert>
-      <div class="people" id="people" ?hidden="${this._hideStatusSection('loaded', 'peopleStatus')}">
+      <div class="people" id="people">
         <h2 class="mt-0">
           <span class="bold mr-2">${this.peopleTotal}</span>
           <span class="weight-regular">People</span>
@@ -200,12 +224,12 @@ return html`
           </rp-badge>
         `)}
         ${this.subjectsTotal > 10 ? html`
-          <rp-badge size="lg" class="my-1" max-width="280"  ellipsis href="/concepts"></rp-badge>
+          <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/concepts"></rp-badge>
           ` : html``}
       </div>
       <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
     </div>
   </div>
 </div>
-
+ 
 `;}

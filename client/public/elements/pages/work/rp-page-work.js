@@ -38,7 +38,7 @@ export default class RpPageWork extends RpUtilsLanding {
     this.assetType = "work";
     this.work = {};
     this.workStatus = 'loading';
-    this.authors = [];
+    this.authors = {ranked:[], unranked: []};
     this.hasOtherAuthors = false;
     this.workType = "";
     this.publishedArray = [];
@@ -102,11 +102,10 @@ export default class RpPageWork extends RpUtilsLanding {
   async doUpdate(state) {
     if( state.page !== 'work' ) return; 
 
-    let path = state.location.path;
-    this.assetId = state.location.path.slice(0,2).join('/');
+    this.assetId = state.location.path.join('/');
     if ( !this.assetId ) return;
 
-    this._setActiveSection(path);
+    this._setActiveSection(state.location.hash);
 
     await Promise.all([
       this._doMainQuery(this.assetId)
@@ -122,12 +121,16 @@ export default class RpPageWork extends RpUtilsLanding {
    */
   async _doMainQuery(id){
     let data = await this.WorkModel.getWork(id);
+    if( data.state === 'error' ) {
+      return this.AppStateModel.show404Page(data);
+    }
+
     this.workStatus = data.state;
     if (data.state != 'loaded') {
-      return;
+      return false;
     }
     this.work = data.payload;
-    if (APP_CONFIG.verbose) console.log("work payload:", data);
+    // if (APP_CONFIG.verbose) console.log("work payload:", data);
 
     this.authors = this.WorkModel.getAuthors(this.work);
     
@@ -138,7 +141,8 @@ export default class RpPageWork extends RpUtilsLanding {
     this.subjects = this.WorkModel.getSubjects(this.work);
     this.fullTextLinks = this.WorkModel.getFullTextLinks(this.work);
     this._doAuthorQuery(id, this.authors);
-    console.log("Subjects:",this.subjects);
+
+    return false;
   }
 
   /**
@@ -151,7 +155,15 @@ export default class RpPageWork extends RpUtilsLanding {
    */
   async _doAuthorQuery(id, authors) {
     this.universityAuthors = [];
-    let universityAuthors = authors.filter(author => author.isOtherUniversity == false).map(a => a.apiEndpoint);
+    let universityAuthors = [];
+
+    for( let type in authors ) {
+      universityAuthors = [... universityAuthors, ...authors[type]
+        .filter(author => author._client.aggieExpertsAuthor === true)
+        .map(a => a._client.apiEndpoint)
+      ];
+    }
+
     
     // don't render
     if( universityAuthors.length === 0 ) {
@@ -162,7 +174,7 @@ export default class RpPageWork extends RpUtilsLanding {
     let data = await this.WorkModel.getAuthorsFullObject(id, universityAuthors);
     this.universityAuthorsStatus = data.state;
     if (data.state != 'loaded') return;
-    if (APP_CONFIG.verbose) console.log("university authors:", data);
+    // if (APP_CONFIG.verbose) console.log("university authors:", data);
     if (Array.isArray(data.payload)) {
       universityAuthors = data.payload;
     }
@@ -215,6 +227,18 @@ export default class RpPageWork extends RpUtilsLanding {
     }
     return true;
   }
+
+  /**
+   * @method _hasRecords
+   * @description called by rp-utils-landing._hidePageSection when the section
+   * is 'records'.  Indicates if data is available or should the section should be hidden.
+   * 
+   * @returns 
+   */
+  _hasRecords() {
+    return (this.isOwnWork || this.WorkModel.getAdditionalLinks(this.work).length > 0);
+  }
+
 
 }
 

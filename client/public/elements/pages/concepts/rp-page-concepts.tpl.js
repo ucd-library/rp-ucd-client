@@ -7,9 +7,10 @@ return html`
   :host {
     display: block;
   } 
+
   ${styles}
 </style>
-<div class="collections container bg-light top">
+<div class="collections container bg-light top ${this.dataStatus}">
   ${this._renderBrowseHeader('Subjects')}
   <hr class="mb-0">
   <div class="body flex">

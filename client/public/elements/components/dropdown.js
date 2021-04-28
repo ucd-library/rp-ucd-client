@@ -43,8 +43,31 @@ export class RpDropdown extends LitElement {
    * @description Lit method called on first element update.
    */
   firstUpdated() {
-    this.shadowRoot.getElementById('dropdown').addEventListener('opened-changed',
+    let dd = this.shadowRoot.getElementById('dropdown');
+    dd.addEventListener('opened-changed',
       (e) => {this.opened = e.target.opened;});
+
+    dd._onArrow = this._onDropdownArrow.bind(this);
+    dd.addOwnKeyBinding('up', "_onArrow");
+    dd.addOwnKeyBinding('down', "_onArrow");
+  }
+
+  /**
+   * @method _onDropdownArrow
+   * @description Bound to arrow down/up events on iron-dropdown
+   * @param {CustomEvent} e - Inherited from IronA11yKeysBehavior
+   */
+  _onDropdownArrow(e) {
+    e.preventDefault();
+    let target = this.shadowRoot.activeElement;
+    let ke = e.detail.keyboardEvent;
+    if (target && ke) {
+      if (ke.code == 'ArrowUp' && target.previousElementSibling) {
+        target.previousElementSibling.focus();
+      } else if(ke.code == 'ArrowDown' && target.nextElementSibling) {
+        target.nextElementSibling.focus();
+      }
+    }
   }
 
 
@@ -96,9 +119,24 @@ export class RpDropdown extends LitElement {
     } 
 
     return html`
-    <li index="${choice.index}"
+    <li 
+      index="${choice.index}"
+      tabindex="0"
       ?selected="${choice.index == this.chosen && !this.stickyTitle}"
+      @keyup="${this._onkeyup}"
       @click="${this._handleClick}">${choice.text}</li>`;
+  }
+
+  /**
+   * @method _onkeyup
+   * @description Bound to dropdown list item keyup
+   * @param {Event} e 
+   */
+  _onkeyup(e){
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      this._handleClick(e);
+    }
   }
 
   /**
@@ -151,7 +189,9 @@ export class RpDropdown extends LitElement {
    */
   openDropdown(){
     this.opened = true;
-    this.shadowRoot.getElementById('dropdown').open();
+    let dd = this.shadowRoot.getElementById('dropdown');
+    dd.focusTarget = this.shadowRoot.querySelector("li[selected]");
+    dd.open();
   }
 
 }

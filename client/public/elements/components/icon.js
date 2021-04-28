@@ -2,21 +2,26 @@ import { LitElement, html, svg } from 'lit-element';
 import render from './icon.tpl.js';
 import { styleMap } from 'lit-html/directives/style-map';
 
+/**
+ * @class RpIcon
+ * @description iron-icon wrapper with additional stylings
+ */
 export class RpIcon extends LitElement {
+  
   static get properties() {
-  return {
-    size: {type: String},
-    icon: {type: String},
-    themeColor: {type: String, attribute: 'theme-color'},
-    isLink: {type: Boolean, attribute: 'is-link'},
-    circleBg: {type: Boolean, attribute: 'circle-bg'},
-    hasText: {type: Boolean, attribute: 'has-text'},
-    sizeIcon: {type: String, attribute: 'size-icon'},
-    sizeIconSVG:  {type: String, attribute: 'size-icon-svg'},
-    _customIcons: {type: Object},
-    iconPixelSize: {type: Number},
-    circlePixelSize: {type: Number}
-  };
+    return {
+      size: {type: String},
+      icon: {type: String},
+      themeColor: {type: String, attribute: 'theme-color'},
+      isLink: {type: Boolean, attribute: 'is-link'},
+      circleBg: {type: Boolean, attribute: 'circle-bg'},
+      hasText: {type: Boolean, attribute: 'has-text'},
+      sizeIcon: {type: String, attribute: 'size-icon'},
+      sizeIconSVG:  {type: String, attribute: 'size-icon-svg'},
+      _customIcons: {type: Object},
+      iconPixelSize: {type: Number},
+      circlePixelSize: {type: Number}
+    };
   }
 
   constructor() {
@@ -55,14 +60,14 @@ export class RpIcon extends LitElement {
         <path d="M5.9,13.87a.78.78,0,0,1-.42.62l-1.91,1.1a.82.82,0,0,1-.84-1.41c.64-.39,1.29-.77,1.95-1.13A.83.83,0,0,1,5.9,13.87Z"/>
         <path d="M18.1,5.64a.7.7,0,0,1,.39-.56c.62-.37,1.24-.74,1.87-1.09a.83.83,0,1,1,.83,1.43c-.62.36-1.24.73-1.87,1.08A.83.83,0,0,1,18.1,5.64Z"/>
         <path d="M9.25,18.83a1.19,1.19,0,0,0,.19.61l.59.89a1.12,1.12,0,0,0,.92.49h2.12a1.12,1.12,0,0,0,.92-.49l.59-.89a1.09,1.09,0,0,0,.18-.61V17.51H9.25ZM6,9.24a6,6,0,0,0,1.5,4,9.75,9.75,0,0,1,1.79,3.15v0h5.52v0a10,10,0,0,1,1.8-3.15A6.06,6.06,0,1,0,6,9.24ZM12,6.49A2.76,2.76,0,0,0,9.25,9.24a.55.55,0,0,1-.55.56.56.56,0,0,1-.55-.56A3.86,3.86,0,0,1,12,5.39a.55.55,0,0,1,.55.55A.55.55,0,0,1,12,6.49Z"/>`
-    }
+    };
   }
 
   /**
    * @method getIconSize
    * @description return the size of the icon depending on the 
    * assigned sizeIcon
-   * @return {Integer} 
+   * @returns {Integer} 
    */
   getIconSize(){
     let size = this.iconPixelSize;
@@ -89,7 +94,7 @@ export class RpIcon extends LitElement {
    * @method getIconSizeStyles
    * @description return the object of the style assigned
    * icons and calls the getIconSize
-   * @return {Object} 
+   * @returns {Object} 
    */
   getIconSizeStyles(){
     let size = `${this.getIconSize()}px`;
@@ -100,7 +105,7 @@ export class RpIcon extends LitElement {
    * @method getCircleSize
    * @description returns the size of the circle based on the 
    * size of the icon
-   * @return {Integer} 
+   * @returns {Integer} 
    */
   getCircleSize(){
     let size = this.circlePixelSize;
@@ -117,7 +122,7 @@ export class RpIcon extends LitElement {
    * @method getCircleSizeStyles
    * @description return the object of the style assigned
    * circles of icon and calls the getCircleSize
-   * @return {Object} 
+   * @returns {Object} 
    */
   getCircleSizeStyles(){
     let size = `${this.getCircleSize()}px`;
@@ -168,7 +173,7 @@ export class RpIcon extends LitElement {
    * @method _calculateViewBox
    * @description return the calcuation of the viewbox
    * for each icon size and calls getIconSize
-   * @return {String} 
+   * @returns {String} 
    */
   _calculateViewBox() {
     let size = this.getIconSize();
@@ -180,10 +185,9 @@ export class RpIcon extends LitElement {
    * @method renderIcon
    * @description renders the icon depending on if it is
    * and iron icon or a custom icon as an html
-   * @return {HTML} 
+   * @returns {HTML} 
    */
   renderIcon() {
-    console.log(this.icon);
     if ( (!this.icon ) || (this.icon == "iron-") ) {
       return html``;
     }
@@ -194,16 +198,17 @@ export class RpIcon extends LitElement {
     }
     if (this._isCustomIcon(this.icon)) {
       let icon = this.icon.split("-").slice(1).join('-');
-      return html`<svg class="icon rp ${this.sizeIconSVG ? this.sizeIconSVG : ''}" viewBox="${this._calculateViewBox()}" style="${styleMap(this.getIconSizeStyles())}" xmlns="http://www.w3.org/2000/svg">${this._renderCustomIcon(icon)}</svg>`
+      return html`<svg class="icon rp ${this.sizeIconSVG ? this.sizeIconSVG : ''}" viewBox="${this._calculateViewBox()}" style="${styleMap(this.getIconSizeStyles())}" xmlns="http://www.w3.org/2000/svg">${this._renderCustomIcon(icon)}</svg>`;
     }
     return html``;
   }
 
   /**
    * @method _renderCustomIcon
+   * @param {Object} icon
    * @description returns the custom icon definition defined
    * above in the constructor
-   * @return {HTML} 
+   * @returns {HTML} 
    */
   _renderCustomIcon(icon) {
     return this._customIcons[icon];
@@ -214,7 +219,7 @@ export class RpIcon extends LitElement {
    * @param {Object} icon
    * @description returns if it is a custom icon or not
    * 
-   * @return {Boolean} 
+   * @returns {Boolean} 
    */
   _isCustomIcon(icon){
     if (icon.startsWith('rp-')) icon = icon.split("-").slice(1).join('-');

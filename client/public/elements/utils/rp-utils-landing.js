@@ -37,8 +37,9 @@ export default class RpUtilsLanding extends Mixin(LitElement)
    * @returns {Array} - Array of objects with section details.
    */
   getPageSections() {
-    let baseHref = `/${this.assetId}`;
-    let sections = [{id:"all", text: "All Info", href: baseHref}];
+    this.disabledSections = [];
+
+    let sections = [{id:"all", text: "All Info", href: ''}];
     if (this.assetType == 'work') {
       sections.push(
         {id: 'records', text: 'Records'},
@@ -60,9 +61,14 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         {id: 'publications', text: 'Publications'}
       );
     }
+
     let i = 0;
     for (let section of sections) {
-      if (!section.href) section.href = `${baseHref}/${section.id}`;
+      if( !this._sectionHasData(section.id) ) {
+        this.disabledSections.push(section.id);
+      }
+
+      if (section.href === undefined) section.href = section.id;
       section.disabled = this.disabledSections.includes(section.id);
       section.index = i;
       i++;
@@ -77,7 +83,10 @@ export default class RpUtilsLanding extends Mixin(LitElement)
    * 
    * @returns {Boolean}
    */
-  _hidePageSection(section){
+  _hidePageSection(section) {
+    let hasData = this._sectionHasData(section);
+    if( !hasData ) return true;
+
     if (this.activeSection.index == 0) {
       return false;
     }
@@ -89,23 +98,34 @@ export default class RpUtilsLanding extends Mixin(LitElement)
   }
 
   /**
+   * @method _sectionHasData
+   * @description all inheriting elements to express if they have data
+   * 
+   * @param {String} section 
+   * @returns Boolean
+   */
+  _sectionHasData(section) {
+    let fn = '_has'+(section.charAt(0).toUpperCase() + section.slice(1));
+    if( this[fn] ) return this[fn]();
+    
+    return true;
+  }
+
+  /**
    * @method _setActiveSection
    * @description Sets the 'activeSection' property based on the current URL. Should be bound to app-state-update.
-   * @param {Array} path - URL path broken into an array.
-   * @param {Number} pathIndex - Index of path array that should contain the page section.
+   * @param {Array} sectionId - id to select.
    */
-  _setActiveSection(path, pathIndex=2){
+  _setActiveSection(sectionId=''){
+    sectionId = sectionId.replace(/^#/, '');
 
     let sections = this.getPageSections();
-    this.activeSection = sections[0];
-    if (path.length >= pathIndex + 1) {
-      for (let section of sections) {
-        if (section.id == path[pathIndex]) {
-          this.activeSection = section;
-          break;
-        }
-      }
+    if( !sectionId ) {
+      this.activeSection = sections[0];
+      return;
     }
+
+    this.activeSection = sections.find(section => section.id === sectionId);
   }
   
   /**

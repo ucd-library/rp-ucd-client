@@ -1,6 +1,7 @@
 import render from "./rp-page-person.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
+import UserUtils from "../../../src/lib/user-utils";
  
 import "../../components/alert";
 import "../../components/avatar";
@@ -11,6 +12,7 @@ import "../../components/hero-image";
 import "../../components/icon";
 import "../../components/link-list";
 import "../../components/modal";
+import "../../components/rp-loading";
 
 
 /**
@@ -31,7 +33,9 @@ export default class RpPagePerson extends RpUtilsLanding {
       totalPublications: {type: Number},
       isOwnProfile: {type: Boolean},
       submitText: {type: String, attribute: 'submitText'},
-      isAdmin: {type: Boolean}
+      isAdmin: {type: Boolean},
+      showResearchSubjectCount : {type: Number},
+      defaultResearchSubjectCount : {type: Number}
     };
   }
 
@@ -43,9 +47,9 @@ export default class RpPagePerson extends RpUtilsLanding {
     this._injectModel('PersonModel', 'AppStateModel');
     
     this.assetType = "person";
+    this.defaultResearchSubjectCount = 4;
 
-    // TODO: make util
-    this.isAdmin = APP_CONFIG.user && (APP_CONFIG.user.roles || []).includes('admin') ? true : false;
+    this.isAdmin = UserUtils.isAdmin(APP_CONFIG.user);
 
     this._resetEleProps();
 
@@ -61,16 +65,16 @@ export default class RpPagePerson extends RpUtilsLanding {
   async _onAppStateUpdate(state) {
     if( state.page !== 'person' ) return;
 
-    let assetId = state.location.path.slice(0, 2).join('/');
+    let assetId = state.location.path.join('/');
     if( this.assetId === assetId ) {
-      this._setActiveSection(state.location.path);
+      this._setActiveSection(state.location.hash);
       return;
     }
     
     this.assetId = assetId;
 
     this.getPageSections();
-    this._setActiveSection(state.location.path);
+    this._setActiveSection(state.location.hash);
     this._resetEleProps();
 
     await Promise.all([
@@ -110,6 +114,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.emailArray = [];
     this.websitesArray = [];
     this.publicationOverviewStatus = 'loading';
+    this.showResearchSubjectCount = this.defaultResearchSubjectCount;
   }
 
   /**
@@ -135,6 +140,7 @@ export default class RpPagePerson extends RpUtilsLanding {
 
   }
 
+
   /**
    * @method _doMainQuery
    * @description Retrieves data for individual on AppStateUpdate. Rerenders.
@@ -145,12 +151,16 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doMainQuery(id){
     let data = await this.PersonModel.get(id);
+    if( data.state === 'error' ) {
+      return this.AppStateModel.show404Page(data);
+    }
     this.individualStatus = data.state;
     if (data.state != 'loaded') {
-      return;
+      return false;
     }
     this.individual = data.payload;
     if (APP_CONFIG.verbose) console.log(data);
+    return false;
   }
 
   /** 
@@ -163,7 +173,12 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @returns {Promise}
    */
   async _doPubOverviewQuery(id) {
+    this.publicationOverviewStatus = 'loading';
     let data = await this.PersonModel.getPubOverview(id);
+    if( data.state === 'error' ) {
+      this.publicationOverviewStatus = 'error';
+      return;
+    }
     if (data.state != 'loaded') {
       return;
     }
@@ -175,7 +190,11 @@ export default class RpPagePerson extends RpUtilsLanding {
       let ct = data.payload.aggregations.facets['@type'][possiblePubType.es];
       if (ct) {
         totalPubs += ct;
-        pubTypes[possiblePubType.id] = {...possiblePubType, ct: ct, displayedOffset: 0, dataStatus: 'loading'};
+        pubTypes[possiblePubType.id] = {
+          ...possiblePubType, 
+          ct: ct, 
+          displayedOffset: 0, 
+          dataStatus: 'loading'};
       }
     }
     this.hasMultiplePubTypes = Object.keys(pubTypes).length > 1;
@@ -186,7 +205,10 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.totalPublications = totalPubs;
     this.publicationOverview  = pubTypes;
 
-    Object.values(pubTypes).map(pt => this._doPubQuery(pt));
+    await Promise.all(Object.values(pubTypes).map(pt => this._doPubQuery(pt)));
+    if ( this.publicationOverviewStatus !== 'error' ) {
+      this.publicationOverviewStatus = 'loaded';
+    }
   }
 
   /**
@@ -199,9 +221,12 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @returns {Promise}
    */
   async _doPubQuery(pubTypeObject, offset=0){
-
     let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
     this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
+    if( data.state === 'error' ) {
+      this.publicationOverviewStatus = 'error';
+      return;
+    }
     if (data.state != 'loaded') return;
 
     if( !this.retrievedPublications[pubTypeObject.id] ) {
@@ -228,6 +253,28 @@ export default class RpPagePerson extends RpUtilsLanding {
     }
     return false;
   }
+
+  /**
+   * @method showPage
+   * @description Shows normal content template for page.
+   * 
+   * @returns {Boolean}
+   */
+  showPage() {
+    if ( this.individualStatus === 'loaded' || this.individualStatus === 'loading' ) return true;
+    return false;
+  }
+
+  /**
+   * @method _getOAId
+   * @description get the open access policy (elements) id for a user
+   * 
+   * @returns {String}
+   */ 
+  _getOAId(){
+    return this.PersonModel.getIdentifier(this.individual, 'oapolicy');
+  }
+
 
   /**
    * @method getPubsByYear
@@ -391,7 +438,12 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   getResearchSubjects(limit=-1) {
     let subjects = this.PersonModel.getResearchSubjects(this.individual);
+    if (limit == -1) return subjects;
     return subjects.slice(0, limit);
+  }
+
+  _showAllResearchSubjects() {
+    this.showResearchSubjectCount = this.getResearchSubjects().length;
   }
 
   /**

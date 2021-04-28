@@ -8,9 +8,9 @@ return html`
   :host {
     display: block;
   }
-  ${styles}
+  ${styles} 
 </style>
-<div class="collections works container bg-light top">
+<div class="collections works container bg-light top ${this.dataStatus}">
   ${this._renderBrowseHeader('Works')}
   <hr class="mb-0">
   <div class="body flex">

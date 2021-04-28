@@ -166,6 +166,7 @@ return html`
       <rp-link-list id="navbar" class="bg-light p-3"
         direction="horizontal"
         .links="${this.getPageSections()}"
+        use-hash
         current-link="${this.activeSection.index}">
       </rp-link-list>
     </div>
@@ -195,7 +196,6 @@ return html`
             html `
               <b style="font-size: 18px; ">Narrower Scope</b>   
             <br /> 
-
             ${this.narrowRelatedSubjects.map(narrow => html ` 
               <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(narrow)}">
                 ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}

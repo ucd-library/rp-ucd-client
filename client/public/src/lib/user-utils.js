@@ -1,3 +1,5 @@
+const rdfUtils = require('./rdf-utils').default;
+
 /**
  * @class UserUtils
  * @description Utility class for interacting with the user object after app login.
@@ -14,14 +16,13 @@ class UserUtils {
    */
   getUserDisplayName(user) {
     if( !user ) return '';
-    if( user.displayname ) {
-      return user.displayname;
+
+    let displayName = rdfUtils.asArray(user.displayname);
+    if( displayName.length > 0 ) {
+      return displayName[0];
     }
-    if( user.displayname ) {
-      return user.displayname;
-    }
-    if( user.givenname && user.sn ) {
-      return user.givenname + ' ' + user.sn;
+    if( rdfUtils.asArray(user.givenname).length > 0 && user.sn ) {
+      return rdfUtils.asArray(user.givenname)[0] + ' ' + user.sn;
     }
     return user.username.split('@')[0];
   }
@@ -66,6 +67,20 @@ class UserUtils {
       if ( field == 'splitUsername') return user.username.split('@')[0];
     }
     return "";
+  }
+
+  /**
+   * @method isAdmin
+   * @description checks if user is a site admin
+   * 
+   * @param {Object} user 
+   * 
+   * @returns {Boolean}
+   */
+  isAdmin(user) {
+    if ( !user ) return false;
+    if ( Array.isArray(user.roles) && user.roles.includes('admin')) return true;
+    return false;
   }
 
 }

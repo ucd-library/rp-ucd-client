@@ -84,7 +84,7 @@ class SubjectService extends BaseService {
           value: [queryUtils.appendIdPrefix(subjectId)]
         }
       }
-    }
+    };
     return this.request({
       url : this.searchUrl,
       fetchOptions : {

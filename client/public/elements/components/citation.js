@@ -1,11 +1,15 @@
 import { LitElement } from 'lit-element';
+import {unsafeHTML} from 'lit-html/directives/unsafe-html.js';
 import render from './citation.tpl.js';
+import rdfUtils from '../../src/lib/rdf-utils';
 
 /**
  * @class RpCitation
  * @description UI component for rendering a publication citation.
  */
-export class RpCitation extends LitElement {
+export class RpCitation extends Mixin(LitElement)
+  .with(LitCorkUtils) {
+
   static get properties() {
     return {
       data: {type: Object},
@@ -26,7 +30,9 @@ export class RpCitation extends LitElement {
     this.href = "";
     this.venue = "";
     this.venueLocation = "";
-    this.authors = [];
+    this.authors = {ranked:[], unranked: []};
+
+    this._injectModel('WorkModel');
   }
 
   /**
@@ -54,7 +60,7 @@ export class RpCitation extends LitElement {
     this.href = this._constructHref(d['@id']);
     this.venue = this._getVenue(d.hasPublicationVenue);
     this.venueLocation = this._getVenueLocation(d);
-    this.authors = this._constructAuthors(d.Authorship);
+    this.authors = this.WorkModel.getAuthors(d);
   }
 
   /**
@@ -76,37 +82,44 @@ export class RpCitation extends LitElement {
    * 
    * @returns {String}
    */
-  _getVenue(venue){
-    if (!venue || !venue.issn ) return '';
-    if( venue.issn  ) return venue.issn;
-    return venue['@id'].replace(APP_CONFIG.data.prefix.ucdId + ':venue/(issn:)?', '');
+  _getVenue(venue={}){
+    let label = this.WorkModel.getVenue(venue);
+
+    // return first (shortest) label, capitalize in case all cap
+    return unsafeHTML(`<span style="text-transform:capitalize">${label.toLowerCase()}</span>`);
   }
 
-  /**
-   * @method _constructAuthors
-   * @description Formats Authorship work property into string
-   * @param {Object|Object[]} authorship 
-   * 
-   * @returns {String}
-   */
-  _constructAuthors(authorship) {
-    if (!authorship) return [];
-    if (!Array.isArray(authorship)) authorship = [authorship];
-    let output = [];
-    for (let author of authorship) {
-      if (!author.hasName || !author.hasName.familyName || !author.hasName.givenName) continue;
-      if (!author['vivo:rank']) author['vivo:rank'] = Infinity;
-      author.text = `${
-        author.hasName.familyName} ${author.hasName.givenName
-        .split("")
-        .filter(letter => letter === letter.toUpperCase() && letter != " ").join("")}`;
-      output.push(author);
-    }
-    output.sort(function (a, b) {
-      return a['vivo:rank'] - b['vivo:rank'];
-    });
-    return output;
-  }
+  // /**
+  //  * @method _constructAuthors
+  //  * @description Formats Authorship work property into string
+  //  * @param {Object|Object[]} authorship 
+  //  * 
+  //  * @returns {String}
+  //  */
+  // _constructAuthors(authorship) {
+  //   let output = [];
+  //   authorship = rdfUtils.asArray(authorship);
+
+  //   for (let author of authorship) {
+  //     let names = rdfUtils.asArray(author.hasName);
+
+  //     for( let hasName of names ) {
+  //       debugger;
+  //       if (!hasName.familyName || !hasName.givenName) continue;
+  //       if (!author['vivo:rank']) author['vivo:rank'] = Infinity;
+  //       author.text = `${hasName.familyName} ${hasName.givenName
+  //         .split("")
+  //         .filter(letter => letter === letter.toUpperCase() && letter != " ").join("")}`;
+
+  //       output.push(author);
+  //       break;
+  //     }
+  //   }
+  //   output.sort(function (a, b) {
+  //     return a['vivo:rank'] - b['vivo:rank'];
+  //   });
+  //   return output;
+  // }
 
   /**
    * @method _getVenueLocation

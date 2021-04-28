@@ -24,18 +24,20 @@ RUN cd client/public && ln -s node_modules/\@ucd-lib/cork-app-load/lib loader
 
 # ucd client code
 COPY client/public/images client/public/images
+COPY client/public/fonts client/public/fonts
 COPY client/public/index.html client/public/index.html
 COPY client/public/login.html client/public/login.html
 COPY client/public/src client/public/src
 COPY client/public/elements client/public/elements
 
-# build dist client
-RUN npm run dist
-
 # add server code
 COPY index.js .
 COPY lib lib
 COPY controllers controllers
+
+# build dist client
+# requires above lib dir
+RUN npm run dist
 
 # set build tags
 ARG CLIENT_TAG

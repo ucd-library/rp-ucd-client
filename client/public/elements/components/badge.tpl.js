@@ -19,6 +19,7 @@ return html`
     border-color: var(--tcolor-bg-primary);
     background-color: var(--tcolor-bg-primary);
     color: var(--tcolor-primary);
+    padding: 5px .7em;
   }
   span.size-lg {
     padding: .55em .9em;
@@ -29,7 +30,10 @@ return html`
     overflow-x: hidden;
     text-overflow: ellipsis;
   }
-  a:hover span.main {
+  a {
+    cursor: pointer;
+  }
+  a:hover span.main, a:focus span.main {
       background-color: var(--tcolor-hover-bg) !important;
       color:  var(--tcolor-hover-text) !important;
       border-color: var(--tcolor-hover-bg) !important;
@@ -67,15 +71,25 @@ return html`
   a:active {
     color: var(--tcolor-text);
   }
-  .dot {
+  /* .dot {
     width: 6px;
     border-radius: 50%;
     display: inline-block;
     height: 6px;
     background-color: var(--tcolor-primary);
-  }
+  } */
   a:hover .dot {
     background-color: #fff;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
   }
 
 </style>

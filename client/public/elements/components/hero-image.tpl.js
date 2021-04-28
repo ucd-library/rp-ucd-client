@@ -5,10 +5,12 @@ export default function render() {
   return html`
   <style>
     :host {
-      display: block;
+      display: flex;
     }
     .container {
       width: 100%;
+      display: flex;
+      flex-direction: column;
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -23,6 +25,9 @@ export default function render() {
       display: flex;
       flex-flow: row nowrap;
       align-items: center;
+    }
+    #main {
+      flex-grow: 1;
     }
     #bottom {
       height: 30px;

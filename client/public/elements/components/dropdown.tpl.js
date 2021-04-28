@@ -46,6 +46,14 @@ export default function render() {
       height: 44px;
       padding-left: 15px;
       padding-right: 10px;
+      border: none;
+      background-color: inherit;
+      color: inherit;
+      font-weight: inherit;
+      font: inherit;
+      padding-top: 0;
+      padding-bottom: 0;
+
     }
     .has-filter-icon #button {
       padding-left: 3px;
@@ -80,7 +88,8 @@ export default function render() {
     iron-icon {
       margin-top: 2px;
     }
-    .color-outline-primary li:hover, .color-bg-primary li:hover {
+    .color-outline-primary li:hover, .color-bg-primary li:hover, 
+    .color-outline-primary li:focus, .color-bg-primary li:focus {
       background-color: var(--tcolor-primary10) !important;
     }
     .color-outline-primary ul, .color-bg-primary ul{
@@ -98,11 +107,13 @@ export default function render() {
       <rp-icon icon=rp-filter></rp-icon>
       <div class="line"></div>
     ` : html``}
-   <div id="button"
-        @click="${this.openDropdown}">
-        <span id="button-text">${this.stickyTitle ? this.stickyTitle : this._parseChoices()[this.chosen].text}</span>
-        <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
-   </div>
+    <button 
+      id="button"
+      type="button"
+      @click="${this.openDropdown}">
+      <span id="button-text">${this.stickyTitle ? this.stickyTitle : this._parseChoices()[this.chosen].text}</span>
+      <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+  </button>
     <iron-dropdown id="dropdown" scroll-action="cancel" vertical-align="top" vertical-offset=${this.stickyTitle ? "35" : "0"}>
       <ul slot="dropdown-content">${this._parseChoices().map(choice => this._renderChoice(choice))}</ul>
     </iron-dropdown>

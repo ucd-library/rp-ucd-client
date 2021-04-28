@@ -9,11 +9,12 @@ import "./icon";
 export class RpQuickSearch extends LitElement {
   static get properties() {
     return {
-      inputWidth: {type: Number, attribute: "input-width"},
+      // inputWidth: {type: Number, attribute: "input-width"},
       inputValue: {type: String, attribute: "input-value", reflect: true},
       placeholder: {type: String},
       opened: {type: Boolean},
-      closing: {type: Boolean}
+      closing: {type: Boolean},
+      label: {type: String}
     };
   }
 
@@ -22,22 +23,11 @@ export class RpQuickSearch extends LitElement {
     this.render = render.bind(this);
     this.placeholder = "Search the registry";
     this.opened = false;
-    this.inputWidth = 220;
+    // this.inputWidth = 220;
     this.inputValue = "";
     this.preventOpen = false;
     this.closing = false;
-
-    this._newSearch = new CustomEvent('new-search', {
-      detail: {
-        message: 'A new search has been triggered'
-      }
-    });
-
-    this._inputStatus = new CustomEvent('input-status', {
-      detail: {
-        message: 'The input has either been expanded or collapsed.'
-      }
-    });
+    this.label = "Press to open sitewide search input";
   }
 
 
@@ -50,13 +40,18 @@ export class RpQuickSearch extends LitElement {
 
     if (props.has('opened')) {
       if (this.opened) {
-        let w = this.inputWidth;
-        this.inputWidth = 0;
-        this.inputWidth = w;
+        // let w = this.inputWidth;
+        // this.inputWidth = 0;
+        // this.inputWidth = w;
         let i = this.shadowRoot.getElementById('search-input');
         i.focus();
       }
-      this.dispatchEvent(this._inputStatus);
+
+      this.dispatchEvent(new CustomEvent('input-status', {
+        detail: {
+          message: 'The input has either been expanded or collapsed.'
+        }
+      }));
     }
   }
 
@@ -134,7 +129,7 @@ export class RpQuickSearch extends LitElement {
       if (!this.validateSearchText()) {
         return;
       }
-      this.dispatchEvent(this._newSearch);
+      this.dispatchEvent(this._newSearchEvent());
     }
 
     else {
@@ -203,8 +198,22 @@ export class RpQuickSearch extends LitElement {
       if (!this.validateSearchText()) {
         return;
       }
-      this.dispatchEvent(this._newSearch);
+      this.dispatchEvent(this._newSearchEvent());
     }
+  }
+
+  /**
+   * @method _newSearchEvent
+   * @description create new custom search event
+   * 
+   * @returns {CustomEvent}
+   */
+  _newSearchEvent() {
+    return new CustomEvent('new-search', {
+      detail: {
+        message: 'A new search has been triggered'
+      }
+    });
   }
 }
 
