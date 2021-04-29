@@ -12,7 +12,7 @@ import "../../components/icon";
 import "../../components/link-list";
 import "../../components/person-preview";
 import "../../components/grant-preview";
-import { data } from "../../../src/stores/GrantStore.js";
+//import { data } from "../../../src/stores/GrantStore.js";
 
 /**
  * @class RpPageGrant
@@ -122,7 +122,7 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.assetId = this.urlPathId;
     if ( !this.assetId ) return;
 
-    this._setActiveSection(path, 3);
+    this._setActiveSection(state.location.hash);
     await Promise.all([
       this._doMainQuery(this.assetId), 
       this._doAboutQuery(this.assetId),
@@ -185,7 +185,7 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.purpose = data.payload.description;
 
     //delete this when description is added
-    // if(!this.about){ 
+    // if(!this.purpose){ 
     //   this.purpose = `Lorem ipsum dolor sit amet, consectetur 
     //                 adipiscing elit, sed do eiusmod tempor 
     //                 incididunt ut labore et dolore magna aliqua. 
