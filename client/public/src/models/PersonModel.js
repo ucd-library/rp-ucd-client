@@ -91,10 +91,6 @@ class PersonModel extends BaseModel {
     } catch (error) {
       // error is recorded in store
     }
-    console.log("State:",state);
-
-    console.log("Has Request:",this.store.data.pubsByRequest[requestId]);
-
     return this.store.data.pubsByRequest[requestId];
   }
 
@@ -122,7 +118,6 @@ class PersonModel extends BaseModel {
       // error is recorded in store
     }
 
-    console.log("Has Grant:",this.store.data.grantsByRequest[requestId]);
 
     return this.store.data.grantsByRequest[requestId];
   }

@@ -394,8 +394,28 @@ return html`
         
           </div>
         </div>
-        <h2 class="mb-0">Selected Grants</h2>
+        <h2 class="mb-0">Selected Grants</h2>       
+          <div>
+            <h3 class="weight-regular mt-0">
+              <i>Active (${this.activeGrant.length})</i>
+              ${this.activeGrant.map(grant => 
+                  html`<h3 class="weight-regular mt-0"><a href="${grant.grant_url}">${grant.title}</a><br />
+                  ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} | ${grant.indivRole} | ${grant.funding_agency} </h3>
+                  `
+              )}
+            </h3>
+          </div>
 
+          <div>
+            <h3 class="weight-regular mt-0">
+              <i>Completed (${this.inactiveGrant.length})</i>
+              ${this.inactiveGrant.map(grant => 
+                  html`<h3 class="weight-regular mt-0"><a href=${grant.grant_url}>${grant.title}</a><br />
+                  ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} | ${grant.indivRole} | ${grant.funding_agency} </h3>
+                  `
+              )}
+            </h3>
+          </div>
       </section>
 
       </div>

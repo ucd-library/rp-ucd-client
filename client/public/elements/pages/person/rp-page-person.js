@@ -27,9 +27,8 @@ export default class RpPagePerson extends RpUtilsLanding {
       individual: {type: Object},
       individualStatus: {type: String},
       publicationOverviewStatus: {type: String},
-      grantOverviewStatus: {type: String},
+      grantStatus: {type: String},
       publicationOverview: {type: Object},
-      grantOverview: {type: Object},
       hasMultiplePubTypes: {type: Boolean},
       hasMultipleGrantTypes: {type: Boolean},
       retrievedPublications: {type: Object},
@@ -40,7 +39,11 @@ export default class RpPagePerson extends RpUtilsLanding {
       submitText: {type: String, attribute: 'submitText'},
       isAdmin: {type: Boolean},
       showResearchSubjectCount : {type: Number},
-      defaultResearchSubjectCount : {type: Number}
+      defaultResearchSubjectCount : {type: Number},
+      tempGrantObject: {type: Object},
+      activeGrant: {type:Array},
+      inactiveGrant: {type:Array}
+
     };
   }
 
@@ -48,6 +51,8 @@ export default class RpPagePerson extends RpUtilsLanding {
     super();
     this.render = render.bind(this);
     this.submitText = "Edit Publication";
+    this.activeGrant = [];
+    this.inactiveGrant = [];
 
     this._injectModel('PersonModel', 'AppStateModel');
     
@@ -111,6 +116,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   _resetEleProps() {
     this.individual = {};
+    this.tempGrantObject = {};
     this.individualStatus = 'loading';
     this.retrievedPublications = {};
     this.totalPublications = 0;
@@ -120,6 +126,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.hasMultiplePubTypes = false;
     this.emailArray = [];
     this.websitesArray = [];
+    this.grantStatus = 'loading';
     this.publicationOverviewStatus = 'loading';
     this.showResearchSubjectCount = this.defaultResearchSubjectCount;
   }
@@ -231,6 +238,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doPubQuery(pubTypeObject, offset=0){
     let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
+
     this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
     if( data.state === 'error' ) {
       this.publicationOverviewStatus = 'error';
@@ -251,27 +259,62 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @method _doGrantQuery
    * @description Retrieves grants in chronological order. Rerenders.
    * 
-   * @param {Object} pubTypeObject - Object containing metadata about the publication type.
-   * @param {Number} offset - Offsets query by this value.
-   * 
    * @returns {Promise}
    */
   async _doGrantQuery(){
     let data = await this.PersonModel.getGrants(this.assetId);
-    console.log("Grant query:",data);
-    // this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
-    // if( data.state === 'error' ) {
-    //   this.publicationOverviewStatus = 'error';
-    //   return;
-    // }
-    // if (data.state != 'loaded') return;
+    this.totalGrants = data.payload.total;
+    this.retrievedGrants = data.payload.results;
+    let activeGrant = [];
+    let inactiveGrant = [];
+    this.retrievedGrants.forEach(function(grant){
+      let dateStart = new Date(grant.dateTimeInterval.start.dateTime);
+      let dateEnd = new Date(grant.dateTimeInterval.end.dateTime);
+      let today = new Date();
 
-    // if( !this.retrievedPublications[pubTypeObject.id] ) {
-    //   this.retrievedPublications[pubTypeObject.id] = [];
-    // }
+      let role = "";
 
-    // this.retrievedPublications[pubTypeObject.id].push(...data.payload.results);
-    // console.log("RP:", this.retrievedPublications);
+      switch (grant.relates[0]["@type"]) {
+      case "vivo:PrincipalInvestigatorRole":
+        role = "Principal Investigator"; 
+        break;
+      case "vivo:coInvestigatorRole":
+        role = "Co-Investigator"; 
+        break;
+      default: 
+        role = "No Role Assigned";
+      }
+
+      let grant_url =  "../" + grant["@id"].split(":")[1];
+      let tempGrantObject = {
+        "title": grant.label,
+        "yearStart": dateStart.getFullYear(),
+        "yearEnd": dateEnd.getFullYear(),
+        "grant_type": "Grant",
+        "indivRole": role,
+        "funding_agency": grant.assignedBy.label,
+        "grant_url": grant_url
+      };
+
+      if(today > dateEnd){
+        inactiveGrant.push(tempGrantObject);
+      } else if(today <= dateEnd){
+        activeGrant.push(tempGrantObject);
+      }
+  
+    });
+
+
+    this.inactiveGrant = inactiveGrant;
+    this.activeGrant = activeGrant;
+
+ 
+    if( data.state === 'error' ) {
+      this.grantStatus = 'error';
+      return;
+    }
+    if (data.state != 'loaded') return;
+
     this.requestUpdate();
   }
   
