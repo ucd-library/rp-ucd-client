@@ -10,7 +10,8 @@ export class RpModal extends LitElement {
     return {
       visible: {type: Boolean},
       contentTitle: {type: String, attribute: "content-title"},
-      dismissText: {type: String, attribute: 'dismiss-text'}
+      dismissText: {type: String, attribute: 'dismiss-text'},
+      closeOnConfirm : {type: Boolean}
     };
   }
 
@@ -20,6 +21,7 @@ export class RpModal extends LitElement {
     this.visible = false;
     this.contentTitle = "";
     this.dismissText = "Cancel";
+    this.closeOnConfirm = true;
   }
 
   /**
@@ -44,6 +46,19 @@ export class RpModal extends LitElement {
    */
   toggle() {
     this.visible = !this.visible;
+  }
+
+  /**
+   * @method _onConfirmClicked
+   * @description bound to click event on confirm slot.  Close modal
+   * if this.closeOnConfirm is set to true.
+   * 
+   * TODO: JM - ensure click event on slot element has cross brower support
+   */
+  _onConfirmClicked() {
+    if( this.closeOnConfirm ) {
+      this.hide();
+    }
   }
 
 }

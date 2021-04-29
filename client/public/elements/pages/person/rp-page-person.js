@@ -75,16 +75,16 @@ export default class RpPagePerson extends RpUtilsLanding {
   async _onAppStateUpdate(state) {
     if( state.page !== 'person' ) return;
 
-    let assetId = state.location.path.slice(0, 2).join('/');
+    let assetId = state.location.path.join('/');
     if( this.assetId === assetId ) {
-      this._setActiveSection(state.location.path);
+      this._setActiveSection(state.location.hash);
       return;
     }
     
     this.assetId = assetId;
 
     this.getPageSections();
-    this._setActiveSection(state.location.path);
+    this._setActiveSection(state.location.hash);
     this._resetEleProps();
 
     await Promise.all([
@@ -355,12 +355,13 @@ export default class RpPagePerson extends RpUtilsLanding {
   }
 
   /**
-   * @method _todo
-   * @description needs to get uid for user
+   * @method _getOAId
+   * @description get the open access policy (elements) id for a user
    * 
+   * @returns {String}
    */ 
-  _todo(){
-    alert('TODO: need to send user to: https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=[ElementsId]');
+  _getOAId(){
+    return this.PersonModel.getIdentifier(this.individual, 'oapolicy');
   }
 
 

@@ -1,6 +1,6 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
-import {unsafeHTML} from 'lit-html/directives/unsafe-html.js';
+import {renderHTML} from '../../../src/lib/santize-html.js';
 
 export default function render() {
 return html`
@@ -90,17 +90,18 @@ return html`
     <div class="page-header container-wide">
       <div class="hero">
         <div class="title mb-0"> 
-          <h1 class="text-secondary h1 bold mb-0 text-center" aria-label="Work title">${this.work.label}</h1>
+          <h1 class="text-secondary h1 bold mb-0 text-center" aria-label="Work title">${renderHTML(this.work.label)}</h1>
         </div>
-        <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.map((author, i) => html`
-          <span>${author.nameFirst} ${author.nameLast}</span>${i + 1 < this.authors.length ? html`<span>, </span>` : html``}
+        <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.ranked.map((author, i) => html`
+          <span>${author._client.givenName} ${author._client.familyName}</span>${i + 1 < this.authors.ranked.length ? html`<span>, </span>` : html``}
         `)}</p></div>
         <div class="type text-center">${this.workType}</div>
       </div>
       <rp-link-list class="bg-light p-3"
-                  direction="horizontal"
-                  .links="${this.getPageSections()}"
-                  current-link="${this.activeSection.index}">
+        direction="horizontal"
+        .links="${this.getPageSections()}"
+        use-hash
+        current-link="${this.activeSection.index}">
       </rp-link-list>
     </div>
     <div class="sections container">
@@ -135,7 +136,7 @@ return html`
         ${this.work.abstract ? 
           html`
           <h2>Abstract</h2>
-          <div>${unsafeHTML(this.work.abstract)}</div>
+          <div>${renderHTML(this.work.abstract)}</div>
           ` 
           :html``
         }
@@ -182,14 +183,14 @@ return html`
             </rp-person-preview>
           `)}
         </div>
-        ${this.hasOtherAuthors ? 
+        <!-- ${this.hasOtherAuthors ? 
         html`
           <h1 class="weight-regular">Other Authors</h1>
-          ${this.authors.filter(author => author.isOtherUniversity).map(author => html`
-            <div><span class="name">${author.nameLast}, ${author.nameFirst}</span></div>
+          ${this.authors.ranked.filter(author => !author._client.aggieExpertsAuthor).map(author => html`
+            <div><span class="name">${author._client.familyName}, ${author._client.givenName}</span></div>
           `)}
         ` 
-        :html``}
+        :html``} -->
      </section>
 
     </div>

@@ -98,7 +98,24 @@ export class RpBadge extends LitElement {
         ${this._renderSpan()}
       </a>`;
     }
-    return html`${this._renderSpan()}`;
+    return html`<a 
+      style="color:inherit;"
+      tabindex="${this.hideFromTab ? "-1": "0"}"
+      @keyup="${this._onKeyUp}">
+      ${this._renderSpan()}
+    </a>`;
+  }
+
+  /**
+   * @method _onKeyUp
+   * @description fake click events on keyup in no href
+   * 
+   * @param {*} e 
+   * @returns 
+   */
+  _onKeyUp(e) {
+    if( e.which !== 13 ) return;
+    this.dispatchEvent(new CustomEvent('click'));
   }
 
   /**
@@ -110,9 +127,7 @@ export class RpBadge extends LitElement {
   _renderSpan() {
     return html`<span class=${classMap(this._constructClasses())} style=${styleMap(this._constructStyles())}>
       ${this.ellipsis ? html`
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+        <iron-icon icon="more-horiz"></iron-icon>
         <span class="sr-only">See more subjects</span>
       ` : html`<slot></slot>`}
       

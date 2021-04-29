@@ -27,7 +27,17 @@ export default class RpPageHelp extends Mixin(LitElement)
     this.isLoggedIn = APP_CONFIG.user ? true : false;
     this.imgPath = '/images/faq/';
 
-    this.AppStateModel.get().then(e => this._renderDelay(e));
+    // need to wait until window finishes loaded to set page
+    // for first time
+    window.addEventListener('load', () => {
+      this.AppStateModel.get().then(e => this._renderDelay(e));
+    });
+  }
+
+  updated(props) {
+    if( props.has('visible') && this.visible ) {
+      this.AppStateModel.get().then(e => this._renderDelay(e));
+    }
   }
 
   /**
@@ -48,14 +58,20 @@ export default class RpPageHelp extends Mixin(LitElement)
    * on dame for correct scroll position
    * 
    * @param {Object} state 
+   * @param {Number} retry 
    */
-  _renderDelay(state) {
-    if (state.location.hash) {
-      requestAnimationFrame(async () => {
-        let pos = this.shadowRoot.getElementById(state.location.hash);
-        if (pos) window.scrollTo(0, pos.getBoundingClientRect().top + window.pageYOffset);
-      });
-    }
+  async _renderDelay(state) {
+    if ( !state.location.hash ) return;
+    await this.updateComplete;
+    
+    let pos = this.shadowRoot.querySelector(`[jump-to="${state.location.hash}"]`);
+    if( !pos ) return;
+
+    requestAnimationFrame(() => {
+      let posY = Math.floor(pos.getBoundingClientRect().top+ window.pageYOffset);
+      window.scrollTo(0, posY);
+      pos.expanded = true;
+    });
   }
 
 }

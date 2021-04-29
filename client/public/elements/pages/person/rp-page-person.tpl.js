@@ -31,7 +31,10 @@ return html`
     align-items: center;
   }
   #researchLabelChild {
-    text-align: center;
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+    justify-content: center;
   }
   #about .cols {
     display: flex;
@@ -177,11 +180,19 @@ return html`
     border-color: var(--tcolor-hover-bg);
   } */
 
+  rp-modal ol li:before, rp-modal ol li::marker {
+    text-align: left !important;
+    width: 15px !important;
+  }
+  rp-modal ol li {
+    padding-left: 5px;
+  }
+
   @media (min-width: 800px){
     .own-profile .box-title {
       flex-flow: row nowrap;
       justify-content: space-between;
-  }
+    }
     .own-profile .box-title-icons {
       justify-content: unset;
     }
@@ -195,6 +206,26 @@ return html`
 </style>
 
 
+<rp-modal content-title='Edit Keywords' id="modal-keyword-edit">
+  Keywords are managed via the "Fields of Research" section of your <b>UC Publication Management System</b> profile. 
+  Clicking the "Edit Keywords" button below will redirect you to the UC Publication Management System. Any changes 
+  made there will be reflected on your Aggie Experts profile. 
+
+  <div style="margin-top: 15px"><b>Steps to Add/Delete Keywords:</b></div>
+  <ol style="margin-top: 5px; padding-left: 20px;">
+    <li>In the "About" block, select the "Edit" button located just to the right of the "Fields of Research" label.</li>
+    <li>To add keywords, search for and select a subject from "Available values." To remove keywords, select an item 
+      from the "Your Selection" list.</li>
+    <li>Select "Save" to confirm your changes.</li>
+  </ol>
+
+  <div slot="confirmButton">
+    <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=${this._getOAId()}&em=true'>
+    <div class="button">Edit Keywords</div>
+    </a>
+  </div> 
+</rp-modal>
+
 <div class="individual top ${this.isOwnProfile ? "own-profile" : ""}">
   <div class="data ${this.individualStatus}" ?hidden="${!this.showPage() }">
     <div class="page-header container-wide">
@@ -207,16 +238,24 @@ return html`
           <div slot="main" class="heromain">
             <rp-avatar size="lg"></rp-avatar>
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
-            <p class="text-light h3 mb-2 mt-1 text-center">${this.getHeadlineTitle()}</p>
+
+            <div class="text-light h3 mb-2 mt-1 text-center">
+              ${this.getHeadlineTitle()}
+              <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
+                <rp-icon style="vertical-align:middle;" 
+                  icon="iron-editor:mode-edit" 
+                  has-text 
+                  circle-bg 
+                  is-link size="lg">
+                  <div slot="tooltip">Edit Positions</div>
+                </rp-icon> 
+              </a>
+            </div>
+
             ${this.getResearchSubjects(1).length > 0 ? html`
               <div>
                 <p class="text-light h3 text-center bold">
                     My research areas include:
-                    ${this.isOwnProfile ? html`
-                      &nbsp;&nbsp;<rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg" @click="${e => this._todo()}">
-                      ` : html``
-                    }
-
                 </p>
                   <div id="researchLabel" class="flex flex-wrap justify-content-center align-items-center">
                     <div id="researchLabelChild">
@@ -228,8 +267,21 @@ return html`
                     <rp-badge size="lg" 
                       ellipsis
                       ?hidden="${(this.showResearchSubjectCount >= this.getResearchSubjects().length)}" 
-                      @click="${this._showAllResearchSubjects}">See more
+                      @click="${this._showAllResearchSubjects}">
                     </rp-badge>
+                    ${this.isOwnProfile ? html`
+                      &nbsp;&nbsp;
+                      <rp-icon style="vertical-align:middle;"
+                        @click="${e => this.shadowRoot.getElementById('modal-keyword-edit').toggle()}"
+                        icon="iron-editor:mode-edit" 
+                        role="button"
+                        circle-bg 
+                        is-link has-text
+                        size="lg">
+                        <div slot="tooltip">Edit Keywords</div>
+                      </rp-icon>
+                      ` : html``
+                    }
                     <br />
                     </div>
                   </div>
@@ -246,9 +298,10 @@ return html`
 
       </rp-hero-image>
       <rp-link-list class="bg-light p-3"
-                    direction="horizontal"
-                    .links="${this.getPageSections()}"
-                    current-link="${this.activeSection.index}">
+        direction="horizontal"
+        .links="${this.getPageSections()}"
+        use-hash
+        current-link="${this.activeSection.index}">
       </rp-link-list>
     </div>
 
@@ -262,21 +315,25 @@ return html`
             ex ea commodo consequat. </p>
           <div class="cols">
             <div>
-              <div>
+              <!-- <div>
                 <div>
                   <h2 class="h3 mb-2">Positions&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
                       <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
-                        <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" circle-bg is-link size="lg">
+                        <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
+                          <div slot="tooltip">Edit Positions</div>
+                        </rp-icon>
                       </a>
                       ` : html``
                     }
                   </h2>
-              </div>
+                </div> 
 
 
                 ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
-              </div>
+
+                
+              </div>  -->
               ${this._showSubSection('contact') ? html`
                 <div>
                   <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
@@ -319,7 +376,7 @@ return html`
 
             <div class="pub-count">${this.totalPublications}</div>
           
-            <rp-modal content-title='Edit "Publications"' id="modal-pub-edit">
+            <rp-modal content-title='Edit Publications' id="modal-pub-edit">
               Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
               redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
               <div slot="confirmButton">

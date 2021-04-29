@@ -1,5 +1,5 @@
 import { html } from 'lit-element';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { renderHTML } from '../../src/lib/santize-html.js';
 
 export default function render() {
   return html`
@@ -60,12 +60,12 @@ export default function render() {
     <div class=container>
       <div class="icon-container"><rp-icon icon="rp-subject" circle-bg theme-color='subject' size-icon-svg="extralgSVGIcon" size="extralg"></rp-icon></div>
       <div class="text-container">
-        <a class="title" href="${this.getLink()}">${unsafeHTML(this.title)}</a>
+        <a class="title" href="${this.getLink()}">${renderHTML(this.title)}</a>
         <div class="below-title">
           <span>Research Subject</span>
         </div>
         ${this.showSnippet && this.getSnippet() ? html`
-        <div class="snippet">${unsafeHTML(this.getSnippet())}</div>
+        <div class="snippet">${renderHTML(this.getSnippet())}</div>
       ` : html``}
       </div>
     </div>

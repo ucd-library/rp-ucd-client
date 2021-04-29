@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import render from "./researcher-profiles.tpl.js";
 import { styleMap } from 'lit-html/directives/style-map';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import {renderHTML} from '../src/lib/santize-html.js';
 
 // sets globals Mixin and EventInterface
 import "@ucd-lib/cork-app-utils";
@@ -163,8 +163,6 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this._resizeQuickSearch();
   }
 
-
-
   /**
    * @method _onAppStateUpdate
    * @description bound to AppStateModel app-state-update event
@@ -172,11 +170,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onAppStateUpdate(e) {
-    if ( APP_CONFIG.verbose ) {
-      console.log('');
-      console.log('=======---  APP STATE CHANGE ---=======');
-      console.log('app state:', e);
-    }
+    rpLogger.log('_onAppStateUpdate', e);
     
     if ( e.location.query && e.location.query.s ) {
       this.isSearch = true;
@@ -186,7 +180,6 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       this.textQuery="";
       this.isSearch = false;
     }
-
 
     let page = e.page;
     if( this.page === page ) return;
@@ -383,7 +376,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
         columnTemplates.push(
           html`<div class="footer-column">
             ${this.theme[col].title ? html`<div class="title">${this.theme[col].title}</div>` : html``}
-            ${this.theme[col].content ? html`${this.theme[col].content.map(line => html`<div class="col-item">${unsafeHTML(line)}</div>`)}` : html``}
+            ${this.theme[col].content ? html`${this.theme[col].content.map(line => html`<div class="col-item">${renderHTML(line)}</div>`)}` : html``}
           </div>`
         );
       }
