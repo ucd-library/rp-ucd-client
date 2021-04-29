@@ -301,12 +301,20 @@ export default class RpPagePerson extends RpUtilsLanding {
       } else if(today <= dateEnd){
         activeGrant.push(tempGrantObject);
       }
-  
+      console.log(tempGrantObject);
     });
 
 
     this.inactiveGrant = inactiveGrant;
     this.activeGrant = activeGrant;
+
+    this.inactiveGrant.sort(function(a, b){
+      return a.yearStart-b.yearStart;
+    });
+
+    this.activeGrant.sort(function(a, b){
+      return a.yearStart-b.yearStart;
+    });
 
  
     if( data.state === 'error' ) {

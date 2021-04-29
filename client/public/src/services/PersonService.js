@@ -88,6 +88,7 @@ class PersonService extends BaseService {
   async getGrants(id) {
     let cacheId = this.getGrantsRequestId(id);
     let query = {
+      limit: 100,
       filters: {
         'relates.@id': {
           type: "keyword", 
