@@ -263,7 +263,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doGrantQuery(){
     let data = await this.PersonModel.getGrants(this.assetId);
-    this.totalGrants = data.payload.total;
+    this.totalGrants = typeof data.payload.total === 'object' ? 0 : data.payload.total;
     this.retrievedGrants = data.payload.results;
     let activeGrant = [];
     let inactiveGrant = [];
@@ -301,7 +301,6 @@ export default class RpPagePerson extends RpUtilsLanding {
       } else if(today <= dateEnd){
         activeGrant.push(tempGrantObject);
       }
-      console.log(tempGrantObject);
     });
 
 
@@ -421,48 +420,48 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @method showMoreButton
    * @description used to toggle show more button
    * 
-   * @param {Object} pubType 
+   * @param {Object} buttonType 
    * 
    * @returns {Boolean}
    */
-  showMoreButton(pubType) {
-    return pubType.displayedOffset < pubType.ct;
+  showMoreButton(buttonType) {
+    return buttonType.displayedOffset < buttonType.ct;
   }
 
   /**
    * @method showMoreButton
    * @description used to toggle show less button
    * 
-   * @param {Object} pubType 
+   * @param {Object} buttonType 
    * 
    * @returns {Boolean}
    */
-  showLessButton(pubType) {
-    return pubType.displayedOffset > pubType.ct;
+  showLessButton(buttonType) {
+    return buttonType.displayedOffset > buttonType.ct;
   }
 
   /**
    * @method showMoreButton
    * @description used to show more button value
    * 
-   * @param {Object} pubType 
+   * @param {Object} buttonType 
    * 
    * @returns {Number}
    */
-  showMoreCount(pubType) {
-    return pubType.ct - pubType.displayedOffset < 10 ? pubType.ct - pubType.displayedOffset : 10;
+  showMoreCount(buttonType) {
+    return buttonType.ct - buttonType.displayedOffset < 10 ? buttonType.ct - buttonType.displayedOffset : 10;
   }
 
   /**
    * @method showLessCount
    * @description used to show less button value
    * 
-   * @param {Object} pubType 
+   * @param {Object} buttonType 
    * 
    * @returns {Number}
    */
-  showLessCount(pubType) {
-    return pubType.displayedOffset > pubType.ct ? pubType.ct - (pubType.displayedOffset - 10) : 10;
+  showLessCount(buttonType) {
+    return buttonType.displayedOffset > buttonType.ct ? buttonType.ct - (buttonType.displayedOffset - 10) : 10;
   }
 
 

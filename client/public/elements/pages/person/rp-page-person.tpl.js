@@ -451,6 +451,7 @@ return html`
         
           </div>
         </div>
+        ${this.totalGrants != 0 ? html `
         <h2 class="mb-0">Selected Grants</h2>       
           <div>
             <h3 class="weight-regular mt-0">
@@ -473,6 +474,8 @@ return html`
               )}
             </h3>
           </div>
+        `
+        :html``}
       </section>
 
       </div>
