@@ -507,6 +507,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       ${this.hasAz ? html`
         <rp-a-z selected-letter="${this.azSelected}"
                 .disabledLetters="${this.azDisabled}"
+                base-href="${this.id+(this.subFacet !== 'none' ? '/'+this.subFacet : '')}"
                 @changed-letter=${e => this._onUserAction("az", e.target.selectedLetter)}>
         </rp-a-z>
       ` : html``}

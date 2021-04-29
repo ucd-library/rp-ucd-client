@@ -48,6 +48,16 @@ export default function render() {
     .letter.selected:hover {
       color: var(--tcolor-primary);
     }
+    a {
+      text-decoration: none;
+      color: var(--tcolor-primary);
+    }
+    a:visited {
+      color: var(--tcolor-primary);
+    }
+    .letter[disabled] a {
+      color: var(--tcolor-link-disabled-text);
+    }
   </style>
   <div class=container>
     ${this.azlist.map(letter => this._renderAz(letter))}
