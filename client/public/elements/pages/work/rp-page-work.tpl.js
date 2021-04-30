@@ -121,14 +121,14 @@ return html`
            `
            :html``
           }
-        ${this.isOwnWork ? 
+        <!-- ${this.isOwnWork ? 
           html`
           <h2>Citation Data & Metrics</h2>
           <ul class="pub-links">
             <li><iron-icon icon="hardware:keyboard-arrow-down"></iron-icon><a href="https://oapolicy.universityofcalifornia.edu/">UC Publication Management System</a></li>
           </ul>
            ` 
-          :html``}
+          :html``} -->
      </section>
 
      <section id="overview" class="bg-light mt-3" ?hidden="${this._hidePageSection('overview')}">

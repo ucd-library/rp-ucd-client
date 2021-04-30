@@ -29,7 +29,7 @@ class RdfUtils {
       if( obj.length === 0 ) return null;
       return obj[0];
     }
-    return obj || null;
+    return obj === undefined ? null : obj;
   }
 
 }

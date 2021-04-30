@@ -1,4 +1,5 @@
 import { LitElement } from 'lit-element';
+import {unsafeHTML} from 'lit-html/directives/unsafe-html.js';
 import render from './citation.tpl.js';
 import rdfUtils from '../../src/lib/rdf-utils';
 
@@ -81,10 +82,11 @@ export class RpCitation extends Mixin(LitElement)
    * 
    * @returns {String}
    */
-  _getVenue(venue){
-    if (!venue || !venue.issn ) return '';
-    if( venue.issn  ) return venue.issn;
-    return venue['@id'].replace(APP_CONFIG.data.prefix.ucdId + ':venue/(issn:)?', '');
+  _getVenue(venue={}){
+    let label = this.WorkModel.getVenue(venue);
+
+    // return first (shortest) label, capitalize in case all cap
+    return unsafeHTML(`<span style="text-transform:capitalize">${label.toLowerCase()}</span>`);
   }
 
   // /**

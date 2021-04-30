@@ -195,13 +195,18 @@ class CollectionModel extends BaseModel {
     if ( subjectFilter ) id = `${id}__${subjectFilter}`;
 
     // Filter by facets if applicable
-    let mainFacetType = AssetDefs.getMainFacetById(mainFacet).es;
+    let mainFacetDef = AssetDefs.getMainFacetById(mainFacet) || {};
+    let mainFacetType = mainFacetDef.es;
     let subFacetType = AssetDefs.getSubFacetById(mainFacet, subFacet).es;
     if ( subFacetType ) {
       q.filters['@type'] = QueryUtils.getKeywordFilter([mainFacetType, subFacetType]);
     }
     else if( mainFacetType ) {
       q.filters['@type'] = QueryUtils.getKeywordFilter(mainFacetType);
+    }
+
+    if( mainFacetDef.defaultSortField ) {
+      q.sort.push({[mainFacetDef.defaultSortField]: 'asc'});
     }
 
     // Filter by subject id if applicable
