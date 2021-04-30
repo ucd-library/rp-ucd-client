@@ -272,7 +272,7 @@ class AssetDefs {
       'hasContactInfo.givenName.text^8',
       "_.organizationLabel.text^6",
       "_.personLabel.text^6",
-      "_.publicationLabel.text^6",
+      "_.workLabel.text^6",
       "_.conceptLabel.text",
       "_.subjectAreaLabel.text^2",
       "_.grantLabel.text^6",
