@@ -110,61 +110,79 @@ class PersonModel extends BaseModel {
    * @method getTitles
    * @description - Returns ordered array of titles for individual.
    * @param {Object} individual 
+   * @param {String} type
    * 
    * @returns {Object[]} {title:string,orgs:["string"]}
    */
-  getTitles(individual){
+  getTitles(individual={}, type='odr'){
     let titles = [];
-    if (!individual) {
-      return titles;
-    }
-    if (typeof individual.hasContactInfo === 'object') {
-      let contactInfo = [];
-      if (Array.isArray(individual.hasContactInfo)) {
-        contactInfo = [...individual.hasContactInfo]
-          .sort((a,b)=>(a["vivo:rank"]?a["vivo:rank"]:100)-(b["vivo:rank"]?b["vivo:rank"]:100));
-      }
-      else {
-        contactInfo = [individual.hasContactInfo];
-      }
-      // If first contact is odr, than only use odr,
-      let identifier_match=null;
-      if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^odr/)) {
-        identifier_match=/^odr/;
-      } else if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^pps/)) {
-        identifier_match=/^pps/;    // If first is pps only include pps
-      } else {                 // Otherwise include them all
-        identifier_match=null;
-      }
-      // Next join every organization with a common title, where titles are organized
-      // by rank.
-      for (let c of contactInfo) {
-        if (!(c.title && ( !identifier_match || (c.identifier && c.identifier.match(identifier_match)))))
-          continue;
-        if ( !Array.isArray(c.title)) c.title=[c.title];
-        for (const t of c.title) {
-          let ind=titles.findIndex((have)=>have.title===t);
-          if (ind > -1) {
-            if (c.organization) {
-              if ( !Array.isArray(c.organization) ) c.organization=[c.organization];
-              for (const o of c.organization) {
-                if (titles[ind].orgs.findIndex((have)=>have===o) === -1) titles[ind].orgs.push(o);
-              }
-            }
-          } else {
-            let new_title={title: t, orgs: []};
-            if ( c.organization ) {
-              if ( Array.isArray(c.organization) ) {
-                new_title.orgs.push(...c.organization);
-              } else {
-                new_title.orgs.push(c.organization);
-              }
-            }
-            titles.push(new_title);
-          }
-        }
+
+    let contacts = rdfUtils.asArray(individual.hasContactInfo);
+    for( let contact of contacts ) {
+      if( contact['@id'].match('#'+type) ) {
+        titles.push({
+          title: rdfUtils.getFirstValue(contact.title),
+          orgs : [contact.organization]
+        });
       }
     }
+
+    if( titles.length === 0 && contacts.length > 0 ) {
+      titles.push({
+        title: rdfUtils.getFirstValue(contacts[0].title),
+        orgs : [contacts[0].organization]
+      });
+    }
+
+
+
+    // if (typeof individual.hasContactInfo === 'object') {
+    //   let contactInfo = [];
+    //   if (Array.isArray(individual.hasContactInfo)) {
+    //     contactInfo = [...individual.hasContactInfo]
+    //       .sort((a,b)=>(a["vivo:rank"]?a["vivo:rank"]:100)-(b["vivo:rank"]?b["vivo:rank"]:100));
+    //   }
+    //   else {
+    //     contactInfo = [individual.hasContactInfo];
+    //   }
+    //   // If first contact is odr, than only use odr,
+    //   let identifier_match=null;
+    //   if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^odr/)) {
+    //     identifier_match=/^odr/;
+    //   } else if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^pps/)) {
+    //     identifier_match=/^pps/;    // If first is pps only include pps
+    //   } else {                 // Otherwise include them all
+    //     identifier_match=null;
+    //   }
+    //   // Next join every organization with a common title, where titles are organized
+    //   // by rank.
+    //   for (let c of contactInfo) {
+    //     if (!(c.title && ( !identifier_match || (c.identifier && c.identifier.match(identifier_match)))))
+    //       continue;
+    //     if ( !Array.isArray(c.title)) c.title=[c.title];
+    //     for (const t of c.title) {
+    //       let ind=titles.findIndex((have)=>have.title===t);
+    //       if (ind > -1) {
+    //         if (c.organization) {
+    //           if ( !Array.isArray(c.organization) ) c.organization=[c.organization];
+    //           for (const o of c.organization) {
+    //             if (titles[ind].orgs.findIndex((have)=>have===o) === -1) titles[ind].orgs.push(o);
+    //           }
+    //         }
+    //       } else {
+    //         let new_title={title: t, orgs: []};
+    //         if ( c.organization ) {
+    //           if ( Array.isArray(c.organization) ) {
+    //             new_title.orgs.push(...c.organization);
+    //           } else {
+    //             new_title.orgs.push(c.organization);
+    //           }
+    //         }
+    //         titles.push(new_title);
+    //       }
+    //     }
+    //   }
+    // }
     return titles;
   }
 
@@ -176,12 +194,18 @@ class PersonModel extends BaseModel {
    * @returns (String) - title, org
    */
   getHeadlineTitle(individual) {
-    let title="";
-    let best=this.getTitles(individual)[0];
-    if (best && best.title)
-      title=best.title;
-    if (best && best.orgs[0])
+    let title = "";
+    let best = this.getTitles(individual);
+    if( best.length === 0 ) return '';
+    best = best[0];
+
+    if (best && best.title) {
+      title = best.title;
+    }
+
+    if (best && best.orgs && best.orgs.length ) {
       title+=`, ${best.orgs[0]}`;
+    }
     return title;
   }
 

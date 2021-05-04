@@ -384,7 +384,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @returns {Array}
    */
   getTitles(){
-    return this.PersonModel.getTitles(this.individual);
+    return this.PersonModel.getTitles(this.individual, 'odr');
   }
 
   /**

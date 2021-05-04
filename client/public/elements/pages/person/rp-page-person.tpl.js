@@ -315,7 +315,7 @@ return html`
             ex ea commodo consequat. </p>
           <div class="cols">
             <div>
-              <!-- <div>
+              <div>
                 <div>
                   <h2 class="h3 mb-2">Positions&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
@@ -333,7 +333,7 @@ return html`
                 ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
 
                 
-              </div>  -->
+              </div> 
               ${this._showSubSection('contact') ? html`
                 <div>
                   <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
