@@ -122,7 +122,8 @@ class PersonModel extends BaseModel {
       if( contact['@id'].match('#'+type) ) {
         titles.push({
           title: rdfUtils.getFirstValue(contact.title),
-          orgs : [contact.organization]
+          org : rdfUtils.getFirstValue(contact.organization),
+          rank : contact["vivo:rank"]
         });
       }
     }
@@ -130,9 +131,12 @@ class PersonModel extends BaseModel {
     if( titles.length === 0 && contacts.length > 0 ) {
       titles.push({
         title: rdfUtils.getFirstValue(contacts[0].title),
-        orgs : [contacts[0].organization]
+        org : rdfUtils.getFirstValue(contacts[0].organization),
+        rank : contacts[0]["vivo:rank"]
       });
     }
+
+    titles.sort((a, b) => a.rank < b.rank ? -1 : 1);
 
 
 

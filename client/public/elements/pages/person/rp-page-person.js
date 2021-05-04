@@ -35,7 +35,9 @@ export default class RpPagePerson extends RpUtilsLanding {
       submitText: {type: String, attribute: 'submitText'},
       isAdmin: {type: Boolean},
       showResearchSubjectCount : {type: Number},
-      defaultResearchSubjectCount : {type: Number}
+      defaultResearchSubjectCount : {type: Number},
+      title : {type: Object},
+      additionalTitles : {type: Array}
     };
   }
 
@@ -82,6 +84,12 @@ export default class RpPagePerson extends RpUtilsLanding {
       this._doPubOverviewQuery(this.assetId)
     ]);
 
+    let titles = this.PersonModel.getTitles(this.individual);
+    if( titles.length ) {
+      this.title = titles.splice(0, 1)[0];
+      this.additionalTitles = titles;
+    }
+
     this.isOwnProfile = this._isOwnProfile();
   }
 
@@ -115,6 +123,8 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.websitesArray = [];
     this.publicationOverviewStatus = 'loading';
     this.showResearchSubjectCount = this.defaultResearchSubjectCount;
+    this.title = {};
+    this.additionalTitles = [];
   }
 
   /**
@@ -376,26 +386,15 @@ export default class RpPagePerson extends RpUtilsLanding {
     return pubType.displayedOffset > pubType.ct ? pubType.ct - (pubType.displayedOffset - 10) : 10;
   }
 
-
-  /**
-   * @method getTitles
-   * @description Gets titles for a person.
-   * 
-   * @returns {Array}
-   */
-  getTitles(){
-    return this.PersonModel.getTitles(this.individual, 'odr');
-  }
-
   /**
    * @method getHeadlineTitle
    * @description Gets title and organization for a person
    * 
    * @returns {String}
    */
-  getHeadlineTitle() {
-    return this.PersonModel.getHeadlineTitle(this.individual);
-  }
+  // getHeadlineTitle() {
+  //   return this.PersonModel.getHeadlineTitle(this.individual);
+  // }
 
   /**
    * @method getBestLabel

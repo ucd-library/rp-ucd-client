@@ -240,7 +240,7 @@ return html`
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
 
             <div class="text-light h3 mb-2 mt-1 text-center">
-              ${this.getHeadlineTitle()}
+              ${this.title.title}, ${this.title.org} 
               <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
                 <rp-icon style="vertical-align:middle;" 
                   icon="iron-editor:mode-edit" 
@@ -315,9 +315,9 @@ return html`
             ex ea commodo consequat. </p>
           <div class="cols">
             <div>
-              <div>
+              <div ?hidden="${this.additionalTitles.length === 0}">
                 <div>
-                  <h2 class="h3 mb-2">Positions&nbsp;&nbsp;
+                  <h2 class="h3 mb-2">Additional Roles&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
                       <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
                         <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
@@ -330,7 +330,7 @@ return html`
                 </div> 
 
 
-                ${this.getTitles().map(t => html`<div>${t.title}:<ul>${t.orgs.map(o=>html`<li>${o}</li>`)}</ul></div>`)}
+                ${this.additionalTitles.map(t => html`<div>${t.title}, ${t.org}</div>`)}
 
                 
               </div> 
