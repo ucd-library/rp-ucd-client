@@ -207,8 +207,8 @@ class PersonModel extends BaseModel {
       title = best.title;
     }
 
-    if (best && best.orgs && best.orgs.length ) {
-      title+=`, ${best.orgs[0]}`;
+    if (best && best.org ) {
+      title+=`, ${best.org}`;
     }
     return title;
   }
