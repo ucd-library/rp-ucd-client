@@ -138,13 +138,14 @@ class CollectionModel extends BaseModel {
     }
 
     let id = QueryUtils.getQueryId(queryObject);
-
     let current = this.store.data.queryById[id];
+
     if( current && current.request ) {
       await current.request;
     } 
     else {
       await this.service.query(id, queryObject);
+
     }
     return this.store.data.queryById[id];
   }

@@ -195,6 +195,7 @@ return html`
   #nav-container {
     min-height: 56px;
   }
+
   #nav-left {
     list-style-type: none;
     margin: 0;
@@ -288,7 +289,7 @@ return html`
     }
   }
   @media( max-width: 565px)  {
-    .hide-help {
+    .hide-hec lp {
       display: none;
     }
   }
@@ -408,10 +409,8 @@ return html`
   <rp-page-concept id="concept"></rp-page-concept>  
   <rp-page-organizations id="organizations"></rp-page-organizations>
   <rp-page-organization id="organization"></rp-page-organization>
-  
   <rp-page-grants id="grants"></rp-page-grants>
   <rp-page-grant id="grant"></rp-page-grant> 
- 
   <rp-page-help id="help"></rp-page-help>
   <rp-page-search id="search"></rp-page-search>
   <rp-page-tou id="termsofuse"></rp-page-tou>

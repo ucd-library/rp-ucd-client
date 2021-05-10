@@ -37,7 +37,6 @@ return html`
 ${this._renderMobileSubFacets()}
 <div class="search container bg-light pb-3 ${this.data.length > 0 ? 'has-results' : 'no-results'} ${this.mainFacet == this.defaultFacetId ? 'not-faceted' : 'faceted'}" >
 <div class="body flex">
-
     ${this.mainFacet == this.defaultFacetId ? 
     html `  
           <div></div>
