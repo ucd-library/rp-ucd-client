@@ -200,6 +200,7 @@ class WorkModel extends BaseModel {
       if( !author._client ) {
         author._client = {
           givenName : name.givenName || '',
+          middleName : name.middleName || '',
           familyName : name.familyName || '',
           citationText : this._getAuthorCitationTextName(name)
         };

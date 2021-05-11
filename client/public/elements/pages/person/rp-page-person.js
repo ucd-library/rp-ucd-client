@@ -397,13 +397,13 @@ export default class RpPagePerson extends RpUtilsLanding {
   // }
 
   /**
-   * @method getBestLabel
+   * @method getFullName
    * @description Gets name of a person.
    * 
    * @returns {String}
    */
-  getBestLabel() {
-    return this.PersonModel.getBestLabel(this.individual);
+  getFullName() {
+    return this.PersonModel.getFullName(this.individual);
   }
 
   /**

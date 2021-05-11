@@ -237,7 +237,7 @@ return html`
           </div>
           <div slot="main" class="heromain">
             <rp-avatar size="lg"></rp-avatar>
-            <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getBestLabel()}</h2>
+            <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getFullName()}</h2>
 
             <div class="text-light h3 mb-2 mt-1 text-center">
               ${this.title.title}, ${this.title.org} 
