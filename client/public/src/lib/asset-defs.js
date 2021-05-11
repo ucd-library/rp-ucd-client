@@ -112,14 +112,11 @@ class AssetDefs {
         },
         azField: "label.firstLetter",
         facetedSearchFields: [
-          "label.text^9",
-          "assignedBy.label.text^8",
-          "sponsorAwardId.text^10",
-          "totalAwardAmount^7",
-          "dateTimeInterval.start.dateTime^10",
-          "dateTimeInterval.end.dateTime^10",
-          "relates.hasContactInfo.familyName^10",
-          "relates.hasContactInfo.givenName^10",
+          "label.text^2",
+          "assignedBy.label.text",
+          "sponsorAwardId.text^2",
+          "relates.hasContactInfo.familyName^2",
+          "relates.hasContactInfo.givenName^2"
         ]
       }
     ];
