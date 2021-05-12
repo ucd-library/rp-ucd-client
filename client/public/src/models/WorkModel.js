@@ -195,7 +195,7 @@ class WorkModel extends BaseModel {
 
     let authors = rdfUtils.asArray(work.Authorship);
     for (let author of authors) {
-      let name = this._getAuthorVcardName(author.hasName) || {};
+      let name = this._getAuthorVcardName(author.relates) || {};
 
       if( !author._client ) {
         author._client = {
@@ -216,9 +216,13 @@ class WorkModel extends BaseModel {
         author._client.aggieExpertsAuthor = false;
 
         try {
-          if( author['@type'].includes('foaf:Person') ) {
-            let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-            author._client.apiEndpoint = author['@id'];
+          let person = rdfUtils
+            .asArray(author.relates)
+            .find(item => item['@type'].includes('foaf:Person'));
+
+          if( person ) {
+            let authorId = person['@id'].replace(this.service.jsonContext + ":", "");
+            author._client.apiEndpoint = person['@id'];
             author._client.href = '/' + authorId;
             author._client.aggieExpertsAuthor = true;
           }
@@ -244,17 +248,22 @@ class WorkModel extends BaseModel {
    * @description given a authors hasName object/array, return the
    * vcard entry or null
    * 
-   * @param {Object|Array} names 
+   * @param {Object|Array} relates 
    * 
    * @returns {Object}
    */
-  _getAuthorVcardName(names) {
-    names = rdfUtils.asArray(names);
-    let vcard = names.find(name => (typeof name === 'object' && name['@id'].match(/#vcard-name$/)));
-    if( vcard ) return this._correctName(vcard);
-    if( names.length > 0 && typeof names[0] === 'object' ) {
-      return this._correctName(names[0]);
+  _getAuthorVcardName(relates) {
+    relates = rdfUtils.asArray(relates);
+
+    let vcard = null;
+    for( let person of relates ) {
+      vcard = rdfUtils.asArray(person.hasName).find(item => 
+        (typeof item === 'object' && item['@id'].match(/#vcard-name$/))
+      );
+      if( vcard ) break;
     }
+
+    if( vcard ) return this._correctName(vcard);
     return null;
   }
 
