@@ -13,6 +13,7 @@ export default function render() {
       list-style-type: none;
       margin: 0;
       padding: 0;
+
     }
     .container.direction-h {
       flex-flow: row nowrap;
@@ -63,9 +64,19 @@ export default function render() {
         margin-right: 1em;
       }
     }
+    @media (max-width: 480px) {
+      .container.direction-h .link {
+        overflow-y: hidden;
+        overflow-x: scroll;
+        white-space:nowrap;
+        background-color:red;
+        width: 25px;
+      }
+
+    }
   </style>
   <ul role="menubar" class="container ${classMap(this._constructClasses())} ">
     ${this.links.map((link, index) => this._renderLink(link, index))}
   </ul>
   `;
-} 
+}  

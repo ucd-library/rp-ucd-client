@@ -297,7 +297,7 @@ return html`
         `}
 
       </rp-hero-image>
-      <rp-link-list class="bg-light p-3"
+      <rp-link-list class="bg-light p-3" 
         direction="horizontal"
         .links="${this.getPageSections()}"
         use-hash
