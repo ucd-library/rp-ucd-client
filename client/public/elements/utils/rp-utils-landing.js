@@ -37,7 +37,7 @@ export default class RpUtilsLanding extends Mixin(LitElement)
    * @returns {Array} - Array of objects with section details.
    */
   getPageSections() {
-    let sections = [{id:"all", text: "All Info this is an add on to see if it works", href: ''}];
+    let sections = [{id:"all", text: "All Info", href: ''}];
     if (this.assetType == 'work') {
       sections.push(
         {id: 'records', text: 'Records'},
