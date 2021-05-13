@@ -50,7 +50,7 @@ class PersonService extends BaseService {
       limit: 0,
       sort: [],
       filters: {
-        'Authorship.@id': {
+        'Authorship.relates.@id': {
           type: "keyword", 
           op : "and", 
           value: [queryUtils.appendIdPrefix(id)]
@@ -128,7 +128,7 @@ class PersonService extends BaseService {
         publicationDate: {order : "desc"}
       }],
       filters: {
-        'Authorship.@id': {
+        'Authorship.relates.@id': {
           type: "keyword", 
           op : "and", 
           value: [queryUtils.appendIdPrefix(id)]

@@ -139,62 +139,75 @@ class PersonModel extends BaseModel {
    * @method getTitles
    * @description - Returns ordered array of titles for individual.
    * @param {Object} individual 
+   * @param {String} type
    * 
    * @returns {Object[]} {title:string,orgs:["string"]}
    */
-  getTitles(individual){
+  getTitles(individual={}, type='odr'){
     let titles = [];
-    if (!individual) {
-      return titles;
+
+    let contacts = rdfUtils.asArray(individual.hasContactInfo);
+    for( let contact of contacts ) {
+      if( contact['@id'].match('#'+type) ) {
+        titles.push({
+          title: rdfUtils.getFirstValue(contact.title),
+          org : rdfUtils.getFirstValue(contact.organization),
+          rank : contact["vivo:rank"]
+        });
+      }
     }
-    if (typeof individual.hasContactInfo === 'object') {
-      let contactInfo = [];
-      if (Array.isArray(individual.hasContactInfo)) {
-        contactInfo = [...individual.hasContactInfo]
-          .sort((a,b)=>(a["vivo:rank"]?a["vivo:rank"]:100)-(b["vivo:rank"]?b["vivo:rank"]:100));
-      }
-      else {
-        contactInfo = [individual.hasContactInfo];
-      }
-      // If first contact is odr, than only use odr,
-      let identifier_match=null;
-      if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^odr/)) {
-        identifier_match=/^odr/;
-      } else if (contactInfo[0].identifier && contactInfo[0].identifier.match(/^pps/)) {
-        identifier_match=/^pps/;    // If first is pps only include pps
-      } else {                 // Otherwise include them all
-        identifier_match=null;
-      }
-      // Next join every organization with a common title, where titles are organized
-      // by rank.
-      for (let c of contactInfo) {
-        if (!(c.title && ( !identifier_match || (c.identifier && c.identifier.match(identifier_match)))))
-          continue;
-        if ( !Array.isArray(c.title)) c.title=[c.title];
-        for (const t of c.title) {
-          let ind=titles.findIndex((have)=>have.title===t);
-          if (ind > -1) {
-            if (c.organization) {
-              if ( !Array.isArray(c.organization) ) c.organization=[c.organization];
-              for (const o of c.organization) {
-                if (titles[ind].orgs.findIndex((have)=>have===o) === -1) titles[ind].orgs.push(o);
-              }
-            }
-          } else {
-            let new_title={title: t, orgs: []};
-            if ( c.organization ) {
-              if ( Array.isArray(c.organization) ) {
-                new_title.orgs.push(...c.organization);
-              } else {
-                new_title.orgs.push(c.organization);
-              }
-            }
-            titles.push(new_title);
-          }
+
+    if( titles.length === 0 ) {
+      for( let contact of contacts ) {
+        if( contact.title ) {
+          titles.push({
+            title: rdfUtils.getFirstValue(contact.title),
+            org : rdfUtils.getFirstValue(contact.organization),
+            rank : contact["vivo:rank"]
+          });
         }
       }
     }
+
+    titles.sort((a, b) => a.rank < b.rank ? -1 : 1);
+
     return titles;
+  }
+
+  /**
+   * @method getContacts
+   * @description get contacts of a type.  Will fall back on first
+   * available
+   * 
+   * @param {Object} individual person object
+   * @param {String} type defaults to odr
+   * @returns Array of contact enteries
+   */
+  getContacts(individual={}, type='odr') {
+    let res = [];
+
+    let contacts = rdfUtils.asArray(individual.hasContactInfo);
+    for( let contact of contacts ) {
+      if( contact['@id'].match('#'+type) ) {
+        res.push({
+          contact,
+          number : parseInt(contact['@id'].replace(new RegExp('.*-'), ''))
+        });
+      }
+    }
+
+    if( res.length === 0 ) {
+      for( let contact of contacts ) {
+        res.push({
+          contact,
+          number : parseInt(contact['@id'].replace(new RegExp('.*-'), ''))
+        });
+      }
+    }
+
+    res.sort((a,b) => a.number < b.number ? -1 : 1);
+
+    return res;
   }
 
   /**
@@ -205,52 +218,86 @@ class PersonModel extends BaseModel {
    * @returns (String) - title, org
    */
   getHeadlineTitle(individual) {
-    let title="";
-    let best=this.getTitles(individual)[0];
-    if (best && best.title)
-      title=best.title;
-    if (best && best.orgs[0])
-      title+=`, ${best.orgs[0]}`;
+    let title = "";
+    let best = this.getTitles(individual);
+    if( best.length === 0 ) return '';
+    best = best[0];
+
+    if (best && best.title) {
+      title = best.title;
+    }
+
+    if (best && best.org ) {
+      title+=`, ${best.org}`;
+    }
     return title;
   }
 
   /**
-   * @method getBestLabel
-   * @description Returns the name of an individual.
-   * @param {Object} individual
+   * @method getFullName
+   * @description given individual record, get best (odr if possible)
+   * full name.
    * 
-   * @returns {String}
+   * @param {Object} individual 
+   * @param {string} type
+   * 
+   * @returns {Object}
    */
-  getBestLabel(individual) {
-    if (individual && individual.label) {
-      if (Array.isArray(individual.label)) {
-        // Prefer the shortest one? This prefers fname lname over lname, fname
-        return individual.label.sort((a,b)=> a.length - b.length)[0];
+  getFullName(individual={}, type='string') {
+    let contacts = this.getContacts(individual);
+
+    if( contacts.length === 0) {
+      let name = rdfUtils.getFirstValue(individual.label) || '';
+      if( type === 'string' ) {
+        return name;
+      } else if( type === 'array' ) {
+        return [name];
       }
-      return individual.label;
+      return {givenName: name};
     }
-    return "";
+
+    let contact = contacts[0].contact;
+
+    if( type === 'string' || type === 'array' ) {
+      let name = [];
+      
+      if( contact.givenName ) {
+        name.push(rdfUtils.getFirstValue(contact.givenName));
+      }
+      if( contact.middleName ) {
+        name.push(rdfUtils.getFirstValue(contact.middleName));
+      }
+      if( contact.familyName ) {
+        name.push(rdfUtils.getFirstValue(contact.familyName));
+      }
+
+      if( type === 'array' ) return name;
+      return name.join(' ');
+    }
+
+    return {
+      givenName : rdfUtils.getFirstValue(contact.givenName) || '',
+      middleName : rdfUtils.getFirstValue(contact.middleName) || '',
+      familyName : rdfUtils.getFirstValue(contact.familyName) || ''
+    };
   }
 
   /**
-   * @method getNameObject
-   * @description Returns name of individual as an object
-   * @param {Object} individual 
+   * @method getFullNameLastFirst
+   * @description get the full name string, last name first
    * 
-   * @returns {Object} {'fname': '', 'lname': ''}
+   * @param {*} individual 
+   * @returns {String}
    */
-  getNameObject(individual){
-    let out = {'fname': '', 'lname': ''};
-    if (!individual || !individual.hasContactInfo) {
-      return out;
-    }
-    let contactArray = Array.isArray(individual.hasContactInfo) ? individual.hasContactInfo : [individual.hasContactInfo];
-    for (const contactInfo of contactArray) {
-      if (out.fname && out.lname) return out;
-      if (contactInfo.familyName) out.lname = contactInfo.familyName;
-      if (contactInfo.givenName) out.fname = contactInfo.givenName;
-    }
-    return out;
+  getFullNameLastFirst(individual={}) {
+    let name = this.getFullName(individual, 'object');
+    let parts = [];  
+
+    if( name.familyName ) parts.push(name.familyName+', ');
+    if( name.givenName ) parts.push(name.givenName);
+    if( name.middleName ) parts.push(name.middleName);
+    
+    return parts.join(' ');
   }
 
   /**

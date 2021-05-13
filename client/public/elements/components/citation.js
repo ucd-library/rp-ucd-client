@@ -1,7 +1,6 @@
 import { LitElement } from 'lit-element';
 import {unsafeHTML} from 'lit-html/directives/unsafe-html.js';
 import render from './citation.tpl.js';
-import rdfUtils from '../../src/lib/rdf-utils';
 
 /**
  * @class RpCitation
@@ -88,38 +87,6 @@ export class RpCitation extends Mixin(LitElement)
     // return first (shortest) label, capitalize in case all cap
     return unsafeHTML(`<span style="text-transform:capitalize">${label.toLowerCase()}</span>`);
   }
-
-  // /**
-  //  * @method _constructAuthors
-  //  * @description Formats Authorship work property into string
-  //  * @param {Object|Object[]} authorship 
-  //  * 
-  //  * @returns {String}
-  //  */
-  // _constructAuthors(authorship) {
-  //   let output = [];
-  //   authorship = rdfUtils.asArray(authorship);
-
-  //   for (let author of authorship) {
-  //     let names = rdfUtils.asArray(author.hasName);
-
-  //     for( let hasName of names ) {
-  //       debugger;
-  //       if (!hasName.familyName || !hasName.givenName) continue;
-  //       if (!author['vivo:rank']) author['vivo:rank'] = Infinity;
-  //       author.text = `${hasName.familyName} ${hasName.givenName
-  //         .split("")
-  //         .filter(letter => letter === letter.toUpperCase() && letter != " ").join("")}`;
-
-  //       output.push(author);
-  //       break;
-  //     }
-  //   }
-  //   output.sort(function (a, b) {
-  //     return a['vivo:rank'] - b['vivo:rank'];
-  //   });
-  //   return output;
-  // }
 
   /**
    * @method _getVenueLocation

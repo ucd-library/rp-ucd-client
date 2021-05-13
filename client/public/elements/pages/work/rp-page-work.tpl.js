@@ -73,11 +73,11 @@ return html`
     font-weight: var(--font-weight-bold);
   }
   @media (min-width: 800px) {
-      .hero {
+    .hero {
       padding-left: 30px;
       padding-right: 30px;
     }
-    }
+  }
 </style>
 <div class="work top">
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
@@ -93,7 +93,7 @@ return html`
           <h1 class="text-secondary h1 bold mb-0 text-center" aria-label="Work title">${renderHTML(this.work.label)}</h1>
         </div>
         <div class="authors"><p class="mb-2 mt-1 text-center">${this.authors.ranked.map((author, i) => html`
-          <span>${author._client.givenName} ${author._client.familyName}</span>${i + 1 < this.authors.ranked.length ? html`<span>, </span>` : html``}
+          <span>${author._client.givenName} ${author._client.middleName} ${author._client.familyName}</span>${i + 1 < this.authors.ranked.length ? html`<span>, </span>` : html``}
         `)}</p></div>
         <div class="type text-center">${this.workType}</div>
       </div>
