@@ -193,14 +193,19 @@ return html`
     display: none;
   }
   #nav-container {
-    min-height: 56px;
+    min-height: 66px;
   }
 
   #nav-left {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: flex;
   }
+  [quick-search-opened] #nav-left {
+    display: none;
+  }
+
   #nav-left a {
     padding: 15px 8px;
     text-transform: uppercase;
@@ -214,6 +219,23 @@ return html`
   #nav-left a:hover {
     color: var(--tcolor-link-hover-text) !important;
   }
+
+  #nav-right {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  #close-quick-search {
+    display: none;
+  }
+  [quick-search-opened] #close-quick-search {
+    display: inline-block;
+  }
+
+  .nav-help {
+    display: none;
+  }
+
   #app-footer {
     background-color: var(--tcolor-primary);
     color: var(--tcolor-light);
@@ -266,12 +288,29 @@ return html`
     #desktop-menu {
       display: flex;
     }
-  }
-  @media (min-width: 600px) {
     #nav-left a {
-      padding: 15px 20px;
+      padding: 20px;
     }
   }
+  
+  @media (min-width: 600px) {
+    #nav-left {
+      display: flex !important;
+    }
+    #nav-right {
+      max-width: 275px;
+    }
+    #close-quick-search {
+      display: none !important;
+    }
+  }
+
+  @media (min-width: 675px) {
+    .nav-help {
+      display: inline-block !important;
+    }
+  }
+
   @media (min-width: 800px) {
     #nav-left a:first-child {
       padding-left: 20px;
@@ -334,24 +373,22 @@ return html`
     </div>
 
 
-    <nav id="nav-container"  class="container flex align-items-center justify-content-between">
-      <rp-icon @click="${this.closeQuickSearch}" ?hidden="${!this.hideMainNav}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
+    <nav id="nav-container"  class="container flex align-items-center justify-content-between" ?quick-search-opened="${this.quickSearchOpened}">
+      <rp-icon id="close-quick-search" @click="${this._closeQuickSearch}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
 
-      <ul id="nav-left" role="menubar" aria-label="primary navigation" class="flex align-items-center bold" ?hidden="${this.hideMainNav}">
+      <ul id="nav-left" role="menubar" aria-label="primary navigation" class="align-items-center bold">
         ${this.navLinks.map(link => html`
         <li role="none">
-          <a href=${link.href} role="menuitem" ?this-page="${link.page == this.page}" class="text-primary no-decoration ${link.page == 'help' ? 'hide-help' : ''}">${link.text}</a>
+          <a href=${link.href} role="menuitem" ?this-page="${link.page == this.page}" class="text-primary no-decoration nav-${link.page}">${link.text}</a>
         </li>`)}
       </ul>
 
       <div id="nav-right" >
         <rp-quick-search 
           id="quick-search" 
-          @keyup="${this._onQuickSearchKeyup}"
-          @input-status="${this._onQuickSearchClick}" 
           @new-search="${this._onSearch}" 
-          input-value="${this.textQuery}" 
-          ?opened="${this.textQuery}">
+          @toggled="${this._onQuickSearchToggle}"
+          input-value="${this.textQuery}">
         </rp-quick-search>
       </div>
     </nav>

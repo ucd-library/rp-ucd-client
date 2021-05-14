@@ -34,6 +34,16 @@ const bundle = `
   </script>
   <script>${loaderSrc}</script>`;
 
+let gaCode = '';
+if( config.client.gaCode ) {
+  gaCode = `<script async src="https://www.googletagmanager.com/gtag/js?id=${config.client.gaCode}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  </script>`;
+}
+
 export default (app) => {
   // path to your spa assets dir
   let assetsDir = path.join(__dirname, '..', '..', 'client', config.client.dir);
@@ -67,6 +77,7 @@ export default (app) => {
         verbose : config.client.verbose,
         includeGrants : config.client.includeGrants,
         defaultTypes : config.client.defaultTypes,
+        gaCode : config.client.gaCode,
         env : {
           CLIENT_TAG : process.env.CLIENT_TAG || '',
           VESSEL_TAG : process.env.VESSEL_TAG || '',
@@ -90,7 +101,7 @@ export default (app) => {
       }
 
       next({
-        bundle, jsonld, 
+        bundle, jsonld, gaCode,
         config: `<script>var APP_CONFIG = ${JSON.stringify(appConfig)};</script>`
       });
     }

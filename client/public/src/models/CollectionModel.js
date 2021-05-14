@@ -463,9 +463,6 @@ class CollectionModel extends BaseModel {
     if (elementQuery.textQuery) {
       query.text = elementQuery.textQuery;
       query.textFields = AssetDefs.getSearchFields(mainFacet);
-
-      // Apply faceting to query
-      query.facets = QueryUtils.defaultTypeFacet;
     }
     // No search text query. Just sort by label
     else {
@@ -473,6 +470,9 @@ class CollectionModel extends BaseModel {
       s[AssetDefs.getBrowseSortField(mainFacet)] = 'asc';
       query.sort = [s];
     }
+
+    // Apply faceting to query
+    query.facets = QueryUtils.defaultTypeFacet;
 
     // Apply pagination
     if (elementQuery.offset) {
@@ -502,6 +502,9 @@ class CollectionModel extends BaseModel {
     if ( q.textQuery ) path += "/search";
     if ( AssetDefs.facetExists(q.mainFacet) ) path += `/${q.mainFacet}`;
     if ( AssetDefs.subFacetExists(q.mainFacet, q.subFacet) && !ignoreArgs.includes('subFacet') ) path += `/${q.subFacet}`;
+
+    // empty text search
+    if( path === '' ) path = "/search";
 
     // query args
     let args = [];

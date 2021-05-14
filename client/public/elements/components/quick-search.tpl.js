@@ -6,33 +6,37 @@ export default function render() {
   return html`
   <style>
     :host {
-      display: inline-block;
+      display: block;
       font-size: var(--font-size-h3);
     }
+
     .container {
+      min-width: 35px;
+      position: relative;
       display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
       justify-content: flex-end;
     }
-    .container.opened input {
-      border-color: var(--tcolor-secondary);
-      border-style: solid;
-      border-width: 2px;
-      border-radius: 20px;
-      border-right: 0;
-      position: relative;
-      left: 25px;
-      padding-right: 30px;
-      height: 34px;
-    }
+
     input {
-      border: 0;
       font-size: var(--font-size);
       padding-left: 10px;
+      padding-right: 32px;
       width: 100%;
       background-color: inherit;
+      box-sizing: border-box;
+      border: 2px solid var(--tcolor-secondary);
+      border-radius: 20px;
+      position: relative;
+      height: 35px;
+      transition: width 200ms ease-in-out, padding 200ms ease-in-out;
     }
+
+    input[closed] {
+      width: 35px;
+      padding-right: 0;
+      padding-left: 0;
+    }
+
     /**
     .container.opened input {
       animation-duration: .75s;
@@ -53,7 +57,10 @@ export default function render() {
     .container.closing {
     }
     rp-icon {
-      z-index: 1;
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
     }
     @keyframes open {
       from {
@@ -74,29 +81,30 @@ export default function render() {
         }
     }
   </style>
-  <div class="container ${classMap(this._constructClasses())}">
-    <input ?hidden="${!this.opened}" type="text" placeholder="${this.placeholder}"
-      style="${styleMap(this._constructInputStyles())}"
+  <div class="container" >
+    <input 
+      ?closed="${!this.opened}" 
+      type="text" 
+      placeholder="${this.placeholder}"
       id="search-input"
       role="search" 
       aria-label="Sitewide"
       .value="${this.inputValue}"
-      @animationend="${this._handleAnimationEnd}"
       @keyup="${this._handleKeyup}"
-      @blur="${this._handleBlur}"
       @input="${(e) => this.inputValue = e.target.value}" />
 
-    <rp-icon @click="${this._handleClick}" 
-      icon="rp-search" 
-      role="button"
-      tabindex="0"
-      aria-label="${this.label}"
-      aria-pressed="${this.opened ? 'true' : 'false'}"
-      circle-bg 
-      ?is-link="${this._activateLink()}" 
-      theme-color='secondary' 
-      size="lg">
-    </rp-icon>
+
+      <rp-icon @click="${this._handleClick}" 
+        icon="rp-search" 
+        role="button"
+        tabindex="0"
+        aria-label="${this.label}"
+        aria-pressed="${this.opened ? 'true' : 'false'}"
+        circle-bg 
+        theme-color='secondary' 
+        size="lg">
+      </rp-icon>
+
   </div>
   `;
 }
