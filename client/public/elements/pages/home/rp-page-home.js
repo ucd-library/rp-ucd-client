@@ -10,6 +10,7 @@ import "../../components/grant-preview";
 import "../../components/search";
 import "../../components/rp-loading";
 
+
 /**
  * @class RpPageHome
  * @description main home page
@@ -35,6 +36,7 @@ export default class RpPageHome extends Mixin(LitElement)
       subjects: {type: Array},
       subjectsTotal: {type: Number},
       subjectsStatus: {type: String},
+      textWidth: {type: String, attribute: 'text-width'},
       visible: {type: Boolean}
     };
   }
@@ -52,7 +54,7 @@ export default class RpPageHome extends Mixin(LitElement)
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
     this.setPeopleWidth(window.innerWidth);
-
+    this.textWidth = (window.innerWidth.toString() - 70) + "px";
     this.theme = APP_CONFIG.theme;
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
 
@@ -96,6 +98,22 @@ export default class RpPageHome extends Mixin(LitElement)
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
     }
+    if (props.has('textWidth')) this.setBadgeTabIndex();
+  }
+
+  /**
+   * @method setBadgeTabIndex
+   * @description Hides any overflow badges from tab positioning
+   */
+  async setBadgeTabIndex(){
+    await this.updated;
+    let containerWidth = this.textWidth;
+    let cumWidth = 0;
+    this.shadowRoot.querySelectorAll('rp-badge').forEach(badge => {
+      cumWidth += badge.offsetWidth;
+      badge.hideFromTab = cumWidth > containerWidth;
+    });
+
   }
 
   /**

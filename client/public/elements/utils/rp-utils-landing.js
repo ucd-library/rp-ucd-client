@@ -65,7 +65,7 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     if (this.assetType == 'grant'){
       sections.push(
         {id: 'about', text:'About'},
-        {id: 'contributors', text:'Contributors'}
+        {id: 'contributors', text:'Contributors'},
       );
     }
     let i = 0;

@@ -26,7 +26,7 @@ return html`
       </div>
       <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
         ${this.data.map((subject, i) => html`
-          <rp-subject-preview .data="${subject}" class="my-3"></rp-subject-preview>
+          <rp-subject-preview .data="${subject}" text-width="${this.peopleWidth}" class="my-3"></rp-subject-preview>
           ${this.data.length - i == 1 && this.dataTotal <= this.pgPer ? html`
             ` : html`
             <hr class="dotted">

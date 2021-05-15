@@ -69,7 +69,7 @@ return html`
   }
   .view-all-row {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: center;
   }
   #subjects {
     padding-bottom: 15px;
@@ -125,7 +125,7 @@ return html`
   }
 
   @media (min-width: 480px) and (max-width: 799px){
-    .container {
+    .container{
       margin-right: auto;
       margin-left: auto;
       max-width: 550px; 
@@ -135,6 +135,12 @@ return html`
     rp-search {
       max-width: 500px;
     }
+  }
+  @media (max-width: 280px) {
+    rp-search {
+      max-width: 250px;
+    }  
+
   }
 
   
@@ -205,14 +211,15 @@ return html`
               text-width=${this.peopleWidth}>
             </rp-person-preview>
             `)}
-            <div></div>
-            <div class="flex view-all-row">
-              <a href="/people" class="view-all"><span>View All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
-            </div>
+        </div>
+        <div></div>
+        <div class="flex view-all-row">
+          <a href="/people" class="view-all"><span>View All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
         </div>
       </div>
       
-      <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+      
       <div id="subjects">
         <h2>
           <span class="bold mr-2">${this.subjectsTotal}</span>
@@ -223,6 +230,7 @@ return html`
             title="${this.SubjectModel.getPreferredLabel(subject)}" 
             size="lg" 
             max-width="280" 
+            text-width=${this.peopleWidth}
             class="my-1" 
             href="${this.SubjectModel.getLandingPage(subject)}">
             ${this.SubjectModel.getPreferredLabel(subject)}
@@ -230,10 +238,10 @@ return html`
         `)}
         ${this.subjectsTotal > 10 ? html`
           <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/concepts"></rp-badge>
-          ` : html``}
+        ` : html``}
       </div>
-      <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
     </div>
+    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
 
 
     <!-- <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>

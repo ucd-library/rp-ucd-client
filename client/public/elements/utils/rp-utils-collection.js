@@ -601,8 +601,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    */
   _renderMobileSubFacets(isBrowsePage=false){
     if (this.data.length == 0 || this.mainFacet == 'none') return html``;
-
     let singleFacetText = "";
+    
     if (!this.subFacetsWithResultsCt && this.subFacets.length > 0 ){
       singleFacetText = this.subFacets[0].text;
     }

@@ -200,10 +200,13 @@ return html`
     list-style-type: none;
     margin: 0;
     padding: 0;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    min-width: 0;
+    margin-right: 12px; 
     display: flex;
-  }
-  [quick-search-opened] #nav-left {
-    display: none;
+
   }
 
   #nav-left a {

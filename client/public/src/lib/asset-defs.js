@@ -18,7 +18,7 @@ class AssetDefs {
    * @returns {Object[]}
    */
   getMainFacets(){
-    return [
+    let facet = [
       {
         id: 'people',
         idSingular: 'person',
@@ -72,7 +72,7 @@ class AssetDefs {
           "label.text^10"
         ]
       },
-      */
+      */ 
       {
         id: 'works', 
         idSingular: 'work',
@@ -97,7 +97,10 @@ class AssetDefs {
           "hasPublicationVenue.issn^5"
         ]
       },
-      {
+    ];
+
+    if(APP_CONFIG.includeGrants){
+      let grant = {
         id: 'grants', 
         idSingular: 'grant',
         text: 'Grants', 
@@ -118,8 +121,12 @@ class AssetDefs {
           "relates.hasContactInfo.familyName^2",
           "relates.hasContactInfo.givenName^2"
         ]
-      }
-    ];
+      };
+      facet.push(grant);
+    }
+
+    return facet;
+    
   }
 
   /**
