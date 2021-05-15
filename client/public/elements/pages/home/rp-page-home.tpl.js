@@ -69,7 +69,7 @@ return html`
   }
   .view-all-row {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: center;
   }
   #subjects {
     padding-bottom: 15px;
@@ -212,14 +212,14 @@ return html`
             </rp-person-preview>
             `)}
         </div>
-
+        <div></div>
         <div class="flex view-all-row">
           <a href="/people" class="view-all"><span>View All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
         </div>
       </div>
-    </div>
       
-      <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+      
       <div id="subjects">
         <h2>
           <span class="bold mr-2">${this.subjectsTotal}</span>
@@ -238,10 +238,10 @@ return html`
         `)}
         ${this.subjectsTotal > 10 ? html`
           <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/concepts"></rp-badge>
-          ` : html``}
+        ` : html``}
       </div>
-      <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
     </div>
+    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
 
 
     <!-- <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
