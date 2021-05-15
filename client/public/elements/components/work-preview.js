@@ -16,7 +16,8 @@ export class RpWorkPreview extends Mixin(LitElement)
       showSnippet: {type: Boolean, attribute: 'show-snippet'},
       authorCt: {type: Number},
       snippet : {type: String},
-      title : {type: String}
+      title : {type: String},
+      textWidth: {type: String, attribute: 'text-width'},
     };
   }
 
@@ -25,8 +26,11 @@ export class RpWorkPreview extends Mixin(LitElement)
     this.data = {};
     this.authorCt = 0;
     this.showSnippet = false;
+    this.textWidth = (window.innerWidth.toString() - 70) + "px";
+
     this._injectModel('WorkModel');
     this.render = render.bind(this);
+    
   }
 
   /**

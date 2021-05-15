@@ -16,7 +16,8 @@ export class RpGrantPreview extends Mixin(LitElement)
       showSnippet: {type: Boolean, attribute: 'show-snippet'},
       contributorCt: {type: Number},
       snippet : {type: String},
-      title : {type: String}
+      title : {type: String},
+      textWidth: {type: String, attribute: 'text-width'},
     };
   }
 
@@ -25,6 +26,8 @@ export class RpGrantPreview extends Mixin(LitElement)
     this.data = {};
     this.contributorCt = 0;
     this.showSnippet = false;
+    this.textWidth = (window.innerWidth.toString() - 70) + "px";
+    
     this._injectModel('GrantModel');
     this.render = render.bind(this);
   }

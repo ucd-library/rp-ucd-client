@@ -200,6 +200,11 @@ return html`
     list-style-type: none;
     margin: 0;
     padding: 0;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    min-width: 0;
+    margin-right: 12px; 
   }
   #nav-left a {
     padding: 15px 8px;

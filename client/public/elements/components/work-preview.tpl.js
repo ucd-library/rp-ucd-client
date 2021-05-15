@@ -1,6 +1,6 @@
 import { html } from 'lit-element';
 import { renderHTML } from '../../src/lib/santize-html.js';
-//import { styleMap } from 'lit-html/directives/style-map';
+import { styleMap } from 'lit-html/directives/style-map';
 
 export default function render() {
   return html`
@@ -31,6 +31,10 @@ export default function render() {
       margin-left: 12px;
       flex-grow: 1;
       align-self: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
     }
     .title {
       font-size: var(--font-size);
@@ -55,7 +59,7 @@ export default function render() {
   </style>
   <div class=container>
     <div class="icon-container"><rp-icon icon="iron-description" theme-color='work' circle-bg size-icon="extralgIconWorks" size="extralg"></rp-icon></div>
-    <div class="text-container">
+    <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}">
       
       <a class="title" 
         href="${this.getLink()}" 

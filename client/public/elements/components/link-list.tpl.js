@@ -11,13 +11,17 @@ export default function render() {
     .container {
       display: flex;
       list-style-type: none;
-      margin: 0;
-      padding: 0;
+      margin: 0px;
+      padding: 0px;
 
     }
+
     .container.direction-h {
       flex-flow: row nowrap;
-      justify-content: center;
+      overflow-y: hidden;
+      overflow-x: scroll;
+      white-space:nowrap;
+      justify-content:center;      
     }
     .container.direction-h .link {
       margin-left: .5em;
@@ -62,15 +66,18 @@ export default function render() {
       .container.direction-h .link {
         margin-left: 1em;
         margin-right: 1em;
-      }
-    }
-    @media (max-width: 480px) {
-      .container.direction-h .link {
         overflow-y: hidden;
         overflow-x: scroll;
         white-space:nowrap;
-        background-color:red;
-        width: 25px;
+        justify-content:start;  
+      }
+    }
+    @media (max-width: 310px) {
+      .container.direction-h {
+        overflow-y: hidden;
+        overflow-x: scroll;
+        white-space:nowrap;
+        justify-content:start;  
       }
 
     }

@@ -141,6 +141,9 @@ return html`
     display: flex;
     flex-grow: 1;
   }
+  #wrapped-text {
+    word-wrap: break-word;
+  }
   .grid-container {
     display: grid;
     display: -ms-grid;
@@ -157,7 +160,7 @@ return html`
     }
   }
 </style>
-<div class="subject top">
+<div id="wrapped-text" class="subject top">
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
   </div>
@@ -228,7 +231,10 @@ return html`
         `: html ``}  
 
         ${this.contributors.map(contributor => html`
-          <rp-person-preview .data=${contributor}></rp-person-preview>`
+          <rp-person-preview style="flex-flow: column wrap;" 
+            .data=${contributor}
+            text-width="${this.peopleWidth}"
+          ></rp-person-preview>`
         )}
 
     </section>

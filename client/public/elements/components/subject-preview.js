@@ -10,8 +10,9 @@ export class RpSubjectPreview extends Mixin(LitElement)
     return {
       data: {type: Object},
       showSnippet: {type: Boolean, attribute: 'show-snippet'},
-      title : {type: String}
-    };
+      title : {type: String},
+      textWidth: {type: String, attribute: 'text-width'},
+    }; 
   }
 
   constructor(){
@@ -20,6 +21,7 @@ export class RpSubjectPreview extends Mixin(LitElement)
     this.render = render.bind(this);
 
     this.showSnippet = false;
+    this.textWidth = (window.innerWidth.toString() - 70) + "px";
   }
 
   /**
