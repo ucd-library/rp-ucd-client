@@ -9,7 +9,6 @@ import "./icon";
 export class RpQuickSearch extends LitElement {
   static get properties() {
     return {
-      // inputWidth: {type: Number, attribute: "input-width"},
       inputValue: {type: String, attribute: "input-value", reflect: true},
       placeholder: {type: String},
       opened: {type: Boolean},
@@ -23,70 +22,13 @@ export class RpQuickSearch extends LitElement {
     this.render = render.bind(this);
     this.placeholder = "Search the registry";
     this.opened = false;
-    // this.inputWidth = 220;
     this.inputValue = "";
-    this.preventOpen = false;
     this.closing = false;
     this.label = "Press to open sitewide search input";
   }
 
-
-  /**
-   * @method updated
-   * @description Lit method called when element is updated.
-   * @param {*} props 
-   */
-  updated(props) {
-
-    if (props.has('opened')) {
-      if (this.opened) {
-        // let w = this.inputWidth;
-        // this.inputWidth = 0;
-        // this.inputWidth = w;
-        let i = this.shadowRoot.getElementById('search-input');
-        i.focus();
-      }
-
-      this.dispatchEvent(new CustomEvent('input-status', {
-        detail: {
-          message: 'The input has either been expanded or collapsed.'
-        }
-      }));
-    }
-  }
-
-  /**
-   * @method _constructClasses
-   * @description Constructs CSS classes based on element properties
-   * 
-   * @returns {Object}
-   */
-  _constructClasses() {
-    let classes = {};
-    classes['opened'] = this.opened;
-    classes['closed'] = !this.opened;
-    classes['closing'] = this.closing;
-    if (this.inputValue) {
-      classes['has-input'] = true;
-    }
-    else {
-      classes['no-input'] = true;
-    }
-    return classes;
-  }
-
-  /**
-   * @method _constructInputStyles
-   * @description Constructs CSS input styles based on element properties
-   * 
-   * @returns {Object}
-   */
-  _constructInputStyles() {
-    let styles = {};
-    if (this.inputWidth) {
-      styles['width'] = (this.inputWidth - 20) + "px";
-    }
-    return styles;
+  firstUpdated() {
+    this.inputEle = this.shadowRoot.getElementById('search-input');
   }
 
   /**
@@ -95,6 +37,14 @@ export class RpQuickSearch extends LitElement {
    */
   open(){
     this.opened = true;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.inputEle.focus();
+      });
+    });
+
+    this._fireToggledEvent();
   }
 
   /**
@@ -103,18 +53,14 @@ export class RpQuickSearch extends LitElement {
    */
   close() {
     this.opened = false;
+    this._fireToggledEvent();
   }
 
-  /**
-   * @method validateSearchText
-   * @description Runs validations on input text.
-   * @returns {Boolean}
-   */
-  validateSearchText(){
-    if ( !this.inputValue.replace(/ /g,'') ) {
-      return false;
-    }
-    return true;
+  _fireToggledEvent() {
+    this.dispatchEvent(new CustomEvent(
+      'toggled', 
+      {detail: {opened: this.opened}}
+    ));
   }
 
   /**
@@ -124,68 +70,29 @@ export class RpQuickSearch extends LitElement {
    * Will display the search input if not a search submission
    */
   _handleClick(){
-
-    if (this.opened) {
-      if (!this.validateSearchText()) {
+    if ( this.opened ) {
+      if( this.inputEle.value === '' ) {
+        this.close();
         return;
       }
+
       this.dispatchEvent(this._newSearchEvent());
-    }
-
-    else {
-      if (this.preventOpen) {
-        this.preventOpen = false;
-        return;
-      }
-      this.opened = true;
-    }
-  }
-
-  /**
-   * @method _activateLink
-   * @description Applies link styling to the submit icon. Bound to 'is-link' attribute on rp-icon
-   * 
-   * @returns {Boolean}
-   */
-  _activateLink() {
-    if (!this.opened) {
-      return true;
-    }
-    if (this.inputValue) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @method _handleBlur
-   * @description Bound to the blur event on the input
-   */
-  _handleBlur(){
-    if (!this.opened) {
       return;
     }
-    let i = this.shadowRoot.getElementById('search-input');
-    if (!i.value) {
-      
-      this.opened = false;
-      //this.preventOpen = true;
-      //this.closing = true;
-      //self = this;
-      //setTimeout(function(){ self.preventOpen = false; }, 300);
-    }
+
+    this.open();
   }
 
   /**
    * @method _handleAnimationEnd
    * @description Bound to the animation end event on the input
    */
-  _handleAnimationEnd() {
-    if (this.closing) {
-      this.opened = false;
-      this.closing = false;
-    }
-  }
+  // _handleAnimationEnd() {
+  //   if (this.closing) {
+  //     this.opened = false;
+  //     this.closing = false;
+  //   }
+  // }
 
   /**
    * @method _handleKeyup
@@ -195,9 +102,6 @@ export class RpQuickSearch extends LitElement {
   _handleKeyup(e) {
     if (e.keyCode === 13) {
       e.preventDefault();
-      if (!this.validateSearchText()) {
-        return;
-      }
       this.dispatchEvent(this._newSearchEvent());
     }
   }

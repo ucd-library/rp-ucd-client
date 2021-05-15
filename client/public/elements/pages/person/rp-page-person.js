@@ -42,8 +42,10 @@ export default class RpPagePerson extends RpUtilsLanding {
       defaultResearchSubjectCount : {type: Number},
       tempGrantObject: {type: Object},
       activeGrant: {type:Array},
-      inactiveGrant: {type:Array}
+      inactiveGrant: {type:Array},
 
+      title : {type: Object},
+      additionalTitles : {type: Array}
     };
   }
 
@@ -57,7 +59,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this._injectModel('PersonModel', 'AppStateModel');
     
     this.assetType = "person";
-    this.defaultResearchSubjectCount = 4;
+    this.defaultResearchSubjectCount = 8;
 
     this.isAdmin = UserUtils.isAdmin(APP_CONFIG.user);
 
@@ -92,6 +94,12 @@ export default class RpPagePerson extends RpUtilsLanding {
       this._doPubOverviewQuery(this.assetId),
       this._doGrantQuery(this.assetId)
     ]);
+
+    let titles = this.PersonModel.getTitles(this.individual);
+    if( titles.length ) {
+      this.title = titles.splice(0, 1)[0];
+      this.additionalTitles = titles;
+    }
 
     this.isOwnProfile = this._isOwnProfile();
   }
@@ -129,6 +137,8 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.grantStatus = 'loading';
     this.publicationOverviewStatus = 'loading';
     this.showResearchSubjectCount = this.defaultResearchSubjectCount;
+    this.title = {};
+    this.additionalTitles = [];
   }
 
   /**
@@ -464,35 +474,24 @@ export default class RpPagePerson extends RpUtilsLanding {
     return buttonType.displayedOffset > buttonType.ct ? buttonType.ct - (buttonType.displayedOffset - 10) : 10;
   }
 
-
-  /**
-   * @method getTitles
-   * @description Gets titles for a person.
-   * 
-   * @returns {Array}
-   */
-  getTitles(){
-    return this.PersonModel.getTitles(this.individual);
-  }
-
   /**
    * @method getHeadlineTitle
    * @description Gets title and organization for a person
    * 
    * @returns {String}
    */
-  getHeadlineTitle() {
-    return this.PersonModel.getHeadlineTitle(this.individual);
-  }
+  // getHeadlineTitle() {
+  //   return this.PersonModel.getHeadlineTitle(this.individual);
+  // }
 
   /**
-   * @method getBestLabel
+   * @method getFullName
    * @description Gets name of a person.
    * 
    * @returns {String}
    */
-  getBestLabel() {
-    return this.PersonModel.getBestLabel(this.individual);
+  getFullName() {
+    return this.PersonModel.getFullName(this.individual);
   }
 
   /**

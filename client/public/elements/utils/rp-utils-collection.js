@@ -92,7 +92,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.subFacetStatus = "loading";
     this.subFacetsWithResultsCt = 0;
 
-    this.textQuery = "";
+    this.textQuery = null;
 
     this.hasAz = false;
     this.azSelected = 'All';
@@ -166,7 +166,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     let data = await this.CollectionModel.query(q);
 
     let facetAggDoneHere = false;
-    if (this.textQuery && this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
+    if (this.textQuery !== null && this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
       this.subFacetStatus = data.state;
       facetAggDoneHere = true;
     }
@@ -202,7 +202,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    * @returns {Promise}
    */
   async _getSearchAggs() {
-    if (!this.textQuery) {
+    if ( this.textQuery === null ) {
       return;
     }
     if (this.mainFacet == this.defaultFacetId && this.subFacet == this.defaultFacetId) {
@@ -309,7 +309,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    */
   _constructQuery(){
     let q = {};
-    if (this.textQuery) {
+    if ( this.textQuery !== null ) {
       q.textQuery = this.textQuery;
     }
 
@@ -509,6 +509,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       ${this.hasAz ? html`
         <rp-a-z selected-letter="${this.azSelected}"
                 .disabledLetters="${this.azDisabled}"
+                base-href="${this.id+(this.subFacet !== 'none' ? '/'+this.subFacet : '')}"
                 @changed-letter=${e => this._onUserAction("az", e.target.selectedLetter)}>
         </rp-a-z>
       ` : html``}

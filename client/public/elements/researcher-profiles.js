@@ -51,7 +51,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       isSearch: {type: Boolean},
       hideMainNav: {type: Boolean},
       accountLinks: {type:Array},
-      quickSearchWidth: {type: Number},
+      quickSearchOpened: {type: Number},
       mobileMenuPage: {type: String},
       showVersion: {type: Boolean},
       hasProfile: {type: Boolean},
@@ -69,7 +69,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.eSearch = APP_CONFIG.client;
     this.hideMainNav = false;
     this.textQuery = "";
-    this.quickSearchWidth = 220;
+    this.quickSearchOpened = false;
     this.userId = userUtils.getUserId(this.user);
     this.userName = userUtils.getUserDisplayName(this.user);
     this.userFirstName = userUtils.getUserFirstName(this.user);
@@ -160,7 +160,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @description Lit method called when element is first updated.
    */
   firstUpdated() {
-    this._resizeQuickSearch();
+    // this._resizeQuickSearch();
   }
 
   /**
@@ -171,8 +171,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    */
   async _onAppStateUpdate(e) {
     rpLogger.log('_onAppStateUpdate', e);
-    
-    if ( e.location.query && e.location.query.s ) {
+
+    if ( e.location.query && e.location.query.s !== undefined ) {
       this.isSearch = true;
       this.textQuery = e.location.query.s;
     }
@@ -221,10 +221,10 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   }
 
   /**
-   * @method closeQuickSearch
+   * @method _closeQuickSearch
    * @description closes the quick-search element.
    */
-  closeQuickSearch(){
+   _closeQuickSearch(){
     this.shadowRoot.getElementById('quick-search').close();
   }
 
@@ -248,24 +248,28 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @description bound to rp-quick search element.
    * Hides main nav on mobile if quick-search is open;
    */
-  _onQuickSearchClick(){
-    if (window.innerWidth < 480) {
-      if (this.shadowRoot.getElementById('quick-search').opened) {
-        this.hideMainNav = true;
-      }
-      else {
-        this.hideMainNav = false;
-      }
-    }
-    else {
-      this.hideMainNav = false;
-    }
-  }
+  // _onQuickSearchClick(){
+  //   if (window.innerWidth < 480) {
+  //     if (this.shadowRoot.getElementById('quick-search').opened) {
+  //       this.hideMainNav = true;
+  //     }
+  //     else {
+  //       this.hideMainNav = false;
+  //     }
+  //   }
+  //   else {
+  //     this.hideMainNav = false;
+  //   }
+  // }
 
-  _onQuickSearchKeyup(e){
-    if (e.keyCode === 13 && !e.target.opened) {
-      e.target.opened = true;
-    }
+  // _onQuickSearchKeyup(e){
+  //   if (e.keyCode === 13 && !e.target.opened) {
+  //     e.target.opened = true;
+  //   }
+  // }
+
+  _onQuickSearchToggle(e) {
+    this.quickSearchOpened = e.detail.opened;
   }
 
   /**
@@ -274,8 +278,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    */
   _onResize(){
     let w = window.innerWidth;
-    this._onQuickSearchClick();
-    this._resizeQuickSearch(w);
+    // this._onQuickSearchClick();
+    // this._resizeQuickSearch(w);
     if (w >= 480 && this.page == 'app-mobile-menu') this.page = this.mobileMenuPage;
   }
 
@@ -284,21 +288,21 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @description Resizes the input of the quicksearch based on the view width.
    * @param {Number} w - Width of view in pixels.
    */
-  _resizeQuickSearch(w) {
-    if (!w) w = window.innerWidth;
+  // _resizeQuickSearch(w) {
+  //   if (!w) w = window.innerWidth;
     
-    if (w > 650) {
-      this.quickSearchWidth = 220;
-    }
-    else if (w > 480) {
-      let navWidth = this.shadowRoot.getElementById('nav-left').offsetWidth;
-      this.quickSearchWidth = w - navWidth - 56;
-    }
-    else {
-      this.quickSearchWidth = w - 40 - 50;
-    }
+  //   if (w > 650) {
+  //     this.quickSearchWidth = 220;
+  //   }
+  //   else if (w > 480) {
+  //     let navWidth = this.shadowRoot.getElementById('nav-left').offsetWidth;
+  //     this.quickSearchWidth = w - navWidth - 56;
+  //   }
+  //   else {
+  //     this.quickSearchWidth = w - 40 - 50;
+  //   }
 
-  }
+  // }
 
   /**
    * @method _onSearch
