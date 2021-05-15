@@ -205,6 +205,7 @@ return html`
     overflow-y: hidden;
     min-width: 0;
     margin-right: 12px; 
+    display: flex;
 
   }
 
