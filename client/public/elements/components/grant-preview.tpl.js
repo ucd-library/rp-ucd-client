@@ -1,4 +1,6 @@
 import { html } from 'lit-element';
+import { styleMap } from 'lit-html/directives/style-map';
+
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 
 export default function render() {
@@ -30,6 +32,10 @@ export default function render() {
       margin-left: 12px;
       flex-grow: 1;
       align-self: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
     }
     .title {
       font-size: var(--font-size);
@@ -58,8 +64,8 @@ export default function render() {
     </style>
 
     <div class=container>
-      <div class="icon-container"><rp-icon icon="rp-grant" circle-bg theme-color='grant' size-icon-svg="extralgSVGIcon" size="extralg"></rp-icon></div>
-      <div class="text-container">
+      <div class="icon-container"><rp-icon icon="iron-receipt" circle-bg theme-color='grant' size-icon="extralgIconGrants" size="extralg"></rp-icon></div>
+      <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}">
         <a class="title" href="${this.getLink()}">${unsafeHTML(this.title)}</a>
         <div class="below-title">
           <span>Research Grant</span>

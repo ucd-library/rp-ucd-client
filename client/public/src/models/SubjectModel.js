@@ -58,7 +58,6 @@ class SubjectModel extends BaseModel {
     } else {
       await this.service.getRandomSubjects(id, count);
     }
-
     return this.store.data.bySubject[id];
   }
 

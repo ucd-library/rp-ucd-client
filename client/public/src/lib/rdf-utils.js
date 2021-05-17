@@ -1,4 +1,3 @@
-
 class RdfUtils {
 
   /**
@@ -17,6 +16,7 @@ class RdfUtils {
     return property;
   }
 
+
   /**
    * @method getFirstValue
    * @description return the first value in an array
@@ -29,9 +29,8 @@ class RdfUtils {
       if( obj.length === 0 ) return null;
       return obj[0];
     }
-    return obj || null;
+    return obj === undefined ? null : obj;
   }
-
 
 }
 

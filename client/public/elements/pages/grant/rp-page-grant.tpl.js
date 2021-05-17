@@ -17,6 +17,13 @@ return html`
     color: var(--tcolor-primary20);
     margin: 0 15%;
   }
+
+  .hero .upperType {
+    color: var(--tcolor-primary10);
+    text-transform: uppercase;
+    font-size: var(--font-size-h3);
+  }
+
   .hero .type {
     color: var(--tcolor-primary10);
     text-transform: uppercase;
@@ -134,6 +141,18 @@ return html`
     display: flex;
     flex-grow: 1;
   }
+  #wrapped-text {
+    word-wrap: break-word;
+  }
+  .grid-container {
+    display: grid;
+    display: -ms-grid;
+    grid-template-columns: auto auto;
+    -ms-grid-template-columns: auto auto;
+    }
+  .grid-item {
+    text-align: left;
+  }  
   @media (min-width: 800px) {
       .hero {
       padding-left: 30px;
@@ -141,7 +160,7 @@ return html`
     }
   }
 </style>
-<div class="subject top">
+<div id="wrapped-text" class="subject top">
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
   </div>
@@ -156,16 +175,15 @@ return html`
           ${this._labelTitle()}
           </h2>
         </div>
-        <div class="type text-center">${this.subjectType}</div>
+        <p class="upperType text-center">
+            ${this.dateStart} &#183; ${this.dateEnd} 
+        </p>
+        <div class="type text-center">Grant</div> <!--${this.grantType}-->
       </div>
-      <!-- <rp-link-list class="bg-light p-3"
-                  direction="horizontal"
-                  .links="${this.getPageSections()}"
-                  current-link="${this.activeSection.index}">
-      </rp-link-list> -->
       <rp-link-list id="navbar" class="bg-light p-3"
         direction="horizontal"
         .links="${this.getPageSections()}"
+        use-hash
         current-link="${this.activeSection.index}">
       </rp-link-list>
     </div>
@@ -174,6 +192,51 @@ return html`
   <div class="sections container">
 
     <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
+        <h1 class="weight-regular mt-0">About</h1>
+        <div class="grid-container">
+            <div class="grid-item">
+                <h2>Awarded By</h2>
+                <div>${this.awardedByLabel}</div>
+            </div> 
+            <div class="grid-item">
+                <h2>Amount</h2>
+                <div>${this.grantAmount}</div>
+            </div> 
+            <div class="grid-item">
+                <h2>Status</h2>
+                <div>${this.grantAwardStatus}</div>
+            </div> 
+            <div class="grid-item">
+                <h2>Grant Number</h2>
+                <div>${this.grantNumber}</div>
+            </div> 
+        </div>
+        ${this.purpose ? html `
+          <h2>Purpose</h2>
+            <div>${this.purpose}</div>
+          `: html ``
+        }
+        ${this.grantUrl ? html `
+          <h2>URL</h2>
+            <div>${this.grantUrl}</div>
+          `: html ``
+        }
+
+    </section>
+
+    <section id="contributors" class="bg-light mt-3" ?hidden="${this._hidePageSection('contributors')}">
+    <h1 class="weight-regular mt-0">Known Contributors</h1>      
+
+        ${this.role == "pi_role" ? html `
+          <h2>Principal Investigator</h2>
+        `: html ``}  
+
+        ${this.contributors.map(contributor => html`
+          <rp-person-preview style="flex-flow: column wrap;" 
+            .data=${contributor}
+            text-width="${this.peopleWidth}"
+          ></rp-person-preview>`
+        )}
 
     </section>
   </div>

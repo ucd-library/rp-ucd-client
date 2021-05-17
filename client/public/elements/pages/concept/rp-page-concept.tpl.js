@@ -1,5 +1,7 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
+import {renderHTML} from '../../../src/lib/santize-html.js';
+
 
 export default function render() {
 return html`
@@ -71,6 +73,9 @@ return html`
     color: var(--tcolor-secondary);
     font-weight: var(--font-weight-bold);
   }
+  #wrapped-text {
+    word-wrap: break-word;
+  }
   #overview .venue {
     text-transform: capitalize;
   }
@@ -141,7 +146,7 @@ return html`
     }
   }
 </style>
-<div class="subject top">
+<div id="wrapped-text" class="subject top">
   <div ?hidden="${this._hideStatusSection('loading')}" class="flex align-items-center justify-content-center">
       <div class="loading1">loading</div>
   </div>
@@ -152,9 +157,9 @@ return html`
     <div class="page-header container-wide">
       <div class="hero">
         <div class="title mb-0"> 
-          <h2 class="text-secondary h1 bold mb-0 text-center">
-          ${this._labelTitle()}
-          </h2>
+          <h1  class="text-secondary h1 bold mb-0 text-center">
+          ${renderHTML(this._labelTitle())}
+          </h1>
         </div>
         <div class="type text-center">${this.subjectType}</div>
       </div>
@@ -227,7 +232,7 @@ return html`
             ${v.results.map((pub, i, pubs) => html`
               <div class="box-pubsyear">
                 <div class="year">${this._getYear(pub, i, pubs)}</div>
-                <div class="pubs"><rp-citation .data="${pub}"></rp-citation></div>
+                <div id="wrapped-text" class="pubs"><rp-citation .data="${pub}"></rp-citation></div>
               </div> 
             `)}
             <div class="box-pub-buttons">

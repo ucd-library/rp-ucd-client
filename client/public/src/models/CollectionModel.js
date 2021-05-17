@@ -38,7 +38,6 @@ class CollectionModel extends BaseModel {
    */
   async overview(id, kwargs={}) {
     let queryObject = QueryUtils.getBaseQueryObject();
-
     if (id == "facets") {
       queryObject.facets["@type"] = {"type" : "facet"};
       queryObject.limit = 0;
@@ -133,20 +132,20 @@ class CollectionModel extends BaseModel {
    */
   async query(elementQuery={}){
     let queryObject = this.convertElementQuery(elementQuery);
-
     // in no type specified, use our default types
     if( !queryObject.filters['@type'] ) {
       queryObject.filters['@type'] = QueryUtils.getKeywordFilter(APP_CONFIG.defaultTypes, 'or');
     }
 
     let id = QueryUtils.getQueryId(queryObject);
-
     let current = this.store.data.queryById[id];
+
     if( current && current.request ) {
       await current.request;
     } 
     else {
       await this.service.query(id, queryObject);
+
     }
     return this.store.data.queryById[id];
   }
@@ -197,13 +196,18 @@ class CollectionModel extends BaseModel {
     if ( subjectFilter ) id = `${id}__${subjectFilter}`;
 
     // Filter by facets if applicable
-    let mainFacetType = AssetDefs.getMainFacetById(mainFacet).es;
+    let mainFacetDef = AssetDefs.getMainFacetById(mainFacet) || {};
+    let mainFacetType = mainFacetDef.es;
     let subFacetType = AssetDefs.getSubFacetById(mainFacet, subFacet).es;
     if ( subFacetType ) {
       q.filters['@type'] = QueryUtils.getKeywordFilter([mainFacetType, subFacetType]);
     }
     else if( mainFacetType ) {
       q.filters['@type'] = QueryUtils.getKeywordFilter(mainFacetType);
+    }
+
+    if( mainFacetDef.defaultSortField ) {
+      q.sort.push({[mainFacetDef.defaultSortField]: 'asc'});
     }
 
     // Filter by subject id if applicable
@@ -389,7 +393,7 @@ class CollectionModel extends BaseModel {
       if (!Object.keys(counts).includes(facetOption.es)) facetOption.disabled = true;
       mainFacets.push(facetOption);
     }
-
+    console.log("MainFacet:", mainFacets);
     if (APP_CONFIG.verbose) console.log("Main facet menu:", mainFacets);
     return mainFacets;
 
@@ -459,9 +463,6 @@ class CollectionModel extends BaseModel {
     if (elementQuery.textQuery) {
       query.text = elementQuery.textQuery;
       query.textFields = AssetDefs.getSearchFields(mainFacet);
-
-      // Apply faceting to query
-      query.facets = QueryUtils.defaultTypeFacet;
     }
     // No search text query. Just sort by label
     else {
@@ -469,6 +470,9 @@ class CollectionModel extends BaseModel {
       s[AssetDefs.getBrowseSortField(mainFacet)] = 'asc';
       query.sort = [s];
     }
+
+    // Apply faceting to query
+    query.facets = QueryUtils.defaultTypeFacet;
 
     // Apply pagination
     if (elementQuery.offset) {
@@ -498,6 +502,9 @@ class CollectionModel extends BaseModel {
     if ( q.textQuery ) path += "/search";
     if ( AssetDefs.facetExists(q.mainFacet) ) path += `/${q.mainFacet}`;
     if ( AssetDefs.subFacetExists(q.mainFacet, q.subFacet) && !ignoreArgs.includes('subFacet') ) path += `/${q.subFacet}`;
+
+    // empty text search
+    if( path === '' ) path = "/search";
 
     // query args
     let args = [];

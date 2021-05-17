@@ -15,7 +15,7 @@ class RpLogger {
   getCaller() {
     try { throw new Error('Stack Trace'); }
     catch(e) { 
-      return e.stack.split('\n')[3].trim() 
+      return e.stack.split('\n')[3].trim();
     }
   }
 }

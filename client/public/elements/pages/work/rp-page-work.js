@@ -133,7 +133,7 @@ export default class RpPageWork extends RpUtilsLanding {
     // if (APP_CONFIG.verbose) console.log("work payload:", data);
 
     this.authors = this.WorkModel.getAuthors(this.work);
-    
+    console.log("AUTHORS:", this.authors);
     this.isOwnWork = this.WorkModel.isUsersWork(this.work);
     this.hasOtherAuthors = this.WorkModel.hasNonInstitutionAuthors(this.work);
     this.workType = this.WorkModel.getWorkType(this.work);
@@ -227,6 +227,18 @@ export default class RpPageWork extends RpUtilsLanding {
     }
     return true;
   }
+
+  /**
+   * @method _hasRecords
+   * @description called by rp-utils-landing._hidePageSection when the section
+   * is 'records'.  Indicates if data is available or should the section should be hidden.
+   * 
+   * @returns 
+   */
+  _hasRecords() {
+    return (this.isOwnWork || this.WorkModel.getAdditionalLinks(this.work).length > 0);
+  }
+
 
 }
 

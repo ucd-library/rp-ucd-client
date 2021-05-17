@@ -35,7 +35,6 @@ class WorkModel extends BaseModel {
    */
   async getWork(id) {
     let state = this.store.data.byWork[id];
-
     try {
       if( state && state.request ) {
         await state.request;
@@ -126,7 +125,7 @@ class WorkModel extends BaseModel {
    */
   isUsersWork(work) {
     if( !APP_CONFIG.user ) return false;
-    if( !APP_CONFIG.user.username ) return false;
+    if( !APP_CONFIG.user.expertsId ) return false;
 
     try {
       let workAuthors = this.getAuthors(work);
@@ -135,7 +134,7 @@ class WorkModel extends BaseModel {
 
         for (let author of authors) {
           let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-          if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === authorId.toLowerCase()) {
+          if (APP_CONFIG.user.expertsId === authorId.toLowerCase()) {
             return true;
           }
         }
@@ -195,11 +194,12 @@ class WorkModel extends BaseModel {
 
     let authors = rdfUtils.asArray(work.Authorship);
     for (let author of authors) {
-      let name = this._getAuthorVcardName(author.hasName) || {};
+      let name = this._getAuthorVcardName(author.relates) || {};
 
       if( !author._client ) {
         author._client = {
           givenName : name.givenName || '',
+          middleName : name.middleName || '',
           familyName : name.familyName || '',
           citationText : this._getAuthorCitationTextName(name)
         };
@@ -215,9 +215,13 @@ class WorkModel extends BaseModel {
         author._client.aggieExpertsAuthor = false;
 
         try {
-          if( author['@type'].includes('foaf:Person') ) {
-            let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-            author._client.apiEndpoint = author['@id'];
+          let person = rdfUtils
+            .asArray(author.relates)
+            .find(item => item['@type'].includes('foaf:Person'));
+
+          if( person ) {
+            let authorId = person['@id'].replace(this.service.jsonContext + ":", "");
+            author._client.apiEndpoint = person['@id'];
             author._client.href = '/' + authorId;
             author._client.aggieExpertsAuthor = true;
           }
@@ -243,17 +247,22 @@ class WorkModel extends BaseModel {
    * @description given a authors hasName object/array, return the
    * vcard entry or null
    * 
-   * @param {Object|Array} names 
+   * @param {Object|Array} relates 
    * 
    * @returns {Object}
    */
-  _getAuthorVcardName(names) {
-    names = rdfUtils.asArray(names);
-    let vcard = names.find(name => (typeof name === 'object' && name['@id'].match(/#vcard-name$/)));
-    if( vcard ) return this._correctName(vcard);
-    if( names.length > 0 && typeof names[0] === 'object' ) {
-      return this._correctName(names[0]);
+  _getAuthorVcardName(relates) {
+    relates = rdfUtils.asArray(relates);
+
+    let vcard = null;
+    for( let person of relates ) {
+      vcard = rdfUtils.asArray(person.hasName).find(item => 
+        (typeof item === 'object' && item['@id'].match(/#vcard-name$/))
+      );
+      if( vcard ) break;
     }
+
+    if( vcard ) return this._correctName(vcard);
     return null;
   }
 
@@ -355,20 +364,9 @@ class WorkModel extends BaseModel {
     // venue name
     try {
       if( work.hasPublicationVenue ) {
-        let venue = work.hasPublicationVenue['@id'];
-        if( venue ) {
-          if( venue.startsWith(APP_CONFIG.data.prefix.ucdId + ':journal') ) {
-            venue = venue.replace(APP_CONFIG.data.prefix.ucdId + ':journal', '');
-            venue += " (journal)";
-          } else {
-            venue = venue.replace(new RegExp('^'+APP_CONFIG.data.prefix.ucdId+':.*/'), '');
-          }
-          venue = venue.replace(/[-:]/g, ' ');
-
-          output.push({text: venue, class: 'venue'});
-        }
+        let label = this.getVenue(rdfUtils.getFirstValue(work.hasPublicationVenue));
+        output.push({text: label.toLowerCase(), class: 'venue'});
       }
-        
     } catch (error) {
       console.error(error);
     }
@@ -400,6 +398,30 @@ class WorkModel extends BaseModel {
     }
 
     return output;
+  }
+
+  /**
+   * @method getVenue
+   * @description Formats venue from hasPublicationVenue work property
+   * @param {Object} venue
+   * 
+   * @returns {String}
+   */
+  getVenue(venue={}){
+    let labels = rdfUtils.asArray(venue.label);
+    if( labels.length === 0 ) return '';
+
+    labels.sort((a,b) => a.length < b.length);
+    let shortest = labels[0].length;
+
+    // many labels are in all caps or have very long titles
+    // attempt to find shortest, no caps, label.
+    let best = labels
+      .filter(item => item.length <= shortest)
+      .filter(item => !item.match(/^[A-Z :_-]*$/));
+    if( best.length ) return best[0];
+
+    return labels[0];
   }
 
   /**

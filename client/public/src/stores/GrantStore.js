@@ -7,7 +7,7 @@ class GrantStore extends BaseStore {
 
     this.data = {
       byGrant : {},
-      grantAuthors: {}
+      grantContributors: {}
     };
     this.events = {};
   } 
@@ -72,8 +72,8 @@ class GrantStore extends BaseStore {
    * @param {String} id grant
    * @param {Promise} request 
    */
-  setAuthorLoading(id, request) {
-    this._setAuthorState({
+  setContributorLoading(id, request) {
+    this._setContributorState({
       state: this.STATE.LOADING,
       id, request
     });
@@ -86,8 +86,8 @@ class GrantStore extends BaseStore {
    * @param {String} id grant
    * @param {Object} payload 
    */
-  setAuthorLoaded(id, payload) {
-    this._setAuthorState({
+  setContributorLoaded(id, payload) {
+    this._setContributorState({
       state: this.STATE.LOADED,
       id, payload
     });
@@ -100,8 +100,8 @@ class GrantStore extends BaseStore {
    * @param {String} id grant
    * @param {Status} error status 
    */
-  setAuthorError(id, error) {
-    this._setAuthorState({
+  setContributorError(id, error) {
+    this._setContributorState({
       state: this.STATE.ERROR,
       id, error
     });
@@ -113,9 +113,9 @@ class GrantStore extends BaseStore {
    * 
    * @param {State} state grant
    */
-  _setAuthorState(state) {
+  _setContributorState(state) {
     //if( !this.stateChanged(this.data.overview[id], state) ) return;
-    this.data.grantAuthors[state.id] = state;
+    this.data.grantContributors[state.id] = state;
   }
 
 }

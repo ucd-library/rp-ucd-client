@@ -27,7 +27,13 @@ return html`
   }
 </style>
 <div class="search-header container-wide bg-light top">
-  <div class="bg-primary text-light" id="search-term-box"><h1 class="weight-regular my-0">${this.dataTotal} results for <span class="text-secondary bold">${this.textQuery}</span></h1></div>
+  <div class="bg-primary text-light" id="search-term-box">
+    <h1 class="weight-regular my-0">
+      ${this.dataTotal} results 
+      <span ?hidden="${this.textQuery === ''}">for</span> 
+      <span class="text-secondary bold">${this.textQueryDisplay}</span>
+    </h1>
+  </div>
   <rp-link-list class="bg-light p-3"
                 direction="horizontal"
                 current-link="${this.mainFacetIndex}"
@@ -37,7 +43,6 @@ return html`
 ${this._renderMobileSubFacets()}
 <div class="search container bg-light pb-3 ${this.data.length > 0 ? 'has-results' : 'no-results'} ${this.mainFacet == this.defaultFacetId ? 'not-faceted' : 'faceted'}" >
 <div class="body flex">
-
     ${this.mainFacet == this.defaultFacetId ? 
     html `  
           <div></div>

@@ -10,6 +10,7 @@ import "../../components/grant-preview";
 import "../../components/search";
 import "../../components/rp-loading";
 
+
 /**
  * @class RpPageHome
  * @description main home page
@@ -35,6 +36,7 @@ export default class RpPageHome extends Mixin(LitElement)
       subjects: {type: Array},
       subjectsTotal: {type: Number},
       subjectsStatus: {type: String},
+      textWidth: {type: String, attribute: 'text-width'},
       visible: {type: Boolean}
     };
   }
@@ -43,7 +45,7 @@ export default class RpPageHome extends Mixin(LitElement)
     super();
     this.render = render.bind(this);
 
-    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel');
+    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel', 'GrantModel');
     this.resetProperties();
     this.facets = {};
     this.visible = false;
@@ -52,7 +54,7 @@ export default class RpPageHome extends Mixin(LitElement)
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
     this.setPeopleWidth(window.innerWidth);
-
+    this.textWidth = (window.innerWidth.toString() - 70) + "px";
     this.theme = APP_CONFIG.theme;
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
 
@@ -87,7 +89,8 @@ export default class RpPageHome extends Mixin(LitElement)
       if (this.facetsStatus == 'loaded') {
         await Promise.all([
           this._getPeople(),
-          this._getSubjects()
+          this._getSubjects(),
+          this._getGrants()
         ]);
       }
       this.setPageStatus();
@@ -95,6 +98,22 @@ export default class RpPageHome extends Mixin(LitElement)
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
     }
+    if (props.has('textWidth')) this.setBadgeTabIndex();
+  }
+
+  /**
+   * @method setBadgeTabIndex
+   * @description Hides any overflow badges from tab positioning
+   */
+  async setBadgeTabIndex(){
+    await this.updated;
+    let containerWidth = this.textWidth;
+    let cumWidth = 0;
+    this.shadowRoot.querySelectorAll('rp-badge').forEach(badge => {
+      cumWidth += badge.offsetWidth;
+      badge.hideFromTab = cumWidth > containerWidth;
+    });
+
   }
 
   /**
@@ -284,6 +303,7 @@ export default class RpPageHome extends Mixin(LitElement)
     let subjects = await this.SubjectModel.getRandomSubjects(10);
     this.subjectsStatus = subjects.state;
     this.subjects = subjects.payload;
+
     if (APP_CONFIG.verbose) console.log('subjects: ', this.subjects);
   }
 

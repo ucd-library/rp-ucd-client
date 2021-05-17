@@ -18,13 +18,13 @@ class AssetDefs {
    * @returns {Object[]}
    */
   getMainFacets(){
-    return [
+    let facet = [
       {
         id: 'people',
         idSingular: 'person',
         text: 'People', 
         es: TYPES.person,
-        defaultSortField: this.defaultSortField,
+        defaultSortField: 'hasContactInfo.familyName',
         baseFilter: {
           '@type': {
             type: "keyword", 
@@ -72,7 +72,7 @@ class AssetDefs {
           "label.text^10"
         ]
       },
-      */
+      */ 
       {
         id: 'works', 
         idSingular: 'work',
@@ -96,8 +96,37 @@ class AssetDefs {
           "hasPublicationVenue.label.text^7",
           "hasPublicationVenue.issn^5"
         ]
-      }
+      },
     ];
+
+    if(APP_CONFIG.includeGrants){
+      let grant = {
+        id: 'grants', 
+        idSingular: 'grant',
+        text: 'Grants', 
+        es: TYPES.grant,
+        defaultSortField: this.defaultSortField,
+        baseFilter: {
+          "@type": {
+            type: "keyword", 
+            op: "and", 
+            value: [TYPES.grant]
+          }
+        },
+        azField: "label.firstLetter",
+        facetedSearchFields: [
+          "label.text^2",
+          "assignedBy.label.text",
+          "sponsorAwardId.text^2",
+          "relates.hasContactInfo.familyName^2",
+          "relates.hasContactInfo.givenName^2"
+        ]
+      };
+      facet.push(grant);
+    }
+
+    return facet;
+    
   }
 
   /**
@@ -223,6 +252,9 @@ class AssetDefs {
             }
           }
         }
+      ],
+      grants: [
+        // TODO: SB No SubFacets that I am aware of.
       ]
     };
   }
@@ -244,9 +276,10 @@ class AssetDefs {
       'hasContactInfo.givenName.text^8',
       "_.organizationLabel.text^6",
       "_.personLabel.text^6",
-      "_.publicationLabel.text^6",
+      "_.workLabel.text^6",
       "_.conceptLabel.text",
       "_.subjectAreaLabel.text^2",
+      "_.grantLabel.text^6",
       "hasSubjectArea.label.text^5",
       "abstract",
       'hasContactInfo.title.text',
@@ -255,7 +288,10 @@ class AssetDefs {
       "hasPublicationVenue.label.text",
       'citation.label^10',
       '_.top20Citation.label^15',
-      '_.lastCitation.label^15'
+      '_.lastCitation.label^15',
+      'relates.hasContactInfo.familyName^10',
+      'relates.hasContactInfo.givenName^10',
+      'assignedBy.label^10',
     ];
   }
  

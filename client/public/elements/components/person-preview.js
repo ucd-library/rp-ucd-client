@@ -43,8 +43,9 @@ export class RpPersonPreview extends Mixin(LitElement)
    */
   updated(props) {
     if( props.has('data') ) {
+
       let result = previewUtils.getSnippetTitle(
-        this.getLastName()+', '+this.getFirstName(),
+        this.PersonModel.getFullNameLastFirst(this.data),
         this.PersonModel.getSnippet(this.data)
       );
 
@@ -73,36 +74,14 @@ export class RpPersonPreview extends Mixin(LitElement)
 
   /**
    * @method getName
-   * @description calls the getBestLabel function gets the 
+   * @description calls the getFullName function gets the 
    * preferred the person label if it exists 
    * 
    * @returns {String}  
    */
   getName() {
     if (!this.data) return "";
-    return this.PersonModel.getBestLabel(this.data);
-  }
-
-  /**
-   * @method getFirstName
-   * @description calls the getFirstName function gets the 
-   * first name of the person from the person object
-   * 
-   * @returns {String}  
-   */
-  getFirstName() {
-    return this.PersonModel.getNameObject(this.data).fname;
-  }
-
-  /**
-   * @method getLastName
-   * @description calls the getLastName function gets the 
-   * last name of the person from the person object
-   * 
-   * @returns {String}  
-   */
-  getLastName() {
-    return this.PersonModel.getNameObject(this.data).lname;
+    return this.PersonModel.getFullName(this.data);
   }
 
   /**

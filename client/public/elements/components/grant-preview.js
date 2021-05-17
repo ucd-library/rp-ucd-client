@@ -14,17 +14,20 @@ export class RpGrantPreview extends Mixin(LitElement)
     return {
       data: {type: Object},
       showSnippet: {type: Boolean, attribute: 'show-snippet'},
-      authorCt: {type: Number},
+      contributorCt: {type: Number},
       snippet : {type: String},
-      title : {type: String}
+      title : {type: String},
+      textWidth: {type: String, attribute: 'text-width'},
     };
   }
 
   constructor() {
     super();
     this.data = {};
-    this.authorCt = 0;
+    this.contributorCt = 0;
     this.showSnippet = false;
+    this.textWidth = (window.innerWidth.toString() - 70) + "px";
+    
     this._injectModel('GrantModel');
     this.render = render.bind(this);
   }
@@ -80,7 +83,7 @@ export class RpGrantPreview extends Mixin(LitElement)
    */
   getAuthors(){
     let authors = this.GrantModel.getAuthors(this.data);
-    this.authorCt = authors.length;
+    this.contributorCt = authors.length;
     return authors;
   }
 

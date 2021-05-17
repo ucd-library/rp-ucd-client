@@ -29,6 +29,7 @@ return html`
         ${this.data.map((grant, i) => html`
           <rp-grant-preview
             .data="${grant}"
+            text-width="${this.peopleWidth}"
             class="my-3">
           </rp-grant-preview>
           ${this.data.length - i == 1 && this.dataTotal <= this.pgPer ? html`

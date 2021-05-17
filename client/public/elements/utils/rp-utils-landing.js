@@ -37,6 +37,8 @@ export default class RpUtilsLanding extends Mixin(LitElement)
    * @returns {Array} - Array of objects with section details.
    */
   getPageSections() {
+    this.disabledSections = [];
+
     let sections = [{id:"all", text: "All Info", href: ''}];
     if (this.assetType == 'work') {
       sections.push(
@@ -48,7 +50,8 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     if (this.assetType == 'person') {
       sections.push(
         {id: 'about', text: 'About'},
-        {id: 'publications', text: 'Publications'}
+        {id: 'publications', text: 'Publications'},
+        {id: 'grants', text: 'Grants'}
       );
     }
     if (this.assetType == 'concept'){
@@ -62,10 +65,15 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     if (this.assetType == 'grant'){
       sections.push(
         {id: 'about', text:'About'},
+        {id: 'contributors', text:'Contributors'},
       );
     }
     let i = 0;
     for (let section of sections) {
+      if( !this._sectionHasData(section.id) ) {
+        this.disabledSections.push(section.id);
+      }
+
       if (section.href === undefined) section.href = section.id;
       section.disabled = this.disabledSections.includes(section.id);
       section.index = i;
@@ -81,7 +89,10 @@ export default class RpUtilsLanding extends Mixin(LitElement)
    * 
    * @returns {Boolean}
    */
-  _hidePageSection(section){
+  _hidePageSection(section) {
+    let hasData = this._sectionHasData(section);
+    if( !hasData ) return true;
+
     if (this.activeSection.index == 0) {
       return false;
     }
@@ -89,6 +100,20 @@ export default class RpUtilsLanding extends Mixin(LitElement)
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * @method _sectionHasData
+   * @description all inheriting elements to express if they have data
+   * 
+   * @param {String} section 
+   * @returns Boolean
+   */
+  _sectionHasData(section) {
+    let fn = '_has'+(section.charAt(0).toUpperCase() + section.slice(1));
+    if( this[fn] ) return this[fn]();
+    
     return true;
   }
 
@@ -107,7 +132,6 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     }
 
     this.activeSection = sections.find(section => section.id === sectionId);
-    console.log(this.activeSection);
   }
   
   /**

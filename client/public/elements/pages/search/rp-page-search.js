@@ -33,7 +33,6 @@ export default class RpPageSearch extends RpUtilsCollection {
    */
   updated(props) {
     super.updated(props);
-
     // set primary facet
     if (props.has('mainFacet') && this.mainFacet != 'none') {
       let isRecognizedFacet = false;
