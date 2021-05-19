@@ -77,7 +77,7 @@ export class RpAZ extends LitElement {
 
     if( this.baseHref ) {
       let disabled = this.disabledLettersFmt.includes(letter);
-      let href = "";
+      let href = "#";
       if( !disabled ) {
         href = `/${this.baseHref}?az=${letter.toLowerCase()}`;
       }

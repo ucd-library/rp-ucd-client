@@ -5,7 +5,10 @@ import RpUtilsCollection from "../../utils/rp-utils-collection";
 import "../../components/alert";
 import "../../components/grant-preview";
 
-
+/**
+ * @class RpPageGrants
+ * @description main grant page
+ */
 export default class RpPageGrants extends RpUtilsCollection {
 
   static get properties() {

@@ -78,6 +78,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.isSearch = false;
     this.hasProfile = (this.user && this.user.expertsId);
     this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
+    
+    //This will change to this.navLinks once the 1.3 release is done
     this.navLinks_Grant = [
       {text: 'People', page: 'people', href: '/people'},
       {text: 'Subjects', page: 'concepts', href: '/concepts'},
@@ -85,6 +87,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       {text: 'Grants', page: 'grants', href: '/grants'},
       {text: 'Help', page: 'help', href: '/help'}];
 
+
+    // This will be deleted once the 1.3 release is done
     this.navLinks_NonGrant = [
       {text: 'People', page: 'people', href: '/people'},
       {text: 'Subjects', page: 'concepts', href: '/concepts'},

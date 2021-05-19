@@ -5,7 +5,10 @@ const GrantStore = require('../stores/GrantStore');
 const CollectionModel = require('./CollectionModel');
 const PersonModel = require('./PersonModel');
 
-
+/**
+ * @class GrantModel
+ * @description powers the research grants
+ */
 class GrantModel extends BaseModel {
 
   constructor() {
@@ -161,32 +164,7 @@ class GrantModel extends BaseModel {
       let id = author.inheresIn["@id"].split(":")[1];
       let person = await this.PersonModel.get(id);
       console.log(person);
-
-    //   if (!author.hasName) {
-    //     continue;
-    //   }
-    //   author.nameFirst = getFirstValue(author.hasName).givenName;
-    //   author.nameLast = getFirstValue(author.hasName).familyName;
-    //   if (!author['vivo:rank']) {
-    //     author['vivo:rank'] = Infinity;
-    //   }
-    //   author.href = "";
-    //   author.isOtherUniversity = true;
-    //   try {
-    //     if( author['@type'].includes('foaf:Person') ) {
-    //       let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-    //       author.apiEndpoint = author['@id'];
-    //       author.href = '/' + authorId;
-    //       author.isOtherUniversity = false;
-    //     }
-    //   } catch (error) {
-    //     console.warn("Unable to construct contributors href.");
-    //   }
-    //   contributor.push(author);
     }
-    // contributor.sort(function (a, b) {
-    //   return a['vivo:rank'] - b['vivo:rank'];
-    // });
     return contributor;
   }
 

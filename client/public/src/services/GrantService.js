@@ -2,6 +2,12 @@ const {BaseService} = require('@ucd-lib/cork-app-utils');
 const GrantStore = require('../stores/GrantStore');
 const queryUtils = require('../lib/query-utils');
 
+/**
+ * @class GrantService
+ * @description Service for linking the view model to the
+ * corresponding components
+ * 
+ */
 class GrantService extends BaseService {
 
   constructor() {

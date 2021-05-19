@@ -171,11 +171,11 @@ return html`
     <div class="page-header container-wide">
       <div class="hero">
         <div class="title mb-0"> 
-          <h2 class="text-secondary h1 bold mb-0 text-center">
+          <h2 class="text-secondary h1 bold mb-0 text-center" aria-label="Grant Title">
           ${this._labelTitle()}
           </h2>
         </div>
-        <p class="upperType text-center">
+        <p class="upperType text-center" aria-label="Date-Interval Title">
             ${this.dateStart} &#183; ${this.dateEnd} 
         </p>
         <div class="type text-center">Grant</div> <!--${this.grantType}-->
@@ -195,29 +195,29 @@ return html`
         <h1 class="weight-regular mt-0">About</h1>
         <div class="grid-container">
             <div class="grid-item">
-                <h2>Awarded By</h2>
+                <h2 aria-label="Awarded By Title">Awarded By</h2>
                 <div>${this.awardedByLabel}</div>
             </div> 
             <div class="grid-item">
-                <h2>Amount</h2>
+                <h2 aria-label="Grant Amount">Amount</h2>
                 <div>${this.grantAmount}</div>
             </div> 
             <div class="grid-item">
-                <h2>Status</h2>
+                <h2 aria-label="Grant Status">Status</h2>
                 <div>${this.grantAwardStatus}</div>
             </div> 
             <div class="grid-item">
-                <h2>Grant Number</h2>
+                <h2 aria-label="Grant Number">Grant Number</h2>
                 <div>${this.grantNumber}</div>
             </div> 
         </div>
         ${this.purpose ? html `
-          <h2>Purpose</h2>
+          <h2 aria-label="Grant Purpose">Purpose</h2>
             <div>${this.purpose}</div>
           `: html ``
         }
         ${this.grantUrl ? html `
-          <h2>URL</h2>
+          <h2 aria-label="Grant URL">URL</h2>
             <div>${this.grantUrl}</div>
           `: html ``
         }
@@ -225,10 +225,10 @@ return html`
     </section>
 
     <section id="contributors" class="bg-light mt-3" ?hidden="${this._hidePageSection('contributors')}">
-    <h1 class="weight-regular mt-0">Known Contributors</h1>      
+    <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>      
 
         ${this.role == "pi_role" ? html `
-          <h2>Principal Investigator</h2>
+          <h2 aria-label="Principal Investigator Section Title">Principal Investigator</h2>
         `: html ``}  
 
         ${this.contributors.map(contributor => html`
