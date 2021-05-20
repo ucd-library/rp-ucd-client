@@ -16,7 +16,7 @@ import "../../components/grant-preview";
 
 /**
  * @class RpPageGrant
- * @description main grant page
+ * @description main grants collection page
  */
 export default class RpPageGrant extends RpUtilsLanding {
   static get properties() {

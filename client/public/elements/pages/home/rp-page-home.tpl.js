@@ -229,7 +229,7 @@ return html`
           <rp-badge 
             title="${this.SubjectModel.getPreferredLabel(subject)}" 
             size="lg" 
-            max-width="280" 
+            max-width="180" 
             text-width=${this.peopleWidth}
             class="my-1" 
             href="${this.SubjectModel.getLandingPage(subject)}">

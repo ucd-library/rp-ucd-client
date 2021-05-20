@@ -1,5 +1,9 @@
 const {BaseStore} = require('@ucd-lib/cork-app-utils');
 
+/**
+ * @class GrantStore
+ * @description Store for recieving application state for grant
+ */
 class GrantStore extends BaseStore {
 
   constructor() {
@@ -14,7 +18,7 @@ class GrantStore extends BaseStore {
 
   /**
    * @method setGrantLoading
-   * @description sets the state for the loading work
+   * @description sets the state for the loading grant
    * 
    * @param {String} id grant
    * @param {Promise} request 
@@ -28,7 +32,7 @@ class GrantStore extends BaseStore {
 
   /**
    * @method setGrantLoaded
-   * @description sets the state for the loaded work
+   * @description sets the state for the loaded grant
    * 
    * @param {String} id subject
    * @param {Object} payload 
@@ -42,7 +46,7 @@ class GrantStore extends BaseStore {
 
   /**
    * @method setGrantError
-   * @description sets the state for the error work
+   * @description sets the state for the error grant
    * 
    * @param {String} id grant
    * @param {Status} error status 
@@ -81,7 +85,7 @@ class GrantStore extends BaseStore {
 
   /**
    * @method setAuthorLoaded
-   * @description sets the state for the loaded author in work
+   * @description sets the state for the loaded author in grant
    * 
    * @param {String} id grant
    * @param {Object} payload 
