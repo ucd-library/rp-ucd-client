@@ -252,6 +252,11 @@ return html`
               </a>
             </div>
 
+            ${this.getPronouns() ? html `
+              <p class="text-light h3 text-center">(${this.getPronouns()})</p>   
+            `: html ``}
+                     
+
             ${this.getResearchSubjects(1).length > 0 ? html`
               <div>
                 <p class="text-light h3 text-center bold">

@@ -495,6 +495,16 @@ export default class RpPagePerson extends RpUtilsLanding {
   }
 
   /**
+   * @method getPronouns
+   * @description Gets name of a person.
+   * 
+   * @returns {String}
+   */
+  getPronouns() {
+    return this.PersonModel.getPronouns(this.individual);
+  }
+
+  /**
    * @method getEmailAddresses
    * @description Gets email addresses for person
    * 

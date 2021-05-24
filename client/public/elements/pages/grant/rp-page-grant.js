@@ -289,7 +289,7 @@ export default class RpPageGrant extends RpUtilsLanding {
       style: 'currency',
       currency: 'USD',
     });
-    if (this.grant.totalAwardAmount == undefined) return "Not Listed";
+    if (this.grant.totalAwardAmount == undefined) return undefined;
     return formatter.format(parseFloat(this.grant.totalAwardAmount));
   }
 

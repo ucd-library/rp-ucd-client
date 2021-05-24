@@ -198,18 +198,20 @@ return html`
                 <h2 aria-label="Awarded By Title">Awarded By</h2>
                 <div>${this.awardedByLabel}</div>
             </div> 
-            <div class="grid-item">
-                <h2 aria-label="Grant Amount">Amount</h2>
-                <div>${this.grantAmount}</div>
-            </div> 
+            ${this.grantAmount ? html `
+              <div class="grid-item">
+                    <h2 aria-label="Grant Amount">Amount</h2>
+                    <div>${this.grantAmount}</div>
+                </div> 
+              `: html``}
             <div class="grid-item">
                 <h2 aria-label="Grant Status">Status</h2>
                 <div>${this.grantAwardStatus}</div>
             </div> 
-            <div class="grid-item">
-                <h2 aria-label="Grant Number">Grant Number</h2>
-                <div>${this.grantNumber}</div>
-            </div> 
+              <div class="grid-item">
+                  <h2 aria-label="Grant Number">Grant Number</h2>
+                  <div>${this.grantNumber}</div>
+              </div> 
         </div>
         ${this.purpose ? html `
           <h2 aria-label="Grant Purpose">Purpose</h2>
