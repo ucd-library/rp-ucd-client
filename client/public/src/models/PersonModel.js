@@ -234,6 +234,29 @@ class PersonModel extends BaseModel {
   }
 
   /**
+   * @method getPronouns
+   * @description given individual record, get best (odr if possible)
+   * full name.
+   * 
+   * @param {Object} individual 
+   * @param {string} type
+   * 
+   * @returns {Object}
+   */
+  getPronouns(individual={}) {
+    let contacts = this.getContacts(individual);
+
+    let contact = contacts[0].contact;
+
+    if(typeof contact.pronoun === 'string'){
+      return undefined;
+    }
+
+    return rdfUtils.getFirstValue(contact.pronoun).replaceAll("/", ", ");
+
+  }
+
+  /**
    * @method getFullName
    * @description given individual record, get best (odr if possible)
    * full name.
@@ -245,7 +268,6 @@ class PersonModel extends BaseModel {
    */
   getFullName(individual={}, type='string') {
     let contacts = this.getContacts(individual);
-
     if( contacts.length === 0) {
       let name = rdfUtils.getFirstValue(individual.label) || '';
       if( type === 'string' ) {
