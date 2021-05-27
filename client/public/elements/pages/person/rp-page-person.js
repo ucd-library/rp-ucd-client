@@ -89,17 +89,18 @@ export default class RpPagePerson extends RpUtilsLanding {
     this._setActiveSection(state.location.hash);
     this._resetEleProps();
 
-    await Promise.all([
-      this._doMainQuery(this.assetId),
-      this._doPubOverviewQuery(this.assetId),
-      this._doGrantQuery(this.assetId)
-    ]);
+    await this._doMainQuery(this.assetId);
 
     let titles = this.PersonModel.getTitles(this.individual);
     if( titles.length ) {
       this.title = titles.splice(0, 1)[0];
       this.additionalTitles = titles;
     }
+
+    await Promise.all([
+      this._doPubOverviewQuery(this.assetId),
+      this._doGrantQuery(this.assetId)
+    ]);
 
     this.isOwnProfile = this._isOwnProfile();
   }

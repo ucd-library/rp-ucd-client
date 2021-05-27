@@ -18,8 +18,8 @@ export default function render() {
 
     .container.direction-h {
       flex-flow: row nowrap;
-      overflow-y: hidden;
-      overflow-x: scroll;
+      /* overflow-y: hidden;
+      overflow-x: scroll; */
       white-space:nowrap;
       justify-content:center;      
     }
