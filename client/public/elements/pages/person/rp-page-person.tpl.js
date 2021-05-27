@@ -253,7 +253,7 @@ return html`
             </div>
 
             ${this.getPronouns() ? html `
-              <p class="text-light h3 text-center">(${this.getPronouns()})</p>   
+              <p class="text-light h3 text-center" style="margin:0">(${this.getPronouns()})</p>   
             `: html ``}
                      
 

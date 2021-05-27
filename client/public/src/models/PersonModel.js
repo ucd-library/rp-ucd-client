@@ -248,11 +248,7 @@ class PersonModel extends BaseModel {
 
     let contact = contacts[0].contact;
 
-    if(typeof contact.pronoun === 'string'){
-      return undefined;
-    }
-
-    return (rdfUtils.getFirstValue(contact.pronoun) || '').replaceAll("/", ", ");
+    return (rdfUtils.getFirstValue(contact.pronoun) || '');
 
   }
 
