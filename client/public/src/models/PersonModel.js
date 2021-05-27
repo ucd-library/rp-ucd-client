@@ -252,7 +252,7 @@ class PersonModel extends BaseModel {
       return undefined;
     }
 
-    return rdfUtils.getFirstValue(contact.pronoun).replaceAll("/", ", ");
+    return (rdfUtils.getFirstValue(contact.pronoun) || '').replaceAll("/", ", ");
 
   }
 
