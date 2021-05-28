@@ -148,7 +148,7 @@ class PersonModel extends BaseModel {
 
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
     for( let contact of contacts ) {
-      if( contact['@id'].match('#'+type) ) {
+      if( contact['@id'].match(new RegExp(`#.*-${type}-`)) ) {
         titles.push({
           title: rdfUtils.getFirstValue(contact.title),
           org : rdfUtils.getFirstValue(contact.organization),

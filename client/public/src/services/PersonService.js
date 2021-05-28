@@ -88,15 +88,19 @@ class PersonService extends BaseService {
   async getGrants(id) {
     let cacheId = this.getGrantsRequestId(id);
     let query = {
-      limit: 100,
+      limit: 5,
       filters: {
         'relates.@id': {
           type: "keyword", 
           op : "and", 
           value: [queryUtils.appendIdPrefix(id)]
         },
-      },
-      facets: {"@type": {type : "facet"}}
+        '@type' : {
+          type : 'keyword',
+          op : 'and',
+          value : [APP_CONFIG.data.types.grant]
+        }
+      }
     };
 
     return this.request({
