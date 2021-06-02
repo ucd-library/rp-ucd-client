@@ -1,7 +1,7 @@
 import express from 'express';
-import api from './api/index.js';
+import ui from './external-ui/index.js';
 const router = express.Router();
 
-router.use('/_/api', api);
+router.use('/ui', ui);
 
 export default router;

@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <title>Testing remote elements</title>
+
+    <script src="http://localhost:8080/ui/loader.js?bundles=directory"></script>
+  </head>
+  <body>
+
+    <script>
+      setTimeout(() => {
+        let ele = document.createElement('ae-directory-listing');
+        document.body.appendChild(ele);
+      }, 3000);
+    </script>
+  </body>
+</html>
