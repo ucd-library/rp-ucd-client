@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import render from './avatar.tpl.js';
+import "@polymer/iron-icons";
 
 /**
  * @class RpAvatar

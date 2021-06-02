@@ -7,6 +7,7 @@ import controller from './controllers/index.js';
 import config from './lib/config.js';
 import rpNodeUtils from '@ucd-lib/rp-node-utils';
 import cookieParser from 'cookie-parser';
+import cors from "cors";
 
 const {logger} = rpNodeUtils;
 const app = express();
@@ -17,6 +18,8 @@ app.use(controller);
 authStaticController(app);
 seoController(app);
 resolveController(app);
+
+app.use(cors());
 staticController(app);
 
 app.listen(config.server.port, () => {

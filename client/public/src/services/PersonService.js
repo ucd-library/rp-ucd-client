@@ -8,8 +8,10 @@ class PersonService extends BaseService {
     super();
     this.store = PersonStore;
 
-    this.baseUrl = APP_CONFIG.data.apiUrl;
-    this.jsonContext = APP_CONFIG.data.prefix.ucdId;
+    if( typeof APP_CONFIG !== 'undefined' ) {
+      this.baseUrl = APP_CONFIG.data.apiUrl;
+      this.jsonContext = APP_CONFIG.data.prefix.ucdId;
+    }
   }
 
   /**

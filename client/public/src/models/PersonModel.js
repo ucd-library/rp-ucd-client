@@ -152,7 +152,8 @@ class PersonModel extends BaseModel {
         titles.push({
           title: rdfUtils.getFirstValue(contact.title),
           org : rdfUtils.getFirstValue(contact.organization),
-          rank : contact["vivo:rank"]
+          rank : contact["vivo:rank"],
+          email : (rdfUtils.getFirstValue(contact.hasEmail) || {}).email
         });
       }
     }

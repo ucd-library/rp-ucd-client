@@ -1,4 +1,7 @@
-const TYPES = APP_CONFIG.data.types;
+let TYPES = {};
+if( typeof APP_CONFIG !== 'undefined' ) {
+  TYPES = APP_CONFIG.data.types;
+}
 
 /**
  * @class AssetDefs

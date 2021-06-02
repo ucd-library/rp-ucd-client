@@ -14,6 +14,7 @@
     "@ucd-lib/spa-router-middleware": "^0.2.1",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "deepmerge": "^4.2.2",
     "express": "^4.17.1",
     "lit-element": "^2.4.0",

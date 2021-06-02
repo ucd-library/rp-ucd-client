@@ -53,7 +53,7 @@
   
   if( !classSupport() ) {
     console.log('No ES Class support found, using aggie experts using IE compatibility build');
-    if( window.AGGIE_EXPERTS_LOADER.ignorePolyfills === true ) {
+    if( AGGIE_EXPERTS_LOADER.ignorePolyfills === true ) {
       console.log(' - ignorePolyfills flag set, aggie experts not loading polyfills');
     } else {
       console.log(' - aggie experts client adding babel polyfills');
@@ -72,6 +72,14 @@
     document.open();
     document.write('<script src="'+loaderRootPath()+'/polyfills/webcomponents-loader.js'+version+'" ><\/script>');
     document.close();
+  }
+
+  if( AGGIE_EXPERTS_LOADER.includeIcons === true ) {
+    let link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    link.setAttribute('href', host()+'/fonts/brand-icons/icons.css');
+    document.head.appendChild(link);
   }
 
   if( window.WebComponents && WebComponents.ready) load();

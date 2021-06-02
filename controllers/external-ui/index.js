@@ -28,6 +28,7 @@ const AGGIE_EXPERTS_LOADER = {
 router.get('/loader.js', (req, res) => {
   let loaderConfig = Object.assign({
     ignorePolyfills : ((req.query.ignorePolyfills || '').trim().toLowerCase() === 'true'),
+    includeIcons : ((req.query.includeIcons || '').trim().toLowerCase() === 'true'),
     bundles : (req.query.bundles || '').split(',').map(item => item.trim()).filter(item => item),
     elements : (req.query.elements || '').split(',').map(item => item.trim()).filter(item => item)
   }, AGGIE_EXPERTS_LOADER);
