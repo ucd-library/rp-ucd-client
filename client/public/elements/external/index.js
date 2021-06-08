@@ -8,13 +8,13 @@ if( !window.AGGIE_EXPERTS_LOADER ) {
 }
 
 // hack, need to see if __webpack_require__.p has a better way to set
+// this sets the remote host to load chunked bundle code from
 if( AGGIE_EXPERTS_LOADER.host ) {
   __webpack_require__.p = AGGIE_EXPERTS_LOADER.host + __webpack_require__.p;
 }
 
 // wait until document has loaded to init our detection scripts
-// most things work off of css class attribute, so all elements need to
-// be loaded into the dom before we start
+// all elements need to be loaded into the dom before we start
 if( document.readyState === 'loading' ) {
   document.addEventListener('DOMContentLoaded', () => initAE());
 } else {
@@ -26,7 +26,7 @@ if( document.readyState === 'loading' ) {
  * @description attempts to load Aggie Experts custom elements by bundle.  Bundles can be
  * loaded by:
  * 
- *  - Providing in the bundle name in the AGGIE_EXPERTS_LOADER.bundles array
+ *  - Providing the bundle name in the AGGIE_EXPERTS_LOADER.bundles array
  *  - Providing the element name in the AGGIE_EXPERTS_LOADER.elements array
  *  - Having the element defined in the main DOM on load 
  */
@@ -42,7 +42,7 @@ function initAE() {
         return;
       }
     }
-    console.warn('Unknown aggie experts element name: '+name);
+    console.warn('Unknown aggie experts element name: '+ele);
   });
 
   // scan for elements

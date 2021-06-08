@@ -3,6 +3,7 @@ import {render, styles} from "./ae-directory-listing.tpl.js";
 import fetch from "isomorphic-fetch";
 import "../../components/avatar";
 import PersonModel from "../../../src/models/PersonModel";
+import titleCleanup from "../utils/title-cleanup";
 
 export default class AeDirectoryListing extends LitElement {
 
@@ -38,7 +39,7 @@ export default class AeDirectoryListing extends LitElement {
     this.results = {
       results : []
     };
-    this.resultsPerPage = 10;
+    this.resultsPerPage = 9999;
     this.page = 1;
     this.render = render.bind(this);
   }
@@ -97,7 +98,10 @@ export default class AeDirectoryListing extends LitElement {
         titles.push(title.title.replace(/-.*/, ''));
         orgs.push(title.org);
       });
-      item.titles = [...titles, ...orgs];
+      item.titles = [
+        ...titleCleanup(titles), 
+        ...titleCleanup(orgs)
+      ];
       item.email = email;
     });
     this.results = results;

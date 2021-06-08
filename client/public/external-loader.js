@@ -67,7 +67,7 @@
     window.WebComponents = {
       ready : true,
       noPolyRequired : true
-    }
+    };
   } else {
     document.open();
     document.write('<script src="'+loaderRootPath()+'/polyfills/webcomponents-loader.js'+version+'" ><\/script>');
