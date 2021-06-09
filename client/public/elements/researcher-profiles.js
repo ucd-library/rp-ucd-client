@@ -111,7 +111,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.showVersion = APP_CONFIG.env.APP_VERSION.match(/(alpha|beta|rc)/) ? true : false;
     this.logVersion();
 
-    this._injectModel('AppStateModel', 'CollectionModel');
+    this._injectModel('AppStateModel', 'CollectionModel', 'PersonModel');
     this._onResize = this._onResize.bind(this);
 
     this._init404();
@@ -429,6 +429,10 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   _stopImpersonating() {
     document.cookie = "impersonate=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     location.reload();
+  }
+
+  testHarvest() {
+    this.PersonModel.harvest(APP_CONFIG.user.uid);
   }
 
 }

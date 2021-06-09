@@ -7,6 +7,7 @@ import esmUtils from '../../lib/esm-utils.js';
 import rpNodeUtils from '@ucd-lib/rp-node-utils';
 import {userAuthController} from './user.js';
 import {staticModelController} from './model.js';
+import harvest from '../../lib/harvest.js';
 
 const {logger, elasticSearch, redis} = rpNodeUtils;
 const {__dirname} = esmUtils.moduleLocation(import.meta);
@@ -85,6 +86,10 @@ export default (app) => {
           BUILD_TIME : process.env.BUILD_TIME || ''
         }
       };
+
+      if( appConfig.user ) {
+        appConfig.harvest = (await harvest.state(appConfig.user.uid)) || 'not-running';
+      }
 
       let jsonld = '';
       if( res.statusCode === 404 ) {

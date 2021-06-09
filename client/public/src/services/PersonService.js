@@ -167,6 +167,23 @@ class PersonService extends BaseService {
     });
   }
 
+  /**
+   * @method harvest
+   * @description start the harvest process for a person
+   * 
+   * @param {String} id user id
+   * 
+   * @returns {Promise}
+   */
+  async harvest(id) {
+    return this.request({
+      url : '/harvest/'+id,
+      fetchOptions : {
+        method : 'POST'
+      }
+    });
+  }
+
 }
 
 module.exports = new PersonService();

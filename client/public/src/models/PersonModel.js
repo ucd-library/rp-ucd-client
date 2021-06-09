@@ -123,6 +123,11 @@ class PersonModel extends BaseModel {
     return this.store.data.grantsByRequest[requestId];
   }
 
+  async harvest(id) {
+    let resp = await this.service.harvest(id);
+    console.log('harvest', resp);
+  }
+
 
   /**
    * @method getPublicationTypes
