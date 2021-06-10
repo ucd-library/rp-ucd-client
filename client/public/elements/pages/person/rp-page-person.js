@@ -293,7 +293,7 @@ export default class RpPagePerson extends RpUtilsLanding {
         role = "Co-Investigator"; 
         break;
       default: 
-        role = "No Role Assigned";
+        role = null;
       }
 
       let grant_url =  "../" + grant["@id"].split(":")[1];
@@ -319,11 +319,11 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.activeGrant = activeGrant;
 
     this.inactiveGrant.sort(function(a, b){
-      return a.yearStart-b.yearStart;
+      return b.yearStart-a.yearStart;
     });
 
     this.activeGrant.sort(function(a, b){
-      return a.yearStart-b.yearStart;
+      return b.yearStart-a.yearStart;
     });
 
  

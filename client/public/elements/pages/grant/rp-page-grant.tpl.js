@@ -153,6 +153,16 @@ return html`
   .grid-item {
     text-align: left;
   }  
+
+  #date-interval{
+    text-align: center;
+    color: var(--tcolor-primary10);
+    text-transform: uppercase;
+    font-size: var(--font-size-h3);
+    margin: 0;
+    margin-top: .25rem;
+    margin-bottom: .75rem;
+  }
   @media (min-width: 800px) {
       .hero {
       padding-left: 30px;
@@ -175,8 +185,8 @@ return html`
           ${this._labelTitle()}
           </h2>
         </div>
-        <p class="upperType text-center" aria-label="Date-Interval Title">
-            ${this.dateStart} &#183; ${this.dateEnd} 
+        <p id="date-interval" aria-label="Date-Interval Title">
+            ${this._dateInterval("start")} &#8211; ${this._dateInterval("end")} 
         </p>
         <div class="type text-center">Grant</div> <!--${this.grantType}-->
       </div>

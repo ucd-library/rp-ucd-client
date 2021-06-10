@@ -136,9 +136,15 @@ return html`
       max-width: 500px;
     }
   }
-  @media (max-width: 280px) {
+  @media (max-width: 325px) {
     rp-search {
-      max-width: 250px;
+      max-width: 245px;
+    }  
+
+  }
+  @media (max-width: 250px) {
+    rp-search {
+      max-width: 185px;
     }  
 
   }

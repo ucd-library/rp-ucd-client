@@ -50,7 +50,7 @@ export default class RpPageSearch extends RpUtilsCollection {
         this.mainFacetIndex = 0;
       }
     }
-
+ 
   }
 
   /**

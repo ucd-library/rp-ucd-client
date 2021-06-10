@@ -165,8 +165,7 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.contributors = rdfUtils.asArray((await this.GrantModel.getContributors(this.grant["@id"], relateIds)).payload);
     
     this.grantType = this._getGrantType();
-    // this.dateStart = this._dateInterval("start");
-    // this.dateEnd = this._dateInterval("end");
+
     return false;
   }
 
@@ -224,8 +223,21 @@ export default class RpPageGrant extends RpUtilsLanding {
    * @returns {String}
    */
   _dateInterval(type){
-    if(type == "start") return this.grant.dateTimeInterval.start.dateTime;
-    else if(type == "end") return this.grant.dateTimeInterval.end.dateTime;
+    let month;
+    let year;
+    let day;
+    if(type == "start") {
+      month = new Date(this.grant.dateTimeInterval.start.dateTime).toLocaleString('default', { month: 'long' });
+      year = new Date(this.grant.dateTimeInterval.start.dateTime).toLocaleString('default', { year: 'numeric' });
+      day = new Date(this.grant.dateTimeInterval.start.dateTime).toLocaleString('default', { day: 'numeric' });
+      return month+ " " + day + ", " + year;  
+    }
+    else if(type == "end") {
+      month = new Date(this.grant.dateTimeInterval.end.dateTime).toLocaleString('default', { month: 'long' });
+      year = new Date(this.grant.dateTimeInterval.end.dateTime).toLocaleString('default', { year: 'numeric' });
+      day = new Date(this.grant.dateTimeInterval.end.dateTime).toLocaleString('default', { day: 'numeric' });
+      return month + " " + day + ", " + year;    
+    }
     return "Unavaliable";
   }
 
