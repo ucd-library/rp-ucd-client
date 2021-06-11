@@ -28,10 +28,10 @@ return html`
 </style>
 <div class="search-header container-wide bg-light top">
   <div class="bg-primary text-light" id="search-term-box">
-    <h1 class="weight-regular my-0">
+    <h1 class="weight-regular my-0"> 
       ${this.dataTotal} results 
-      <span ?hidden="${this.textQuery === ''}">for</span> 
-      <span class="text-secondary bold">${this.textQueryDisplay}</span>
+      <span ?hidden="${this.textQuery === null}">for</span> 
+      <span class="text-secondary bold">${this.textQuery}</span>
     </h1>
   </div>
   <rp-link-list class="bg-light p-3"

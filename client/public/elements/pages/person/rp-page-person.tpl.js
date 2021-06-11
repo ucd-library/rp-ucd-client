@@ -164,6 +164,12 @@ return html`
     justify-content: center;
     height: 150px;
   }
+
+  #pronoun {
+    margin: 0;
+    font-size: var(--font-size);
+    color: var(--color-blue10);
+  }
   /* #showMore{
     display:block;
     margin:0 auto; 
@@ -253,7 +259,7 @@ return html`
             </div>
 
             ${this.getPronouns() ? html `
-              <p class="text-light h3 text-center" style="margin:0">(${this.getPronouns()})</p>   
+              <p id="pronoun">(${this.getPronouns()})</p>   
             `: html ``}
                      
 
@@ -464,7 +470,7 @@ return html`
                 <i>Active (${this.activeGrant.length})</i>
                 ${this.activeGrant.map(grant => 
                     html`<h3 class="weight-regular mt-0"><a href="${grant.grant_url}">${grant.title}</a><br />
-                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} | ${grant.indivRole} | ${grant.funding_agency} </h3>
+                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
                     `
                 )}
               `
@@ -477,7 +483,7 @@ return html`
                 <i>Completed (${this.inactiveGrant.length})</i>
                 ${this.inactiveGrant.map(grant => 
                     html`<h3 class="weight-regular mt-0"><a href=${grant.grant_url}>${grant.title}</a><br />
-                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} | ${grant.indivRole} | ${grant.funding_agency} </h3>
+                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
                     `
                 )}
             `
