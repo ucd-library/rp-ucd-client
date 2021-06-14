@@ -31,9 +31,7 @@ export default function render() {
       margin-left: 12px;
       flex-grow: 1;
       align-self: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      overflow-wrap: break-word;
       min-width: 0;
     }
     .title {

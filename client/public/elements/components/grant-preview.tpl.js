@@ -32,10 +32,7 @@ export default function render() {
       margin-left: 12px;
       flex-grow: 1;
       align-self: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-width: 0;
+      overflow-wrap: break-word;
     }
     .title {
       font-size: var(--font-size);

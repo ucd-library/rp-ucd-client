@@ -565,25 +565,25 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
     if (assetType == 'concept') {
       return html`
-      <rp-subject-preview .data="${data}" text-width="${this.peopleWidth}" class="my-3" show-snippet></rp-subject-preview>
+      <rp-subject-preview .data="${data}" class="my-3" show-snippet></rp-subject-preview>
       `;
     }
 
     if (assetType == 'work') {
       return html`
-      <rp-work-preview .data="${data}" text-width="${this.peopleWidth}" show-snippet class="my-3"></rp-work-preview>
+      <rp-work-preview .data="${data}" show-snippet class="my-3"></rp-work-preview>
       `;
     }
 
     if (assetType == 'organization') {
       return html`
-      <rp-organization-preview .data="${data}" text-width="${this.peopleWidth}" class="my-3"></rp-organization-preview>
+      <rp-organization-preview .data="${data}" class="my-3"></rp-organization-preview>
       `;
     }
 
     if (assetType == 'grant') {
       return html`
-      <rp-grant-preview .data="${data}" text-width="${this.peopleWidth}" class="my-3"></rp-grant-preview>
+      <rp-grant-preview .data="${data}" class="my-3"></rp-grant-preview>
       `;
     }
   
