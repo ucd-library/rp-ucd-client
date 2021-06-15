@@ -68,6 +68,7 @@ async function handleConnection(socket) {
  * @returns
  */
 function handleDisconnect(token, socket) {
+  if( !userSockets[token.username] ) return;
   let index = userSockets[token.username].find(item => item.socket === socket);
   userSockets[token.username].splice(index, 1);
   if( userSockets[token.username].length === 0 ) {

@@ -11,7 +11,7 @@ class SocketService extends BaseService {
 
   connect() {
     if( this.socket ) return;
-    this.socket = io({query: {foo: 'bar'}});
+    this.socket = io();
 
     this.socket.on('connect', () => {
       console.log('update socket connected');
