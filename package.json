@@ -17,7 +17,8 @@
     "deepmerge": "^4.2.2",
     "express": "^4.17.1",
     "lit-element": "^2.4.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "sanitize-html": "^2.3.3"
   },
   "devDependencies": {
     "@ucd-lib/cork-app-build": "^0.2.0",

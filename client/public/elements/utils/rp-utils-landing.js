@@ -50,7 +50,8 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     if (this.assetType == 'person') {
       sections.push(
         {id: 'about', text: 'About'},
-        {id: 'publications', text: 'Publications'}
+        {id: 'publications', text: 'Publications'},
+        {id: 'grants', text: 'Grants'}
       );
     }
     if (this.assetType == 'concept'){
@@ -61,7 +62,12 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         {id: 'publications', text: 'Publications'}
       );
     }
-
+    if (this.assetType == 'grant'){
+      sections.push(
+        {id: 'about', text:'About'},
+        {id: 'contributors', text:'Contributors'},
+      );
+    }
     let i = 0;
     for (let section of sections) {
       if( !this._sectionHasData(section.id) ) {

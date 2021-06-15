@@ -27,15 +27,23 @@ export default class RpPagePerson extends RpUtilsLanding {
       individual: {type: Object},
       individualStatus: {type: String},
       publicationOverviewStatus: {type: String},
+      grantStatus: {type: String},
       publicationOverview: {type: Object},
       hasMultiplePubTypes: {type: Boolean},
+      hasMultipleGrantTypes: {type: Boolean},
       retrievedPublications: {type: Object},
+      retrievedGrants: {type: Object},
       totalPublications: {type: Number},
+      totalGrants: {type: Number},
       isOwnProfile: {type: Boolean},
       submitText: {type: String, attribute: 'submitText'},
       isAdmin: {type: Boolean},
       showResearchSubjectCount : {type: Number},
       defaultResearchSubjectCount : {type: Number},
+      tempGrantObject: {type: Object},
+      activeGrant: {type:Array},
+      inactiveGrant: {type:Array},
+
       title : {type: Object},
       additionalTitles : {type: Array}
     };
@@ -45,11 +53,13 @@ export default class RpPagePerson extends RpUtilsLanding {
     super();
     this.render = render.bind(this);
     this.submitText = "Edit Publication";
+    this.activeGrant = [];
+    this.inactiveGrant = [];
 
     this._injectModel('PersonModel', 'AppStateModel');
     
     this.assetType = "person";
-    this.defaultResearchSubjectCount = 4;
+    this.defaultResearchSubjectCount = 8;
 
     this.isAdmin = UserUtils.isAdmin(APP_CONFIG.user);
 
@@ -79,16 +89,18 @@ export default class RpPagePerson extends RpUtilsLanding {
     this._setActiveSection(state.location.hash);
     this._resetEleProps();
 
-    await Promise.all([
-      this._doMainQuery(this.assetId),
-      this._doPubOverviewQuery(this.assetId)
-    ]);
+    await this._doMainQuery(this.assetId);
 
     let titles = this.PersonModel.getTitles(this.individual);
     if( titles.length ) {
       this.title = titles.splice(0, 1)[0];
       this.additionalTitles = titles;
     }
+
+    await Promise.all([
+      this._doPubOverviewQuery(this.assetId),
+      this._doGrantQuery(this.assetId)
+    ]);
 
     this.isOwnProfile = this._isOwnProfile();
   }
@@ -113,14 +125,17 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   _resetEleProps() {
     this.individual = {};
+    this.tempGrantObject = {};
     this.individualStatus = 'loading';
     this.retrievedPublications = {};
     this.totalPublications = 0;
+    this.totalGrants = 0;
     this.isOwnProfile = false;
     this.publicationOverview = {};
     this.hasMultiplePubTypes = false;
     this.emailArray = [];
     this.websitesArray = [];
+    this.grantStatus = 'loading';
     this.publicationOverviewStatus = 'loading';
     this.showResearchSubjectCount = this.defaultResearchSubjectCount;
     this.title = {};
@@ -214,12 +229,14 @@ export default class RpPagePerson extends RpUtilsLanding {
     }
     this.totalPublications = totalPubs;
     this.publicationOverview  = pubTypes;
-
     await Promise.all(Object.values(pubTypes).map(pt => this._doPubQuery(pt)));
     if ( this.publicationOverviewStatus !== 'error' ) {
       this.publicationOverviewStatus = 'loaded';
     }
   }
+
+
+  
 
   /**
    * @method _doPubQuery
@@ -232,6 +249,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doPubQuery(pubTypeObject, offset=0){
     let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
+
     this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
     if( data.state === 'error' ) {
       this.publicationOverviewStatus = 'error';
@@ -247,6 +265,77 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.requestUpdate();
   }
 
+
+  /**
+   * @method _doGrantQuery
+   * @description Retrieves grants in chronological order. Rerenders.
+   * 
+   * @returns {Promise}
+   */
+  async _doGrantQuery(){
+    let data = await this.PersonModel.getGrants(this.assetId);
+    this.totalGrants = typeof data.payload.total === 'object' ? 0 : data.payload.total;
+    this.retrievedGrants = data.payload.results;
+    let activeGrant = [];
+    let inactiveGrant = [];
+    this.retrievedGrants.forEach(function(grant){
+      let dateStart = new Date(grant.dateTimeInterval.start.dateTime);
+      let dateEnd = new Date(grant.dateTimeInterval.end.dateTime);
+      let today = new Date();
+
+      let role = "";
+
+      switch (grant.relates[0]["@type"]) {
+      case "vivo:PrincipalInvestigatorRole":
+        role = "Principal Investigator"; 
+        break;
+      case "vivo:coInvestigatorRole":
+        role = "Co-Investigator"; 
+        break;
+      default: 
+        role = null;
+      }
+
+      let grant_url =  "../" + grant["@id"].split(":")[1];
+      let tempGrantObject = {
+        "title": grant.label,
+        "yearStart": dateStart.getFullYear(),
+        "yearEnd": dateEnd.getFullYear(),
+        "grant_type": "Grant",
+        "indivRole": role,
+        "funding_agency": grant.assignedBy.label,
+        "grant_url": grant_url
+      };
+
+      if(today > dateEnd){
+        inactiveGrant.push(tempGrantObject);
+      } else if(today <= dateEnd){
+        activeGrant.push(tempGrantObject);
+      }
+    });
+
+
+    this.inactiveGrant = inactiveGrant;
+    this.activeGrant = activeGrant;
+
+    this.inactiveGrant.sort(function(a, b){
+      return b.yearStart-a.yearStart;
+    });
+
+    this.activeGrant.sort(function(a, b){
+      return b.yearStart-a.yearStart;
+    });
+
+ 
+    if( data.state === 'error' ) {
+      this.grantStatus = 'error';
+      return;
+    }
+    if (data.state != 'loaded') return;
+
+    this.requestUpdate();
+  }
+  
   /**
    * @method _isOwnProfile
    * @description Determines if currently loaded page is the logged in user's
@@ -342,48 +431,48 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @method showMoreButton
    * @description used to toggle show more button
    * 
-   * @param {Object} pubType 
+   * @param {Object} buttonType 
    * 
    * @returns {Boolean}
    */
-  showMoreButton(pubType) {
-    return pubType.displayedOffset < pubType.ct;
+  showMoreButton(buttonType) {
+    return buttonType.displayedOffset < buttonType.ct;
   }
 
   /**
    * @method showMoreButton
    * @description used to toggle show less button
    * 
-   * @param {Object} pubType 
+   * @param {Object} buttonType 
    * 
    * @returns {Boolean}
    */
-  showLessButton(pubType) {
-    return pubType.displayedOffset > pubType.ct;
+  showLessButton(buttonType) {
+    return buttonType.displayedOffset > buttonType.ct;
   }
 
   /**
    * @method showMoreButton
    * @description used to show more button value
    * 
-   * @param {Object} pubType 
+   * @param {Object} buttonType 
    * 
    * @returns {Number}
    */
-  showMoreCount(pubType) {
-    return pubType.ct - pubType.displayedOffset < 10 ? pubType.ct - pubType.displayedOffset : 10;
+  showMoreCount(buttonType) {
+    return buttonType.ct - buttonType.displayedOffset < 10 ? buttonType.ct - buttonType.displayedOffset : 10;
   }
 
   /**
    * @method showLessCount
    * @description used to show less button value
    * 
-   * @param {Object} pubType 
+   * @param {Object} buttonType 
    * 
    * @returns {Number}
    */
-  showLessCount(pubType) {
-    return pubType.displayedOffset > pubType.ct ? pubType.ct - (pubType.displayedOffset - 10) : 10;
+  showLessCount(buttonType) {
+    return buttonType.displayedOffset > buttonType.ct ? buttonType.ct - (buttonType.displayedOffset - 10) : 10;
   }
 
   /**
@@ -404,6 +493,16 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   getFullName() {
     return this.PersonModel.getFullName(this.individual);
+  }
+
+  /**
+   * @method getPronouns
+   * @description Gets name of a person.
+   * 
+   * @returns {String}
+   */
+  getPronouns() {
+    return this.PersonModel.getPronouns(this.individual);
   }
 
   /**

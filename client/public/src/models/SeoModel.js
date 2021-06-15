@@ -3,6 +3,8 @@ const { getTransformByType } = require('../../../../lib/schema-org-transforms');
 const PersonModel = require('./PersonModel');
 const WorkModel = require('./WorkModel');
 const SubjectModel = require('./SubjectModel');
+const GrantModel = require('./GrantModel');
+
 
 /**
  * @class SeoModel
@@ -58,6 +60,9 @@ class SeoModel extends BaseModel {
       break;
     case 'work':
       this.updateFromModel(await WorkModel.getWork(id));
+      break;
+    case 'grant':
+      this.updateFromModel(await GrantModel.getGrant(id));
       break;
     default:
       console.warn('unknown model type', type, id);

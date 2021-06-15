@@ -68,6 +68,7 @@ class PersonModel extends BaseModel {
     return this.store.data.pubsOverview[id];
   }
 
+
   /**
    * @method getPublications
    * @description get publications for a person
@@ -91,9 +92,37 @@ class PersonModel extends BaseModel {
     } catch (error) {
       // error is recorded in store
     }
-
     return this.store.data.pubsByRequest[requestId];
   }
+
+  /**
+   * @method getGrants
+   * @description get publications for a person
+   * 
+   * @param {String} id 
+   * @param {Object} pubTypeObject 
+   * @param {Number} offset
+   * 
+   * @returns {Promise} 
+   */
+  async getGrants(id) {
+    let requestId = this.service.getGrantsRequestId(id);
+    let state = this.store.data.grantsByRequest[requestId];
+
+    try {
+      if( state && state.request ) {
+        await state.request;
+      } else {
+        await this.service.getGrants(id);
+      }
+    } catch (error) {
+      // error is recorded in store
+    }
+
+
+    return this.store.data.grantsByRequest[requestId];
+  }
+
 
   /**
    * @method getPublicationTypes
@@ -205,6 +234,25 @@ class PersonModel extends BaseModel {
   }
 
   /**
+   * @method getPronouns
+   * @description given individual record, get best (odr if possible)
+   * full name.
+   * 
+   * @param {Object} individual 
+   * @param {string} type
+   * 
+   * @returns {Object}
+   */
+  getPronouns(individual={}) {
+    let contacts = this.getContacts(individual);
+
+    let contact = contacts[0].contact;
+
+    return (rdfUtils.getFirstValue(contact.pronoun) || '');
+
+  }
+
+  /**
    * @method getFullName
    * @description given individual record, get best (odr if possible)
    * full name.
@@ -216,7 +264,6 @@ class PersonModel extends BaseModel {
    */
   getFullName(individual={}, type='string') {
     let contacts = this.getContacts(individual);
-
     if( contacts.length === 0) {
       let name = rdfUtils.getFirstValue(individual.label) || '';
       if( type === 'string' ) {

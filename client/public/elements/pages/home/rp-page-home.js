@@ -6,8 +6,10 @@ import "@ucd-lib/cork-app-utils";
 import "../../components/alert";
 import "../../components/badge";
 import "../../components/person-preview";
+import "../../components/grant-preview";
 import "../../components/search";
 import "../../components/rp-loading";
+
 
 /**
  * @class RpPageHome
@@ -24,6 +26,9 @@ export default class RpPageHome extends Mixin(LitElement)
       facets: {type: Object},
       academicWorks: {type: Array},
       academicWorksTotal: {type: Number},
+      grants: {type: Array},
+      grantsTotal: {type: Number},
+      grantsStatus: {type: String},
       peopleStatus: {type: String},
       people: {type: Array},
       peopleTotal: {type: Number},
@@ -31,6 +36,7 @@ export default class RpPageHome extends Mixin(LitElement)
       subjects: {type: Array},
       subjectsTotal: {type: Number},
       subjectsStatus: {type: String},
+      textWidth: {type: String, attribute: 'text-width'},
       visible: {type: Boolean}
     };
   }
@@ -39,15 +45,16 @@ export default class RpPageHome extends Mixin(LitElement)
     super();
     this.render = render.bind(this);
 
-    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel');
+    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel', 'GrantModel');
     this.resetProperties();
     this.facets = {};
     this.visible = false;
     this.academicWorksTotal = 0;
+    this.grantsTotal = 0;
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
     this.setPeopleWidth(window.innerWidth);
-
+    this.textWidth = (window.innerWidth.toString() - 70) + "px";
     this.theme = APP_CONFIG.theme;
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
 
@@ -60,12 +67,15 @@ export default class RpPageHome extends Mixin(LitElement)
    */
   resetProperties(){
     this.people = [];
+    this.grants = [];
     this.academicWorks = [];
     this.subjects = [];
     this.pageStatus = 'loading';
     this.facetsStatus = 'loading';
     this.peopleStatus = 'loading';
     this.subjectsStatus = 'loading';
+    this.grantsStatus = 'loading';
+
   }
 
   /**
@@ -79,7 +89,8 @@ export default class RpPageHome extends Mixin(LitElement)
       if (this.facetsStatus == 'loaded') {
         await Promise.all([
           this._getPeople(),
-          this._getSubjects()
+          this._getSubjects(),
+          this._getGrants()
         ]);
       }
       this.setPageStatus();
@@ -87,6 +98,22 @@ export default class RpPageHome extends Mixin(LitElement)
     if (props.has('visible') && this.visible ) {
       requestAnimationFrame( () => this._handleResize());
     }
+    if (props.has('textWidth')) this.setBadgeTabIndex();
+  }
+
+  /**
+   * @method setBadgeTabIndex
+   * @description Hides any overflow badges from tab positioning
+   */
+  async setBadgeTabIndex(){
+    await this.updated;
+    let containerWidth = this.textWidth;
+    let cumWidth = 0;
+    this.shadowRoot.querySelectorAll('rp-badge').forEach(badge => {
+      cumWidth += badge.offsetWidth;
+      badge.hideFromTab = cumWidth > containerWidth;
+    });
+
   }
 
   /**
@@ -251,6 +278,22 @@ export default class RpPageHome extends Mixin(LitElement)
   }
 
   /**
+   * @method _getGrants
+   * @description load and render a random list of grants
+   * 
+   * @returns {Promise}
+   */
+  async _getGrants() {
+    let grantsList = await this.CollectionModel.overview('randomGrants', {limit: 4, total: this.grantsTotal});
+    this.grantsStatus = grantsList.state;
+    if (grantsList.state != "loaded") {
+      return;
+    }
+    this.grants = grantsList.payload.results;
+    if (APP_CONFIG.verbose) console.log('grants: ', this.grants);
+  }
+
+  /**
    * @method _getSubjects
    * @description load and render a random list of subjects
    * 
@@ -260,6 +303,7 @@ export default class RpPageHome extends Mixin(LitElement)
     let subjects = await this.SubjectModel.getRandomSubjects(10);
     this.subjectsStatus = subjects.state;
     this.subjects = subjects.payload;
+
     if (APP_CONFIG.verbose) console.log('subjects: ', this.subjects);
   }
 
@@ -292,6 +336,9 @@ export default class RpPageHome extends Mixin(LitElement)
       }
       if (facet == APP_CONFIG.data.types.person ) {
         this.peopleTotal = this.facets[facet];
+      }
+      if (facet == APP_CONFIG.data.types.grant ) {
+        this.grantsTotal = this.facets[facet];
       }
     }
 

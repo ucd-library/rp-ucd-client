@@ -10,7 +10,7 @@ export default class RpPagePeople extends RpUtilsCollection {
 
   static get properties() {
     return {
-    }
+    };
   }
  
   constructor() {

@@ -21,6 +21,8 @@ import "../../components/search"
 import "../../components/edit-profile"
 import "../../components/work-preview"
 import "../../components/subject-preview"
+import "../../components/grant-preview"
+
 
 
 export default function render() {
@@ -401,6 +403,15 @@ ${this.exampleWorks.map((work) => html`
 <p>Card for the Subject asset type - used in browse and search pages.</p>
 ${this.exampleSubjects.map((subject) => html`
   <rp-subject-preview .data="${subject}"></rp-subject-preview>
+`)}
+
+</section>
+
+<section>
+<h1>Asset Preview (Grants)</h1>
+<p>Card for the Grant asset type - used in browse and search pages.</p>
+${this.exampleGrants.map((grant) => html`
+  <rp-grant-preview .data="${grant}"></rp-grant-preview>
 `)}
 
 </section>

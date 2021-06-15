@@ -1,7 +1,5 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
-import {renderHTML} from '../../../src/lib/santize-html.js';
-
 
 export default function render() {
 return html`
@@ -19,6 +17,13 @@ return html`
     color: var(--tcolor-primary20);
     margin: 0 15%;
   }
+
+  .hero .upperType {
+    color: var(--tcolor-primary10);
+    text-transform: uppercase;
+    font-size: var(--font-size-h3);
+  }
+
   .hero .type {
     color: var(--tcolor-primary10);
     text-transform: uppercase;
@@ -72,9 +77,6 @@ return html`
     min-height: 25px;
     color: var(--tcolor-secondary);
     font-weight: var(--font-weight-bold);
-  }
-  #wrapped-text {
-    word-wrap: break-word;
   }
   #overview .venue {
     text-transform: capitalize;
@@ -139,6 +141,28 @@ return html`
     display: flex;
     flex-grow: 1;
   }
+  #wrapped-text {
+    word-wrap: break-word;
+  }
+  .grid-container {
+    display: grid;
+    display: -ms-grid;
+    grid-template-columns: auto auto;
+    -ms-grid-template-columns: auto auto;
+    }
+  .grid-item {
+    text-align: left;
+  }  
+
+  #date-interval{
+    text-align: center;
+    color: var(--tcolor-primary10);
+    text-transform: uppercase;
+    font-size: var(--font-size-h3);
+    margin: 0;
+    margin-top: .25rem;
+    margin-bottom: .75rem;
+  }
   @media (min-width: 800px) {
       .hero {
       padding-left: 30px;
@@ -151,23 +175,21 @@ return html`
       <div class="loading1">loading</div>
   </div>
   <div ?hidden="${this._hideStatusSection('error')}" class="flex align-items-center justify-content-center">
-    <rp-alert>Error loading work.</rp-alert>
+    <rp-alert>Error loading grant.</rp-alert>
   </div>
   <div class="data" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="page-header container-wide">
       <div class="hero">
         <div class="title mb-0"> 
-          <h1  class="text-secondary h1 bold mb-0 text-center">
-          ${renderHTML(this._labelTitle())}
-          </h1>
+          <h2 class="text-secondary h1 bold mb-0 text-center" aria-label="Grant Title">
+          ${this._labelTitle()}
+          </h2>
         </div>
-        <div class="type text-center">${this.subjectType}</div>
+        <p id="date-interval" aria-label="Date-Interval Title">
+            ${this._dateInterval("start")} &#8211; ${this._dateInterval("end")} 
+        </p>
+        <div class="type text-center">Grant</div> <!--${this.grantType}-->
       </div>
-      <!-- <rp-link-list class="bg-light p-3"
-                  direction="horizontal"
-                  .links="${this.getPageSections()}"
-                  current-link="${this.activeSection.index}">
-      </rp-link-list> -->
       <rp-link-list id="navbar" class="bg-light p-3"
         direction="horizontal"
         .links="${this.getPageSections()}"
@@ -180,76 +202,54 @@ return html`
   <div class="sections container">
 
     <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
-      <h1 class="weight-regular mt-0">About</h1>
-      <p>${this.about}</p>
-    </section>
-    <section id="relatedSubjects" class="bg-light mt-3" ?hidden="${this._hidePageSection('relatedSubjects')}">
-      <h1 class="weight-regular mt-0">Related Subjects</h1>
-      
-      ${this._isEmpty(this.broadRelatedSubjects) ? html `` : 
-            html `
-              <b style="font-size: 18px;">Broader Scope</b>   
-            <br /> 
-            ${this.broadRelatedSubjects.map(broad => html ` 
-              <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(broad)}">
-                ${(broad.prefLabel) ? broad.prefLabel: broad.label}
-              </rp-badge>`)}`
-       }
-       <br />   
-
-       ${this._isEmpty(this.narrowRelatedSubjects) ? html `` : 
-            html `
-              <b style="font-size: 18px; ">Narrower Scope</b>   
-            <br /> 
-            ${this.narrowRelatedSubjects.map(narrow => html ` 
-              <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(narrow)}">
-                ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
-              </rp-badge>`)}`
-       }        
-
-    </section>
-    
-    <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
-      <div class="box-title">
-        <h1 class="weight-regular mt-0">Researchers</h1>
-      </div>    
-          ${this.tempResearch.map(researcher => html`
-            <rp-person-preview
-              .data="${researcher}"
-              text-width="${this.peopleWidth}"
-              show-subjects
-              class="my-3">
-            </rp-person-preview>
-          `)}   
-    </section>
-    <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
-      <div class="box-title">
-        <h1 class="weight-regular mt-0">Related Publications</h1>
-      </div>
-        <div class="data">
-          ${Object.entries(this.publications).map(([k, v]) => html`
-            <h3>${this._publicationTitle(k)} (${v.total})</h3>
-            ${v.results.map((pub, i, pubs) => html`
-              <div class="box-pubsyear">
-                <div class="year">${this._getYear(pub, i, pubs)}</div>
-                <div id="wrapped-text" class="pubs"><rp-citation .data="${pub}"></rp-citation></div>
+        <h1 class="weight-regular mt-0">About</h1>
+        <div class="grid-container">
+            <div class="grid-item">
+                <h2 aria-label="Awarded By Title">Awarded By</h2>
+                <div>${this.awardedByLabel}</div>
+            </div> 
+            ${this.grantAmount ? html `
+              <div class="grid-item">
+                    <h2 aria-label="Grant Amount">Amount</h2>
+                    <div>${this.grantAmount}</div>
+                </div> 
+              `: html``}
+            <div class="grid-item">
+                <h2 aria-label="Grant Status">Status</h2>
+                <div>${this.grantAwardStatus}</div>
+            </div> 
+              <div class="grid-item">
+                  <h2 aria-label="Grant Number">Grant Number</h2>
+                  <div>${this.grantNumber}</div>
               </div> 
-            `)}
-            <div class="box-pub-buttons">
-            <div class="padding"></div>
-            ${ v.total > 5 ? 
-              html`
-              <div class="buttons">
-                <button @click=${() => this._pubRedirect(k)} class="load-pubs less">
-                  View All Related ${this._publicationTitle(k)}
-                </button>
-              </div>
-              `: 
-              html ``
-             }
-            </div>
-        `)} 
         </div>
+        ${this.purpose ? html `
+          <h2 aria-label="Grant Purpose">Purpose</h2>
+            <div>${this.purpose}</div>
+          `: html ``
+        }
+        ${this.grantUrl ? html `
+          <h2 aria-label="Grant URL">URL</h2>
+            <div>${this.grantUrl}</div>
+          `: html ``
+        }
+
+    </section>
+
+    <section id="contributors" class="bg-light mt-3" ?hidden="${this._hidePageSection('contributors')}">
+    <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>      
+
+        ${this.role == "pi_role" ? html `
+          <h2 aria-label="Principal Investigator Section Title">Principal Investigator</h2>
+        `: html ``}  
+
+        ${this.contributors.map(contributor => html`
+          <rp-person-preview style="flex-flow: column wrap;" 
+            .data=${contributor}
+            text-width="${this.peopleWidth}"
+          ></rp-person-preview>`
+        )}
+
     </section>
   </div>
 </div>

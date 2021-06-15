@@ -1,4 +1,6 @@
 import { html } from 'lit-element';
+import { styleMap } from 'lit-html/directives/style-map';
+
 import { renderHTML } from '../../src/lib/santize-html.js';
 
 export default function render() {
@@ -28,8 +30,10 @@ export default function render() {
     }
     .text-container {
       margin-left: 12px;
-      flex-grow: 1;
       align-self: center;
+      overflow-wrap: break-word;
+      min-width: 0;
+      
     }
     .title {
       font-size: var(--font-size);
@@ -55,11 +59,12 @@ export default function render() {
       font-weight: bold;
       font-style: normal;
     }     
+
     </style>
 
     <div class=container>
       <div class="icon-container"><rp-icon icon="rp-subject" circle-bg theme-color='subject' size-icon-svg="extralgSVGIcon" size="extralg"></rp-icon></div>
-      <div class="text-container">
+      <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}">
         <a class="title" href="${this.getLink()}">${renderHTML(this.title)}</a>
         <div class="below-title">
           <span>Research Subject</span>

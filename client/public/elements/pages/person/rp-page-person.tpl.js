@@ -164,6 +164,12 @@ return html`
     justify-content: center;
     height: 150px;
   }
+
+  #pronoun {
+    margin: 0;
+    font-size: var(--font-size);
+    color: var(--color-blue10);
+  }
   /* #showMore{
     display:block;
     margin:0 auto; 
@@ -252,6 +258,11 @@ return html`
               </a>
             </div>
 
+            ${this.getPronouns() ? html `
+              <p id="pronoun">(${this.getPronouns()})</p>   
+            `: html ``}
+                     
+
             ${this.getResearchSubjects(1).length > 0 ? html`
               <div>
                 <p class="text-light h3 text-center bold">
@@ -297,7 +308,7 @@ return html`
         `}
 
       </rp-hero-image>
-      <rp-link-list class="bg-light p-3"
+      <rp-link-list class="bg-light p-3" 
         direction="horizontal"
         .links="${this.getPageSections()}"
         use-hash
@@ -429,6 +440,62 @@ return html`
         
 
       </section>
+
+      <div ?hidden="${!APP_CONFIG.includeGrants}">
+
+      <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('grants')}">
+        <div class="box-title">
+          <h1 class="weight-regular mt-0">Grants</h1>
+          <div class="box-title-icons">
+            <div class="pub-icons">
+              ${this.isOwnProfile ? html`
+                  <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
+                    <div slot="tooltip">Edit Publications</div>
+                  </rp-icon>
+                  <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
+
+                ` : html``
+              }
+            </div>
+
+            <div class="pub-count">${this.totalGrants}</div>
+        
+          </div>
+        </div>
+        ${this.totalGrants != 0 ? html `
+        <h2 class="mb-0">Selected Grants</h2>       
+          <div>
+            <h3 class="weight-regular mt-0">
+              ${this.activeGrant.length != 0 ? html `
+                <i>Active (${this.activeGrant.length})</i>
+                ${this.activeGrant.map(grant => 
+                    html`<h3 class="weight-regular mt-0"><a href="${grant.grant_url}">${grant.title}</a><br />
+                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
+                    `
+                )}
+              `
+              :html``}
+            </h3>
+          </div>
+          <div>
+            <h3 class="weight-regular mt-0">
+            ${this.inactiveGrant.length != 0  ? html `
+                <i>Completed (${this.inactiveGrant.length})</i>
+                ${this.inactiveGrant.map(grant => 
+                    html`<h3 class="weight-regular mt-0"><a href=${grant.grant_url}>${grant.title}</a><br />
+                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
+                    `
+                )}
+            `
+            :html``}
+            </h3>
+          </div>
+        `
+        :html``}
+      </section>
+
+      </div>
+
     </div>
   </div>
 </div>

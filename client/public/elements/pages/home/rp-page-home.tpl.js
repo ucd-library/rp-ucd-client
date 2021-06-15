@@ -69,7 +69,7 @@ return html`
   }
   .view-all-row {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: center;
   }
   #subjects {
     padding-bottom: 15px;
@@ -125,7 +125,7 @@ return html`
   }
 
   @media (min-width: 480px) and (max-width: 799px){
-    .container {
+    .container{
       margin-right: auto;
       margin-left: auto;
       max-width: 550px; 
@@ -135,6 +135,18 @@ return html`
     rp-search {
       max-width: 500px;
     }
+  }
+  @media (max-width: 325px) {
+    rp-search {
+      max-width: 245px;
+    }  
+
+  }
+  @media (max-width: 250px) {
+    rp-search {
+      max-width: 185px;
+    }  
+
   }
 
   
@@ -167,6 +179,7 @@ return html`
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
   <div class="container flex" ?hidden="${this._hideStatusSection('loaded')}">
+
     <div class="col-l">
       <div id="works">
         <div class="list-count">
@@ -187,6 +200,9 @@ return html`
         </div>
       </div>
     </div>
+
+
+
     <div class="col-r flex-grow-1">
       <div class="people" id="people">
         <h2 class="mt-0">
@@ -201,13 +217,15 @@ return html`
               text-width=${this.peopleWidth}>
             </rp-person-preview>
             `)}
-            <div></div>
-            <div class="flex view-all-row">
-              <a href="/people" class="view-all"><span>View All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
-            </div>
+        </div>
+        <div></div>
+        <div class="flex view-all-row">
+          <a href="/people" class="view-all"><span>View All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
         </div>
       </div>
-      <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+      
+    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+      
       <div id="subjects">
         <h2>
           <span class="bold mr-2">${this.subjectsTotal}</span>
@@ -217,7 +235,8 @@ return html`
           <rp-badge 
             title="${this.SubjectModel.getPreferredLabel(subject)}" 
             size="lg" 
-            max-width="280" 
+            max-width="180" 
+            text-width=${this.peopleWidth}
             class="my-1" 
             href="${this.SubjectModel.getLandingPage(subject)}">
             ${this.SubjectModel.getPreferredLabel(subject)}
@@ -225,10 +244,38 @@ return html`
         `)}
         ${this.subjectsTotal > 10 ? html`
           <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/concepts"></rp-badge>
+        ` : html``}
+      </div>
+    </div>
+    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+
+
+    <!-- <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+      <div id="grants">
+        <h2>
+          <span class="bold mr-2">${this.grantsTotal}</span>
+          <span class="weight-regular">Grants</span>
+        </h2>
+        ${this.grants.map(grant => html`
+          <rp-badge 
+            title="${this.GrantModel.getLabel(grant)}" 
+            size="lg" 
+            max-width="280" 
+            class="my-1" 
+            href="${this.GrantModel.getLandingPage(grant)}">
+            ${this.GrantModel.getLabel(grant)}
+          </rp-badge>
+        `)}
+        ${this.grantsTotal > 10 ? html`
+          <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/grants"></rp-badge>
           ` : html``}
       </div>
       <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-    </div>
+    </div> -->
+    
+
+
+
   </div>
 </div>
  

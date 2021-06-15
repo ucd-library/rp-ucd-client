@@ -14,7 +14,8 @@ export class RpAZ extends LitElement {
       disabledLettersFmt: {type: Array},
       selectedLetter: {type: String, attribute: 'selected-letter'},
       role: {type: String, reflect: true},
-      ariaLabel: {type: String, attribute: "aria-label", reflect: true}
+      ariaLabel: {type: String, attribute: "aria-label", reflect: true},
+      baseHref : {type: String, attribute: "base-href"}
     };
   }
 
@@ -71,6 +72,22 @@ export class RpAZ extends LitElement {
         selected = "selected";
       }
     }
+
+
+
+    if( this.baseHref ) {
+      let disabled = this.disabledLettersFmt.includes(letter);
+      let href = "#";
+      if( !disabled ) {
+        href = `/${this.baseHref}?az=${letter.toLowerCase()}`;
+      }
+
+      return html`<div class="letter ${selected}" ?disabled="${disabled}">
+          <a href="${href}">${letter}</a>
+        </div>
+      `;
+    }
+
     return html`
     <div 
       @click="${this.handleClick}"
