@@ -32,7 +32,7 @@ export class RpPersonPreview extends Mixin(LitElement)
     this.showSubjects = false;
     this.subjectCt = 4;
     this.avatarSize = "md";
-    this.textWidth = (window.innerWidth.toString() - 70) + "px";
+    this.textWidth = (window.innerWidth - 70) + "px";
   }
 
   /**
