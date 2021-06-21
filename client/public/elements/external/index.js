@@ -1,15 +1,16 @@
 const BUNDLES = {
-  directory : ['ae-directory-listing']
+  directory : ['ae-directory-listing'],
+  publications : ['ae-publication-list']
 };
 
 const loaded = {};
 if( !window.AGGIE_EXPERTS_LOADER ) {
-  AGGIE_EXPERTS_LOADER = {};
+  window.AGGIE_EXPERTS_LOADER = {};
 }
 
 // hack, need to see if __webpack_require__.p has a better way to set
 // this sets the remote host to load chunked bundle code from
-if( AGGIE_EXPERTS_LOADER.host ) {
+if( AGGIE_EXPERTS_LOADER.host && window.__webpack_require__ ) {
   __webpack_require__.p = AGGIE_EXPERTS_LOADER.host + __webpack_require__.p;
 }
 
@@ -65,6 +66,8 @@ function loadBundle(name) {
 
   if( name === 'directory' ) {
     return import(/* webpackChunkName: "external-directory" */ "./directory/ae-directory-listing");
+  } else if( name === 'publications' ) {
+    return import(/* webpackChunkName: "external-publications" */ "./directory/ae-publications-list");
   }
 
   console.warn('Unknown aggie experts bundle name: '+name);
