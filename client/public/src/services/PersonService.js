@@ -89,6 +89,10 @@ class PersonService extends BaseService {
     let cacheId = this.getGrantsRequestId(id);
     let query = {
       limit: 5,
+      offset: 0,
+      sort: [{
+        'dateTimeInterval.start.dateTime': {order: 'desc'}
+      }],
       filters: {
         'relates.@id': {
           type: "keyword", 
@@ -100,7 +104,8 @@ class PersonService extends BaseService {
           op : 'and',
           value : [APP_CONFIG.data.types.grant]
         }
-      }
+      },
+      facets: {}
     };
 
     return this.request({
