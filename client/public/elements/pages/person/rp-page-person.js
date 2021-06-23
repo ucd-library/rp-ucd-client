@@ -33,6 +33,7 @@ export default class RpPagePerson extends RpUtilsLanding {
       hasMultipleGrantTypes: {type: Boolean},
       retrievedPublications: {type: Object},
       retrievedGrants: {type: Object},
+      showMoreGrants: {type: Number},
       totalPublications: {type: Number},
       totalGrants: {type: Number},
       isOwnProfile: {type: Boolean},
@@ -128,6 +129,8 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.tempGrantObject = {};
     this.individualStatus = 'loading';
     this.retrievedPublications = {};
+    this.retrievedGrants = [];
+    this.showMoreGrants = false;
     this.totalPublications = 0;
     this.totalGrants = 0;
     this.isOwnProfile = false;
@@ -273,11 +276,22 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @returns {Promise}
    */
   async _doGrantQuery(){
-    let data = await this.PersonModel.getGrants(this.assetId);
+    let data = await this.PersonModel.getGrants(this.assetId, this.retrievedGrants.length);
+
+    if( data.state === 'error' ) {
+      this.grantStatus = 'error';
+      return;
+    }
+    if (data.state != 'loaded') return;
+
     this.totalGrants = typeof data.payload.total === 'object' ? 0 : data.payload.total;
-    this.retrievedGrants = data.payload.results;
+    
+    this.retrievedGrants = [...this.retrievedGrants, ...data.payload.results];
+    this.showMoreGrants = this.totalGrants-this.retrievedGrants.length;
+    
     let activeGrant = [];
     let inactiveGrant = [];
+    
     this.retrievedGrants.forEach(function(grant){
       let dateStart = new Date(grant.dateTimeInterval.start.dateTime);
       let dateEnd = new Date(grant.dateTimeInterval.end.dateTime);
@@ -314,10 +328,6 @@ export default class RpPagePerson extends RpUtilsLanding {
       }
     });
 
-
-    this.inactiveGrant = inactiveGrant;
-    this.activeGrant = activeGrant;
-
     this.inactiveGrant.sort(function(a, b){
       return b.yearStart-a.yearStart;
     });
@@ -326,14 +336,8 @@ export default class RpPagePerson extends RpUtilsLanding {
       return b.yearStart-a.yearStart;
     });
 
- 
-    if( data.state === 'error' ) {
-      this.grantStatus = 'error';
-      return;
-    }
-    if (data.state != 'loaded') return;
-
-    this.requestUpdate();
+    this.inactiveGrant = inactiveGrant;
+    this.activeGrant = activeGrant;
   }
   
   /**
