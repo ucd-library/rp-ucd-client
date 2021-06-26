@@ -38,7 +38,6 @@ export class RpMessage extends Mixin(LitElement)
     this.lastMessage = await this._doLastMessage();
     if (this.lastMessage == null) this.lastMessage = "No Message Found";
     this.shadowRoot.querySelector('.toaster').style.height = '15%';
-    console.log("check");
 
   }
 
