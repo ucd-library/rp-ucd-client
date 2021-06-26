@@ -16,7 +16,7 @@ export class RpOrganizationPreview extends LitElement {
   constructor() {
     super();
     this.organizationPath = "/organization/";
-    this.jsonldContext = APP_CONFIG.data.context.organization;
+    this.jsonldContext = ((APP_CONFIG.data.context.organization) ? APP_CONFIG.data.context.organization : '');
     this.render = render.bind(this);
   }
 

@@ -14,12 +14,12 @@ eventBus.on('user-message', msg => {
   userSockets[msg.user]
     .forEach(connection => connection.socket.emit('message', msg));
 });
-
+console.log("UserSocket: ",userSockets);
 export default server => {
   const io = new Server(server);
   io.on('connection', handleConnection);
 };
-
+ 
 /**
  * @function handleConnection
  * @description hand new socket.io connection
@@ -28,6 +28,7 @@ export default server => {
  * @returns {Promise}
  */
 async function handleConnection(socket) {
+  console.log("Attempting Connection");
   let cookies = cookie.parse(socket.handshake.headers.cookie);
   let token = cookies[config.jwt.cookieName];
 
@@ -45,6 +46,8 @@ async function handleConnection(socket) {
     logger.error('User connected to websocket but bad auth token provided');
     return;
   }
+
+  console.log("Connected");
 
   // wire up disconnect listener
   socket.on('disconnect', () => {

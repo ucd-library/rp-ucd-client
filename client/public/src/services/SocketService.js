@@ -9,7 +9,7 @@ class SocketService extends BaseService {
     this.store = SocketStore;
   }
 
-  connect() {
+  connect() { 
     if( this.socket ) return;
     this.socket = io();
 
@@ -18,8 +18,9 @@ class SocketService extends BaseService {
     });
 
     this.socket.on('message', (msg) => {
-      console.log('msg', msg);
+      this.store.setSocketMessageLoaded(msg);
     });
+
   }
  
 }
