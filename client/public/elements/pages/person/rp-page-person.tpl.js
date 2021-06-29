@@ -1,6 +1,6 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
-import "../../components/message"
+import "../../components/rp-toast-message"
 
 
 export default function render() {
@@ -255,7 +255,7 @@ return html`
               </a>
             </div>
 
-            <rp-message ?hidden="${!this.isOwnProfile}"><rp-message>
+            <rp-toast-message ?hidden="${!this.isOwnProfile}"><rp-toast-message>
 
 
             ${this.getPronouns() ? html `

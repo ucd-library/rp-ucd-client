@@ -22,7 +22,7 @@ import "../../components/edit-profile"
 import "../../components/work-preview"
 import "../../components/subject-preview"
 import "../../components/grant-preview"
-import "../../components/message"
+import "../../components/rp-toast-message"
 
 
 
@@ -122,7 +122,7 @@ You control them with attributes, and build more complicated (bus-connected) ele
 
 <section>
   <h2>Toaster Message</h2>
-  <rp-message><rp-message>
+  <rp-toast-message><rp-toast-message>
 </section>
 
 <section>

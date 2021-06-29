@@ -37,13 +37,12 @@ export default function render() {
   </style>
     <div class="toaster">
         <iron-icon class="cancel" icon="close" @click="${this._dismissToaster}"></iron-icon>
-        <h2>Kafka Message: </h2>
+        <h2 style="padding-bottom: -10px;">Kafka Message: </h2>
         <p style="padding-right: 20px;">${this.lastMessage}</p>
     </div>
     <div class="container">
         <button @click="${this._toastMessage}">Toaster Button</button> 
     </div>
-
     
   `;
 }

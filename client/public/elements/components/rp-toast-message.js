@@ -1,14 +1,14 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { styleMap } from 'lit-html/directives/style-map';
-import render from './message.tpl.js';
+import render from './rp-toast-message.tpl.js';
 
 
 /**
- * @class RpMessage
+ * @class RpToastMessage
  * @description A message for the harvest.
  */
-export class RpMessage extends Mixin(LitElement)
+export class RpToastMessage extends Mixin(LitElement)
   .with(LitCorkUtils) {
   static get properties() {
     return {
@@ -80,4 +80,4 @@ export class RpMessage extends Mixin(LitElement)
 
 
 }
-customElements.define('rp-message', RpMessage);
+customElements.define('rp-toast-message', RpToastMessage);
