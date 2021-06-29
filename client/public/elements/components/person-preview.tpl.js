@@ -24,9 +24,9 @@ export default function render() {
       font-size: var(--font-size);
       color : var(--tcolor-link-text);
       font-weight : var(--font-weight-bold);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      /* white-space: nowrap; */
+      /* overflow: hidden; */
+      /* text-overflow: ellipsis; */
       display: block;
     }
     .name:hover {
@@ -38,6 +38,9 @@ export default function render() {
     }
     .name[disabled]:hover {
       color : var(--tcolor-link-text);
+    }
+    .title {
+      font-size: var(--font-size-small);
     }
     small {
       font-size : var(--font-size-small);
@@ -67,7 +70,7 @@ export default function render() {
         ?disabled="${!this.getLandingPage()}">
         ${renderHTML(this.title)}
       </a>
-      <small>${this.getTitle()}</small>
+      <div class="title">${this.getTitle()}</div>
       ${this.showSnippet && this.getSnippet() ? html`
         <div class="snippet">${renderHTML(this.getSnippet())}</div>
       ` : html``}

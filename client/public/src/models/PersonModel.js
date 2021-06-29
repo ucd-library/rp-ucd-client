@@ -90,6 +90,7 @@ class PersonModel extends BaseModel {
         await this.service.getPublications(id,  pubTypeObject, offset);
       }
     } catch (error) {
+      console.error(error);
       // error is recorded in store
     }
     return this.store.data.pubsByRequest[requestId];
@@ -100,25 +101,24 @@ class PersonModel extends BaseModel {
    * @description get publications for a person
    * 
    * @param {String} id 
-   * @param {Object} pubTypeObject 
    * @param {Number} offset
    * 
    * @returns {Promise} 
    */
-  async getGrants(id) {
-    let requestId = this.service.getGrantsRequestId(id);
+  async getGrants(id, offset=0) {
+    let requestId = this.service.getGrantsRequestId(id, offset);
     let state = this.store.data.grantsByRequest[requestId];
 
     try {
       if( state && state.request ) {
         await state.request;
       } else {
-        await this.service.getGrants(id);
+        await this.service.getGrants(id, offset);
       }
     } catch (error) {
+      console.error(error);
       // error is recorded in store
     }
-
 
     return this.store.data.grantsByRequest[requestId];
   }

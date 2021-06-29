@@ -5,6 +5,8 @@ return html`
 <style>
   :host {
     display: inline-block;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   span.main {
     display: inline-block;
@@ -14,6 +16,11 @@ return html`
     line-height: 1;
     border-color: var(--tcolor-accent0);
     transition: 0.3s;
+
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
   }
   span.main.ellipsis {
     border-color: var(--tcolor-bg-primary);

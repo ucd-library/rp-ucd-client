@@ -492,6 +492,11 @@ return html`
           </div>
         `
         :html``}
+
+        <button type="button" 
+          ?hidden="${this.showMoreGrants === 0}"
+          @click="${e => this._doGrantQuery()}" 
+          class="load-pubs more">Show ${Math.min(this.showMoreGrants, 10)} more</button>
       </section>
 
       </div>

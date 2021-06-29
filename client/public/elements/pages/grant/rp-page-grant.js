@@ -223,6 +223,9 @@ export default class RpPageGrant extends RpUtilsLanding {
    * @returns {String}
    */
   _dateInterval(type){
+    if( !this.grant ) return 'Unavailable';
+    if( !this.grant.dateTimeInterval ) return 'Unavailable';
+
     let month;
     let year;
     let day;
@@ -238,7 +241,7 @@ export default class RpPageGrant extends RpUtilsLanding {
       day = new Date(this.grant.dateTimeInterval.end.dateTime).toLocaleString('default', { day: 'numeric' });
       return month + " " + day + ", " + year;    
     }
-    return "Unavaliable";
+    return "Unavailable";
   }
 
   /**

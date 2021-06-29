@@ -81,14 +81,18 @@ class PersonService extends BaseService {
     return `${id}-${pubTypeObject.id}-${offset}`;
   }
 
-  getGrantsRequestId(id) {
-    return `grants-${id}`;
+  getGrantsRequestId(id, offset) {
+    return `grants-${id}-${offset}`;
   }
 
-  async getGrants(id) {
-    let cacheId = this.getGrantsRequestId(id);
+  async getGrants(id, offset) {
+    let cacheId = this.getGrantsRequestId(id, offset);
     let query = {
-      limit: 5,
+      limit: 10,
+      offset,
+      sort: [{
+        'dateTimeInterval.start.dateTime': {order: 'desc'}
+      }],
       filters: {
         'relates.@id': {
           type: "keyword", 
@@ -100,7 +104,8 @@ class PersonService extends BaseService {
           op : 'and',
           value : [APP_CONFIG.data.types.grant]
         }
-      }
+      },
+      facets: {}
     };
 
     return this.request({
