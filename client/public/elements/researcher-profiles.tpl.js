@@ -235,6 +235,9 @@ return html`
   .nav-help {
     display: none;
   }
+  .nav-grants {
+    display: none;
+  }
 
   #app-footer {
     background-color: var(--tcolor-primary);
@@ -305,8 +308,13 @@ return html`
     }
   }
 
-  @media (min-width: 675px) {
+  @media (min-width: 500px) {
     .nav-help {
+      display: inline-block !important;
+    }
+  }
+  @media (min-width:425px) {
+    .nav-grants {
       display: inline-block !important;
     }
   }

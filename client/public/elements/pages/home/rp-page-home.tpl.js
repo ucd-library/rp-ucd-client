@@ -15,10 +15,10 @@ return html`
     background-size: cover;
     color: var(--tcolor-light);
   }
-  .hero .container {
-    padding-bottom: 30px;
-    flex-flow: column;
-    align-items: center;
+  .hero .title-container {
+    display: flex;
+    padding: 0 20px 30px 20px;
+    justify-content: center;
   }
   .hero img {
     height: auto;
@@ -87,6 +87,11 @@ return html`
     height: 100vh;
   }
 
+  h2.title-fix {
+    margin: 0;
+    padding-top: 20px;
+  }
+
   @media (min-width: 800px){
     .people-container {
       grid-template-columns: auto auto;
@@ -102,7 +107,7 @@ return html`
       padding-left: 24px;
       order: unset;
     }
-    .hero .container {
+    .hero .title-container {
       padding: 50px 0;
     }
     .hero img {
@@ -125,15 +130,18 @@ return html`
   }
 
   @media (min-width: 480px) and (max-width: 799px){
-    .container{
-      margin-right: auto;
-      margin-left: auto;
+    /* .title-container {
       max-width: 550px; 
-    }
+    } */
   }
   @media (min-width: 480px) {
     rp-search {
       max-width: 500px;
+    }
+  }
+  @media (max-width: 480px) {
+    .hero .title-container {
+      display: block;
     }
   }
   @media (max-width: 325px) {
@@ -152,11 +160,11 @@ return html`
   
 </style>
 <div class="hero">
-  <div class="container flex">
+  <div class="title-container">
     <!-- <img src="${this.theme.homeHeroImage}" alt=""> -->
-    <div class="text flex flex-column" style="text-align: center; max-width: 600px">
-      <h2>${this.theme.homeHeroTitle}</h2>
-      <div class="flex flex-column justify-content-between flex-grow-1 content">
+    <div style="text-align: center; max-width: 600px">
+      <h2 class="title-fix">${this.theme.homeHeroTitle}</h2>
+      <div class="content">
         <div>${renderHTML(this.theme.homeHeroContentTop)}</div>
         <div>${renderHTML(this.theme.homeHeroContentBottom)}</div>
         <div style="margin-top: 50px;">

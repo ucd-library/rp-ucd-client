@@ -9,39 +9,48 @@ export default function render() {
       display: inline-block;
       background-color: var(--tcolor-light);
     }
+
     .container {
       display: flex;
       flex-flow: row nowrap;
       align-items: center;
     }
+
     #input {
-      flex-grow: 1;
+      /* flex-grow: 1; */
       height: 44px;
       min-width: 30px;
       border: none;
       background-color: var(--tcolor-light);
       font-size: var(--font-size);
       padding-left: 10px;
-    }
-    #icon-container {
-      height: 44px;
-      display: flex;
-      flex-grow: 1;
-      align-items: center;
-      justify-content: flex-end;
-      padding-left: 15px;
-      padding-right: 15px;
-      background-color: var(--tcolor-light);
+      box-sizing: border-box;
+      flex: 1;
     }
     input:focus {
       outline: none;
     }
+
+    /* #icon-container { */
+    rp-icon {
+      display: inline-block;
+      /* height: 44px; */
+      /* display: flex; */
+      /* flex-grow: 1; */
+      /* align-items: center; */
+      /* justify-content: flex-end; */
+      padding-left: 15px;
+      padding-right: 15px;
+      background-color: var(--tcolor-light);
+    }
+
     .line {
       background-color: var(--tcolor-primary10);
       width: 1px;
       min-width: 1px;
       height: 34px;
     }
+
     .sr-only {
       position: absolute;
       width: 1px;
@@ -67,9 +76,9 @@ export default function render() {
            @input="${(e) => this.inputValue = e.target.value}"
            @keyup="${this._handleKeyup}"
            id="input">
-    <div id="icon-container">
+    <!-- <div id="icon-container"> -->
       <rp-icon @click="${this.doSearch}" icon="rp-search" ?is-link="${this.inputValue}"><rp-icon>
-    </div>
+    <!-- </div> -->
 
   </div>
   `;
