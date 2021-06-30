@@ -20,7 +20,8 @@ async function authMiddleware(req, res, next) {
   }
 
   // only admins or users asking for self harvest, can harvest
-  if( !auth.isAdmin(token) && token.uid !== req.params.userId ) {
+  if( !auth.isAdmin(token) && 
+    (token.uid !== req.params.userId || token.username !== req.params.userId+'@ucdavis.edu' ) ) {
     return res.status(403).json({error: true, message: 'Forbidden, invalid user'});
   }
 
