@@ -97,7 +97,8 @@ class WorkModel extends BaseModel {
         output.push({label, url: `${url}id=doi:${work.doi}`});
       }
       else if (work.hasPublicationVenue) {
-        output.push({label, url: `${url}issn=${work.hasPublicationVenue.issn}&spage=${work.pageStart}&volume=${work.volume}&issue=${work.issue}&date=${work.publicationDate}`});
+        let pd = rdfUtils.getLatestDate(work.publicationDate).toISOString();
+        output.push({label, url: `${url}issn=${work.hasPublicationVenue.issn}&spage=${work.pageStart}&volume=${work.volume}&issue=${work.issue}&date=${pd}`});
       }
     } catch (error) {
       console.error('Error processing additional links', error);
@@ -389,7 +390,7 @@ class WorkModel extends BaseModel {
 
     // publication date
     try {
-      let d = new Date(work.publicationDate);
+      let d = rdfUtils.getLatestDate(work.publicationDate);
       let options = {year: 'numeric', month: 'long', day: 'numeric' };
       d = new Intl.DateTimeFormat('en-US', options).format(d);
       if (d) output.push({text: d, class: 'pub-date'});
