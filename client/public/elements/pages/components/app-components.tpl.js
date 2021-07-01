@@ -124,8 +124,13 @@ You control them with attributes, and build more complicated (bus-connected) ele
 
 <section id="ToastMessage">
   <h2>Toaster Message</h2>
-  <button @click="${this.addToast}">Test</button>
+  <p>One toast message will pop up automatically with just adding <code>rp-toast-message</code></p>
+  <rp-toast-message></rp-toast-message> 
+  <p>You can add a button for toast message by <code>@click</code> with function <code>addToast</code></p>
+  <button @click="${this.addToast}">Add Toast Message</button>
 </section>
+
+
 
 <section>
   <h2>Accordians for FAQ section</h2>

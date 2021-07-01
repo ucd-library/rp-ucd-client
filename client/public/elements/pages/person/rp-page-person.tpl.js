@@ -255,7 +255,10 @@ return html`
               </a>
             </div>
 
-            <rp-toast-message ?hidden="${!this.isOwnProfile}"><rp-toast-message>
+            <!-- 
+              SB: Kafka Message Add?
+              <rp-toast-message ?hidden="${!this.isOwnProfile}"><rp-toast-message> 
+            -->
 
 
             ${this.getPronouns() ? html `

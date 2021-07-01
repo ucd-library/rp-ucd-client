@@ -75,10 +75,6 @@ export class RpToastMessage extends Mixin(LitElement)
    * @returns {String} data
    */
   async _doLastMessage() {
-    //let data = await this.PersonModel.harvest(APP_CONFIG.user.uid);
-    //return data.body.message;
-
-    //SB: Socket add?
     let data = await this.SocketModel.getLastMessage();
     return data.connected;
   }
