@@ -27,7 +27,21 @@ export class RpToastMessage extends Mixin(LitElement)
 
   }
 
+  /**
+   * @method show
+   * @description Show the toaster module 
+   */
+  show(){
+    this.shadowRoot.host.style.display = "block";
+  }
 
+  /**
+   * @method show
+   * @description Hide the toaster module 
+   */
+  hide(){
+    this.shadowRoot.host.style.display = "none";
+  }
 
   /**
    * @method _toastMessage
@@ -37,8 +51,12 @@ export class RpToastMessage extends Mixin(LitElement)
   async _toastMessage() {
     this.lastMessage = await this._doLastMessage();
     if (this.lastMessage == null) this.lastMessage = "No Message Found";
-    this.shadowRoot.querySelector('.toaster').style.height = '15%';
+    this.show();
 
+  }
+  _onSocketMessage(event){
+    this.lastMessage = event.connected;
+    this.show();
   }
 
   /**
@@ -47,7 +65,7 @@ export class RpToastMessage extends Mixin(LitElement)
    * @description Displays the last message from the harvest container
    */
   async _dismissToaster() {
-    this.shadowRoot.querySelector('.toaster').style.height = '0';
+    this.hide();
   }
 
   /**
@@ -57,12 +75,12 @@ export class RpToastMessage extends Mixin(LitElement)
    * @returns {String} data
    */
   async _doLastMessage() {
-    let data = await this.PersonModel.harvest(APP_CONFIG.user.uid);
-    return data.body.message;
+    //let data = await this.PersonModel.harvest(APP_CONFIG.user.uid);
+    //return data.body.message;
 
     //SB: Socket add?
-    //let data = await this.SocketModel.getLastMessage();
-    //return data;
+    let data = await this.SocketModel.getLastMessage();
+    return data.connected;
   }
 
 

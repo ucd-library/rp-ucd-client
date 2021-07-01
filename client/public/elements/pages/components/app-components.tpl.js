@@ -24,6 +24,8 @@ import "../../components/subject-preview"
 import "../../components/grant-preview"
 import "../../components/rp-toast-message"
 
+import ToastMessage from "../../components/rp-toast-message"
+
 
 
 export default function render() {
@@ -120,9 +122,9 @@ You control them with attributes, and build more complicated (bus-connected) ele
 <rp-a-z hide-all=true selected-letter="f" disabled-letters=${JSON.stringify(['g','q', 'S'])}></rp-a-z>
 </section>
 
-<section>
+<section id="ToastMessage">
   <h2>Toaster Message</h2>
-  <rp-toast-message><rp-toast-message>
+  <button @click="${this.addToast}">Test</button>
 </section>
 
 <section>

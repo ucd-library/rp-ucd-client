@@ -9,7 +9,7 @@ class SocketStore extends BaseStore {
       socketLastMessage: null,
     };
     this.events = {
-      SOCKET_LAST_MESSAGE: 'socket-message'
+      SOCKET_MESSAGE: 'socket-message'
     };
   }
 
@@ -46,7 +46,7 @@ class SocketStore extends BaseStore {
    */
   _setSocketMessageState(state){
     this.data.socketLastMessage = state;
-    this.emit(this.events.SOCKET_LAST_MESSAGE, state);
+    this.emit(this.events.SOCKET_MESSAGE, state);
   }
 }
 
