@@ -1,5 +1,7 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
+import "../../components/rp-toast-message"
+
 
 export default function render() {
 return html`
@@ -230,6 +232,7 @@ return html`
   <div class="data ${this.individualStatus}" ?hidden="${!this.showPage() }">
     <div class="page-header container-wide">
       <rp-hero-image id="hero">
+
         ${this.individualStatus === 'loaded' ? html`
           <div class="hidden" slot="top" class="herotop">
             <rp-icon icon="iron-link" circle-bg is-link style="margin-right:5px;"></rp-icon>
@@ -251,6 +254,12 @@ return html`
                 </rp-icon> 
               </a>
             </div>
+
+            <!-- 
+              SB: Kafka Message Add?
+              <rp-toast-message ?hidden="${!this.isOwnProfile}"><rp-toast-message> 
+            -->
+
 
             ${this.getPronouns() ? html `
               <p class="text-light h3 text-center" style="margin:0">(${this.getPronouns()})</p>   

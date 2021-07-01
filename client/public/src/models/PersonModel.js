@@ -126,6 +126,7 @@ class PersonModel extends BaseModel {
   async harvest(id) {
     let resp = await this.service.harvest(id);
     console.log('harvest', resp);
+    return resp;
   }
 
 

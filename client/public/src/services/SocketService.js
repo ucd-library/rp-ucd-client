@@ -9,17 +9,21 @@ class SocketService extends BaseService {
     this.store = SocketStore;
   }
 
-  connect() {
+  connect() { 
     if( this.socket ) return;
     this.socket = io();
-
+    
     this.socket.on('connect', () => {
+      setTimeout(() => {
+        this.store.setSocketMessageLoaded({connected: true});
+      }, 3000); 
       console.log('update socket connected');
     });
 
     this.socket.on('message', (msg) => {
-      console.log('msg', msg);
+      this.store.setSocketMessageLoaded(msg);
     });
+
   }
  
 }

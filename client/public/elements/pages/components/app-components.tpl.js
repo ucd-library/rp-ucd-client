@@ -22,6 +22,9 @@ import "../../components/edit-profile"
 import "../../components/work-preview"
 import "../../components/subject-preview"
 import "../../components/grant-preview"
+import "../../components/rp-toast-message"
+
+import ToastMessage from "../../components/rp-toast-message"
 
 
 
@@ -119,14 +122,24 @@ You control them with attributes, and build more complicated (bus-connected) ele
 <rp-a-z hide-all=true selected-letter="f" disabled-letters=${JSON.stringify(['g','q', 'S'])}></rp-a-z>
 </section>
 
+<section id="ToastMessage">
+  <h2>Toaster Message</h2>
+  <p>One toast message will pop up automatically with just adding <code>rp-toast-message</code></p>
+  <rp-toast-message></rp-toast-message> 
+  <p>You can add a button for toast message by <code>@click</code> with function <code>addToast</code></p>
+  <button @click="${this.addToast}">Add Toast Message</button>
+</section>
+
+
+
 <section>
-<h2>Accordians for FAQ section</h2>
-<p>Use the <code>title</code> attribute to specify the link text. The expandable content is an unnamed slot.</p>
-<rp-accordian title="How often do you update the data in the registry?">${'Hello world! '.repeat(40)}</rp-accordian>
-<rp-accordian></rp-accordian>
-<rp-accordian expanded title="Use the expanded attribute or toggle method to control expansion">
-This is open on page load because I'm using the expanded attribute.
-</rp-accordian>
+  <h2>Accordians for FAQ section</h2>
+  <p>Use the <code>title</code> attribute to specify the link text. The expandable content is an unnamed slot.</p>
+  <rp-accordian title="How often do you update the data in the registry?">${'Hello world! '.repeat(40)}</rp-accordian>
+  <rp-accordian></rp-accordian>
+  <rp-accordian expanded title="Use the expanded attribute or toggle method to control expansion">
+  This is open on page load because I'm using the expanded attribute.
+  </rp-accordian>
 </section>
 
 <section>
@@ -201,7 +214,7 @@ Otherwise, a <code>new-selection</code> event will fire when an option is clicke
 <h2>Dropdown</h2>
 <p>A stylized dropdown. Listen with <code>@new-selection="\${e => console.log(e.target.choices[e.target.chosen])}</code></p>
 <rp-dropdown choices='["People",
-                       {"text": "Subjects"}
+                       {"text": "Subjects"},
                        {"text": "Organizations"},
                        {"text": "Works"}]'
              @new-selection="${e => console.log(e.target.choices[e.target.chosen])}">

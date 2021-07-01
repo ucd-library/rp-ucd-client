@@ -384,7 +384,6 @@ return html`
       </ul>
 
       <button @click="${this.testHarvest}">Harvest</button>
-
       <div id="nav-right" >
         <rp-quick-search 
           id="quick-search" 

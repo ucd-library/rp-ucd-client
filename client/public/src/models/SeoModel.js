@@ -4,6 +4,7 @@ const PersonModel = require('./PersonModel');
 const WorkModel = require('./WorkModel');
 const SubjectModel = require('./SubjectModel');
 const GrantModel = require('./GrantModel');
+const SocketModel = require('./SocketModel');
 
 
 /**
@@ -63,6 +64,9 @@ class SeoModel extends BaseModel {
       break;
     case 'grant':
       this.updateFromModel(await GrantModel.getGrant(id));
+      break;
+    case 'socket':
+      this.updateFromModel(await SocketModel.getLastMessage(id));
       break;
     default:
       console.warn('unknown model type', type, id);

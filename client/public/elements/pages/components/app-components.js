@@ -84,5 +84,9 @@ export class AppPageComponents extends Mixin(LitElement)
     console.log(this.exampleOrgs);
 
   }
+
+  addToast(){
+    this.shadowRoot.querySelector("#ToastMessage").appendChild(document.createElement('rp-toast-message'));
+  }
 }
 customElements.define('app-page-components', AppPageComponents);
