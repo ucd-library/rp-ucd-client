@@ -55,7 +55,7 @@ export class RpCitation extends Mixin(LitElement)
     }
     let d = this.data;
 
-    this.title = d.label;
+    this.title = unsafeHTML(d.label);
     this.href = this._constructHref(d['@id']);
     this.venue = this._getVenue(d.hasPublicationVenue);
     this.venueLocation = this._getVenueLocation(d);
