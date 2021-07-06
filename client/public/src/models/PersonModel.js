@@ -293,6 +293,10 @@ class PersonModel extends BaseModel {
       return name.join(' ');
     }
 
+    if( contact.hasName ) {
+      contact = contact.hasName;
+    }
+
     return {
       givenName : rdfUtils.getFirstValue(contact.givenName) || '',
       middleName : rdfUtils.getFirstValue(contact.middleName) || '',

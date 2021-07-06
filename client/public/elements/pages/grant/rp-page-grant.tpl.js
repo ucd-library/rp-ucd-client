@@ -239,16 +239,16 @@ return html`
     <section id="contributors" class="bg-light mt-3" ?hidden="${this._hidePageSection('contributors')}">
     <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>      
 
-        ${this.role == "pi_role" ? html `
-          <h2 aria-label="Principal Investigator Section Title">Principal Investigator</h2>
-        `: html ``}  
+        ${this.contributors.map(contribType => html`
+          <h2 aria-label="Principal Investigator Section Title">${contribType.label}</h2>
 
-        ${this.contributors.map(contributor => html`
-          <rp-person-preview style="flex-flow: column wrap;" 
-            .data=${contributor}
-            text-width="${this.peopleWidth}"
-          ></rp-person-preview>`
-        )}
+          ${contribType.contributors.map(contributor => html`
+            <rp-person-preview
+              .data=${contributor}
+              text-width="${this.peopleWidth}"
+            ></rp-person-preview>`
+          )}
+        `)}
 
     </section>
   </div>
