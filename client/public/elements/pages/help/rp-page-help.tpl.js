@@ -45,9 +45,26 @@ return html`
       </rp-accordian>
       <rp-accordian title-text="How often do you update the data in the registry?">
         <div>
-        We plan to update the data in the registry from our sources nightly.
+        At this stage we will update the data in the registry weekly. As the project progresses, we will implement nightly updates. Grants data are updated quarterly.
         </div>
       </rp-accordian>
+
+      <rp-accordian title-text="How do I export data?">
+        ${this.isLoggedIn  ? html`
+          <div>
+            Currently only publications can be exported for MyInfoVault, but we are planning to expand the 
+            options to include other data, such as grants. You must be logged into your profile to access 
+            the download functionality. In the Publications section of your profile, you will find a 
+            download button located to the left of your publication count in the upper right-hand corner. 
+            One of the available format options is RIS. This file can be imported into MIV.
+          </div>
+          `: html`
+            <div>
+              You must be logged in to view this information.
+            </div>
+          `}
+      </rp-accordian>
+
 
       <rp-accordian title-text="How do I edit my registry entry?">
         <div>
@@ -61,26 +78,31 @@ return html`
       </rp-accordian>
       <rp-accordian title-text="How do I edit my research areas?" jump-to="edit-area">
         <div>
-          <div>You can select Fields of Research in your Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a>. Log in into the system and go to your profile.</div>
-          <img class="fw" src="${this.imgPath}faq-profile-goto.jpg" alt="Go to profile screenshot">
-          Scroll down to the Fields of Research heading and click on the pencil icon.
-          <img class="fw" src="${this.imgPath}faq-about-edit.jpg" alt="Go to edit profile screenshot">
-          You will see a search and select interface for the available research are options.
-          <img class="fw" src="${this.imgPath}faq-research-fields-edit.jpg" alt="Go to research field edit screenshot">
-          After you select all relevant fields by clicking  on them and seeing them appear in the column on the right, remember to click the save button at the bottom of the pop-up window.  Closing the window by clicking on the X in the upper right corner will not save your selections.
-          <img class="fw" src="${this.imgPath}faq-research-fields-selection-edit.jpg" alt="Go to research field selection screenshot">
-          The Publication Management System is currently implementing a controlled vocabulary developed by the Australian Bureau of Statistics. We are in the testing stages of adding a more in-depth vocabulary to the list of options.<br />
-          Note that at the present time once you make your selections in the Publication Management System, your Aggie Experts research areas will be updated after the next data reload, which happens weekly. Also, once the research fields selections coming from the System are detected, they will replace the automatically-generated Aggie Experts research areas with your selections.
+          <div>You can select Fields of Research in your Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a>. Log in into the system and click on “Edit my profile” button.</div>
+          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords-and-privacy.jpg" alt="Go to profile screenshot">
+          Scroll down to the FAST and Fields of Research (2008) headings and click on the pencil icon.
+          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords1.jpg" alt="Go to edit profile screenshot">
+          You will see a search and select interface for the available research subjects options.
+          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords2.jpg" alt="Go to research field edit screenshot">
+
+          Click the “Add” button for your selections.
+          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords3.jpg" alt="Add your written selections">
+
+          After selecting all the research areas you would like to add to your profile, remember to click “Save changes” at the bottom of the box.
+          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords4.jpg" alt="Go to research field selection screenshot">
+          Note that at the present time once you make your selections in the Publication Management System, your Aggie Experts research areas will 
+          be updated after the next data reload, which happens weekly. Also, once the research fields selections coming from the System are detected, 
+          they will replace the automatically-generated Aggie Experts research areas with your selections.
         </div>
       </rp-accordian>
       <rp-accordian title-text="How do I add more information to what you already have in the registry?">
         <div>
           <div>Most of the data we add to Aggie Experts come from authoritative sources, and changing and updating the data in them is addressed in separate questions, eg. “<a href="#change-bio">How do I change my name/title/affiliation</a>” and “<a href="#change-pub">How do I edit my publication record</a>”. An exception is the “About” section in your profile. Currently, you can add more websites by logging into UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your profile.</div>
-          <img class="fw" src="${this.imgPath}faq-profile-goto.jpg" alt="Go to profile screenshot">
+          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords-and-privacy.jpg" alt="Go to profile screenshot">
           <div>You will be able to edit the “About” section there, which includes websites you would like to link to from Aggie Experts. In one of the future iterations of Aggie Experts we plan to bring in keywords and potentially research overviews, if you have provided such to the university for public view. If you choose to populate them directly in the Publication Management System, we will be able to bring them in at the next data update, ahead of the planned iteration.</div>
         </div>
       </rp-accordian>
-      <rp-accordian title-text="From where are you getting information about my publications?">
+      <rp-accordian title-text="What sources do you use for my publications?">
         <div>
           <div> We are using the Publication Management System adopted by the California Digital Library in support of the UC Open Access policy. The sources used are Dimensions, Scopus, Crossref, Web of Science (Lite), Europe PubMed Central, PubMed, eScholarship, arXiv, RePEc, SSRN, DBLP, CiNii EN, CiNii JP, figshare.com (limited) and Google Books.</div>
         </div>
@@ -93,65 +115,73 @@ return html`
       <rp-accordian title-text="How do I edit my publication record?" jump-to="change-pub">
         <div>
           <div>It is very likely that you have additional publications in your Publication Management System pending queue. To review your queue, log into your UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your profile.</div>
-          <img class="fw" src="${this.imgPath}faq-profile-goto.jpg" alt="Go to profile screenshot">
-          <div>Click on the “Publications” tab</div>
-          <img class="fw" src="${this.imgPath}faq-profile-pubbutton.jpg" alt="Go to publications tab screenshot">
-          <div>Select “Manage Publications”</div>
-          <img class="fw" src="${this.imgPath}faq-manage-publications.jpg" alt="Select manage publications screenshot">
+          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords-and-privacy.jpg" alt="Go to profile screenshot">
+          <div>Click on either the “Claim now” or “View all” button.</div>
+          <img class="fw" src="${this.imgPath}ae-publications-claim-1.jpg" alt="Go to publications tab screenshot">
           <div>Click on “Pending”</div>
-          <img class="fw" src="${this.imgPath}faq-pending-publications.jpg" alt="Select pending screenshot">
+          <img class="fw" src="${this.imgPath}ae-publications-claim-2.jpg" alt="Select pending screenshot">
           <div>There are several elements in the pending queue that can improve your publication list. First, you can inspect each listed publication and claim the correct ones one by one.</div>
-          <img class="fw" src="${this.imgPath}faq-claim-publication.jpg" alt="Claim publication screenshot">
-          <div>Second, you can improve the search for your publications</div>
+          <img class="fw" src="${this.imgPath}ae-publications-claim-3.jpg" alt="Claim publication screenshot">
+          <div>Second, you can improve <a href="#search-pub">the search for your publications</a></div>
         </div>
       </rp-accordian>
-      <rp-accordian title-text="How do I improve the search results for my publications?">
+      <rp-accordian id="search-pub" title-text="How do I improve the search results for my publications?">
         <div>
           <div>To improve the search criteria for your publications, log into your UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your profile. If you are already looking at your pending publication list, jump <a href="#pending-pub">here</a>. Otherwise, follow the instructions directly below.</div>
-          <img class="fw" src="${this.imgPath}faq-profile-goto.jpg" alt="Go to profile screenshot">
-          <div>Click on the “Publications” tab</div>
-          <img class="fw" src="${this.imgPath}faq-profile-pubbutton.jpg" alt="Go to publications tab screenshot">
-          <div>Select “Manage Publications”</div>
-          <img class="fw" src="${this.imgPath}faq-manage-publications.jpg" alt="Select manage publications screenshot">
+          <div>To review your queue, log into your UC Publication Management System account and go to your profile.</div>
+          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords-and-privacy.jpg" alt="Go to profile screenshot">
+          <div>Click on either the “Claim now” or “View all” button.</div>
+          <img class="fw" src="${this.imgPath}ae-publications-claim-1.jpg" alt="Go to publications tab screenshot">
           <div>Click on “Pending”</div>
-          <img class="fw" src="${this.imgPath}faq-pending-publications.jpg" alt="Select pending screenshot">
-          <div jump-to="pending-pub">The quickest way to refine your search criteria is to inspect proposed external id’s such as Scopus, Researcher ID from Web of Science, Dimensions, ORCID id and others. If you claim your id's, you can set the system to automatically claim publications associated with those id's.</div>
+          <img class="fw" src="${this.imgPath}ae-publications-claim-2.jpg" alt="Select pending screenshot">
+          <div jump-to="pending-pub">The quickest way to refine your search criteria is to inspect proposed external id’s such as Scopus, Researcher ID from Web of Science, Dimensions, ORCID id and others. If you claim your id's, you can set the system to automatically claim publications associated with those id's.</div><br/>
           <div>Please, note that your registry entry will reflect changes to your publication list only after the next update.</div>
-          <img class="fw" src="${this.imgPath}faq-identifiers.jpg" alt="Find Identifiers screenshot">
+          <img class="fw" src="${this.imgPath}ae-publications-claim-identifiers.jpg" alt="Find Identifiers screenshot">
           <div>You can also contact us for assistance with further refining the search parameters for your publications if you are missing a significant number or if you have a lot of publications that are not yours in your pending queue.</div>
         </div>
       </rp-accordian>
+
+      <rp-accordian title-text="What sources do you use for my grants? Why can’t I edit the grant records?">    
+        <div>
+          We receive the data from the university’s financial warehouse. They have been reconciled with UCOP records 
+          of awards to UC Davis and are considered the official university record. As such they cannot be edited. 
+          We are considering adding fields for user-generated data in the future, to clarify items such as the 
+          original source of a subaward.
+        </div>
+      </rp-accordian>
+
       <rp-accordian title-text="How do I change the visibility of the fields in my profile?">
         <div>
           <div>You have granular control over the visibility of the fields in your profile. 
           To do so, log into the UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> 
           and go to your account (for step-by-step instructions, see <a href="#change-pub">How do I edit my publication record?</a>). 
-          Next to every information segment that you have filled out, you will see an icon with an option to make a public segment internal.</div>
-          <img class="fw" src="${this.imgPath}faq-edit-mode-visibile.jpg" alt="Go to edit mode screenshot">
-          <div>You can also control the visibility of each publication displayed in Aggie Experts, as explained <a href="#visible-publication">here</a>.<br />
-               If you change the visibility of the entire profile, Aggie Experts will not display any of the information from there, but you will still have a stub entry with your name and title, similar to how you would be shown on UC Davis People pages. To completely remove your profile from Aggie Experts, refer to <a href="#delete-profile">this answer</a>.</div>
+          Next to every information segment that you have filled out, you will see an icon with an option to make a public segment internal.
+          </div>
+          <img class="fw" src="${this.imgPath}ae-profile-edit-privacy.jpg" alt="Go to edit mode screenshot">
+          <div>
+          You can also control the visibility of each publication displayed in Aggie Experts, as explained <a href="#visible-publication">here</a>.<br />
+          If you change the visibility of the entire profile, Aggie Experts not display any information about you, including your name.        
+          </div>
         </div>
       </rp-accordian>
+
       <rp-accordian title-text="How do I change the visibility of a publication?" jump-to="visible-publication">
         <div>
-          <div>Log into your UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your profile. </div>
-          <img class="fw" src="${this.imgPath}faq-profile-goto.jpg" alt="Go to profile screenshot">
-          <div>Navigate to “Manage Publications”.</div>
-          <img class="fw" src="${this.imgPath}faq-manage-publications.jpg" alt="Go to publications tab screenshot">
-          <div>Each claimed publication has an icon that looks like an eye that will hide it from public view.</div>
-          <img class="fw" src="${this.imgPath}faq-hide-publication.jpg" alt="Hide publication screenshot">
+          <div>Log into your UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to “Edit my profile” </div>
+          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords-and-privacy.jpg" alt="Go to profile screenshot">
+          <div>Click on either the View all” button.</div>
+          <img class="fw" src="${this.imgPath}ae-publications-privacy-1.jpg" alt="Go to publications tab screenshot">
+          <div>Click on the Globe icon.</div>
+          <img class="fw" src="${this.imgPath}ae-publications-privacy-2.jpg" alt="Hide publication screenshot">
+          <div>Click on the “Private” icon.</div>
+          <img class="fw" src="${this.imgPath}ae-publications-privacy-3.jpg" alt="Private publication screenshot">
         </div>
       </rp-accordian>
+      <!-- 
       <rp-accordian title-text="Can I export data ${this.isLoggedIn && false ? "for import into MIV": ""}?">
         ${this.isLoggedIn && false ? "Currently only publications can be exported for MyInfoVault, but we are planning to expand the options to include other data, such as grants. You must be logged into your profile to access the download functionality. In the Publications section of your profile, you will find a download button located to the left of your publication count in the upper right-hand corner. One of the available format options is RIS. This file can be imported into MIV." : "We only allow downloads for each user's own publications.  Once logged into the system, the Publications section of your profile includes a download button located to the left of your publication count in the upper right-hand corner." }
-      </rp-accordian>
-      <rp-accordian title-text="How do I delete my profile?" jump-to="delete-profile">
-        <div>
-          <div>To completely hide your data from view, update your <a href="https://org.ucdavis.edu/odr/">campus directory.</a> listing and uncheck all boxes under WWW visibility. Note that this change will affect the discovery of your UC Davis pages as well.</div>
+      </rp-accordian> -->
 
-          <img class="fw" src="${this.imgPath}faq-delete-profile.jpg" alt="Go to delete profile screenshot">
-        </div>
-      </rp-accordian>
     </div>
   </div>
 
