@@ -123,11 +123,19 @@ You control them with attributes, and build more complicated (bus-connected) ele
 </section>
 
 <section id="ToastMessage">
+
   <h2>Toaster Message</h2>
   <p>One toast message will pop up automatically with just adding <code>rp-toast-message</code></p>
+
+  <p>First one has no Message insert and automatically gets info from event socket <code>lastMessage</code></p>
   <rp-toast-message></rp-toast-message> 
+
+  <p>Second one has a custom title and message for custom use with <code>slot</code> is <code>toastTitle</code> and <code>toastMessage</code> </p>
+  <rp-toast-message><h2 style="padding-bottom: -10px;" slot="toastTitle">Title: Hello</h2><p slot="toastMessage">Message: World</p></rp-toast-message> 
+  
   <p>You can add a button for toast message by <code>@click</code> with function <code>addToast</code></p>
   <button @click="${this.addToast}">Add Toast Message</button>
+
 </section>
 
 

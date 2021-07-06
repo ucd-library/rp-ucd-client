@@ -44,16 +44,17 @@ export class RpToastMessage extends Mixin(LitElement)
   }
 
   /**
-   * @method _toastMessage
-   * @param {String} lastMessage - The last message recieved by the harvest
+   * @method _onSocketMessage
+   * @param {Event} event - The last message recieved by the harvest
    * @description Displays the last message from the harvest container
+   * and show the toaster message
    */
-  async _toastMessage() {
-    this.lastMessage = await this._doLastMessage();
-    if (this.lastMessage == null) this.lastMessage = "No Message Found";
-    this.show();
+  // async _toastMessage() {
+  //   this.lastMessage = await this._doLastMessage();
+  //   if (this.lastMessage == null) this.lastMessage = "No Message Found";
+  //   this.show();
 
-  }
+  // }
   _onSocketMessage(event){
     this.lastMessage = event.connected;
     this.show();
