@@ -1,6 +1,7 @@
 import render from "./rp-page-concept.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
+import rdfUtils from "../../../src/lib/rdf-utils.js";
 
 import "../../components/alert";
 import "../../components/badge";
@@ -437,11 +438,11 @@ export default class RpPageConcept extends RpUtilsLanding {
    * @returns {String}
    */
   _getYear(pub, i, pubs){
-    let date = pub.publicationDate;
+    let date = rdfUtils.getLatestDate(pub.publicationDate).toISOString();
     if (!date) return '';
     let thisYr = date.split("-")[0];
     if ( i > 0 ) {
-      let prevYr = pubs[i-1].publicationDate;
+      let prevYr = rdfUtils.getLatestDate(pubs[i-1].publicationDate).toISOString();
       if ( prevYr && thisYr === prevYr.split("-")[0] )  return "";
     }
     return thisYr;

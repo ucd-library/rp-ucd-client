@@ -2,6 +2,7 @@ import render from "./rp-page-person.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
 import UserUtils from "../../../src/lib/user-utils";
+import rdfUtils from "../../../src/lib/rdf-utils";
  
 import "../../components/alert";
 import "../../components/avatar";
@@ -401,8 +402,8 @@ export default class RpPagePerson extends RpUtilsLanding {
     let pubObj = {};
     let yrs = [];
     for (let pub of pubs) {
-      if (!pub.publicationDate) continue;
-      let dt = new Date(pub.publicationDate);
+      if ( !pub.publicationDate ) continue;
+      let dt = rdfUtils.getLatestDate(pub.publicationDate);
       let yr = dt.getFullYear();
       if (!yrs.includes(yr)) {
         yrs.push(yr);
