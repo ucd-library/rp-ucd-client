@@ -1,3 +1,4 @@
+import { text } from 'd3';
 import { LitElement } from 'lit-element';
 import render from "./app-components.tpl.js";
 //import { colorStyles } from '../../styles/site.js';
@@ -86,7 +87,22 @@ export class AppPageComponents extends Mixin(LitElement)
   }
 
   addToast(){
-    this.shadowRoot.querySelector("#ToastMessage").appendChild(document.createElement('rp-toast-message'));
+    let div =  this.shadowRoot.querySelector("#ToastMessage");
+    let toast = document.createElement("rp-toast-message");
+    let title = document.createElement("h2");
+    let message = document.createElement("p");
+
+    title.setAttribute("slot", "toastTitle");
+    message.setAttribute("slot", "toastMessage");
+
+    title.textContent = "Sample Title";
+    message.textContent = "Sample Content";
+
+    toast.appendChild(title);
+    toast.appendChild(message);
+
+    div.appendChild(toast.cloneNode(true));
+
   }
 }
 customElements.define('app-page-components', AppPageComponents);
