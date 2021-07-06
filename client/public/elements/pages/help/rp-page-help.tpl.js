@@ -97,7 +97,7 @@ return html`
       </rp-accordian>
       <rp-accordian title-text="How do I add more information to what you already have in the registry?">
         <div>
-          <div>Most of the data we add to Aggie Experts come from authoritative sources, and changing and updating the data in them is addressed in separate questions, eg. “<a href="#change-bio">How do I change my name/title/affiliation</a>” and “<a href="#change-pub">How do I edit my publication record</a>”. An exception is the “About” section in your profile. Currently, you can add more websites by logging into UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your profile.</div>
+          <div>Most of the data we add to Aggie Experts come from authoritative sources, and changing and updating the data in them is addressed in separate questions, eg. “<a href="#change-bio">How do I change my name/title/affiliation</a>” and “<a href="#change-pub">How do I edit my publication record</a>”. An exception is the “About” section in your profile. Currently, you can add more websites by logging into UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and click on the “Edit my profile” button.</div>
           <img class="fw" src="${this.imgPath}ae-profile-edit-keywords-and-privacy.jpg" alt="Go to profile screenshot">
           <div>You will be able to edit the “About” section there, which includes websites you would like to link to from Aggie Experts. In one of the future iterations of Aggie Experts we plan to bring in keywords and potentially research overviews, if you have provided such to the university for public view. If you choose to populate them directly in the Publication Management System, we will be able to bring them in at the next data update, ahead of the planned iteration.</div>
         </div>
@@ -109,7 +109,7 @@ return html`
       </rp-accordian>
       <rp-accordian title-text="Why are there so few / no publications in my registry entry?">
         <div>
-        Most likely you have not claimed your publications in the Publication Management System we are using as a data source. Please, refer to “<a href="#change-pub">How do I edit my publication record?</a>” to enrich your publication list
+        Most likely you have not claimed your publications in the Publication Management System we are using as a data source. Please, refer to “<a href="#change-pub">How do I edit my publication record?</a>” to enrich your publication list.
         </div>
       </rp-accordian>
       <rp-accordian title-text="How do I edit my publication record?" jump-to="change-pub">
@@ -122,13 +122,13 @@ return html`
           <img class="fw" src="${this.imgPath}ae-publications-claim-2.jpg" alt="Select pending screenshot">
           <div>There are several elements in the pending queue that can improve your publication list. First, you can inspect each listed publication and claim the correct ones one by one.</div>
           <img class="fw" src="${this.imgPath}ae-publications-claim-3.jpg" alt="Claim publication screenshot">
-          <div>Second, you can improve <a href="#search-pub">the search for your publications</a></div>
+          <div>Second, you can improve <a href="#search-pub">the search for your publications.</a></div>
         </div>
       </rp-accordian>
       <rp-accordian id="search-pub" title-text="How do I improve the search results for my publications?">
         <div>
           <div>To improve the search criteria for your publications, log into your UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your profile. If you are already looking at your pending publication list, jump <a href="#pending-pub">here</a>. Otherwise, follow the instructions directly below.</div>
-          <div>To review your queue, log into your UC Publication Management System account and go to your profile.</div>
+          <div>To review your queue, log into your UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to your profile.</div>
           <img class="fw" src="${this.imgPath}ae-profile-edit-keywords-and-privacy.jpg" alt="Go to profile screenshot">
           <div>Click on either the “Claim now” or “View all” button.</div>
           <img class="fw" src="${this.imgPath}ae-publications-claim-1.jpg" alt="Go to publications tab screenshot">
@@ -154,12 +154,12 @@ return html`
         <div>
           <div>You have granular control over the visibility of the fields in your profile. 
           To do so, log into the UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> 
-          and go to your account (for step-by-step instructions, see <a href="#change-pub">How do I edit my publication record?</a>). 
+          and go to your account (for step-by-step instructions, see <a href="#change-pub">here</a>). 
           Next to every information segment that you have filled out, you will see an icon with an option to make a public segment internal.
           </div>
           <img class="fw" src="${this.imgPath}ae-profile-edit-privacy.jpg" alt="Go to edit mode screenshot">
           <div>
-          You can also control the visibility of each publication displayed in Aggie Experts, as explained <a href="#visible-publication">here</a>.<br />
+          You can also control the visibility of each publication displayed in Aggie Experts, as explained <a href="#visible-publication">here</a>.<br /><br />
           If you change the visibility of the entire profile, Aggie Experts not display any information about you, including your name.        
           </div>
         </div>
