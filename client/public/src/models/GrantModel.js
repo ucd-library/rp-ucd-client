@@ -295,9 +295,9 @@ class GrantModel extends BaseModel {
 
     grant.relates
       .filter(item => item.inheresIn)
-      .filter(item => this.knownRoleMap[item['@type']])
+      .filter(item => this.getKnownGrantRole(item['@type']))
       .forEach(item => {
-        let label = this.knownRoleMap[item['@type']];
+        let label = this.getKnownGrantRole(item['@type']);
         if( !byRole[label] ) byRole[label] = [];
         let id = item.inheresIn['@id'];
         byRole[label].push(id);
@@ -316,6 +316,23 @@ class GrantModel extends BaseModel {
     return byRole;
   }
 
+  /**
+   * @method getKnownGrantRole
+   * @description get the known type from a list of types
+   * 
+   * @param {Array} types \@types array
+   * 
+   * @returns {String|null}
+   */
+  getKnownGrantRole(types=[]) {
+    types = rdfUtils.asArray(types);
+    for( let type of types ) {
+      if( this.knownRoleMap[type] ) {
+        return this.knownRoleMap[type];
+      }
+    }
+    return null;
+  }
 
 }
 
