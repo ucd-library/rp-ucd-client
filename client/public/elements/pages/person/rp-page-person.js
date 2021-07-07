@@ -58,7 +58,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.activeGrant = [];
     this.inactiveGrant = [];
 
-    this._injectModel('PersonModel', 'AppStateModel');
+    this._injectModel('PersonModel', 'GrantModel', 'AppStateModel');
     
     this.assetType = "person";
     this.defaultResearchSubjectCount = 8;
@@ -293,25 +293,18 @@ export default class RpPagePerson extends RpUtilsLanding {
     let activeGrant = [];
     let inactiveGrant = [];
     
-    this.retrievedGrants.forEach(function(grant){
+    this.retrievedGrants.forEach(grant => {
       let dateStart = new Date(grant.dateTimeInterval.start.dateTime);
       let dateEnd = new Date(grant.dateTimeInterval.end.dateTime);
       let today = new Date();
 
-      let role = "";
+      let person = grant.relates
+        .filter(item => item.inheresIn)
+        .find(item => item.inheresIn['@id'] === 'ucdrp:'+this.assetId);
 
-      switch (grant.relates[0]["@type"]) {
-      case "vivo:PrincipalInvestigatorRole":
-        role = "Principal Investigator"; 
-        break;
-      case "vivo:coInvestigatorRole":
-        role = "Co-Investigator"; 
-        break;
-      default: 
-        role = null;
-      }
+      let role = this.GrantModel.getKnownGrantRole(person['@type']) || '';
 
-      let grant_url =  "../" + grant["@id"].split(":")[1];
+      let grant_url =  grant["@id"].replace('ucdrp:', '/');
       let tempGrantObject = {
         "title": grant.label,
         "yearStart": dateStart.getFullYear(),

@@ -155,14 +155,21 @@ export default class RpPageGrant extends RpUtilsLanding {
 
     // Gets the relate Ids from gran and checks to make sure inheresIn has it with the
     // ["@id"] or the item itself has ["@id"] then filters if item has ucdrp
-    this.role = this.grant.relates[0]["@id"].split("/")[0].split(":")[1];
-    let relateIds = this.grant.relates
-      .map(item => item.inheresIn ? item.inheresIn["@id"] : item["@id"] )
-      .filter(item => item.match(/^ucdrp:/));
+    // this.role = this.grant.relates[0]["@id"].split("/")[0].split(":")[1];
+    // let relateIds = this.grant.relates
+    //   .map(item => item.inheresIn ? item.inheresIn["@id"] : item["@id"] )
+    //   .filter(item => item.match(/^ucdrp:/));
 
-    // set is created from the related IDs array and 
-    relateIds = Array.from(new Set(relateIds));
-    this.contributors = rdfUtils.asArray((await this.GrantModel.getContributors(this.grant["@id"], relateIds)).payload);
+    // // set is created from the related IDs array and 
+    // relateIds = Array.from(new Set(relateIds));
+    // this.contributors = rdfUtils.asArray((await this.GrantModel.getContributors(this.grant["@id"], relateIds)).payload);
+
+    let contributors = await this.GrantModel.getContributorsByRole(this.grant);
+    let tmp = [];
+    for( let label in contributors ) {
+      tmp.push({label, contributors: contributors[label]});
+    }
+    this.contributors = tmp;
     
     this.grantType = this._getGrantType();
 
