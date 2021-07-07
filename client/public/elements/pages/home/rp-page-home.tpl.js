@@ -135,6 +135,10 @@ return html`
     } */
   }
   @media (min-width: 480px) {
+    .container{
+      margin-right: auto;
+      margin-left: auto;
+    }
     rp-search {
       max-width: 500px;
     }
@@ -145,12 +149,20 @@ return html`
     }
   }
   @media (max-width: 325px) {
+    .container{
+      margin-right: auto;
+      margin-left: auto;
+    }
     rp-search {
       max-width: 245px;
     }  
 
   }
   @media (max-width: 250px) {
+    .container{
+      margin-right: auto;
+      margin-left: auto;
+    }
     rp-search {
       max-width: 185px;
     }  
