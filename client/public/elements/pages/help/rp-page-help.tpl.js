@@ -86,7 +86,7 @@ return html`
           <img class="fw" src="${this.imgPath}ae-profile-edit-keywords2.jpg" alt="Go to research field edit screenshot">
 
           Click the “Add” button for your selections.
-          <img class="fw" src="${this.imgPath}ae-profile-edit-keywords3.jpg" alt="Add your written selections">
+          <img style="margin-left: auto; margin-right: auto; display: block;" src="${this.imgPath}ae-profile-edit-keywords3.jpg" alt="Add your written selections">
 
           After selecting all the research areas you would like to add to your profile, remember to click “Save changes” at the bottom of the box.
           <img class="fw" src="${this.imgPath}ae-profile-edit-keywords4.jpg" alt="Go to research field selection screenshot">
@@ -97,9 +97,9 @@ return html`
       </rp-accordian>
       <rp-accordian title-text="How do I add more information to what you already have in the registry?">
         <div>
-          <div>Most of the data we add to Aggie Experts come from authoritative sources, and changing and updating the data in them is addressed in separate questions, eg. “<a href="#change-bio">How do I change my name/title/affiliation</a>” and “<a href="#change-pub">How do I edit my publication record</a>”. An exception is the “About” section in your profile. Currently, you can add more websites by logging into UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and click on the “Edit my profile” button.</div>
+          <div>Most of the data we add to Aggie Experts come from authoritative sources, and changing and updating the data in them is addressed in separate questions, eg. “<a href="#change-bio">How do I change my name/title/affiliation</a>” and “<a href="#change-pub">How do I edit my publication record</a>”. An exception is the “About” section in your profile. Currently, you can add more websites by logging into UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and clicking on the “Edit my profile” button.</div>
           <img class="fw" src="${this.imgPath}ae-profile-edit-keywords-and-privacy.jpg" alt="Go to profile screenshot">
-          <div>You will be able to edit the “About” section there, which includes websites you would like to link to from Aggie Experts. In one of the future iterations of Aggie Experts we plan to bring in keywords and potentially research overviews, if you have provided such to the university for public view. If you choose to populate them directly in the Publication Management System, we will be able to bring them in at the next data update, ahead of the planned iteration.</div>
+          <div>You will be able to edit the “About” section there, which includes websites you would like to link to from Aggie Experts. In one of the future iterations of Aggie Experts we plan to bring in research overviews, if you have provided such to the university for public view. If you choose to populate them directly in the Publication Management System, it will make the overview upload easier.</div>
         </div>
       </rp-accordian>
       <rp-accordian title-text="What sources do you use for my publications?">
@@ -169,7 +169,7 @@ return html`
         <div>
           <div>Log into your UC Publication Management System <a href="https://oapolicy.universityofcalifornia.edu/">account</a> and go to “Edit my profile” </div>
           <img class="fw" src="${this.imgPath}ae-profile-edit-keywords-and-privacy.jpg" alt="Go to profile screenshot">
-          <div>Click on either the View all” button.</div>
+          <div>Click on the View all” button.</div>
           <img class="fw" src="${this.imgPath}ae-publications-privacy-1.jpg" alt="Go to publications tab screenshot">
           <div>Click on the Globe icon.</div>
           <img class="fw" src="${this.imgPath}ae-publications-privacy-2.jpg" alt="Hide publication screenshot">
