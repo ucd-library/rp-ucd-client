@@ -1,6 +1,7 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const GrantService = require('../services/GrantService');
 const GrantStore = require('../stores/GrantStore');
+const rdfUtils = require('../lib/rdf-utils').default;
 
 const CollectionModel = require('./CollectionModel');
 const PersonModel = require('./PersonModel');
@@ -22,6 +23,12 @@ class GrantModel extends BaseModel {
     this.UrlLanding = '/grant/';
     this.urlBrowse = '/grants';
     this.urlContributor = "/person/";
+
+    // Only roles in this map will be shown in the UI
+    // map should contain rdf @type property mapped to a UI label
+    this.knownRoleMap = {
+      'vivo:PrincipalInvestigatorRole' : 'Principal Investigator'
+    };
 
     // TODO: JM - this needs to be fixed, I don't think it indicates a 'UCD Author'
     // as shown in the UI.
@@ -273,6 +280,59 @@ class GrantModel extends BaseModel {
     return output;
   }
 
+  /**
+   * @method getContributorsByRole
+   * @description given a grant object, return an object of role labels to contributes with that
+   * role
+   * 
+   * @param {Object} grant
+   * 
+   * @returns {Object} 
+   */
+  async getContributorsByRole(grant) {
+    let byRole = {};
+    let all = [];
+
+    grant.relates
+      .filter(item => item.inheresIn)
+      .filter(item => this.getKnownGrantRole(item['@type']))
+      .forEach(item => {
+        let label = this.getKnownGrantRole(item['@type']);
+        if( !byRole[label] ) byRole[label] = [];
+        let id = item.inheresIn['@id'];
+        byRole[label].push(id);
+        all.push(id);
+      });
+
+    let resp = await this.getContributors(grant['@id'], all);
+    let people = rdfUtils.asArray(resp.payload);
+
+    for( let label in byRole ) {
+      for( let i = 0; i < byRole[label].length; i++  ) {
+        byRole[label][i] = people.find(person => person['@id'] === byRole[label][i]);
+      }
+    }
+
+    return byRole;
+  }
+
+  /**
+   * @method getKnownGrantRole
+   * @description get the known type from a list of types
+   * 
+   * @param {Array} types \@types array
+   * 
+   * @returns {String|null}
+   */
+  getKnownGrantRole(types=[]) {
+    types = rdfUtils.asArray(types);
+    for( let type of types ) {
+      if( this.knownRoleMap[type] ) {
+        return this.knownRoleMap[type];
+      }
+    }
+    return null;
+  }
 
 }
 

@@ -153,6 +153,16 @@ return html`
   .grid-item {
     text-align: left;
   }  
+
+  #date-interval{
+    text-align: center;
+    color: var(--tcolor-primary10);
+    text-transform: uppercase;
+    font-size: var(--font-size-h3);
+    margin: 0;
+    margin-top: .25rem;
+    margin-bottom: .75rem;
+  }
   @media (min-width: 800px) {
       .hero {
       padding-left: 30px;
@@ -175,8 +185,8 @@ return html`
           ${this._labelTitle()}
           </h2>
         </div>
-        <p class="upperType text-center" aria-label="Date-Interval Title">
-            ${this.dateStart} &#183; ${this.dateEnd} 
+        <p id="date-interval" aria-label="Date-Interval Title">
+            ${this._dateInterval("start")} &#8211; ${this._dateInterval("end")} 
         </p>
         <div class="type text-center">Grant</div> <!--${this.grantType}-->
       </div>
@@ -229,16 +239,16 @@ return html`
     <section id="contributors" class="bg-light mt-3" ?hidden="${this._hidePageSection('contributors')}">
     <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>      
 
-        ${this.role == "pi_role" ? html `
-          <h2 aria-label="Principal Investigator Section Title">Principal Investigator</h2>
-        `: html ``}  
+        ${this.contributors.map(contribType => html`
+          <h2 aria-label="Principal Investigator Section Title">${contribType.label}</h2>
 
-        ${this.contributors.map(contributor => html`
-          <rp-person-preview style="flex-flow: column wrap;" 
-            .data=${contributor}
-            text-width="${this.peopleWidth}"
-          ></rp-person-preview>`
-        )}
+          ${contribType.contributors.map(contributor => html`
+            <rp-person-preview
+              .data=${contributor}
+              text-width="${this.peopleWidth}"
+            ></rp-person-preview>`
+          )}
+        `)}
 
     </section>
   </div>

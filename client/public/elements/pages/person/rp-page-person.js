@@ -2,6 +2,7 @@ import render from "./rp-page-person.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
 import UserUtils from "../../../src/lib/user-utils";
+import rdfUtils from "../../../src/lib/rdf-utils";
  
 import "../../components/alert";
 import "../../components/avatar";
@@ -33,6 +34,7 @@ export default class RpPagePerson extends RpUtilsLanding {
       hasMultipleGrantTypes: {type: Boolean},
       retrievedPublications: {type: Object},
       retrievedGrants: {type: Object},
+      showMoreGrants: {type: Number},
       totalPublications: {type: Number},
       totalGrants: {type: Number},
       isOwnProfile: {type: Boolean},
@@ -56,7 +58,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.activeGrant = [];
     this.inactiveGrant = [];
 
-    this._injectModel('PersonModel', 'AppStateModel');
+    this._injectModel('PersonModel', 'GrantModel', 'AppStateModel');
     
     this.assetType = "person";
     this.defaultResearchSubjectCount = 8;
@@ -128,6 +130,8 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.tempGrantObject = {};
     this.individualStatus = 'loading';
     this.retrievedPublications = {};
+    this.retrievedGrants = [];
+    this.showMoreGrants = false;
     this.totalPublications = 0;
     this.totalGrants = 0;
     this.isOwnProfile = false;
@@ -273,30 +277,34 @@ export default class RpPagePerson extends RpUtilsLanding {
    * @returns {Promise}
    */
   async _doGrantQuery(){
-    let data = await this.PersonModel.getGrants(this.assetId);
+    let data = await this.PersonModel.getGrants(this.assetId, this.retrievedGrants.length);
+
+    if( data.state === 'error' ) {
+      this.grantStatus = 'error';
+      return;
+    }
+    if (data.state != 'loaded') return;
+
     this.totalGrants = typeof data.payload.total === 'object' ? 0 : data.payload.total;
-    this.retrievedGrants = data.payload.results;
+    
+    this.retrievedGrants = [...this.retrievedGrants, ...data.payload.results];
+    this.showMoreGrants = this.totalGrants-this.retrievedGrants.length;
+    
     let activeGrant = [];
     let inactiveGrant = [];
-    this.retrievedGrants.forEach(function(grant){
+    
+    this.retrievedGrants.forEach(grant => {
       let dateStart = new Date(grant.dateTimeInterval.start.dateTime);
       let dateEnd = new Date(grant.dateTimeInterval.end.dateTime);
       let today = new Date();
 
-      let role = "";
+      let person = grant.relates
+        .filter(item => item.inheresIn)
+        .find(item => item.inheresIn['@id'] === 'ucdrp:'+this.assetId);
 
-      switch (grant.relates[0]["@type"]) {
-      case "vivo:PrincipalInvestigatorRole":
-        role = "Principal Investigator"; 
-        break;
-      case "vivo:coInvestigatorRole":
-        role = "Co-Investigator"; 
-        break;
-      default: 
-        role = "No Role Assigned";
-      }
+      let role = this.GrantModel.getKnownGrantRole(person['@type']) || '';
 
-      let grant_url =  "../" + grant["@id"].split(":")[1];
+      let grant_url =  grant["@id"].replace('ucdrp:', '/');
       let tempGrantObject = {
         "title": grant.label,
         "yearStart": dateStart.getFullYear(),
@@ -314,26 +322,16 @@ export default class RpPagePerson extends RpUtilsLanding {
       }
     });
 
-
-    this.inactiveGrant = inactiveGrant;
-    this.activeGrant = activeGrant;
-
     this.inactiveGrant.sort(function(a, b){
-      return a.yearStart-b.yearStart;
+      return b.yearStart-a.yearStart;
     });
 
     this.activeGrant.sort(function(a, b){
-      return a.yearStart-b.yearStart;
+      return b.yearStart-a.yearStart;
     });
 
- 
-    if( data.state === 'error' ) {
-      this.grantStatus = 'error';
-      return;
-    }
-    if (data.state != 'loaded') return;
-
-    this.requestUpdate();
+    this.inactiveGrant = inactiveGrant;
+    this.activeGrant = activeGrant;
   }
   
   /**
@@ -397,8 +395,8 @@ export default class RpPagePerson extends RpUtilsLanding {
     let pubObj = {};
     let yrs = [];
     for (let pub of pubs) {
-      if (!pub.publicationDate) continue;
-      let dt = new Date(pub.publicationDate);
+      if ( !pub.publicationDate ) continue;
+      let dt = rdfUtils.getLatestDate(pub.publicationDate);
       let yr = dt.getFullYear();
       if (!yrs.includes(yr)) {
         yrs.push(yr);

@@ -1,5 +1,5 @@
 import { LitElement } from 'lit-element';
-import {unsafeHTML} from 'lit-html/directives/unsafe-html.js';
+import {renderHTML} from '../../src/lib/santize-html.js';
 import render from './citation.tpl.js';
 
 /**
@@ -55,7 +55,7 @@ export class RpCitation extends Mixin(LitElement)
     }
     let d = this.data;
 
-    this.title = d.label;
+    this.title = renderHTML(d.label);
     this.href = this._constructHref(d['@id']);
     this.venue = this._getVenue(d.hasPublicationVenue);
     this.venueLocation = this._getVenueLocation(d);
@@ -85,7 +85,7 @@ export class RpCitation extends Mixin(LitElement)
     let label = this.WorkModel.getVenue(venue);
 
     // return first (shortest) label, capitalize in case all cap
-    return unsafeHTML(`<span style="text-transform:capitalize">${label.toLowerCase()}</span>`);
+    return renderHTML(`<span style="text-transform:capitalize">${label.toLowerCase()}</span>`);
   }
 
   /**

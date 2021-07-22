@@ -31,9 +31,7 @@ export default function render() {
     .text-container {
       margin-left: 12px;
       align-self: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      overflow-wrap: break-word;
       min-width: 0;
       
     }

@@ -14,7 +14,7 @@ export default class RpPageHelp extends Mixin(LitElement)
     return {
       visible: {type: Boolean},
       isLoggedIn: {type: Boolean},
-      imgPath: {type: String}
+      imgPath: {type: String},
     };
   }
 
@@ -25,7 +25,7 @@ export default class RpPageHelp extends Mixin(LitElement)
     
     this.visible = false;
     this.isLoggedIn = APP_CONFIG.user ? true : false;
-    this.imgPath = '/images/faq/';
+    this.imgPath = '/images/faq/';    
 
     // need to wait until window finishes loaded to set page
     // for first time
@@ -49,6 +49,8 @@ export default class RpPageHelp extends Mixin(LitElement)
   async _onAppStateUpdate(state) {
     if( state.page !== 'help' ) return;
     this._renderDelay(state);
+    
+    
   }
 
   /**

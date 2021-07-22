@@ -155,18 +155,24 @@ export default class RpPageGrant extends RpUtilsLanding {
 
     // Gets the relate Ids from gran and checks to make sure inheresIn has it with the
     // ["@id"] or the item itself has ["@id"] then filters if item has ucdrp
-    this.role = this.grant.relates[0]["@id"].split("/")[0].split(":")[1];
-    let relateIds = this.grant.relates
-      .map(item => item.inheresIn ? item.inheresIn["@id"] : item["@id"] )
-      .filter(item => item.match(/^ucdrp:/));
+    // this.role = this.grant.relates[0]["@id"].split("/")[0].split(":")[1];
+    // let relateIds = this.grant.relates
+    //   .map(item => item.inheresIn ? item.inheresIn["@id"] : item["@id"] )
+    //   .filter(item => item.match(/^ucdrp:/));
 
-    // set is created from the related IDs array and 
-    relateIds = Array.from(new Set(relateIds));
-    this.contributors = rdfUtils.asArray((await this.GrantModel.getContributors(this.grant["@id"], relateIds)).payload);
+    // // set is created from the related IDs array and 
+    // relateIds = Array.from(new Set(relateIds));
+    // this.contributors = rdfUtils.asArray((await this.GrantModel.getContributors(this.grant["@id"], relateIds)).payload);
+
+    let contributors = await this.GrantModel.getContributorsByRole(this.grant);
+    let tmp = [];
+    for( let label in contributors ) {
+      tmp.push({label, contributors: contributors[label]});
+    }
+    this.contributors = tmp;
     
     this.grantType = this._getGrantType();
-    // this.dateStart = this._dateInterval("start");
-    // this.dateEnd = this._dateInterval("end");
+
     return false;
   }
 
@@ -224,9 +230,25 @@ export default class RpPageGrant extends RpUtilsLanding {
    * @returns {String}
    */
   _dateInterval(type){
-    if(type == "start") return this.grant.dateTimeInterval.start.dateTime;
-    else if(type == "end") return this.grant.dateTimeInterval.end.dateTime;
-    return "Unavaliable";
+    if( !this.grant ) return 'Unavailable';
+    if( !this.grant.dateTimeInterval ) return 'Unavailable';
+
+    let month;
+    let year;
+    let day;
+    if(type == "start") {
+      month = new Date(this.grant.dateTimeInterval.start.dateTime).toLocaleString('default', { month: 'long' });
+      year = new Date(this.grant.dateTimeInterval.start.dateTime).toLocaleString('default', { year: 'numeric' });
+      day = new Date(this.grant.dateTimeInterval.start.dateTime).toLocaleString('default', { day: 'numeric' });
+      return month+ " " + day + ", " + year;  
+    }
+    else if(type == "end") {
+      month = new Date(this.grant.dateTimeInterval.end.dateTime).toLocaleString('default', { month: 'long' });
+      year = new Date(this.grant.dateTimeInterval.end.dateTime).toLocaleString('default', { year: 'numeric' });
+      day = new Date(this.grant.dateTimeInterval.end.dateTime).toLocaleString('default', { day: 'numeric' });
+      return month + " " + day + ", " + year;    
+    }
+    return "Unavailable";
   }
 
   /**
