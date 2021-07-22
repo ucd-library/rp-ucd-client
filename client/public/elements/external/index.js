@@ -1,3 +1,4 @@
+import properties from "../styles/properties.css";
 const BUNDLES = {
   directory : ['ae-directory-listing'],
   publications : ['ae-publication-list']
@@ -10,7 +11,7 @@ if( !window.AGGIE_EXPERTS_LOADER ) {
 
 // hack, need to see if __webpack_require__.p has a better way to set
 // this sets the remote host to load chunked bundle code from
-if( AGGIE_EXPERTS_LOADER.host && window.__webpack_require__ ) {
+if( AGGIE_EXPERTS_LOADER.host && typeof __webpack_require__ !== 'undefined' ) {
   __webpack_require__.p = AGGIE_EXPERTS_LOADER.host + __webpack_require__.p;
 }
 
@@ -46,6 +47,11 @@ function initAE() {
     console.warn('Unknown aggie experts element name: '+ele);
   });
 
+  // inject custom style definition
+  let styleEle = document.createElement('style');
+  styleEle.innerHTML = properties;
+  document.head.appendChild(styleEle);
+
   // scan for elements
   for( let name in BUNDLES ) {
     let ele = document.querySelector(BUNDLES[name].join(', '));
@@ -67,7 +73,7 @@ function loadBundle(name) {
   if( name === 'directory' ) {
     return import(/* webpackChunkName: "external-directory" */ "./directory/ae-directory-listing");
   } else if( name === 'publications' ) {
-    return import(/* webpackChunkName: "external-publications" */ "./directory/ae-publications-list");
+    return import(/* webpackChunkName: "external-publications" */ "../components/ae-publication-list");
   }
 
   console.warn('Unknown aggie experts bundle name: '+name);

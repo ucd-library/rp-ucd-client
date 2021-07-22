@@ -60,7 +60,6 @@ export default class RpPageOrganization extends Mixin(LitElement)
       return;
     }
     this.organization = data.payload;
-    if (APP_CONFIG.verbose) console.log("organization payload:", data);
   }
 
   _hideStatusSection(section, statusProperty="organizationStatus") {

@@ -130,7 +130,6 @@ export default class RpPageWork extends RpUtilsLanding {
       return false;
     }
     this.work = data.payload;
-    // if (APP_CONFIG.verbose) console.log("work payload:", data);
 
     this.authors = this.WorkModel.getAuthors(this.work);
     console.log("AUTHORS:", this.authors);
@@ -174,7 +173,7 @@ export default class RpPageWork extends RpUtilsLanding {
     let data = await this.WorkModel.getAuthorsFullObject(id, universityAuthors);
     this.universityAuthorsStatus = data.state;
     if (data.state != 'loaded') return;
-    // if (APP_CONFIG.verbose) console.log("university authors:", data);
+
     if (Array.isArray(data.payload)) {
       universityAuthors = data.payload;
     }

@@ -22,7 +22,9 @@ if( fs.existsSync(loaderPath) ) {
 const AGGIE_EXPERTS_LOADER = {
   loaderVersion : config.client.versions.externalLoader,
   host : config.server.url,
-  version : config.client.versions.bundle
+  version : config.client.versions.bundle,
+  data : config.client.data,
+  defaultTypes : config.client.defaultTypes
 };
 
 router.get('/loader.js', (req, res) => {
@@ -33,7 +35,8 @@ router.get('/loader.js', (req, res) => {
     elements : (req.query.elements || '').split(',').map(item => item.trim()).filter(item => item)
   }, AGGIE_EXPERTS_LOADER);
 
-  res.set('content-type', 'application/javascript');
+  res.set('Content-Type', 'application/javascript');
+  res.set('Cache-Control', 'no-cache');
   res.send(`window.AGGIE_EXPERTS_LOADER=${JSON.stringify(loaderConfig)};
 ${loaderSrc}`);
 });

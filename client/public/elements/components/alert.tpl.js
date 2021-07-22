@@ -11,14 +11,14 @@ export default function render() {
       display: flex;
       align-items: center;
       padding: 8px;
-      font-size: var(--font-size-small);
+      font-size: var(--ae-font-size-small);
     }
     .container.color-danger {
-      background-color: var(--tcolor-light);
+      background-color: var(--ae-tcolor-light);
       border-width: 1px;
       border-style: solid;
-      border-color: var(--tcolor-danger);
-      color: var(--tcolor-danger);
+      border-color: var(--ae-tcolor-danger);
+      color: var(--ae-tcolor-danger);
     }
     .container iron-icon {
       width: 24px;

@@ -19,6 +19,7 @@ import "./styles/site";
 
 // main library
 import "../src";
+import config from "../src/config";
 import userUtils from "../src/lib/user-utils";
 
 // app elements
@@ -61,12 +62,12 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   constructor() {
     super();
     this.render = render.bind(this);
-    this.appRoutes = APP_CONFIG.appRoutes;
-    this.theme = APP_CONFIG.theme;
+    this.appRoutes = config.appRoutes;
+    this.theme = config.theme;
     this.page = 'loading';
     this.loadedPages = {};
-    this.user = APP_CONFIG.user;
-    this.eSearch = APP_CONFIG.client;
+    this.user = config.user;
+    this.eSearch = config.client;
     this.hideMainNav = false;
     this.textQuery = "";
     this.quickSearchOpened = false;
@@ -95,9 +96,9 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       {text: 'Works', page: 'works', href: '/works'},
       {text: 'Help', page: 'help', href: '/help'}];
  
-    this.navLinks = APP_CONFIG.includeGrants ? this.navLinks_Grant : this.navLinks_NonGrant;
+    this.navLinks = config.includeGrants ? this.navLinks_Grant : this.navLinks_NonGrant;
 
-    if( APP_CONFIG.user && APP_CONFIG.user.impersonatedBy ) {
+    if( config.user && config.user.impersonatedBy ) {
       this.accountLinks.unshift({text: "Stop Impersonating", action: 'stop-impersonating'}); 
     }
     if( this.hasProfile ){
@@ -105,10 +106,10 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     }
 
 
-    if( !APP_CONFIG.env ) {
-      APP_CONFIG.env = {APP_VERSION:''};
+    if( !config.env ) {
+      config.env = {APP_VERSION:''};
     }
-    this.showVersion = APP_CONFIG.env.APP_VERSION.match(/(alpha|beta|rc)/) ? true : false;
+    this.showVersion = config.env.APP_VERSION.match(/(alpha|beta|rc)/) ? true : false;
     this.logVersion();
 
     this._injectModel('AppStateModel', 'CollectionModel', 'PersonModel');
@@ -123,7 +124,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * event handler.  Either condition will show the 404 page
    */
   async _init404() {
-    if( APP_CONFIG.is404 ) {
+    if( config.is404 ) {
       // await this.loadPage('404');
       this.AppStateModel.show404Page();
     }
@@ -138,7 +139,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @description Logs the versions of this build.
    */
   logVersion() {
-    console.log('App Tags:', APP_CONFIG.env);
+    console.log('App Tags:', config.env);
   }
 
   /**
@@ -432,7 +433,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   }
 
   testHarvest() {
-    this.PersonModel.harvest(APP_CONFIG.user.uid);
+    this.PersonModel.harvest(config.user.uid);
   }
 
 }

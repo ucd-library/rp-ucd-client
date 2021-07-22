@@ -3,6 +3,7 @@ import render from "./rp-page-person.tpl.js";
 import RpUtilsLanding from "../../utils/rp-utils-landing";
 import UserUtils from "../../../src/lib/user-utils";
 import rdfUtils from "../../../src/lib/rdf-utils";
+import config from "../../../src/config.js";
  
 import "../../components/alert";
 import "../../components/avatar";
@@ -14,6 +15,7 @@ import "../../components/icon";
 import "../../components/link-list";
 import "../../components/modal";
 import "../../components/rp-loading";
+import "../../components/ae-publication-list";
 
 
 /**
@@ -27,9 +29,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     return {
       individual: {type: Object},
       individualStatus: {type: String},
-      publicationOverviewStatus: {type: String},
       grantStatus: {type: String},
-      publicationOverview: {type: Object},
       hasMultiplePubTypes: {type: Boolean},
       hasMultipleGrantTypes: {type: Boolean},
       retrievedPublications: {type: Object},
@@ -63,7 +63,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.assetType = "person";
     this.defaultResearchSubjectCount = 8;
 
-    this.isAdmin = UserUtils.isAdmin(APP_CONFIG.user);
+    this.isAdmin = UserUtils.isAdmin(config.user);
 
     this._resetEleProps();
 
@@ -188,7 +188,7 @@ export default class RpPagePerson extends RpUtilsLanding {
       return false;
     }
     this.individual = data.payload;
-    if (APP_CONFIG.verbose) console.log(data);
+    if (config.verbose) console.log(data);
     return false;
   }
 
@@ -211,7 +211,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     if (data.state != 'loaded') {
       return;
     }
-    if (APP_CONFIG.verbose) console.log('pub overview:', data);
+    if (config.verbose) console.log('pub overview:', data);
 
     let totalPubs = 0;
     let pubTypes = {};
@@ -342,7 +342,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   _isOwnProfile() {
     try {
-      if (APP_CONFIG.user.expertsId === this.assetId) {
+      if (config.user.expertsId === this.assetId) {
         return true;
       }
     } catch (error) {
@@ -561,16 +561,6 @@ export default class RpPagePerson extends RpUtilsLanding {
     }
 
     return false;
-  }
-
-  /**
-   * @method getPubExports
-   * @description Returns the ways a user can export their publications.
-   * 
-   * @returns {Array}
-   */
-  getPubExports() {
-    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/ucdrp:${this.assetId}`}];
   }
 
   /**

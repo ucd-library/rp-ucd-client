@@ -1,8 +1,8 @@
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const PersonService = require('../services/PersonService');
 const PersonStore = require('../stores/PersonStore');
-const urlUtils = require('../lib/url-utils');
-const AssetDefs = require('../lib/asset-defs');
+const urlUtils = require('../lib/url-utils').default;
+const AssetDefs = require('../lib/asset-defs').default;
 const rdfUtils = require('../lib/rdf-utils').default;
 
 /**

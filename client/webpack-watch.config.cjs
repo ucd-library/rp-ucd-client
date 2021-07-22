@@ -25,7 +25,7 @@ configs.forEach((config, index) => {
   });
   */
 
-  config.output.publicPath = '/js/'
+  config.output.publicPath = '/js/';
   config.output.chunkFilename = '[name].'+config.output.filename;
 
   if( index % 2 === 1 ) {

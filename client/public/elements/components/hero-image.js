@@ -34,7 +34,7 @@ export class RpHeroImage extends LitElement {
     let styles = {};
 
     if (this.src) {
-      styles['background-image'] = `var(--tcolor-hero-film), url(${this.src})`;
+      styles['background-image'] = `var(--ae-tcolor-hero-film), url(${this.src})`;
     }
     else {
       if (this.assetPick < 0) {
@@ -43,7 +43,7 @@ export class RpHeroImage extends LitElement {
       if (this.assetPick > this.assetMax) {
         this.assetPick = this.assetMax;
       }
-      styles['background-image'] = `var(--tcolor-hero-film), url(${this.assetFolder + this.assetPick + ".jpg"})`;
+      styles['background-image'] = `var(--ae-tcolor-hero-film), url(${this.assetFolder + this.assetPick + ".jpg"})`;
     }
     return styles;
   }

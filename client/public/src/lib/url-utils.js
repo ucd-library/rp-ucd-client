@@ -1,4 +1,6 @@
-module.exports = {
+import config from "../config.js";
+
+const UrlUtils = {
 
   /**
    * @method idAsLocalUrlPath
@@ -9,6 +11,8 @@ module.exports = {
    * @returns {String} 
    */
   idAsLocalUrlPath(id='') {
-    return '/'+id.replace(APP_CONFIG.data.prefix.ucdId+':', '');
+    return '/'+id.replace(config.data.prefix.ucdId+':', '');
   }
 };
+
+export default UrlUtils;

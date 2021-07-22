@@ -1,7 +1,7 @@
 import render from "./rp-page-grant.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
-import rdfUtils from "../../../src/lib/rdf-utils";
+import config from "../../../src/config.js";
 
 import "../../components/alert";
 import "../../components/badge";
@@ -151,7 +151,7 @@ export default class RpPageGrant extends RpUtilsLanding {
       return false;
     }
     this.grant = data.payload;
-    if (APP_CONFIG.verbose) console.log("grant payload:", data);
+    if (config.verbose) console.log("grant payload:", data);
 
     // Gets the relate Ids from gran and checks to make sure inheresIn has it with the
     // ["@id"] or the item itself has ["@id"] then filters if item has ucdrp
@@ -216,7 +216,7 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.awardedByLabel = this._awardedByLabel();
     this.grantNumber = this._grantNumber();
 
-    if (APP_CONFIG.verbose) console.log("description:", data);
+    if (config.verbose) console.log("description:", data);
 
     // this._toggleElements("about", this.about);
     

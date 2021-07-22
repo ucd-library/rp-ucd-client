@@ -1,14 +1,34 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./ae-publication-list.tpl.js";
-import "../../../src/models/PersonModel";
+import "../../src/models/PersonModel.js";
+import "../../src/models/ResolverModel.js";
+import config from "../../src/config.js";
 
-export default class AePublicationList extends LitElement {
+import "./citation.js";
+import "./modal.js";
+
+export default class AePublicationList extends Mixin(LitElement)
+  .with(LitCorkUtils) {
 
   static get properties() {
     return {
+      isOwnProfile : {
+        type: Boolean,
+        attribute: 'is-own-profile'
+      },
+      totalPublications: {type: Number},
       publicationOverviewStatus: {type: String},
       publicationOverview: {type: Object},
-    }
+      hasMultiplePubTypes: {type: Boolean},
+      hideHeader: {
+        type: Boolean,
+        attribute: 'hide-header'
+      },
+      expertId: {
+        type: String,
+        attribute: 'expert-id'
+      }
+    };
   }
 
   static get styles() {
@@ -19,17 +39,46 @@ export default class AePublicationList extends LitElement {
     super();
     this.render = render.bind(this);
 
-    this._injectModel('PersonModel');
+    this.hideHeader = false;
+    this._resetEleProps();
 
-    this._doPubOverviewQuery(this.assetId);
+    this._injectModel('PersonModel', 'ResolverModel');
+  }
+
+  updated(props) {
+    if( props.has('expertId') && this.expertId ) {
+      this._resetEleProps();
+      this._doPubOverviewQuery();
+    }
   }
 
   _resetEleProps() {
+    this.isOwnProfile = false;
     this.retrievedPublications = {};
     this.totalPublications = 0;
     this.publicationOverview = {};
     this.hasMultiplePubTypes = false;
     this.publicationOverviewStatus = 'loading';
+    this.resolvedId = '';
+  }
+
+  async getExpertId() {
+    if( this.resolvedId ) return this.resolvedId;
+    if( this.expertId.match(/^\/?person\//) ) {
+      return this.expertId;
+    }
+
+    let resp = await this.ResolverModel.resolve(this.expertId);
+    if( resp.error ) {
+      console.error(resp.error);
+      this.dispatchEvent(new CustomEvent('unknown-id', {
+        detail: this.expertId
+      }));
+      return '';
+    }
+
+    this.resolvedId = resp.payload['@id'].replace(config.data.prefix.ucdId+':', '');
+    return this.resolvedId;
   }
 
   /**
@@ -59,11 +108,11 @@ export default class AePublicationList extends LitElement {
    * @description Gets aggregation counts of all publication types for this individual.
    * Kicks off further queries for the actual publication records if applicable.
    * 
-   * @param {String} id - The individual's id
-   * 
    * @returns {Promise}
    */
-  async _doPubOverviewQuery(id) {
+  async _doPubOverviewQuery() {
+    let id = await this.getExpertId();
+
     this.publicationOverviewStatus = 'loading';
     let data = await this.PersonModel.getPubOverview(id);
     if( data.state === 'error' ) {
@@ -73,7 +122,6 @@ export default class AePublicationList extends LitElement {
     if (data.state != 'loaded') {
       return;
     }
-    if (APP_CONFIG.verbose) console.log('pub overview:', data);
 
     let totalPubs = 0;
     let pubTypes = {};
@@ -93,6 +141,7 @@ export default class AePublicationList extends LitElement {
       pubTypes[pubType].displayedOffset = this.hasMultiplePubTypes ? 5 : 10;
 
     }
+
     this.totalPublications = totalPubs;
     this.publicationOverview  = pubTypes;
     await Promise.all(Object.values(pubTypes).map(pt => this._doPubQuery(pt)));
@@ -111,7 +160,9 @@ export default class AePublicationList extends LitElement {
    * @returns {Promise}
    */
   async _doPubQuery(pubTypeObject, offset=0){
-    let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
+    let id = await this.getExpertId();
+
+    let data = await this.PersonModel.getPublications(id, pubTypeObject, offset);
 
     this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
     if( data.state === 'error' ) {
@@ -165,6 +216,16 @@ export default class AePublicationList extends LitElement {
     }
 
     return output;
+  }
+
+  /**
+   * @method getPubExports
+   * @description Returns the ways a user can export their publications.
+   * 
+   * @returns {Array}
+   */
+  getPubExports() {
+    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/ucdrp:${this.assetId}`}];
   }
 
   /**

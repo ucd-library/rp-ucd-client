@@ -12,17 +12,17 @@ export default function render() {
       display: none !important;
     }
     .container {
-      font-size: var(--font-size-small);
+      font-size: var(--ae-font-size-small);
       display: flex;
       align-items: center;
     }
     .container.color-bg-primary {
-      background-color: var(--tcolor-bg-primary);
-      color: var(--tcolor-text);
+      background-color: var(--ae-tcolor-bg-primary);
+      color: var(--ae-tcolor-text);
     }
     .container.color-outline-primary {
-      color: var(--tcolor-primary70);
-      background-color: var(--tcolor-light);
+      color: var(--ae-tcolor-primary70);
+      background-color: var(--ae-tcolor-light);
     }
     rp-icon {
       padding-left: 10px;
@@ -31,7 +31,7 @@ export default function render() {
       background-color: #fff;
     }
     .line {
-      background-color: var(--tcolor-primary10);
+      background-color: var(--ae-tcolor-primary10);
       width: 1px;
       height: 34px;
       margin: 0 8px;
@@ -63,7 +63,7 @@ export default function render() {
       padding-right: 0;
     }
     #input::placeholder {
-      color: var(--tcolor-placeholder-text);
+      color: var(--ae-tcolor-placeholder-text);
     }
     ul {
       list-style-type: none;
@@ -77,26 +77,26 @@ export default function render() {
     li[selected] {
       pointer-events: none;
       cursor: auto;
-      font-weight: var(--font-weight-bold);
+      font-weight: var(--ae-font-weight-bold);
     }
     li a {
       display: block;
       width: 100%;
       text-decoration: none;
-      color: var(--tcolor-primary);
+      color: var(--ae-tcolor-primary);
     }
     iron-icon {
       margin-top: 2px;
     }
     .color-outline-primary li:hover, .color-bg-primary li:hover, 
     .color-outline-primary li:focus, .color-bg-primary li:focus {
-      background-color: var(--tcolor-primary10) !important;
+      background-color: var(--ae-tcolor-primary10) !important;
     }
     .color-outline-primary ul, .color-bg-primary ul{
       border-style: solid;
       border-width: 1px;
-      border-color: var(--tcolor-primary70);
-      background-color: var(--tcolor-light);
+      border-color: var(--ae-tcolor-primary70);
+      background-color: var(--ae-tcolor-light);
     }
     .container.upper {
       text-transform: uppercase;

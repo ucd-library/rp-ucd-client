@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import render from './organization-preview.tpl.js';
-
+import config from "../../src/config.js";
 
 export class RpOrganizationPreview extends LitElement {
   
@@ -16,7 +16,7 @@ export class RpOrganizationPreview extends LitElement {
   constructor() {
     super();
     this.organizationPath = "/organization/";
-    this.jsonldContext = ((APP_CONFIG.data.context.organization) ? APP_CONFIG.data.context.organization : '');
+    this.jsonldContext = ((config.data.context.organization) ? config.data.context.organization : '');
     this.render = render.bind(this);
   }
 

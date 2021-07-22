@@ -1,7 +1,7 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html";
 import "../../components/rp-toast-message"
-
+import config from "../../../src/config.js";
 
 export default function render() {
 return html`
@@ -19,7 +19,7 @@ return html`
   }
   .data section rp-loading {
     height: 150px;
-    --rp-loading-color: var(--tcolor-primary);
+    --rp-loading-color: var(--ae-tcolor-primary);
   }
   .herotop {
     display: flex;
@@ -46,28 +46,28 @@ return html`
     width: 100%;
   }
   .pub-count {
-    background-color: var(--tcolor-primary);
-    color: var(--tcolor-light);
+    background-color: var(--ae-tcolor-primary);
+    color: var(--ae-tcolor-light);
     min-height: 60px;
     min-width: 60px;
     border-radius: 50%;
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-h2);
+    font-weight: var(--ae-font-weight-bold);
+    font-size: var(--ae-font-size-h2);
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .button {
-    color: var(--tcolor-primary);
+    color: var(--ae-tcolor-primary);
     padding: 10px;
-    background-color: var(--tcolor-bg-primary);
+    background-color: var(--ae-tcolor-bg-primary);
     cursor: pointer;
     transition: .3s;
     margin: 5px;
-    }
+  }
   .button:hover {
-    background-color: var(--tcolor-hover-bg);
-    color: var(--tcolor-hover-text);
+    background-color: var(--ae-tcolor-hover-bg);
+    color: var(--ae-tcolor-hover-text);
   }
   rp-badge {
     margin-left: 8px;
@@ -80,26 +80,26 @@ return html`
   }
   .load-pubs {
     height: 42px;
-    font-size: var(--font-size);
-    color: var(--tcolor-text);
-    font-weight: var(--font-weight);
-    border: 2px solid var(--tcolor-primary10);
+    font-size: var(--ae-font-size);
+    color: var(--ae-tcolor-text);
+    font-weight: var(--ae-font-weight);
+    border: 2px solid var(--ae-tcolor-primary10);
     padding: 0 15px;
     cursor: pointer;
     transition: .3s;
-    color: var(--tcolor-primary);
+    color: var(--ae-tcolor-primary);
   }
   .load-pubs.more {
-    background-color: var(--tcolor-primary10);
+    background-color: var(--ae-tcolor-primary10);
   }
   .load-pubs.less {
-    background-color: var(--tcolor-light);
+    background-color: var(--ae-tcolor-light);
     margin-right: 8px;
   }
   .load-pubs:hover {
-    background-color: var(--tcolor-hover-bg);
-    border: 2px solid var(--tcolor-hover-bg);
-    color: var(--tcolor-light);
+    background-color: var(--ae-tcolor-hover-bg);
+    border: 2px solid var(--ae-tcolor-hover-bg);
+    color: var(--ae-tcolor-light);
   }
   .site .logo {
     vertical-align: middle;
@@ -131,7 +131,7 @@ return html`
     order: -1;
   }
   #publications h3 {
-    font-weight: var(--font-weight);
+    font-weight: var(--ae-font-weight);
     font-style: italic;
 
   }
@@ -139,7 +139,7 @@ return html`
     display: flex;
   }
   .box-pubsyear .year {
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--ae-font-weight-bold);
     width: 60px;
     min-width: 60px;
   }
@@ -169,8 +169,8 @@ return html`
 
   #pronoun {
     margin: 0;
-    font-size: var(--font-size);
-    color: var(--color-blue10);
+    font-size: var(--ae-font-size);
+    color: var(--ae-color-blue10);
   }
   /* #showMore{
     display:block;
@@ -183,9 +183,9 @@ return html`
   }
 
   #showMore:hover{
-    background-color: var(--tcolor-hover-bg);
-    color: var(--tcolor-hover-text);
-    border-color: var(--tcolor-hover-bg);
+    background-color: var(--ae-tcolor-hover-bg);
+    color: var(--ae-tcolor-hover-text);
+    border-color: var(--ae-tcolor-hover-bg);
   } */
 
   rp-modal ol li:before, rp-modal ol li::marker {
@@ -379,96 +379,18 @@ return html`
 
       </section>
 
-      <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
-        <div class="box-title">
-          <h1 class="weight-regular mt-0">Publications</h1>
-          <div class="box-title-icons">
-            <div class="pub-icons">
-              ${this.isOwnProfile ? html`
-                  <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
-                    <div slot="tooltip">Edit Publications</div>
-                  </rp-icon>
-                  <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
+      <ae-publication-list
+        expert-id="${this.assetId}"
+        ?is-own-profile="${this.isOwnProfile}">
+      </ae-publication-list>
 
-                ` : html``
-              }
-            </div>
-
-            <div class="pub-count">${this.totalPublications}</div>
-          
-            <rp-modal content-title='Edit Publications' id="modal-pub-edit">
-              Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
-              redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
-              <div slot="confirmButton">
-                <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/objects.html?as=3&am=false&cid=1&ipr=false&iqf=true'>
-                <div class="button">Edit Publications</div>
-                </a>
-              </div> 
-            </rp-modal>
-          </div>
-        </div>
-        ${this.publicationOverviewStatus === 'loaded' ? html`
-          <h2 class="mb-0">Selected Publications</h2>
-          <div class="data">
-            ${ Object.values(this.publicationOverview).map(pubType => html`
-              <h3>${pubType.text} (${pubType.ct})</h3>
-              ${this.getPubsByYear(pubType.id).map(yr => html`
-                <div class="box-pubsyear">
-                  <div class="year">${yr.year}</div>
-                  <div class="pubs">${yr.pubs.map(pub => html`
-                    <rp-citation .data="${pub}"></rp-citation>
-                  `)}</div>
-                </div>
-              `)}
-
-              <div class="box-pub-buttons" ?hidden="${!this.showMoreButton(pubType)}">
-                <div class="padding"></div>
-                <div class="buttons">
-                  <button type="button" 
-                    ?hidden="${!this.showLessButton(pubType)}"
-                    @click="${e => this._loadPubs(pubType.id, false)}" 
-                    class="load-pubs less">Show ${this.showLessCount(pubType)} less</button>
-
-                  <button type="button" 
-                    ?hidden="${!this.showMoreButton(pubType)}"
-                    @click="${e => this._loadPubs(pubType.id, true)}" 
-                    class="load-pubs more">Show ${this.showMoreCount(pubType)} more</button>
-                </div>
-              </div>
-            `)}
-          </div>
-        ` : html``}
-        ${this.publicationOverviewStatus === 'loading' ? html`
-          <rp-loading>Loading publications</rp-loading>
-        ` : html``}
-        ${this.publicationOverviewStatus === 'error' ? html`
-          <div class="load-error">
-            <rp-alert>Error loading publications. Try again later.</rp-alert>
-          </div>
-        ` : html``}
-        
-
-      </section>
-
-      <div ?hidden="${!APP_CONFIG.includeGrants}">
+      <div ?hidden="${!config.includeGrants}">
 
       <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('grants')}">
         <div class="box-title">
           <h1 class="weight-regular mt-0">Grants</h1>
           <div class="box-title-icons">
-            <div class="pub-icons">
-              ${this.isOwnProfile ? html`
-                  <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
-                    <div slot="tooltip">Edit Publications</div>
-                  </rp-icon>
-                  <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
-
-                ` : html``
-              }
-            </div>
-
             <div class="pub-count">${this.totalGrants}</div>
-        
           </div>
         </div>
         ${this.totalGrants != 0 ? html `

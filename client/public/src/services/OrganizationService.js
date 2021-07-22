@@ -1,5 +1,6 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const OrganizationStore = require('../stores/OrganizationStore');
+const config = require('../config').default;
 
 class OrganizationService extends BaseService {
 
@@ -7,8 +8,7 @@ class OrganizationService extends BaseService {
     super();
     this.store = OrganizationStore;
 
-    this.baseUrl = APP_CONFIG.data.apiUrl;
-    // this.jsonContext = APP_CONFIG.data.context.organization;
+    this.baseUrl = config.data.apiUrl;
   }
 
   async getOrganization(id) {

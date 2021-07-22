@@ -1,6 +1,7 @@
 import { LitElement } from 'lit-element';
 import render from "./rp-page-help.tpl.js";
 
+import config from "../../../src/config.js";
 import "../../components/accordian";
 
 /**
@@ -24,7 +25,7 @@ export default class RpPageHelp extends Mixin(LitElement)
     this._injectModel('AppStateModel');
     
     this.visible = false;
-    this.isLoggedIn = APP_CONFIG.user ? true : false;
+    this.isLoggedIn = config.user ? true : false;
     this.imgPath = '/images/faq/';    
 
     // need to wait until window finishes loaded to set page

@@ -5,7 +5,7 @@ const WorkModel = require('./WorkModel');
 const SubjectModel = require('./SubjectModel');
 const GrantModel = require('./GrantModel');
 const SocketModel = require('./SocketModel');
-
+const config = require('../config').default;
 
 /**
  * @class SeoModel
@@ -27,7 +27,7 @@ class SeoModel extends BaseModel {
       this.currentPath = e.location.fullpath;
       this.reset();
 
-      if( !APP_CONFIG.modelRoutes.includes(e.page) ) return;
+      if( !config.modelRoutes.includes(e.page) ) return;
 
       this.getModel(e.page, this.currentPath.replace(/^\//, ''));
     });

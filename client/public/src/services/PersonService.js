@@ -1,6 +1,7 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const PersonStore = require('../stores/PersonStore');
 const queryUtils = require('../lib/query-utils');
+const config = require('../config').default;
 
 class PersonService extends BaseService {
 
@@ -8,10 +9,8 @@ class PersonService extends BaseService {
     super();
     this.store = PersonStore;
 
-    if( typeof APP_CONFIG !== 'undefined' ) {
-      this.baseUrl = APP_CONFIG.data.apiUrl;
-      this.jsonContext = APP_CONFIG.data.prefix.ucdId;
-    }
+    this.baseUrl = (config.host || '') + config.data.apiUrl;
+    this.jsonContext = config.data.prefix.ucdId;
   }
 
   /**
@@ -104,7 +103,7 @@ class PersonService extends BaseService {
         '@type' : {
           type : 'keyword',
           op : 'and',
-          value : [APP_CONFIG.data.types.grant]
+          value : [config.data.types.grant]
         }
       },
       facets: {}

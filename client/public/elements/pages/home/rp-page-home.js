@@ -3,6 +3,7 @@ import render from "./rp-page-home.tpl.js";
 
 import "@ucd-lib/cork-app-utils";
 
+import config from "../../../src/config.js";
 import "../../components/alert";
 import "../../components/badge";
 import "../../components/person-preview";
@@ -55,7 +56,7 @@ export default class RpPageHome extends Mixin(LitElement)
     this.subjectsTotal = 0;
     this.setPeopleWidth(window.innerWidth);
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
-    this.theme = APP_CONFIG.theme;
+    this.theme = config.theme;
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
 
     this._handleResize = this._handleResize.bind(this);
@@ -274,7 +275,7 @@ export default class RpPageHome extends Mixin(LitElement)
       return;
     }
     this.people = peopleList.payload.results;
-    if (APP_CONFIG.verbose) console.log('people: ', this.people);
+    if (config.verbose) console.log('people: ', this.people);
   }
 
   /**
@@ -290,7 +291,7 @@ export default class RpPageHome extends Mixin(LitElement)
       return;
     }
     this.grants = grantsList.payload.results;
-    if (APP_CONFIG.verbose) console.log('grants: ', this.grants);
+    if (config.verbose) console.log('grants: ', this.grants);
   }
 
   /**
@@ -304,7 +305,7 @@ export default class RpPageHome extends Mixin(LitElement)
     this.subjectsStatus = subjects.state;
     this.subjects = subjects.payload;
 
-    if (APP_CONFIG.verbose) console.log('subjects: ', this.subjects);
+    if (config.verbose) console.log('subjects: ', this.subjects);
   }
 
   /**
@@ -320,7 +321,7 @@ export default class RpPageHome extends Mixin(LitElement)
       return;
     }
     this.facets = facetList.payload.aggregations.facets['@type'];
-    if (APP_CONFIG.verbose) console.log('facets: ', this.facets);
+    if (config.verbose) console.log('facets: ', this.facets);
     for (let facet in this.facets) {
       for (let recognizedFacet of this.CollectionModel.subFacets.works) {
         if (facet == recognizedFacet.es) {
@@ -328,16 +329,16 @@ export default class RpPageHome extends Mixin(LitElement)
           break;
         }
       }
-      if (facet == APP_CONFIG.data.types.concept ) {
+      if (facet == config.data.types.concept ) {
         this.subjectsTotal = this.facets[facet];
       }
-      if (facet == APP_CONFIG.data.types.work ) {
+      if (facet == config.data.types.work ) {
         this.academicWorksTotal = this.facets[facet];
       }
-      if (facet == APP_CONFIG.data.types.person ) {
+      if (facet == config.data.types.person ) {
         this.peopleTotal = this.facets[facet];
       }
-      if (facet == APP_CONFIG.data.types.grant ) {
+      if (facet == config.data.types.grant ) {
         this.grantsTotal = this.facets[facet];
       }
     }

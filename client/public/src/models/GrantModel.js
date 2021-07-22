@@ -2,6 +2,7 @@ const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const GrantService = require('../services/GrantService');
 const GrantStore = require('../stores/GrantStore');
 const rdfUtils = require('../lib/rdf-utils').default;
+const config = require('../config').default;
 
 const CollectionModel = require('./CollectionModel');
 const PersonModel = require('./PersonModel');
@@ -102,15 +103,15 @@ class GrantModel extends BaseModel {
    * @returns {Boolean}
    */
   isUsersWork(grant) {
-    if( !APP_CONFIG.user ) return false;
-    if( !APP_CONFIG.user.username ) return false;
+    if( !config.user ) return false;
+    if( !config.user.username ) return false;
 
     try {
       let contributors = this.getContributors(grant);
       for (let grantContribute of contributors) {
         // for (let id of author.identifiers) {
         let contributorId = grantContribute['@id'].replace(this.service.jsonContext + ":", "");
-        if (APP_CONFIG.user.username.toLowerCase().split('@')[0] === contributorId.toLowerCase()) {
+        if (config.user.username.toLowerCase().split('@')[0] === contributorId.toLowerCase()) {
           return true;
         }
         // }

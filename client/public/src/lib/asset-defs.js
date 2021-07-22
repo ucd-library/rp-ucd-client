@@ -1,7 +1,5 @@
-let TYPES = {};
-if( typeof APP_CONFIG !== 'undefined' ) {
-  TYPES = APP_CONFIG.data.types;
-}
+import config from '../config.js';
+let TYPES = config.data.types;
 
 /**
  * @class AssetDefs
@@ -102,7 +100,7 @@ class AssetDefs {
       },
     ];
 
-    if(APP_CONFIG.includeGrants){
+    if(config.includeGrants){
       let grant = {
         id: 'grants', 
         idSingular: 'grant',
@@ -420,5 +418,6 @@ class AssetDefs {
   }
 }
 
-//export default new AssetDefs();
-module.exports = new AssetDefs();
+let assetDefs = new AssetDefs();
+export default assetDefs;
+

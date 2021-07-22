@@ -9,12 +9,12 @@ export default function render() {
       display: inline-block;
     }
     iron-icon {
-      color: var(--color-blue);
+      color: var(--ae-color-blue);
       height: 50%;
       width: 50%;
     }
     .circle {
-      background-color: var(--color-blue20);
+      background-color: var(--ae-color-blue20);
       height: 70px;
       width: 70px;
       border-radius: 50%;

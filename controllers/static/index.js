@@ -65,7 +65,7 @@ export default (app) => {
     htmlFile : path.join(assetsDir, 'index.html'), // pass the file you want to use
     isRoot : true, // are we serving from host root (/)?
     appRoutes : config.client.appRoutes, // array of root paths.  ie appRoutes = ['foo', 'bar'] to server /foo/* /bar/*
-    static : {dir : assetsDir},
+    static : {dir : assetsDir, opts : {maxAge: 1000 * 60 * 60 * 24 * 30 }},
     enable404 : true,
     template : async (req, res, next) => {
 

@@ -1,15 +1,15 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const SubjectStore = require('../stores/SubjectStore');
 const queryUtils = require('../lib/query-utils');
+const config = require('../config').default;
 
 class SubjectService extends BaseService {
   constructor() {
     super(); 
     this.store = SubjectStore;
 
-    this.baseUrl = APP_CONFIG.data.apiUrl;
-    this.searchUrl = APP_CONFIG.data.apiUrl + "/search";
-    // this.jsonContext = APP_CONFIG.data.context.publication;
+    this.baseUrl = config.data.apiUrl;
+    this.searchUrl = config.data.apiUrl + "/search";
   } 
 
   /**
@@ -76,7 +76,7 @@ class SubjectService extends BaseService {
         "@type": {
           type: "keyword", 
           op: "and", 
-          value: [APP_CONFIG.data.types.person]
+          value: [config.data.types.person]
         },
         "_.allResearchArea": {
           type: "keyword", 
@@ -118,7 +118,7 @@ class SubjectService extends BaseService {
         "@type": {
           type: "keyword", 
           op: "and", 
-          value: [APP_CONFIG.data.types.work]
+          value: [config.data.types.work]
         },
         '_.allSubjectArea': {
           type: "keyword", 

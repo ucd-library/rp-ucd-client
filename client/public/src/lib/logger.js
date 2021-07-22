@@ -1,14 +1,15 @@
+import config from "../config.js";
 
 class RpLogger {
   log() {
-    if ( !APP_CONFIG.verbose ) return;
+    if ( !config.verbose ) return;
     let args = Array.from(arguments);
     args.unshift(this.getCaller());
     console.log.apply(null, args);
   }
 
   error() {
-    if ( !APP_CONFIG.verbose ) return;
+    if ( !config.verbose ) return;
     console.log.apply(null, arguments);
   }
 

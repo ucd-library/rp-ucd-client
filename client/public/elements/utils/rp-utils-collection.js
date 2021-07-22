@@ -190,9 +190,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     else {
       this.hasAz = true;
     }
-    this.data = data.payload.results;
-    if (APP_CONFIG.verbose) console.log("main search/browse query result:", data);
-    
+    this.data = data.payload.results;    
   }
 
   /**
@@ -297,8 +295,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
 
     this.currentQuery = this._constructQuery();
-    if (APP_CONFIG.verbose) console.log( 'element query:', this.currentQuery);
-
   }
 
   /**

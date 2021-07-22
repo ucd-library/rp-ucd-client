@@ -11,6 +11,8 @@ configs = [...configs, ...appBuild.dist({
   root : __dirname,
   entry : 'public/elements/external',
   dist : 'dist/js',
+  modern : 'external.js',
+  ie : 'external-ie.js',
   clientModules : 'public/node_modules'
 })];
 

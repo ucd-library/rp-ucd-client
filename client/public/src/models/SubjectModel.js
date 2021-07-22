@@ -2,7 +2,7 @@ const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const SubjectService = require('../services/SubjectService');
 const SubjectStore = require('../stores/SubjectStore');
 const CollectionModel = require('./CollectionModel');
-const urlUtils = require('../lib/url-utils');
+const urlUtils = require('../lib/url-utils').default;
 
 /**
  * @class SubjectModel

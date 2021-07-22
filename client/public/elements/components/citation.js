@@ -1,6 +1,8 @@
 import { LitElement } from 'lit-element';
 import {renderHTML} from '../../src/lib/santize-html.js';
 import render from './citation.tpl.js';
+import config from '../../src/config.js';
+import "../../src/models/WorkModel";
 
 /**
  * @class RpCitation
@@ -70,7 +72,7 @@ export class RpCitation extends Mixin(LitElement)
    * @returns {String}
    */
   _constructHref(id){
-    let href = id.replace(APP_CONFIG.data.prefix.ucdId+':', '/');
+    let href = id.replace(config.data.prefix.ucdId+':', '/');
     return href;
   }
 

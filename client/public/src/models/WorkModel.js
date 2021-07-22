@@ -2,6 +2,7 @@ const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const WorkService = require('../services/WorkService');
 const WorkStore = require('../stores/WorkStore');
 const rdfUtils = require('../lib/rdf-utils').default;
+const config = require('../config.js').default;
 
 const CollectionModel = require('./CollectionModel');
 
@@ -125,8 +126,8 @@ class WorkModel extends BaseModel {
    * @returns {Boolean}
    */
   isUsersWork(work) {
-    if( !APP_CONFIG.user ) return false;
-    if( !APP_CONFIG.user.expertsId ) return false;
+    if( !config.user ) return false;
+    if( !config.user.expertsId ) return false;
 
     try {
       let workAuthors = this.getAuthors(work);
@@ -135,7 +136,7 @@ class WorkModel extends BaseModel {
 
         for (let author of authors) {
           let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-          if (APP_CONFIG.user.expertsId === authorId.toLowerCase()) {
+          if (config.user.expertsId === authorId.toLowerCase()) {
             return true;
           }
         }
