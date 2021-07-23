@@ -15,7 +15,7 @@ class SocketModel extends BaseModel {
     this.store = SocketStore;
     this.service = SocketService;
       
-    if( config.user ) {
+    if( config.user && config.enableUpdates ) {
       this.service.connect();
     }
 

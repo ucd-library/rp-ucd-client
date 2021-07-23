@@ -8,13 +8,18 @@ const {auth, logger} = rpNodeUtils;
 const userSockets = {};
 
 eventBus.on('user-message', msg => {
-  console.log(userSockets, msg);
   if( !userSockets[msg.user] ) return;
 
   userSockets[msg.user]
     .forEach(connection => connection.socket.emit('message', msg));
 });
-console.log("UserSocket: ",userSockets);
+
+function getSocketCount() {
+  let c = 0;
+  for( let key in userSockets ) c += userSockets[key].length;
+  return c;
+}
+
 export default server => {
   const io = new Server(server);
   io.on('connection', handleConnection);
@@ -28,7 +33,6 @@ export default server => {
  * @returns {Promise}
  */
 async function handleConnection(socket) {
-  console.log("Attempting Connection");
   let cookies = cookie.parse(socket.handshake.headers.cookie);
   let token = cookies[config.jwt.cookieName];
 
@@ -47,11 +51,10 @@ async function handleConnection(socket) {
     return;
   }
 
-  console.log("Connected");
-
   // wire up disconnect listener
   socket.on('disconnect', () => {
     handleDisconnect(token, socket);
+    logger.info("Socket disconnected, live sockets: "+getSocketCount());
   });
 
   // register socket
@@ -60,6 +63,8 @@ async function handleConnection(socket) {
     userSockets[uid] = [];
   }
   userSockets[uid].push({token, socket, uid});  
+
+  logger.info("Socket connected, live sockets: "+getSocketCount());
 }
 
 /**
@@ -71,10 +76,13 @@ async function handleConnection(socket) {
  * @returns
  */
 function handleDisconnect(token, socket) {
-  if( !userSockets[token.username] ) return;
-  let index = userSockets[token.username].find(item => item.socket === socket);
-  userSockets[token.username].splice(index, 1);
-  if( userSockets[token.username].length === 0 ) {
-    delete userSockets[token.username];
+  let uid = token.username.replace(/@.*/, '');
+  if( !userSockets[uid] ) return;
+
+  let index = userSockets[uid].find(item => item.socket === socket);
+  userSockets[uid].splice(index, 1);
+
+  if( userSockets[uid].length === 0 ) {
+    delete userSockets[uid];
   }
 }

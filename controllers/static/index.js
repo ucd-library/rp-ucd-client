@@ -79,6 +79,7 @@ export default (app) => {
         includeGrants : config.client.includeGrants,
         defaultTypes : config.client.defaultTypes,
         gaCode : config.client.gaCode,
+        enableUpdates : config.client.enableUpdates,
         env : {
           CLIENT_TAG : process.env.CLIENT_TAG || '',
           VESSEL_TAG : process.env.VESSEL_TAG || '',
