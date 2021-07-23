@@ -7,20 +7,20 @@ export default function render() {
   <style>
     :host {
       display: inline-block;
-      color: var(--tcolor-primary)
+      color: var(--ae-tcolor-primary)
     }
     .hidden {
       display: none !important;
     }
     .container {
-      font-size: var(--font-size-small);
+      font-size: var(--ae-font-size-small);
     }
     .icon-dl {
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      background-color: var(--tcolor-bg-primary);
+      background-color: var(--ae-tcolor-bg-primary);
       transition: 0.3s;
       width: 40px;
       height: 40px;
@@ -31,18 +31,18 @@ export default function render() {
       cursor: pointer;
     }
     #main-toggle.opened, #main-toggle.opened:hover {
-      --rp-icon-bg-color: var(--tcolor-primary);
-      --rp-icon-color: var(--tcolor-bg-primary);
+      --rp-icon-bg-color: var(--ae-tcolor-primary);
+      --rp-icon-color: var(--ae-tcolor-bg-primary);
     }
     #dropdown-content {
-      background-color: var(--tcolor-light);
+      background-color: var(--ae-tcolor-light);
       box-shadow: 0 0 3px 5px rgba(0, 0, 0, .1);
       padding-bottom: 10px;
     }
     .title {
       padding: 15px 15px 5px 15px;
-      font-weight: var(--font-weight-bold);
-      color: var(--tcolor-text);
+      font-weight: var(--ae-font-weight-bold);
+      color: var(--ae-tcolor-text);
     }
     iron-icon {
       width: 60%;
@@ -59,19 +59,19 @@ export default function render() {
       margin-left: 10px;
     }
     .text {
-      font-weight: var(--font-weight-bold);
+      font-weight: var(--ae-font-weight-bold);
     }
     .choice {
       padding: 5px 15px;
       transition: 0.3s;
     }
     a {
-      color: var(--tcolor-primary);
+      color: var(--ae-tcolor-primary);
       text-decoration: none;
       transition: 0.3s;
     }
     .choice:hover {
-      background-color: var(--tcolor-bg-primary);
+      background-color: var(--ae-tcolor-bg-primary);
     }
     .choice-content {
       display: flex;

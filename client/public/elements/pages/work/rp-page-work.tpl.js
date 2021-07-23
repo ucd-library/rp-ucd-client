@@ -12,20 +12,20 @@ return html`
     display: block;
   }
   .hero {
-    background-color: var(--tcolor-primary);
+    background-color: var(--ae-tcolor-primary);
     padding: 30px 20px;
   }
   .hero .authors {
-    color: var(--tcolor-primary20);
+    color: var(--ae-tcolor-primary20);
     margin: 0 15%;
   }
   .hero .type {
-    color: var(--tcolor-primary10);
+    color: var(--ae-tcolor-primary10);
     text-transform: uppercase;
-    font-size: var(--font-size-small);
+    font-size: var(--ae-font-size-small);
   }
   .icon-container {
-    background-color: var(--tcolor-bg-primary);
+    background-color: var(--ae-tcolor-bg-primary);
     height: 150px;
     width: 150px;
     min-height: 150px;
@@ -36,19 +36,19 @@ return html`
     align-items: center;
   }
   iron-icon {
-    color: var(--tcolor-primary);
+    color: var(--ae-tcolor-primary);
     height: 50%;
     width: 50%;
   }
   .authors a {
-    color: var(--tcolor-light) !important;
+    color: var(--ae-tcolor-light) !important;
   }
   .authors a[disabled] {
     pointer-events: none;
     text-decoration: none;
     }
   .authors a[disabled]:hover {
-    color : var(--tcolor-link-text);
+    color : var(--ae-tcolor-link-text);
   }
   .pub-links {
     list-style: none;
@@ -64,14 +64,14 @@ return html`
     height: 25px;
     min-width: 25px;
     min-height: 25px;
-    color: var(--tcolor-secondary);
-    font-weight: var(--font-weight-bold);
+    color: var(--ae-tcolor-secondary);
+    font-weight: var(--ae-font-weight-bold);
   }
   #overview .venue {
     text-transform: capitalize;
   }
   #authors .name {
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--ae-font-weight-bold);
   }
   @media (min-width: 800px) {
     .hero {

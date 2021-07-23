@@ -15,8 +15,8 @@ export default function render() {
       padding: 1.5%;
       background-color: #B3C1D1;
       font-family      : proxima-nova,"Lucida Grande","Lucida Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-      font-size        : var(--font-size);
-      font-weight      : var(--font-weight);
+      font-size        : var(--ae-font-size);
+      font-weight      : var(--ae-font-weight);
       color: #355B85;
       border: none;
       font-family: "Proxima Nova";
@@ -27,7 +27,7 @@ export default function render() {
 
     .icon-container:hover {
       cursor:default;
-      background-color: var(--tcolor-hover-bg);
+      background-color: var(--ae-tcolor-hover-bg);
       color: white;
     }
 
@@ -75,7 +75,7 @@ export default function render() {
     }
     #rearrange:hover{
       text-align: center;
-      color: var(--tcolor-hover-bg);
+      color: var(--ae-tcolor-hover-bg);
       cursor:default;
     }
 
@@ -85,7 +85,7 @@ export default function render() {
     }
     #delete:hover{
       vertical-align: center;
-      color: var(--tcolor-hover-bg);
+      color: var(--ae-tcolor-hover-bg);
       cursor:default;
 
     }    
@@ -101,11 +101,11 @@ export default function render() {
     }
     
     textarea {
-      border: 1px solid var(--tcolor-primary20);
+      border: 1px solid var(--ae-tcolor-primary20);
       font-family      : proxima-nova,"Lucida Grande","Lucida Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-      font-size        : var(--font-size);
-      font-weight      : var(--font-weight);
-      line-height      : calc(var(--font-size) * 1.625);
+      font-size        : var(--ae-font-size);
+      font-weight      : var(--ae-font-weight);
+      line-height      : calc(var(--ae-font-size) * 1.625);
       padding: 10px 15px;
       width: 850px;
       min-height: 100px;
@@ -124,11 +124,11 @@ export default function render() {
     }
 
     input[type=text] {
-      border: 1px solid var(--tcolor-primary20);
+      border: 1px solid var(--ae-tcolor-primary20);
       font-family      : proxima-nova,"Lucida Grande","Lucida Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-      font-size        : var(--font-size);
-      font-weight      : var(--font-weight);
-      line-height      : calc(var(--font-size) * 1.625);
+      font-size        : var(--ae-font-size);
+      font-weight      : var(--ae-font-weight);
+      line-height      : calc(var(--ae-font-size) * 1.625);
       padding: 5px;
     }
 
@@ -149,7 +149,7 @@ export default function render() {
 
     .dotted-break {
       width:950px;
-      border-bottom: 1px dashed var(--hr-color-light);
+      border-bottom: 1px dashed var(--ae-hr-color-light);
       border-width: 3px;
     }
 
@@ -165,13 +165,13 @@ export default function render() {
     }
 
     .icon-button span {
-      color: var(--tcolor-primary);
+      color: var(--ae-tcolor-primary);
       font-weight: bold;
     }
 
     .icon-button iron-icon {
       margin-right: 5px;
-      color: var(--tcolor-secondary);
+      color: var(--ae-tcolor-secondary);
     }
 
   </style>

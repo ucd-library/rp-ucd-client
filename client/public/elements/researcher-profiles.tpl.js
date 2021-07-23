@@ -40,7 +40,7 @@ return html`
   .loading-dots {
     text-align: center;
     z-index: 5;
-    color: var(--tcolor-primary);
+    color: var(--ae-tcolor-primary);
   }
 
   .dot {
@@ -66,7 +66,7 @@ return html`
 
   #masthead {
     width: 100%;
-    height: var(--masthead-height);
+    height: var(--ae-masthead-height);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -77,10 +77,10 @@ return html`
     justify-content: space-between;
   }
   #masthead .logo {
-    height: var(--masthead-logo-height);
+    height: var(--ae-masthead-logo-height);
   }
   #masthead .hamburger {
-    color: var(--tcolor-primary70);
+    color: var(--ae-tcolor-primary70);
     left: 15px;
     width: 24px;
     height: 24px;
@@ -91,22 +91,22 @@ return html`
     background-color: #fff;
     opacity: .75;
     z-index: -1;
-    height: var(--masthead-height);
+    height: var(--ae-masthead-height);
     left: -9px;
     width: 39px;
     position: absolute;
     cursor: pointer;
   }
   #masthead .hamburger:hover {
-    color: var(--tcolor-link-hover-text);
+    color: var(--ae-tcolor-link-hover-text);
   }
   #app-mobile-menu {
     background-color: #fff;
     width: 100%;
     position: absolute;
-    height: calc(100% - var(--masthead-height));
+    height: calc(100% - var(--ae-masthead-height));
     z-index: 100;
-    top: var(--masthead-height);
+    top: var(--ae-masthead-height);
     display: flex;
     flex-direction: column;
   }
@@ -134,37 +134,37 @@ return html`
     height: 50px;
     padding-left: 14px;
     align-items: center;
-    color: var(--tcolor-primary);
+    color: var(--ae-tcolor-primary);
     text-decoration: none;
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--ae-font-weight-bold);
   }
   #app-mobile-menu .nav-links a:hover {
-    color: var(--tcolor-link-hover-text);
+    color: var(--ae-tcolor-link-hover-text);
   }
   #app-mobile-menu a.login-button {
-    font-size: var(--font-size);
-    font-weight: var(--font-weight-bold);
+    font-size: var(--ae-font-size);
+    font-weight: var(--ae-font-weight-bold);
     padding: 15px 50px;
     cursor: pointer;
     transition: .3s;
-    color: var(--tcolor-primary);
+    color: var(--ae-tcolor-primary);
     display: block;
     text-decoration: none;
-    background-color: var(--tcolor-bg-primary);
+    background-color: var(--ae-tcolor-bg-primary);
     margin-top: 20px;
   }
   #app-mobile-menu a.login-button:hover {
-    background-color: var(--tcolor-hover-bg);
-    color: var(--tcolor-light);
+    background-color: var(--ae-tcolor-hover-bg);
+    color: var(--ae-tcolor-light);
   }
   #app-mobile-menu .account {
     flex-grow: 1;
-    background-color: var(--tcolor-bg-primary);
+    background-color: var(--ae-tcolor-bg-primary);
     padding-top: 24px;
   }
   #app-mobile-menu .greeting {
-    font-size: var(--font-size-h2);
-    font-weight: var(--font-weight-bold);
+    font-size: var(--ae-font-size-h2);
+    font-weight: var(--ae-font-weight-bold);
     padding-bottom: 16px;
     padding-top: 15px;
   }
@@ -215,10 +215,10 @@ return html`
     padding-left: 0;
   }
   #nav-left a.selected {
-    background-color: var(--tcolor-secondary);
+    background-color: var(--ae-tcolor-secondary);
   }
   #nav-left a:hover {
-    color: var(--tcolor-link-hover-text) !important;
+    color: var(--ae-tcolor-link-hover-text) !important;
   }
 
   #nav-right {
@@ -241,10 +241,10 @@ return html`
   }
 
   #app-footer {
-    background-color: var(--tcolor-primary);
-    color: var(--tcolor-light);
+    background-color: var(--ae-tcolor-primary);
+    color: var(--ae-tcolor-light);
     padding: 40px 0;
-    font-size: var(--font-size-small);
+    font-size: var(--ae-font-size-small);
   }
   #app-footer .logo-line {
     padding: 40px 0;
@@ -273,14 +273,14 @@ return html`
   }
   #app-footer a {
     text-decoration: underline;
-    color: var(--tcolor-light);
+    color: var(--ae-tcolor-light);
   }
   #app-footer .address {
     line-height: 1.75;
   }
   #app-footer .title {
-    font-weight: var(--font-weight-bold);
-    font-size : var(--font-size-h3);
+    font-weight: var(--ae-font-weight-bold);
+    font-size : var(--ae-font-size-h3);
     margin-bottom: 10px;
     margin-top: 20px;
   }
