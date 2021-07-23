@@ -72,7 +72,7 @@ export class RpCitation extends Mixin(LitElement)
    * @returns {String}
    */
   _constructHref(id){
-    let href = id.replace(config.data.prefix.ucdId+':', '/');
+    let href = (config.host || '')+id.replace(config.data.prefix.ucdId+':', '/');
     return href;
   }
 
