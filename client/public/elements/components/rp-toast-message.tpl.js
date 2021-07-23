@@ -17,7 +17,7 @@ export default function render() {
         bottom: 10px;
         right: 10px;
         overflow: auto;
-        background-color: var(--ae-color-farmers-market); 
+        background-color: var(--color-farmers-market); 
         color: #FFF;
         padding-left: 20px;
         animation: slidein 0.5s ease-in-out;    

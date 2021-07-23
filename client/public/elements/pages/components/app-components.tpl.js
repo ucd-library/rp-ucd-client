@@ -100,7 +100,7 @@ return html`
     justify-content: center;
   }
   .search-blue {
-    background-color: var(--ae-tcolor-primary);
+    background-color: var(--tcolor-primary);
     display: flex;
     justify-content: center;
     align-items: center;

@@ -19,7 +19,7 @@ return html`
   }
   .data section rp-loading {
     height: 150px;
-    --rp-loading-color: var(--ae-tcolor-primary);
+    --rp-loading-color: var(--tcolor-primary);
   }
   .herotop {
     display: flex;
@@ -46,28 +46,28 @@ return html`
     width: 100%;
   }
   .pub-count {
-    background-color: var(--ae-tcolor-primary);
-    color: var(--ae-tcolor-light);
+    background-color: var(--tcolor-primary);
+    color: var(--tcolor-light);
     min-height: 60px;
     min-width: 60px;
     border-radius: 50%;
-    font-weight: var(--ae-font-weight-bold);
-    font-size: var(--ae-font-size-h2);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-h2);
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .button {
-    color: var(--ae-tcolor-primary);
+    color: var(--tcolor-primary);
     padding: 10px;
-    background-color: var(--ae-tcolor-bg-primary);
+    background-color: var(--tcolor-bg-primary);
     cursor: pointer;
     transition: .3s;
     margin: 5px;
   }
   .button:hover {
-    background-color: var(--ae-tcolor-hover-bg);
-    color: var(--ae-tcolor-hover-text);
+    background-color: var(--tcolor-hover-bg);
+    color: var(--tcolor-hover-text);
   }
   rp-badge {
     margin-left: 8px;
@@ -80,26 +80,26 @@ return html`
   }
   .load-pubs {
     height: 42px;
-    font-size: var(--ae-font-size);
-    color: var(--ae-tcolor-text);
-    font-weight: var(--ae-font-weight);
-    border: 2px solid var(--ae-tcolor-primary10);
+    font-size: var(--font-size);
+    color: var(--tcolor-text);
+    font-weight: var(--font-weight);
+    border: 2px solid var(--tcolor-primary10);
     padding: 0 15px;
     cursor: pointer;
     transition: .3s;
-    color: var(--ae-tcolor-primary);
+    color: var(--tcolor-primary);
   }
   .load-pubs.more {
-    background-color: var(--ae-tcolor-primary10);
+    background-color: var(--tcolor-primary10);
   }
   .load-pubs.less {
-    background-color: var(--ae-tcolor-light);
+    background-color: var(--tcolor-light);
     margin-right: 8px;
   }
   .load-pubs:hover {
-    background-color: var(--ae-tcolor-hover-bg);
-    border: 2px solid var(--ae-tcolor-hover-bg);
-    color: var(--ae-tcolor-light);
+    background-color: var(--tcolor-hover-bg);
+    border: 2px solid var(--tcolor-hover-bg);
+    color: var(--tcolor-light);
   }
   .site .logo {
     vertical-align: middle;
@@ -131,7 +131,7 @@ return html`
     order: -1;
   }
   #publications h3 {
-    font-weight: var(--ae-font-weight);
+    font-weight: var(--font-weight);
     font-style: italic;
 
   }
@@ -139,7 +139,7 @@ return html`
     display: flex;
   }
   .box-pubsyear .year {
-    font-weight: var(--ae-font-weight-bold);
+    font-weight: var(--font-weight-bold);
     width: 60px;
     min-width: 60px;
   }
@@ -169,8 +169,8 @@ return html`
 
   #pronoun {
     margin: 0;
-    font-size: var(--ae-font-size);
-    color: var(--ae-color-blue10);
+    font-size: var(--font-size);
+    color: var(--color-blue10);
   }
   /* #showMore{
     display:block;
@@ -183,9 +183,9 @@ return html`
   }
 
   #showMore:hover{
-    background-color: var(--ae-tcolor-hover-bg);
-    color: var(--ae-tcolor-hover-text);
-    border-color: var(--ae-tcolor-hover-bg);
+    background-color: var(--tcolor-hover-bg);
+    color: var(--tcolor-hover-text);
+    border-color: var(--tcolor-hover-bg);
   } */
 
   rp-modal ol li:before, rp-modal ol li::marker {

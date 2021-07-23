@@ -5,10 +5,10 @@ export default function render() {
   <style>
     :host {
       display: block;
-      font-size: var(--ae-font-size);
+      font-size: var(--font-size);
     }
     a {
-      color: var(--ae-tcolor-link-text)
+      color: var(--tcolor-link-text)
     }
     .venue {
       text-transform: capitalize;

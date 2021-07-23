@@ -7,9 +7,9 @@ export default function render() {
   <style>
     :host {
       display: inline-block;
-      font-size: var(--ae-rp-icon-font-size, var(--ae-font-size));
-      padding: var(--ae-rp-icon-padding, 0);
-      margin: var(--ae-rp-icon-margin, 0);
+      font-size: var(--rp-icon-font-size, var(--font-size));
+      padding: var(--rp-icon-padding, 0);
+      margin: var(--rp-icon-margin, 0);
     }
     .icon {
       height: 24px;
@@ -32,7 +32,7 @@ export default function render() {
       width: 24px;
     }
     .container {
-      color: var(--ae-rp-icon-color, var(--ae-tcolor-primary));
+      color: var(--rp-icon-color, var(--tcolor-primary));
       height: 30px;
       width: 30px;
       display: flex;
@@ -60,7 +60,7 @@ export default function render() {
 
     .container.circle {
       border-radius: 50%;
-      background-color: var(--ae-rp-icon-bg-color, var(--ae-tcolor-bg-primary));
+      background-color: var(--rp-icon-bg-color, var(--tcolor-bg-primary));
     }
     .container.noicon {
       display: none;
@@ -70,33 +70,33 @@ export default function render() {
       transition: 0.3s;
     }
     .container.link:hover {
-      background-color: var(--ae-tcolor-hover-bg);
-      color: var(--ae-tcolor-light);
+      background-color: var(--tcolor-hover-bg);
+      color: var(--tcolor-light);
     }
     .container.link:hover .tooltiptext{
       visibility: visible;
     }
     .container.secondary {
-      color: var(--ae-tcolor-light);
+      color: var(--tcolor-light);
     }
     .container.people {
-      background-color: var(--ae-color-blue20);
-      color: var(--ae-color-blue);
+      background-color: var(--color-blue20);
+      color: var(--color-blue);
     }
     .container.work {
-      background-color: var(--ae-color-farmers-market);
-      color: var(--ae-color-blue);
+      background-color: var(--color-farmers-market);
+      color: var(--color-blue);
     }
     .container.subject {
-      background-color: var(--ae-color-rec-pool);
-      color: var(--ae-color-blue);
+      background-color: var(--color-rec-pool);
+      color: var(--color-blue);
     }
     .container.grant {
-      background-color: var(--ae-color-thiebaud-icing);
-      color: var(--ae-color-blue);
+      background-color: var(--color-thiebaud-icing);
+      color: var(--color-blue);
     }
     .container.circle.secondary {
-      background-color: var(--ae-tcolor-secondary);
+      background-color: var(--tcolor-secondary);
     }
     .container.lg {
       height: 35px;

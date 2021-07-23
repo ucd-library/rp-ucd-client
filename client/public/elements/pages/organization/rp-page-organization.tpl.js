@@ -20,7 +20,7 @@ return html`
     align-items: center;
   }
   .icon-container {
-      background-color: var(--ae-tcolor-bg-primary);
+      background-color: var(--tcolor-bg-primary);
       height: 150px;
       width: 150px;
       min-height: 150px;
@@ -31,7 +31,7 @@ return html`
       align-items: center;
     }
   iron-icon {
-    color: var(--ae-tcolor-primary);
+    color: var(--tcolor-primary);
     height: 50%;
     width: 50%;
   }

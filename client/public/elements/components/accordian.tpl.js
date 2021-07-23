@@ -11,7 +11,7 @@ export default function render() {
       display: none !important;
     }
     iron-icon {
-      color: var(--ae-tcolor-secondary);
+      color: var(--tcolor-secondary);
       width: 24px;
       min-width: 24px;
       height: 24px;
@@ -25,16 +25,16 @@ export default function render() {
       display: flex;
     }
     #title:hover {
-      color: var(--ae-tcolor-link-hover-text);
+      color: var(--tcolor-link-hover-text);
     }
     #title {
-      color: var(--ae-tcolor-link-text);
-      font-weight: var(--ae-font-weight-bold);
-      font-size: var(--ae-font-size);
+      color: var(--tcolor-link-text);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size);
     }
     #content {
       padding-left: 24px;
-      font-size: var(--ae-font-size);
+      font-size: var(--font-size);
       margin-top: 14px;
     }
   </style>

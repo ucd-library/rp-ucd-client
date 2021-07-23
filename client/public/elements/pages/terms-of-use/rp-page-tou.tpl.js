@@ -7,7 +7,7 @@ return html`
 <style>
   :host {
     display: block;
-    background-color: var(--ae-color-white);
+    background-color: var(--color-white);
   }
 
 

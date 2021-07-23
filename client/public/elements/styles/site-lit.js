@@ -4,24 +4,24 @@ export default css`
 
 /* Default element styles */
 a {
-  color: var(--ae-tcolor-link-text);
+  color: var(--tcolor-link-text);
 }
 a:link {
-  color: var(--ae-tcolor-link-text);
+  color: var(--tcolor-link-text);
 }
 a:visited {
-  color: var(--ae-tcolor-link-text);
+  color: var(--tcolor-link-text);
 }
 a:active {
-  color: var(--ae-tcolor-link-text);
+  color: var(--tcolor-link-text);
 }
 a:hover {
-    color:  var(--ae-tcolor-link-hover-text);
+    color:  var(--tcolor-link-hover-text);
 }
 hr {
-  border-color: var(--ae-hr-color);
+  border-color: var(--hr-color);
   border-style: solid;
-  border-width: var(--ae-hr-weight);
+  border-width: var(--hr-weight);
   border-bottom-width: 0;
 }
 hr.dotted {
@@ -31,11 +31,11 @@ hr.dashed {
   border-style: dashed;
 }
 hr.light {
-  border-color: var(--ae-hr-color-light);
+  border-color: var(--hr-color-light);
 }
 code {
-  color: var(--ae-tcolor-code-text);
-  background-color: var(--ae-tcolor-code-bg);
+  color: var(--tcolor-code-text);
+  background-color: var(--tcolor-code-bg);
 }
 section, .section {
   background-color: var( --tcolor-block-bg );
@@ -55,73 +55,73 @@ section.top {
 
 /* color classes*/
 .text-primary {
-  color: var(--ae-tcolor-primary) !important;
+  color: var(--tcolor-primary) !important;
 }
 .bg-primary {
-  background-color: var(--ae-tcolor-primary) !important;
+  background-color: var(--tcolor-primary) !important;
 }
 .text-primary50 {
-  color: var(--ae-tcolor-primary50) !important;
+  color: var(--tcolor-primary50) !important;
 }
 .text-secondary {
-  color: var(--ae-tcolor-secondary) !important;
+  color: var(--tcolor-secondary) !important;
 }
 .bg-secondary {
-  background-color: var(--ae-tcolor-secondary) !important;
+  background-color: var(--tcolor-secondary) !important;
 }
 .text-light {
-  color: var(--ae-tcolor-light) !important;
+  color: var(--tcolor-light) !important;
 }
 .bg-light {
-  background-color: var(--ae-tcolor-light) !important;
+  background-color: var(--tcolor-light) !important;
 }
 .text-default {
-  color: var(--ae-tcolor-text) !important;
+  color: var(--tcolor-text) !important;
 }
 
 
 /* Font size classes */
 h1, .h1 {
-  font-size: var(--ae-font-size-h1);
+  font-size: var(--font-size-h1);
   line-height: 1.4;
 }
 h2, .h2 {
-  font-size: var(--ae-font-size-h2);
+  font-size: var(--font-size-h2);
 }
 h3, .h3 {
-  font-size: var(--ae-font-size-h3);
+  font-size: var(--font-size-h3);
 }
 p, .p {
-  font-size: var(--ae-font-size);
+  font-size: var(--font-size);
 }
 small, .small {
-  font-size: var(--ae-font-size-small);
+  font-size: var(--font-size-small);
 }
 .bold {
-  font-weight: var(--ae-font-weight-bold)
+  font-weight: var(--font-weight-bold)
 }
 .weight-regular {
-  font-weight: var(--ae-font-weight)
+  font-weight: var(--font-weight)
 }
 .italic {
   font-style: italic;
 }
 .border-color-primary70 {
-  border-color: var(--ae-tcolor-primary70);
+  border-color: var(--tcolor-primary70);
 }
 
 /* Borders */
 .border-top {
-  border-top: 1px solid var(--ae-tcolor-primary20);
+  border-top: 1px solid var(--tcolor-primary20);
 }
 .border-left {
-  border-left: 1px solid var(--ae-tcolor-primary20);
+  border-left: 1px solid var(--tcolor-primary20);
 }
 .border-right {
-  border-right: 1px solid var(--ae-tcolor-primary20);
+  border-right: 1px solid var(--tcolor-primary20);
 }
 .border-bottom {
-  border-bottom: 1px solid var(--ae-tcolor-primary20);
+  border-bottom: 1px solid var(--tcolor-primary20);
 }
 .border-white {
   border-color: #fff;
@@ -130,20 +130,20 @@ small, .small {
 /* Animations */
 .loading1 {
   animation: pulseColorPrimary 2s ease-in-out infinite;
-  color: var(--ae-tcolor-primary70);
+  color: var(--tcolor-primary70);
 }
 
 @keyframes pulseColorPrimary {
-  0% { color: var(--ae-tcolor-primary10); }
-  50% { color: var(--ae-tcolor-primary); }
-  60% { color: var(--ae-tcolor-primary); }
-  100% { color: var(--ae-tcolor-primary10); }
+  0% { color: var(--tcolor-primary10); }
+  50% { color: var(--tcolor-primary); }
+  60% { color: var(--tcolor-primary); }
+  100% { color: var(--tcolor-primary10); }
 }
 
 /* chevrons, list markers and icons */
 .list-dot {
   border-radius: 50%;
-  background-color: var(--ae-tcolor-secondary);
+  background-color: var(--tcolor-secondary);
   width: 5px;
   height: 5px;
   min-width: 5px;
@@ -152,7 +152,7 @@ small, .small {
 }
 
 iron-icon.filled-arrow {
-  color: var(--ae-tcolor-secondary);
+  color: var(--tcolor-secondary);
   width: 28px;
   min-width: 28px;
   height: 28px;
@@ -169,8 +169,8 @@ iron-icon.filled-arrow {
 }
 .list-count .count {
   display: table-cell;
-  color: var(--ae-tcolor-text);
-  font-weight: var(--ae-font-weight-bold);
+  color: var(--tcolor-text);
+  font-weight: var(--font-weight-bold);
   text-align: right;
   width: calc(30% - 10px);
   padding-right: 10px;
@@ -185,13 +185,13 @@ a.view-all {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  font-weight: var(--ae-font-weight-bold);
+  font-weight: var(--font-weight-bold);
   text-decoration: none;
-  color: var(--ae-tcolor-text);
+  color: var(--tcolor-text);
   transition: .3s;
 }
 a.view-all:hover, a.view-all:hover iron-icon {
-  color: var(--ae-tcolor-link-hover-text) !important
+  color: var(--tcolor-link-hover-text) !important
 }
 
 
@@ -210,7 +210,7 @@ a.view-all:hover, a.view-all:hover iron-icon {
 .hlist {
   display: flex;
   align-items: center;
-  border-color: var(--ae-tcolor-border);
+  border-color: var(--tcolor-border);
 }
 .hlist>* {
   border-right-width: 1px;

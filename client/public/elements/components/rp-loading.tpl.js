@@ -5,12 +5,12 @@ return html`
 
 <style>
   :host {
-    --rp-loading-color: var(--ae-tcolor-secondary);
+    --rp-loading-color: var(--tcolor-secondary);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: var(--ae-rp-loading-color);
+    color: var(--rp-loading-color);
   }
   .loading-dots {
     text-align: center;
@@ -23,7 +23,7 @@ return html`
   }
 
   .dot {
-    background-color: var(--ae-rp-loading-color);
+    background-color: var(--rp-loading-color);
     width: 10px;
     height: 10px;
     border-radius: 50%;

@@ -8,7 +8,7 @@ export function styles() {
     }
 
     #publications h3 {
-      font-weight: var(--ae-font-weight);
+      font-weight: var(--font-weight);
       font-style: italic;
     }
 
@@ -33,7 +33,7 @@ export function styles() {
       display: flex;
     }
     .box-pubsyear .year {
-      font-weight: var(--ae-font-weight-bold);
+      font-weight: var(--font-weight-bold);
       width: 60px;
       min-width: 60px;
     }
@@ -61,39 +61,39 @@ export function styles() {
       height: 150px;
     }
     .pub-count {
-      background-color: var(--ae-tcolor-primary);
-      color: var(--ae-tcolor-light);
+      background-color: var(--tcolor-primary);
+      color: var(--tcolor-light);
       min-height: 60px;
       min-width: 60px;
       border-radius: 50%;
-      font-weight: var(--ae-font-weight-bold);
-      font-size: var(--ae-font-size-h2);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-h2);
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .load-pubs {
       height: 42px;
-      font-size: var(--ae-font-size);
-      color: var(--ae-tcolor-text);
-      font-weight: var(--ae-font-weight);
-      border: 2px solid var(--ae-tcolor-primary10);
+      font-size: var(--font-size);
+      color: var(--tcolor-text);
+      font-weight: var(--font-weight);
+      border: 2px solid var(--tcolor-primary10);
       padding: 0 15px;
       cursor: pointer;
       transition: .3s;
-      color: var(--ae-tcolor-primary);
+      color: var(--tcolor-primary);
     }
     .load-pubs.more {
-      background-color: var(--ae-tcolor-primary10);
+      background-color: var(--tcolor-primary10);
     }
     .load-pubs.less {
-      background-color: var(--ae-tcolor-light);
+      background-color: var(--tcolor-light);
       margin-right: 8px;
     }
     .load-pubs:hover {
-      background-color: var(--ae-tcolor-hover-bg);
-      border: 2px solid var(--ae-tcolor-hover-bg);
-      color: var(--ae-tcolor-light);
+      background-color: var(--tcolor-hover-bg);
+      border: 2px solid var(--tcolor-hover-bg);
+      color: var(--tcolor-light);
     }
     .pub-icons {
       display: flex;
@@ -103,16 +103,16 @@ export function styles() {
       margin-right: 10px;
     }
     .button {
-      color: var(--ae-tcolor-primary);
+      color: var(--tcolor-primary);
       padding: 10px;
-      background-color: var(--ae-tcolor-bg-primary);
+      background-color: var(--tcolor-bg-primary);
       cursor: pointer;
       transition: .3s;
       margin: 5px;
     }
     .button:hover {
-      background-color: var(--ae-tcolor-hover-bg);
-      color: var(--ae-tcolor-hover-text);
+      background-color: var(--tcolor-hover-bg);
+      color: var(--tcolor-hover-text);
     }
   `;
 

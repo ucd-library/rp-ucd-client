@@ -21,29 +21,29 @@ export default function render() {
       align-self: center;
     }
     .name {
-      font-size: var(--ae-font-size);
-      color : var(--ae-tcolor-link-text);
-      font-weight : var(--ae-font-weight-bold);
+      font-size: var(--font-size);
+      color : var(--tcolor-link-text);
+      font-weight : var(--font-weight-bold);
       /* white-space: nowrap; */
       /* overflow: hidden; */
       /* text-overflow: ellipsis; */
       display: block;
     }
     .name:hover {
-      color : var(--ae-tcolor-link-hover-text);
+      color : var(--tcolor-link-hover-text);
     }
     .name[disabled] {
       pointer-events: none;
       text-decoration: none;
     }
     .name[disabled]:hover {
-      color : var(--ae-tcolor-link-text);
+      color : var(--tcolor-link-text);
     }
     .title {
-      font-size: var(--ae-font-size-small);
+      font-size: var(--font-size-small);
     }
     small {
-      font-size : var(--ae-font-size-small);
+      font-size : var(--font-size-small);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -54,8 +54,8 @@ export default function render() {
       margin-top: 10px;
     }
     .snippet {
-      font-size : var(--ae-font-size-small);
-      color: var(--ae-tcolor-link-disabled-text);
+      font-size : var(--font-size-small);
+      color: var(--tcolor-link-disabled-text);
     }
     .snippet em {
       font-weight: bold;

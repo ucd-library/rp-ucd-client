@@ -13,7 +13,7 @@ return html`
   .hero {
     background: url(/images/homepage-hero.jpg) no-repeat center center;
     background-size: cover;
-    color: var(--ae-tcolor-light);
+    color: var(--tcolor-light);
   }
   .hero .title-container {
     display: flex;
@@ -30,11 +30,11 @@ return html`
     flex-grow: 1;
   }
   .hero .content {
-    font-size: var(--ae-font-size);
+    font-size: var(--font-size);
     line-height: 23px;
   }
   .hero h2 {
-    color: var(--ae-tcolor-secondary)
+    color: var(--tcolor-secondary)
   }
   .search .container {
     padding: 30px 0;
@@ -75,7 +75,7 @@ return html`
     padding-bottom: 15px;
   }
   rp-loading {
-    --rp-loading-color: var(--ae-tcolor-primary);
+    --rp-loading-color: var(--tcolor-primary);
   }
   .data.loading rp-loading {
     height: 100vh;

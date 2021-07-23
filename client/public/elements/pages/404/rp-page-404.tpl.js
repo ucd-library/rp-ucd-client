@@ -21,7 +21,7 @@ return html`
   }
 
   .topic{
-    color: var(--ae-color-blue);
+    color: var(--color-blue);
     font-size: 100px;
     margin: 40px 0 0 0;
   }
