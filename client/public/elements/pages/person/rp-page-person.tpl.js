@@ -391,7 +391,7 @@ return html`
               Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
               redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
               <div slot="confirmButton">
-                <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/objects.html?as=3&am=false&cid=1&ipr=false&iqf=true'>
+                <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/listobjects.html?as=1&am=false&cid=1'>
                 <div class="button">Edit Publications</div>
                 </a>
               </div> 
@@ -447,17 +447,6 @@ return html`
         <div class="box-title">
           <h1 class="weight-regular mt-0">Grants</h1>
           <div class="box-title-icons">
-            <div class="pub-icons">
-              ${this.isOwnProfile ? html`
-                  <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
-                    <div slot="tooltip">Edit Publications</div>
-                  </rp-icon>
-                  <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
-
-                ` : html``
-              }
-            </div>
-
             <div class="pub-count">${this.totalGrants}</div>
         
           </div>
