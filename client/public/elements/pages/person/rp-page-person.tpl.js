@@ -174,8 +174,8 @@ return html`
   }
   /* #showMore{
     display:block;
-    margin:0 auto; 
-    padding:10px; 
+    margin:0 auto;
+    padding:10px;
     border-radius: 20px;
     color:white;
     background-color: transparent;
@@ -215,14 +215,14 @@ return html`
 
 
 <rp-modal content-title='Edit Keywords' id="modal-keyword-edit">
-  Keywords are managed via the "Fields of Research" section of your <b>UC Publication Management System</b> profile. 
-  Clicking the "Edit Keywords" button below will redirect you to the UC Publication Management System. Any changes 
-  made there will be reflected on your Aggie Experts profile. 
+  Keywords are managed via the "Fields of Research" section of your <b>UC Publication Management System</b> profile.
+  Clicking the "Edit Keywords" button below will redirect you to the UC Publication Management System. Any changes
+  made there will be reflected on your Aggie Experts profile.
 
   <div style="margin-top: 15px"><b>Steps to Add/Delete Keywords:</b></div>
   <ol style="margin-top: 5px; padding-left: 20px;">
     <li>In the "About" block, select the "Edit" button located just to the right of the "Fields of Research" label.</li>
-    <li>To add keywords, search for and select a subject from "Available values." To remove keywords, select an item 
+    <li>To add keywords, search for and select a subject from "Available values." To remove keywords, select an item
       from the "Your Selection" list.</li>
     <li>Select "Save" to confirm your changes.</li>
   </ol>
@@ -231,7 +231,7 @@ return html`
     <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=${this._getOAId()}&em=true'>
     <div class="button">Edit Keywords</div>
     </a>
-  </div> 
+  </div>
 </rp-modal>
 
 <div class="individual top ${this.isOwnProfile ? "own-profile" : ""}">
@@ -249,28 +249,28 @@ return html`
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getFullName()}</h2>
 
             <div class="text-light h3 mb-2 mt-1 text-center">
-              ${this.title.title}, ${this.title.org} 
+              ${this.title.title}, ${this.title.org}
               <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
-                <rp-icon style="vertical-align:middle;" 
-                  icon="iron-editor:mode-edit" 
-                  has-text 
-                  circle-bg 
+                <rp-icon style="vertical-align:middle;"
+                  icon="iron-editor:mode-edit"
+                  has-text
+                  circle-bg
                   is-link size="lg">
                   <div slot="tooltip">Edit Positions</div>
-                </rp-icon> 
+                </rp-icon>
               </a>
             </div>
 
-            <!-- 
+            <!--
               SB: Kafka Message Add?
-              <rp-toast-message ?hidden="${!this.isOwnProfile}"><rp-toast-message> 
+              <rp-toast-message ?hidden="${!this.isOwnProfile}"><rp-toast-message>
             -->
 
 
             ${this.getPronouns() ? html `
-              <p id="pronoun">(${this.getPronouns()})</p>   
+              <p id="pronoun">(${this.getPronouns()})</p>
             `: html ``}
-                     
+
 
             ${this.getResearchSubjects(1).length > 0 ? html`
               <div>
@@ -283,19 +283,19 @@ return html`
                       <rp-badge size="lg" class="text-light my-1" href="${subject.href}">
                         ${subject.bestLabel}
                       </rp-badge>
-                    `)} 
-                    <rp-badge size="lg" 
+                    `)}
+                    <rp-badge size="lg"
                       ellipsis
-                      ?hidden="${(this.showResearchSubjectCount >= this.getResearchSubjects().length)}" 
+                      ?hidden="${(this.showResearchSubjectCount >= this.getResearchSubjects().length)}"
                       @click="${this._showAllResearchSubjects}">
                     </rp-badge>
                     ${this.isOwnProfile ? html`
                       &nbsp;&nbsp;
                       <rp-icon style="vertical-align:middle;"
                         @click="${e => this.shadowRoot.getElementById('modal-keyword-edit').toggle()}"
-                        icon="iron-editor:mode-edit" 
+                        icon="iron-editor:mode-edit"
                         role="button"
-                        circle-bg 
+                        circle-bg
                         is-link has-text
                         size="lg">
                         <div slot="tooltip">Edit Keywords</div>
@@ -305,7 +305,7 @@ return html`
                     <br />
                     </div>
                   </div>
-                  
+
               </div>
             ` : html``}
             <div ?hidden="${!this.isAdmin}" style="margin-top: 20px">
@@ -317,7 +317,7 @@ return html`
         `}
 
       </rp-hero-image>
-      <rp-link-list class="bg-light p-3" 
+      <rp-link-list class="bg-light p-3"
         direction="horizontal"
         .links="${this.getPageSections()}"
         use-hash
@@ -347,19 +347,19 @@ return html`
                       ` : html``
                     }
                   </h2>
-                </div> 
+                </div>
 
 
                 ${this.additionalTitles.map(t => html`<div>${t.title}, ${t.org}</div>`)}
 
-                
-              </div> 
+
+              </div>
               ${this._showSubSection('contact') ? html`
                 <div>
                   <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
                 </div>
               ` : html``}
-              
+
             </div>
             <div>
               ${this._showSubSection('websites') ? html`
@@ -394,12 +394,12 @@ return html`
           </div>
         </div>
         ${this.totalGrants != 0 ? html `
-        <h2 class="mb-0">Selected Grants</h2>       
+        <h2 class="mb-0">Selected Grants</h2>
           <div>
             <h3 class="weight-regular mt-0">
               ${this.activeGrant.length != 0 ? html `
                 <i>Active (${this.activeGrant.length})</i>
-                ${this.activeGrant.map(grant => 
+                ${this.activeGrant.map(grant =>
                     html`<h3 class="weight-regular mt-0"><a href="${grant.grant_url}">${grant.title}</a><br />
                     ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
                     `
@@ -412,7 +412,7 @@ return html`
             <h3 class="weight-regular mt-0">
             ${this.inactiveGrant.length != 0  ? html `
                 <i>Completed (${this.inactiveGrant.length})</i>
-                ${this.inactiveGrant.map(grant => 
+                ${this.inactiveGrant.map(grant =>
                     html`<h3 class="weight-regular mt-0"><a href=${grant.grant_url}>${grant.title}</a><br />
                     ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
                     `
@@ -424,9 +424,9 @@ return html`
         `
         :html``}
 
-        <button type="button" 
+        <button type="button"
           ?hidden="${this.showMoreGrants === 0}"
-          @click="${e => this._doGrantQuery()}" 
+          @click="${e => this._doGrantQuery()}"
           class="load-pubs more">Show ${Math.min(this.showMoreGrants, 10)} more</button>
       </section>
 
