@@ -41,9 +41,11 @@ return html`
   #about .cols {
     display: flex;
     flex-wrap: wrap;
+    
   }
   #about .cols > div {
     width: 100%;
+    word-wrap: break-word;
   }
   .pub-count {
     background-color: var(--ae-tcolor-primary);
@@ -195,6 +197,17 @@ return html`
   rp-modal ol li {
     padding-left: 5px;
   }
+  .svg-icon {
+    width: 18px;
+    height: 18px;
+    fill: #73ABDD;
+    margin-right: 5px;
+  }
+  .contact-container {
+    display: inline-flex;
+    align-items: center;
+    word-wrap: break-word;
+  }
 
   @media (min-width: 800px){
     .own-profile .box-title {
@@ -249,7 +262,6 @@ return html`
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getFullName()}</h2>
 
             <div class="text-light h3 mb-2 mt-1 text-center">
-              ${this.title.title}, ${this.title.org}
               <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
                 <rp-icon style="vertical-align:middle;"
                   icon="iron-editor:mode-edit"
@@ -337,7 +349,7 @@ return html`
             <div>
               <div ?hidden="${this.additionalTitles.length === 0}">
                 <div>
-                  <h2 class="h3 mb-2">Additional Roles&nbsp;&nbsp;
+                  <h2 class="h3 mb-2">Roles&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
                       <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
                         <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
@@ -350,16 +362,28 @@ return html`
                 </div>
 
 
-                ${this.additionalTitles.map(t => html`<div>${t.title}, ${t.org}</div>`)}
-
-
+                ${this.additionalTitles.map(t => 
+                  html`
+                    <div>
+                      <div>${t.title}, ${t.org}</div>
+                      ${t.url ? html`<div class="contact-container">              
+                                      <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                                        <path d="M640,328V312a16,16,0,0,0-16-16H344V256h72a32,32,0,0,0,32-32V96a32,32,0,0,0-32-32H224a32,32,0,0,0-32,32V224a32,32,0,0,0,32,32h72v40H16A16,16,0,0,0,0,312v16a16,16,0,0,0,16,16H120v40H64a32,32,0,0,0-32,32V544a32,32,0,0,0,32,32H224a32,32,0,0,0,32-32V416a32,32,0,0,0-32-32H168V344H472v40H416a32,32,0,0,0-32,32V544a32,32,0,0,0,32,32H576a32,32,0,0,0,32-32V416a32,32,0,0,0-32-32H520V344H624A16,16,0,0,0,640,328ZM256,192V128H384v64ZM192,512H96V448h96Zm352,0H448V448h96Z"/>
+                                      </svg>                                      
+                                      <a href="${t.url}">${t.urlFaceResult}</a>
+                                      
+                                     </div>`
+                                :``}
+                      ${t.email ? html`<div class="contact-container">
+                                        <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                          <path d="M502.3,190.8a6,6,0,0,1,9.7,4.7V400a48,48,0,0,1-48,48H48A48,48,0,0,1,0,400V195.6a6,6,0,0,1,9.7-4.7c22.4,17.4,52.1,39.5,154.1,113.6,21.1,15.4,56.7,47.8,92.2,47.6,35.7.3,72-32.8,92.3-47.6C450.3,230.4,479.9,208.2,502.3,190.8ZM256,320c23.2.4,56.6-29.2,73.4-41.4,132.7-96.3,142.8-104.7,173.4-128.7A23.93,23.93,0,0,0,512,131V112a48,48,0,0,0-48-48H48A48,48,0,0,0,0,112v19a24.08,24.08,0,0,0,9.2,18.9c30.6,23.9,40.7,32.4,173.4,128.7,16.8,12.2,50.2,41.8,73.4,41.4Z"/>
+                                        </svg>
+                                        <a href="">${t.email}</a>
+                                       </div>`
+                                :``}
+                    </div>
+                  `)}
               </div>
-              ${this._showSubSection('contact') ? html`
-                <div>
-                  <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
-                </div>
-              ` : html``}
-
             </div>
             <div>
               ${this._showSubSection('websites') ? html`

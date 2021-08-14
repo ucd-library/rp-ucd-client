@@ -40,7 +40,6 @@ class PersonModel extends BaseModel {
     } catch (error) {
       // error is recorded in store
     }
-
     return this.store.data.byIndividual[id];
   }
 
@@ -149,17 +148,26 @@ class PersonModel extends BaseModel {
    * 
    * @returns {Object[]} {title:string,orgs:["string"]}
    */
-  getTitles(individual={}, type='odr'){
+  getTitles(individual={}, type='odr' || 'oap'){
     let titles = [];
+    let urlFace;
+    let urlFaceResult;
 
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
     for( let contact of contacts ) {
       if( contact['@id'].match(new RegExp(`#.*-${type}-\\d+`)) ) {
+        if((rdfUtils.getFirstValue(contact.hasURL))){
+          urlFace = String(rdfUtils.getFirstValue(contact.hasURL).url).replace(/^(?:https?:\/\/)?(?:www\.)?/, "");
+          urlFaceResult = urlFace.replace(/\/$/, "");
+        }
+
         titles.push({
           title: rdfUtils.getFirstValue(contact.title),
           org : rdfUtils.getFirstValue(contact.organization),
           rank : contact["vivo:rank"],
-          email : (rdfUtils.getFirstValue(contact.hasEmail) || {}).email
+          email : (rdfUtils.getFirstValue(contact.hasEmail) || {}).email,
+          url : (rdfUtils.getFirstValue(contact.hasURL) || {}).url,
+          urlFaceResult : urlFaceResult || {}
         });
       }
     }
@@ -194,6 +202,7 @@ class PersonModel extends BaseModel {
     let res = [];
 
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
+   
     for( let contact of contacts ) {
       if( contact['@id'].match('#'+type) ) {
         res.push({

@@ -92,10 +92,8 @@ export default class RpPagePerson extends RpUtilsLanding {
     this._resetEleProps();
 
     await this._doMainQuery(this.assetId);
-
     let titles = this.PersonModel.getTitles(this.individual);
     if( titles.length ) {
-      this.title = titles.splice(0, 1)[0];
       this.additionalTitles = titles;
     }
 
