@@ -23,10 +23,10 @@ class PersonModel extends BaseModel {
   /**
    * @method get
    * @description get a person by id
-   * 
+   *
    * @param {String} id
-   * 
-   * @returns {Object} 
+   *
+   * @returns {Object}
    */
   async get(id) {
     let state = this.store.data.byIndividual[id];
@@ -46,9 +46,9 @@ class PersonModel extends BaseModel {
   /**
    * @method getPubOverview
    * @description get publication overview for person
-   * 
+   *
    * @param {String} id
-   * 
+   *
    * @returns {Promise}
    */
   async getPubOverview(id) {
@@ -71,12 +71,12 @@ class PersonModel extends BaseModel {
   /**
    * @method getPublications
    * @description get publications for a person
-   * 
-   * @param {String} id 
-   * @param {Object} pubTypeObject 
+   *
+   * @param {String} id
+   * @param {Object} pubTypeObject
    * @param {Number} offset
-   * 
-   * @returns {Promise} 
+   *
+   * @returns {Promise}
    */
   async getPublications(id, pubTypeObject, offset) {
     let requestId = this.service.getPublicationsRequestId(id, pubTypeObject, offset);
@@ -98,11 +98,11 @@ class PersonModel extends BaseModel {
   /**
    * @method getGrants
    * @description get publications for a person
-   * 
-   * @param {String} id 
+   *
+   * @param {String} id
    * @param {Number} offset
-   * 
-   * @returns {Promise} 
+   *
+   * @returns {Promise}
    */
   async getGrants(id, offset=0) {
     let requestId = this.service.getGrantsRequestId(id, offset);
@@ -132,7 +132,7 @@ class PersonModel extends BaseModel {
   /**
    * @method getPublicationTypes
    * @description Returns types of publications for subfaceting
-   * 
+   *
    * @returns {Object[]}
    */
   getPublicationTypes(){
@@ -143,9 +143,9 @@ class PersonModel extends BaseModel {
   /**
    * @method getTitles
    * @description - Returns ordered array of titles for individual.
-   * @param {Object} individual 
+   * @param {Object} individual
    * @param {String} type
-   * 
+   *
    * @returns {Object[]} {title:string,orgs:["string"]}
    */
   getTitles(individual={}, type='odr' || 'oap'){
@@ -193,7 +193,7 @@ class PersonModel extends BaseModel {
    * @method getContacts
    * @description get contacts of a type.  Will fall back on first
    * available
-   * 
+   *
    * @param {Object} individual person object
    * @param {String} type defaults to odr
    * @returns Array of contact enteries
@@ -202,12 +202,12 @@ class PersonModel extends BaseModel {
     let res = [];
 
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
-   
+
     for( let contact of contacts ) {
-      if( contact['@id'].match('#'+type) ) {
+      if( contact['experts:identifier'].match('^'+type) ) {
         res.push({
           contact,
-          number : parseInt(contact['@id'].replace(new RegExp('.*-'), ''))
+          number : contact["vivo:rank"]
         });
       }
     }
@@ -216,7 +216,7 @@ class PersonModel extends BaseModel {
       for( let contact of contacts ) {
         res.push({
           contact,
-          number : parseInt(contact['@id'].replace(new RegExp('.*-'), ''))
+          number : contact["vivo:rank"]
         });
       }
     }
@@ -229,8 +229,8 @@ class PersonModel extends BaseModel {
   /**
    * @method getHeadlineTitle
    * @description Returns a single (first) title for an individual
-   * @param {Object} individual 
-   * 
+   * @param {Object} individual
+   *
    * @returns (String) - title, org
    */
   getHeadlineTitle(individual) {
@@ -253,10 +253,10 @@ class PersonModel extends BaseModel {
    * @method getPronouns
    * @description given individual record, get best (odr if possible)
    * full name.
-   * 
-   * @param {Object} individual 
+   *
+   * @param {Object} individual
    * @param {string} type
-   * 
+   *
    * @returns {Object}
    */
   getPronouns(individual={}) {
@@ -272,10 +272,10 @@ class PersonModel extends BaseModel {
    * @method getFullName
    * @description given individual record, get best (odr if possible)
    * full name.
-   * 
-   * @param {Object} individual 
+   *
+   * @param {Object} individual
    * @param {string} type
-   * 
+   *
    * @returns {Object}
    */
   getFullName(individual={}, type='string') {
@@ -294,7 +294,7 @@ class PersonModel extends BaseModel {
 
     if( type === 'string' || type === 'array' ) {
       let name = [];
-      
+
       if( contact.givenName ) {
         name.push(rdfUtils.getFirstValue(contact.givenName));
       }
@@ -323,26 +323,26 @@ class PersonModel extends BaseModel {
   /**
    * @method getFullNameLastFirst
    * @description get the full name string, last name first
-   * 
-   * @param {*} individual 
+   *
+   * @param {*} individual
    * @returns {String}
    */
   getFullNameLastFirst(individual={}) {
     let name = this.getFullName(individual, 'object');
-    let parts = [];  
+    let parts = [];
 
     if( name.familyName ) parts.push(name.familyName+', ');
     if( name.givenName ) parts.push(name.givenName);
     if( name.middleName ) parts.push(name.middleName);
-    
+
     return parts.join(' ');
   }
 
   /**
    * @method getAvatarSrc
    * @description placeholder method for retrieving a person's thumbnail
-   * @param {Object} individual 
-   * 
+   * @param {Object} individual
+   *
    * @returns {String}
    */
   getAvatarSrc(individual){
@@ -353,8 +353,8 @@ class PersonModel extends BaseModel {
   /**
    * @method getSnippet
    * @description Returns highlighted search snippet for individual.
-   * @param {Object} individual 
-   * 
+   * @param {Object} individual
+   *
    * @returns {String}
    */
   getSnippet(individual){
@@ -367,9 +367,9 @@ class PersonModel extends BaseModel {
   /**
    * @method getLandingPage
    * @description returns the landing page url for a person
-   * 
-   * @param {Object} individual 
-   * 
+   *
+   * @param {Object} individual
+   *
    * @returns {String}
    */
   getLandingPage(individual={}) {
@@ -381,7 +381,7 @@ class PersonModel extends BaseModel {
    * @method getEmailAddresses
    * @description Returns array of email addresses for individual.
    * @param {Object} individual
-   * 
+   *
    * @returns {String[]}
    */
   getEmailAddresses(individual){
@@ -408,7 +408,7 @@ class PersonModel extends BaseModel {
    * @method getResearchSubjects
    * @description Returns research subjects of individual
    * @param {Object} individual
-   * 
+   *
    * @returns {Object[]} {bestLabel: "use me", href: "subject landing page"}
    */
   getResearchSubjects(individual) {
@@ -428,7 +428,7 @@ class PersonModel extends BaseModel {
    * @method getWebsites
    * @description Returns array of individual's websites
    * @param {Object} individual
-   * 
+   *
    * @returns {Object[]} {text: "friendly text", href: "url of website", icon: "optional path to icon"}
    */
   getWebsites(individual) {
@@ -440,21 +440,37 @@ class PersonModel extends BaseModel {
     let orcid = this.getIdentifier(individual, 'orcid');
     if( orcid ){
       out.push({
-        text: orcid, 
-        href: 'https://orcid.org/'+orcid, 
+        text: orcid,
+        href: 'https://orcid.org/'+orcid,
         icon: '/images/orcid_16x16.png'
       });
     }
-    
+
     let scopusId = this.getIdentifier(individual, 'scopus-author-id');
     if( scopusId ){
       out.push({
-        text: 'Scopus', 
+        text: 'Scopus',
         href: `https://www.scopus.com/authid/detail.uri?authorId=${scopusId}`,
         icon: '/images/scopus_32x32.png'
       });
     }
-    
+    let oap = (this.getContacts(individual,'oap'))[0].contact
+    let websites = []
+    if (oap && oap.hasURL ) websites=websites.concat(oap.hasURL);
+
+    // There are multiple urlType available.  Should we push just the type, and
+    // decode somewhere else or decode here? urlTypes are :
+    // Personal,Company,Blog,RSS Feed,Portfolio,Twitter,LinkedIn,Google
+    // Scholar,ResearchGate,figshare,Mendeley,Department,Laboratory,Other
+    // Something like <aeq-icons icon="urlType-departement"> ?
+
+    for (const website of websites) {
+      out.push({
+        text:website.label ,
+        href:website.url,
+        icon: '/images/scopus_32x32.png'
+      });
+    }
     return out;
   }
 
@@ -462,9 +478,9 @@ class PersonModel extends BaseModel {
    * @method getIdentifier
    * @description given a person object and a scheme return the
    * identifier for the scheme.  Example: 'orcid' or 'oapolicy'
-   * 
-   * @param {Object} person 
-   * @param {String} scheme 
+   *
+   * @param {Object} person
+   * @param {String} scheme
    * @returns {String}
    */
   getIdentifier(person, scheme) {
