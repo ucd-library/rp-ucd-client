@@ -204,8 +204,8 @@ class PersonModel extends BaseModel {
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
 
     for( let contact of contacts ) {
-      console.log(contact);
-      if( contact['experts:identifier'].match('^'+type) ) {
+      let id=contact.identifier || contact['experts:identifier']
+      if( id && id.match('^'+type) ) {
         res.push({
           contact,
           number : contact["vivo:rank"]
