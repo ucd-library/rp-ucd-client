@@ -198,12 +198,13 @@ class PersonModel extends BaseModel {
    * @param {String} type defaults to odr
    * @returns Array of contact enteries
    */
-  getContacts(individual={}, type='odr') {
+  getContacts(individual={}, type='odr' || 'oap') {
     let res = [];
 
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
 
     for( let contact of contacts ) {
+      console.log(contact);
       if( contact['experts:identifier'].match('^'+type) ) {
         res.push({
           contact,
@@ -442,7 +443,7 @@ class PersonModel extends BaseModel {
       out.push({
         text: orcid,
         href: 'https://orcid.org/'+orcid,
-        icon: '/images/orcid_16x16.png'
+        icon: '/images/academicons/svg/orchid.svg'
       });
     }
 
@@ -451,11 +452,11 @@ class PersonModel extends BaseModel {
       out.push({
         text: 'Scopus',
         href: `https://www.scopus.com/authid/detail.uri?authorId=${scopusId}`,
-        icon: '/images/scopus_32x32.png'
+        icon: '/images/academicons/svg/scopus.svg'
       });
     }
-    let oap = (this.getContacts(individual,'oap'))[0].contact
-    let websites = []
+    let oap = (this.getContacts(individual,'oap'))[0].contact;
+    let websites = [];
     if (oap && oap.hasURL ) websites=websites.concat(oap.hasURL);
 
     // There are multiple urlType available.  Should we push just the type, and
@@ -468,7 +469,7 @@ class PersonModel extends BaseModel {
       out.push({
         text:website.label ,
         href:website.url,
-        icon: '/images/scopus_32x32.png'
+        icon: '/images/academicons/svg/scopus.svg'
       });
     }
     return out;

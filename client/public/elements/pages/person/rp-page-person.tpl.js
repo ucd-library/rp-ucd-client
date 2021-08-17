@@ -385,7 +385,7 @@ return html`
                 <div>
                   <h2 class="h3 mb-2">Websites</h2>
                   ${this.getWebsites().map(site => html`
-                    <div class="site">
+                    <div class="contact-container">
                       <a href="${site.href}" target="_blank" rel="noopener">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
                     </div>`)}
                 </div>
