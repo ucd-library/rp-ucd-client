@@ -41,7 +41,7 @@ return html`
   #about .cols {
     display: flex;
     flex-wrap: wrap;
-    
+
   }
   #about .cols > div {
     width: 100%;
@@ -362,12 +362,12 @@ return html`
                 </div>
 
 
-                ${this.additionalTitles.map(t => 
+                ${this.additionalTitles.map(t =>
                   html`
                     <div>
                       <div>${t.title}, ${t.org}</div>
-                      ${t.url ? html`<div class="contact-container"> 
-                                        ${this.svgIcon.url}                                     
+                      ${t.url ? html`<div class="contact-container">
+                                        ${this.svgIcon.url}
                                         <a href="${t.url}">${t.urlFaceResult}</a>
                                      </div>`
                                 :``}
@@ -384,9 +384,9 @@ return html`
               ${this._showSubSection('websites') ? html`
                   <h2 class="h3 mb-2">Websites</h2>
                   ${this.getWebsites().map(site => html`
-                    <div class="contact-container"> 
+                    <div class="contact-container">
                       <a href="${site.href}" target="_blank" rel="noopener">
-                        ${site.icon ? html`${site.icon}` : html``}${site.text}
+                ${this.svgIcon[site.type] ? html`${this.svgIcon[site.type]}` : html`${this.svgIcon.url}`}${site.text}
                       </a>
                     </div>`)}
               ` : html``}
