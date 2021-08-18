@@ -443,7 +443,7 @@ class PersonModel extends BaseModel {
       out.push({
         text: orcid,
         href: 'https://orcid.org/'+orcid,
-        icon: orchidIcon
+        type: 'orcid'
       });
     }
 
@@ -452,7 +452,7 @@ class PersonModel extends BaseModel {
       out.push({
         text: 'Scopus',
         href: `https://www.scopus.com/authid/detail.uri?authorId=${scopusId}`,
-        icon: scorpusIcon
+        type: 'scopus'
       });
     }
     let oap = (this.getContacts(individual,'oap'))[0].contact;
@@ -469,7 +469,7 @@ class PersonModel extends BaseModel {
       out.push({
         text:website.label ,
         href:website.url,
-        icon: scorpusIcon
+        type: 'url'
       });
     }
     return out;
