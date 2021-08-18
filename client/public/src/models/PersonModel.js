@@ -430,9 +430,9 @@ class PersonModel extends BaseModel {
    * @description Returns array of individual's websites
    * @param {Object} individual
    *
-   * @returns {Object[]} {text: "friendly text", href: "url of website", icon: "optional path to icon"}
+   * @returns {Object[]} {text: "friendly text", href: "url of website", type: "type of website"}
    */
-  getWebsites(individual, scorpusIcon, orchidIcon) {
+  getWebsites(individual) {
     let out = [];
     if (!individual) {
       return out;
