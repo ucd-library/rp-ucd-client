@@ -198,13 +198,13 @@ return html`
     padding-left: 5px;
   }
   .svg-icon {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     fill: #73ABDD;
     margin-right: 5px;
   }
   .contact-container {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     word-wrap: break-word;
   }
@@ -366,7 +366,7 @@ return html`
                   html`
                     <div>
                       <div>${t.title}, ${t.org}</div>
-                      ${t.url ? html`<div class="contact-container">              
+                      ${t.url ? html`<div class="contact-container"> 
                                         ${this.svgIcon.url}                                     
                                         <a href="${t.url}">${t.urlFaceResult}</a>
                                      </div>`
@@ -382,13 +382,13 @@ return html`
             </div>
             <div>
               ${this._showSubSection('websites') ? html`
-                <div>
                   <h2 class="h3 mb-2">Websites</h2>
                   ${this.getWebsites().map(site => html`
-                    <div class="contact-container">
-                      <a href="${site.href}" target="_blank" rel="noopener">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
+                    <div class="contact-container"> 
+                      <a href="${site.href}" target="_blank" rel="noopener">
+                        ${site.icon ? html`${site.icon}` : html``}${site.text}
+                      </a>
                     </div>`)}
-                </div>
               ` : html``}
             </div>
           </div>

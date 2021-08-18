@@ -204,7 +204,7 @@ class PersonModel extends BaseModel {
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
 
     for( let contact of contacts ) {
-      let id=contact.identifier || contact['experts:identifier']
+      let id=contact.identifier || contact['experts:identifier'];
       if( id && id.match('^'+type) ) {
         res.push({
           contact,
@@ -432,7 +432,7 @@ class PersonModel extends BaseModel {
    *
    * @returns {Object[]} {text: "friendly text", href: "url of website", icon: "optional path to icon"}
    */
-  getWebsites(individual) {
+  getWebsites(individual, scorpusIcon, orchidIcon) {
     let out = [];
     if (!individual) {
       return out;
@@ -443,7 +443,7 @@ class PersonModel extends BaseModel {
       out.push({
         text: orcid,
         href: 'https://orcid.org/'+orcid,
-        icon: '/images/academicons/svg/orchid.svg'
+        icon: orchidIcon
       });
     }
 
@@ -452,7 +452,7 @@ class PersonModel extends BaseModel {
       out.push({
         text: 'Scopus',
         href: `https://www.scopus.com/authid/detail.uri?authorId=${scopusId}`,
-        icon: '/images/academicons/svg/scopus.svg'
+        icon: scorpusIcon
       });
     }
     let oap = (this.getContacts(individual,'oap'))[0].contact;
@@ -469,7 +469,7 @@ class PersonModel extends BaseModel {
       out.push({
         text:website.label ,
         href:website.url,
-        icon: '/images/academicons/svg/scopus.svg'
+        icon: scorpusIcon
       });
     }
     return out;
