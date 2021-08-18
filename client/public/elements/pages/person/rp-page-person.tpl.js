@@ -41,9 +41,11 @@ return html`
   #about .cols {
     display: flex;
     flex-wrap: wrap;
+
   }
   #about .cols > div {
     width: 100%;
+    word-wrap: break-word;
   }
   .pub-count {
     background-color: var(--ae-tcolor-primary);
@@ -195,6 +197,17 @@ return html`
   rp-modal ol li {
     padding-left: 5px;
   }
+  .svg-icon {
+    width: 20px;
+    height: 20px;
+    fill: #73ABDD;
+    margin-right: 5px;
+  }
+  .contact-container {
+    display: flex;
+    align-items: center;
+    word-wrap: break-word;
+  }
 
   @media (min-width: 800px){
     .own-profile .box-title {
@@ -249,7 +262,6 @@ return html`
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getFullName()}</h2>
 
             <div class="text-light h3 mb-2 mt-1 text-center">
-              ${this.title.title}, ${this.title.org}
               <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
                 <rp-icon style="vertical-align:middle;"
                   icon="iron-editor:mode-edit"
@@ -337,7 +349,7 @@ return html`
             <div>
               <div ?hidden="${this.additionalTitles.length === 0}">
                 <div>
-                  <h2 class="h3 mb-2">Additional Roles&nbsp;&nbsp;
+                  <h2 class="h3 mb-2">Roles&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
                       <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
                         <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
@@ -350,26 +362,33 @@ return html`
                 </div>
 
 
-                ${this.additionalTitles.map(t => html`<div>${t.title}, ${t.org}</div>`)}
-
-
+                ${this.additionalTitles.map(t =>
+                  html`
+                    <div>
+                      <div>${t.title}, ${t.org}</div>
+                      ${t.url ? html`<div class="contact-container">
+                                        ${this.svgIcon.url}
+                                        <a href="${t.url}">${t.urlFaceResult}</a>
+                                     </div>`
+                                :``}
+                      ${t.email ? html`<div class="contact-container">
+                                        ${this.svgIcon.email}
+                                        <a href="mailto:${t.email}">${t.email}</a>
+                                       </div>`
+                                :``}
+                    </div>
+                `)}
               </div>
-              ${this._showSubSection('contact') ? html`
-                <div>
-                  <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
-                </div>
-              ` : html``}
-
             </div>
             <div>
               ${this._showSubSection('websites') ? html`
-                <div>
                   <h2 class="h3 mb-2">Websites</h2>
                   ${this.getWebsites().map(site => html`
-                    <div class="site">
-                      <a href="${site.href}" target="_blank" rel="noopener">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
+                    <div class="contact-container">
+                      <a href="${site.href}" target="_blank" rel="noopener">
+                ${this.svgIcon[site.type] ? html`${this.svgIcon[site.type]}` : html`${this.svgIcon.url}`}${site.text}
+                      </a>
                     </div>`)}
-                </div>
               ` : html``}
             </div>
           </div>

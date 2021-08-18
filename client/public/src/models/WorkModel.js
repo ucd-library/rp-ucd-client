@@ -89,7 +89,6 @@ class WorkModel extends BaseModel {
   getAdditionalLinks(work) {
     let output = [];
     if (typeof work !== 'object' ) return output;
-
     // ucd elinks
     try {
       let label = "UCD-eLinks";
@@ -103,6 +102,25 @@ class WorkModel extends BaseModel {
       }
     } catch (error) {
       console.error('Error processing additional links', error);
+    }
+
+    // Citation Link
+    try {
+      if(work.uri){
+        let label = "Citation Link";
+
+        if (Array.isArray(work.uri)){
+          let uriCollection = [];
+          for(let i = 0; i < work.uri.length; i++)
+            uriCollection.push(work.uri[i]); 
+          output.push({label, url: uriCollection});
+        }
+        else{
+          output.push({label, url: work.uri});
+        }
+      }
+    } catch (error) {
+      console.error('Error processing additional links uri', error);
     }
 
     // publisher page
@@ -255,7 +273,6 @@ class WorkModel extends BaseModel {
    */
   _getAuthorVcardName(relates) {
     relates = rdfUtils.asArray(relates);
-
     let vcard = null;
     for( let person of relates ) {
       vcard = rdfUtils.asArray(person.hasName).find(item => 
@@ -263,7 +280,6 @@ class WorkModel extends BaseModel {
       );
       if( vcard ) break;
     }
-
     if( vcard ) return this._correctName(vcard);
     return null;
   }
