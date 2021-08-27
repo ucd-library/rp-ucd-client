@@ -262,6 +262,7 @@ class PersonModel extends BaseModel {
    */
   getPronouns(individual={}) {
     let contacts = this.getContacts(individual);
+    
 
     let contact = contacts[0].contact;
 
@@ -280,7 +281,15 @@ class PersonModel extends BaseModel {
    * @returns {Object}
    */
   getFullName(individual={}, type='string') {
-    let contacts = this.getContacts(individual);
+    let contactArr = this.getContacts(individual);
+    let res = [];
+
+    for(let contact of contactArr){
+      let id = contact.contact['@id'];
+      if(id && id.match('^ucdrp')) res.push(contact);
+    }
+    
+    let contacts = res; 
     if( contacts.length === 0) {
       let name = rdfUtils.getFirstValue(individual.label) || '';
       if( type === 'string' ) {
