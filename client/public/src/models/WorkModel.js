@@ -91,7 +91,7 @@ class WorkModel extends BaseModel {
     if (typeof work !== 'object' ) return output;
     // ucd elinks
     try {
-      let label = "UCD-eLinks";
+      let label = "Get it at UC";
       let url = 'https://ucelinks.cdlib.org/sfx_local?';
       if (work.doi) {
         output.push({label, url: `${url}id=doi:${work.doi}`});
