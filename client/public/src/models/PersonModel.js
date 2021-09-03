@@ -263,6 +263,7 @@ class PersonModel extends BaseModel {
   getPronouns(individual={}) {
     let contacts = this.getContacts(individual);
 
+
     let contact = contacts[0].contact;
 
     return (rdfUtils.getFirstValue(contact.pronoun) || '');
@@ -272,7 +273,7 @@ class PersonModel extends BaseModel {
   /**
    * @method getFullName
    * @description given individual record, get best (odr if possible)
-   * full name.
+   * full name.  The Best name is the name with the highest rank.
    *
    * @param {Object} individual
    * @param {string} type
@@ -281,6 +282,11 @@ class PersonModel extends BaseModel {
    */
   getFullName(individual={}, type='string') {
     let contacts = this.getContacts(individual);
+    let res = [];
+
+    // Choose best contact via rank.
+    contacts.sort((a, b) => a.rank < b.rank ? -1 : 1);
+
     if( contacts.length === 0) {
       let name = rdfUtils.getFirstValue(individual.label) || '';
       if( type === 'string' ) {
