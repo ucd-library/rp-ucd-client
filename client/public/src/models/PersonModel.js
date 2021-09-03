@@ -281,7 +281,7 @@ class PersonModel extends BaseModel {
    * @returns {Object}
    */
   getFullName(individual={}, type='string') {
-    let contacs = this.getContacts(individual);
+    let contacts = this.getContacts(individual);
     let res = [];
 
     // Choose best contact via rank.
