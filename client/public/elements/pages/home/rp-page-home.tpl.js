@@ -1,12 +1,15 @@
 import { html } from 'lit-element';
 import { renderHTML } from '../../../src/lib/santize-html.js';
 import styles from "../../styles/site.html"
+import layoutCss from "../../../node_modules/@ucd-lib/theme-sass/5_layout/_index.css.js";
+
 
 export default function render() {
 return html`
 
 <style>
   ${styles}
+  ${layoutCss}
   :host {
     display: block;
   }
@@ -90,6 +93,12 @@ return html`
   h2.title-fix {
     margin: 0;
     padding-top: 20px;
+  }
+
+  .import-icon{
+    margin:auto;
+    width:135px; 
+    height:135px;
   }
 
   @media (min-width: 800px){
@@ -198,102 +207,65 @@ return html`
   <div ?hidden="${this._hideStatusSection('error')}" class="error">
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
+  <div class="container" ?hidden="${this._hideStatusSection('loaded')}">
+    <div class="l-3col layout-columns" style="margin-top:25px">
+    
+      <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
+        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
+      </rp-factoid>
+
+      <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works">
+        <span><ucdlib-icon class="import-icon" style="fill:var(-ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
+      </rp-factoid>
+
+      <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
+        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-putah-creek);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
+      </rp-factoid>
+    
+      <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants">
+        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
+      </rp-factoid>
+
+      <rp-factoid href="" statistic="${this.coursesTotal}" title="courses">
+        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rose);"  icon="ucdlib:chalkboard-teacher"></ucdlib-icon></span>
+      </rp-factoid>
+
+      <rp-factoid href="" statistic="${this.patentsTotal}" title="patents">
+        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-double-decker);"  icon="ucdlib:award"></ucdlib-icon></span>
+      </rp-factoid>
+
+    </div>     
+  </div>
+
   <div class="container flex" ?hidden="${this._hideStatusSection('loaded')}">
 
-    <div class="col-l">
-      <div id="works">
-        <div class="list-count">
-          <div class="row">
-            <div class="count"><h2 class="mt-0">${this.academicWorksTotal}</h2></div>
-            <div class="text"><h2 class="weight-regular mt-0">Academic Works</h2></div>
-          </div>
-          ${this.academicWorks.map(work => html`
-          <div class="row item">
-            <div class=count>${work.count}</div>
-            <div class="text"><a href="${work.href}">${work.text}</a></div>
-          </div>
-          `)}
-        </div>
-
-        <div class="flex view-all-row">
-          <a href="/works" class="view-all"><span>View All Works</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
-        </div>
-      </div>
-    </div>
-
-
-
-    <div class="col-r flex-grow-1">
-      <div class="people" id="people">
-        <h2 class="mt-0">
-          <span class="bold mr-2">${this.peopleTotal}</span>
-          <span class="weight-regular">People</span>
-        </h2>
-        <div class="people-container">
-          ${this.people.map(person => html`
-            <rp-person-preview
-              .data="${person}"
-              avatar-size='sm'
-              text-width=${this.peopleWidth}>
-            </rp-person-preview>
-            `)}
-        </div>
-        <div></div>
-        <div class="flex view-all-row">
-          <a href="/people" class="view-all"><span>View All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
-        </div>
-      </div>
       
     <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
       
       <div id="subjects">
-        <h2>
-          <span class="bold mr-2">${this.subjectsTotal}</span>
-          <span class="weight-regular">Research Subjects</span>
-        </h2>
-        ${this.subjects.map(subject => html`
-          <rp-badge 
-            title="${this.SubjectModel.getPreferredLabel(subject)}" 
-            size="lg" 
-            max-width="180" 
-            text-width=${this.peopleWidth}
-            class="my-1" 
-            href="${this.SubjectModel.getLandingPage(subject)}">
-            ${this.SubjectModel.getPreferredLabel(subject)}
-          </rp-badge>
-        `)}
-        ${this.subjectsTotal > 10 ? html`
-          <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/concepts"></rp-badge>
-        ` : html``}
+        <h1 style="text-align:center;color:var(--ae-tcolor-code-text);">
+          <span  style="font-size: 36px;">Recently Updated Subjects</span>
+        </h1>
+        <div style="text-align:center; color:var(--ae-tcolor-code-text); font-weight:var(--ae-font-weight-bold)">
+          ${this.subjects.map(subject => html`
+            <rp-badge 
+              title="${this.SubjectModel.getPreferredLabel(subject)}" 
+              size="lg" 
+              max-width="180" 
+              text-width=${this.peopleWidth}
+              class="my-1" 
+              href="${this.SubjectModel.getLandingPage(subject)}">
+              ${this.SubjectModel.getPreferredLabel(subject)}
+            </rp-badge>
+          `)}
+          <br />
+          ${this.subjectsTotal > 10 ? html`
+            <rp-badge title="Browse All Subjects" size="extralg" class="my-1" max-width="280"  href="/concepts">Browse All Subjects</rp-badge>
+          ` : html``}
+        </div>
       </div>
     </div>
     <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-
-
-    <!-- <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-      <div id="grants">
-        <h2>
-          <span class="bold mr-2">${this.grantsTotal}</span>
-          <span class="weight-regular">Grants</span>
-        </h2>
-        ${this.grants.map(grant => html`
-          <rp-badge 
-            title="${this.GrantModel.getLabel(grant)}" 
-            size="lg" 
-            max-width="280" 
-            class="my-1" 
-            href="${this.GrantModel.getLandingPage(grant)}">
-            ${this.GrantModel.getLabel(grant)}
-          </rp-badge>
-        `)}
-        ${this.grantsTotal > 10 ? html`
-          <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/grants"></rp-badge>
-          ` : html``}
-      </div>
-      <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-    </div> -->
-    
-
 
 
   </div>

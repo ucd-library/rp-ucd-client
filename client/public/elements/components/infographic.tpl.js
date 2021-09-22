@@ -16,8 +16,9 @@ import layoutCss from "../../node_modules/@ucd-lib/theme-sass/5_layout/_index.cs
                 width:135px; 
                 height:135px;
             }
+
         </style>
-        <div class="factoid">
+        <div class="factoid" style="margin-top: 35px;">
             <a href="${this.href}">
             <div class="factoid-bracket left">
                 <div class="factoid-bracket__thing"></div>

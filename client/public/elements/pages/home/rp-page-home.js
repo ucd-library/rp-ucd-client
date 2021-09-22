@@ -10,6 +10,8 @@ import "../../components/person-preview";
 import "../../components/grant-preview";
 import "../../components/search";
 import "../../components/rp-loading";
+import "../../components/infographic";
+
 
 
 /**
@@ -37,6 +39,8 @@ export default class RpPageHome extends Mixin(LitElement)
       subjects: {type: Array},
       subjectsTotal: {type: Number},
       subjectsStatus: {type: String},
+      patentsTotal: {type: Number},
+      coursesTotal: {type: Number},
       textWidth: {type: String, attribute: 'text-width'},
       visible: {type: Boolean}
     };
@@ -54,6 +58,8 @@ export default class RpPageHome extends Mixin(LitElement)
     this.grantsTotal = 0;
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
+    this.patentsTotal = 0,
+    this.coursesTotal = 0,
     this.setPeopleWidth(window.innerWidth);
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
     this.theme = config.theme;

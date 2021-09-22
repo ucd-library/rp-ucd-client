@@ -32,6 +32,10 @@ return html`
     padding: .55em .9em;
     border-radius: 2em;
   }
+  span.size-extralg {
+    padding: .75em 1.5em;
+    border-radius: 2em;
+  }
   span.main.has-max-width {
     white-space: nowrap;
     overflow-x: hidden;
