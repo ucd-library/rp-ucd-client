@@ -1,5 +1,6 @@
 import { html } from 'lit-element';
 import {renderHTML} from '../src/lib/santize-html.js';
+import layoutCss from "../../../node_modules/@ucd-lib/theme-sass/5_layout/_index.css.js";
 import styles from "./styles/site.html"
 import config from "../src/config"
 
@@ -8,6 +9,7 @@ return html`
 
 <style>
   ${styles}
+  ${layoutCss}
   :host {
     display: block;
     min-width: 360px;
@@ -342,7 +344,6 @@ return html`
     }
   }
 
-
 </style>
 
 <!--
@@ -446,7 +447,7 @@ return html`
     </div>
     `}
   </div>
-
+  <ucdlib-icon style="margin:auto;width:135px; height:135px;"  icon="academic:scopus" size=24></ucdlib-icon>  
   <app-page-components id="components"></app-page-components>
   <rp-page-home id="home"></rp-page-home>
   <rp-page-people id="people"></rp-page-people>
