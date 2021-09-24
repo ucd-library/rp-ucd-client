@@ -1,11 +1,6 @@
 import { html, css } from 'lit';
 
 import { classMap } from 'lit-html/directives/class-map';
-
-
-import normalizeCss from "../../node_modules/@ucd-lib/theme-sass/normalize.css.js";
-import factoidCss from "../../node_modules/@ucd-lib/theme-sass/main_site/factoid/_factoid.css.js";
-import layoutCss from "../../node_modules/@ucd-lib/theme-sass/5_layout/_index.css.js";
   
   export function render() {
   return html`
