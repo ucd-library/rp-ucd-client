@@ -1,6 +1,6 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html"
-import layoutCss from "../../../node_modules/@ucd-lib/theme-sass/5_layout/_index.css.js";
+import layoutCss from "@ucd-lib/theme-sass/5_layout/_index.css.js";
 
 
 import "../../components/a-z"
@@ -13,7 +13,7 @@ import "../../components/download-list"
 import "../../components/dropdown"
 import "../../components/hero-image"
 import "../../components/icon"
-import "../../components/infographic"
+import "../../components/rp-factoid"
 import "../../components/link-list"
 import "../../components/modal"
 import "../../components/organization-preview"

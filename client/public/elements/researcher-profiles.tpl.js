@@ -1,6 +1,5 @@
 import { html } from 'lit-element';
 import {renderHTML} from '../src/lib/santize-html.js';
-import layoutCss from "../../../node_modules/@ucd-lib/theme-sass/5_layout/_index.css.js";
 import styles from "./styles/site.html"
 import config from "../src/config"
 
@@ -9,7 +8,6 @@ return html`
 
 <style>
   ${styles}
-  ${layoutCss}
   :host {
     display: block;
     min-width: 360px;
