@@ -1,7 +1,7 @@
 import { html } from 'lit-element';
 import { renderHTML } from '../../../src/lib/santize-html.js';
 import styles from "../../styles/site.html"
-import layoutCss from "../../../node_modules/@ucd-lib/theme-sass/5_layout/_index.css.js";
+import layoutCss from "@ucd-lib/theme-sass/5_layout/_index.css.js";
 
 
 export default function render() {
@@ -209,7 +209,6 @@ return html`
   </div>
   <div class="container" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="l-3col layout-columns" style="margin-top:25px">
-    
       <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
         <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
       </rp-factoid>

@@ -3,6 +3,7 @@ import render from "./rp-page-home.tpl.js";
 
 import "@ucd-lib/cork-app-utils";
 
+
 import config from "../../../src/config.js";
 import "../../components/alert";
 import "../../components/badge";
@@ -10,7 +11,7 @@ import "../../components/person-preview";
 import "../../components/grant-preview";
 import "../../components/search";
 import "../../components/rp-loading";
-import "../../components/infographic";
+import "../../components/rp-factoid";
 
 
 
