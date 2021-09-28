@@ -240,7 +240,7 @@ Otherwise, a <code>new-selection</code> event will fire when an option is clicke
   <div class="l-3col layout-columns" style="margin-top:25px">
   
       <rp-factoid href="http://library.ucdavis.edu" statistic="4,000,000" title="Books">
-        <span><ucdlib-icon style="margin:auto;width:135px; height:135px; fill:red;"  icon="ucdlib:book"  size=24></ucdlib-icon></span>
+        <span><ucdlib-icon style="margin:auto;width:135px; height:135px;"  icon="ucdlib:book"  size=24></ucdlib-icon></span>
       </rp-factoid>
   
       <rp-factoid href="http://library.ucdavis.edu" statistic="800" title="Scorpus IDs">
