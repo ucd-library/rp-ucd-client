@@ -1,5 +1,7 @@
 import { html } from 'lit-element';
 import styles from "../../styles/site.html"
+import layoutCss from "@ucd-lib/theme-sass/5_layout/_index.css.js";
+
 
 import "../../components/a-z"
 import "../../components/accordian"
@@ -11,6 +13,7 @@ import "../../components/download-list"
 import "../../components/dropdown"
 import "../../components/hero-image"
 import "../../components/icon"
+import "../../components/rp-factoid"
 import "../../components/link-list"
 import "../../components/modal"
 import "../../components/organization-preview"
@@ -108,6 +111,7 @@ return html`
   }
   
   ${styles}
+  ${layoutCss}
 </style>
 
 <h1 class="text-primary">Site Components</h1>
@@ -221,6 +225,35 @@ Otherwise, a <code>new-selection</code> event will fire when an option is clicke
 </rp-dropdown>
 </section>
 
+<section>
+  <H2> Factoids </H2>
+  
+  <p>Factoids are small components of a statistic,title,icon and link, that are
+  typically used to display a brief datum, with a link to more information.  The
+  factoids are an encompassing div tag with some bracket decoration.</p>
+  
+  <p>Factoids can be generated using only the CSS styling included in the ucdlib-theme, but they can be pretty complicated.</p>
+  <rp-factoid href="http://library.ucdavis.edu" statistic="40" title="Cats">
+    <span style="font-size:100px;">⑁</span>
+  </rp-factoid>
+
+  <div class="l-3col layout-columns" style="margin-top:25px">
+  
+      <rp-factoid href="http://library.ucdavis.edu" statistic="4,000,000" title="Books">
+        <span><ucdlib-icon style="margin:auto;width:135px; height:135px;"  icon="ucdlib:book"  size=24></ucdlib-icon></span>
+      </rp-factoid>
+  
+      <rp-factoid href="http://library.ucdavis.edu" statistic="800" title="Scorpus IDs">
+        <span><ucdlib-icon style="margin:auto;width:135px; height:135px;"  icon="academic:scopus" ></ucdlib-icon></span>
+      </rp-factoid>
+  
+      <rp-factoid href="http://library.ucdavis.edu" statistic="5000" title="Seats">
+        <span><ucdlib-icon style="margin:auto;width:135px; height:135px;"  icon="academic:stackoverflow" ></ucdlib-icon></span>
+      </rp-factoid>
+  
+    </div> 
+</section>
+
 <section class="hero">
 <h2>Hero Image</h2>
 <p>Hero image will randomly pull a background-photo from the path declared in <code>asset-folder</code> attribute.
@@ -267,6 +300,8 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <rp-icon icon="iron-description" theme-color='work' circle-bg sizeIcon="extralgIconWorks" size="extralg"></rp-icon>
 <rp-icon icon="rp-subject" circle-bg theme-color='subject' sizeIconSVG="extralgSVGIcon" size="extralg"></rp-icon>
 <rp-avatar></rp-avatar>
+<p>Temporary addition of the call to ucdlib icon through rp background.</p>
+<rp-icon ucdlib iconset="academic" icon="ucdlib-pubmed" theme-color='work' circle-bg sizeIcon="extralgIconWorks" size="extralg"></rp-icon>
 
 </section>
 

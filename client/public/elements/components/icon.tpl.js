@@ -106,6 +106,11 @@ export default function render() {
       height: 70px;
       width: 70px;
     }
+    .import-icon{
+      margin:auto;
+      width:135px; 
+      height:135px;
+    }
 
   </style>
   <div class="container ${classMap(this.constructClasses())}" style="${styleMap(this.getCircleSizeStyles())}">
