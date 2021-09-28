@@ -342,7 +342,6 @@ return html`
     }
   }
 
-
 </style>
 
 <!--
@@ -446,7 +445,7 @@ return html`
     </div>
     `}
   </div>
-
+  <ucdlib-icon style="margin:auto;width:135px; height:135px;"  icon="academic:scopus" size=24></ucdlib-icon>  
   <app-page-components id="components"></app-page-components>
   <rp-page-home id="home"></rp-page-home>
   <rp-page-people id="people"></rp-page-people>

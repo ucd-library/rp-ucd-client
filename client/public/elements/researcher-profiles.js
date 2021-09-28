@@ -3,8 +3,12 @@ import render from "./researcher-profiles.tpl.js";
 import { styleMap } from 'lit-html/directives/style-map';
 import {renderHTML} from '../src/lib/santize-html.js';
 
+
 // sets globals Mixin and EventInterface
 import "@ucd-lib/cork-app-utils";
+
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/ucdlib-icons';
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/academic';
 
 // Polymer
 import "@polymer/iron-icons/iron-icons";
