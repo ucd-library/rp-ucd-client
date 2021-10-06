@@ -1,4 +1,4 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import styles from "../../styles/site.html";
 import "../../components/rp-toast-message"
 import config from "../../../src/config.js";

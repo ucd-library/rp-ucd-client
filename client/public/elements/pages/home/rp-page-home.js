@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import render from "./rp-page-home.tpl.js";
 
 import "@ucd-lib/cork-app-utils";
@@ -12,6 +12,8 @@ import "../../components/grant-preview";
 import "../../components/search";
 import "../../components/rp-loading";
 import "../../components/rp-factoid";
+
+
 
 
 

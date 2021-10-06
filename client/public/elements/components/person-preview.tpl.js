@@ -1,5 +1,5 @@
-import { html } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
+import { html } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { renderHTML } from '../../src/lib/santize-html.js';
 import "./avatar"
 import urlUtils from "../../src/lib/url-utils"

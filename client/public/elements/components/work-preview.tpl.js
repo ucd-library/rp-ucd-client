@@ -1,6 +1,6 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import { renderHTML } from '../../src/lib/santize-html.js';
-import { styleMap } from 'lit-html/directives/style-map';
+import { styleMap } from 'lit/directives/style-map.js';
 
 export default function render() {
   return html`

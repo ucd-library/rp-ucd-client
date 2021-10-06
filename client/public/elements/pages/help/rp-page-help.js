@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import render from "./rp-page-help.tpl.js";
 
 import config from "../../../src/config.js";

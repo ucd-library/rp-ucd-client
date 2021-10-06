@@ -1,6 +1,6 @@
-import { html } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import { classMap } from 'lit-html/directives/class-map';
+import { html } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
+import { classMap } from 'lit/directives/class-map.js';
 
 export default function render() {
   return html`

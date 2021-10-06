@@ -1,8 +1,8 @@
-import { LitElement, html, svg } from 'lit-element';
+import { LitElement, html, svg } from 'lit';
 import render from './icon.tpl.js';
 
 
-import { styleMap } from 'lit-html/directives/style-map';
+import { styleMap } from 'lit/directives/style-map.js';
 
 /**
  * @class RpIcon

@@ -16,18 +16,16 @@
     "@ucd-lib/cork-app-load": "^0.3.2",
     "@ucd-lib/cork-app-state": "^1.0.5",
     "@ucd-lib/cork-app-utils": "^4.4.0",
-    "@ucd-lib/theme-elements": "^0.0.3",
+    "@ucd-lib/theme-elements": "^0.0.4",
     "@ucd-lib/theme-sass": "^5.0.14",
-    "isomorphic-fetch": "^2.2.1",
+    "isomorphic-fetch": "^3.0.0",
     "lit": "^2.0.0",
-    "lit-element": "^2.5.1",
-    "lit-html": "^2.0.0",
     "sanitize-html": "^2.5.1",
     "socket.io": "^4.2.0",
     "socket.io-client": "^4.2.0",
     "sortablejs": "^1.14.0",
     "striptags": "^3.2.0",
-    "toastify-js": "^1.11.1"
+    "toastify-js": "^1.11.2"
   },
   "devDependencies": {
     "webpack-bundle-analyzer": "^4.4.2"

@@ -1,8 +1,9 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import { renderHTML } from '../../../src/lib/santize-html.js';
 import styles from "../../styles/site.html"
 import layoutCss from "@ucd-lib/theme-sass/5_layout/_index.css.js";
 import base from "@ucd-lib/theme-sass/1_base_html/_index.css.js";
+
 
 
 export default function render() {
@@ -12,6 +13,7 @@ return html`
   ${styles}
   ${layoutCss}
   ${base}
+
   :host {
     display: block;
   }
@@ -210,6 +212,7 @@ return html`
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
   <div class="container" ?hidden="${this._hideStatusSection('loaded')}">
+
     <div class="l-3col layout-columns" style="margin-top:25px">
       <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
         <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>

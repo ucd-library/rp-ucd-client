@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import {renderHTML} from '../../src/lib/santize-html.js';
 import render from './citation.tpl.js';
 import config from '../../src/config.js';
