@@ -21,6 +21,7 @@
     "isomorphic-fetch": "^2.2.1",
     "lit": "^2.0.0",
     "lit-element": "^2.5.1",
+    "lit-html": "^2.0.0",
     "sanitize-html": "^2.5.1",
     "socket.io": "^4.2.0",
     "socket.io-client": "^4.2.0",

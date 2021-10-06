@@ -11,6 +11,7 @@ return html`
 <style>
   ${styles}
   ${layoutCss}
+  ${base}
   :host {
     display: block;
   }
