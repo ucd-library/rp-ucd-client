@@ -17,7 +17,7 @@
     "@ucd-lib/cork-app-state": "^1.0.5",
     "@ucd-lib/cork-app-utils": "^4.4.0",
     "@ucd-lib/theme-elements": "^0.0.3",
-    "@ucd-lib/theme-sass": "^5.0.10",
+    "@ucd-lib/theme-sass": "^5.0.14",
     "isomorphic-fetch": "^2.2.1",
     "lit": "^2.0.0",
     "lit-element": "^2.5.1",
