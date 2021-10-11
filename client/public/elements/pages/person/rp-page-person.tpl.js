@@ -466,7 +466,8 @@ return html`
         <h2 class="mb-0">Selected Grants</h2>       
           <div>
             ${this.activeGrant.length != 0 ? html `
-              <div><i>Active (${this.activeGrant.length})</i>
+              <div>
+                <h3 class="weight-regular mt-0"><i>Active (${this.activeGrant.length})</i></h3>
               ${this.activeGrant.map(grant => 
                   html`<div class="grant-panel"><a href="${grant.grant_url}">${grant.title}</a><br />
                   ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
@@ -477,7 +478,8 @@ return html`
           </div>
           <div>
             ${this.inactiveGrant.length != 0  ? html `
-              <div><i>Completed (${this.inactiveGrant.length})</i>
+              <div>
+                <h3 class="weight-regular mt-0"><i>Completed (${this.inactiveGrant.length})</i></h3>
                 ${this.inactiveGrant.map(grant => 
                     html`<div class="grant-panel"><a href=${grant.grant_url}>${grant.title}</a><br />
                     ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
