@@ -261,18 +261,6 @@ return html`
             <rp-avatar size="lg"></rp-avatar>
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getFullName()}</h2>
 
-            <div class="text-light h3 mb-2 mt-1 text-center">
-              <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
-                <rp-icon style="vertical-align:middle;"
-                  icon="iron-editor:mode-edit"
-                  has-text
-                  circle-bg
-                  is-link size="lg">
-                  <div slot="tooltip">Edit Positions</div>
-                </rp-icon>
-              </a>
-            </div>
-
             <!--
               SB: Kafka Message Add?
               <rp-toast-message ?hidden="${!this.isOwnProfile}"><rp-toast-message>
@@ -353,7 +341,7 @@ return html`
                     ${this.isOwnProfile ? html`
                       <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
                         <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
-                          <div slot="tooltip">Edit Positions</div>
+                          <div slot="tooltip">Edit Roles</div>
                         </rp-icon>
                       </a>
                       ` : html``
