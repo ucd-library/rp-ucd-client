@@ -144,7 +144,7 @@ return html`
   .box-pubsyear .pubs {
     flex-grow: 1;
   }
-  .box-pubsyear .pubs rp-citation {
+  .box-pubsyear .pubs rp-citation, .grant-panel {
     margin-bottom: 8px;
   }
   .box-pub-buttons {
@@ -454,30 +454,28 @@ return html`
         ${this.totalGrants != 0 ? html `
         <h2 class="mb-0">Selected Grants</h2>       
           <div>
-            <h3 class="weight-regular mt-0">
-              ${this.activeGrant.length != 0 ? html `
-                <i>Active (${this.activeGrant.length})</i>
-                ${this.activeGrant.map(grant => 
-                    html`<h3 class="weight-regular mt-0"><a href="${grant.grant_url}">${grant.title}</a><br />
-                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
-                    `
-                )}
-              `
-              :html``}
-            </h3>
+            ${this.activeGrant.length != 0 ? html `
+              <div>
+                <h3 class="weight-regular mt-0"><i>Active (${this.activeGrant.length})</i></h3>
+              ${this.activeGrant.map(grant => 
+                  html`<div class="grant-panel"><a href="${grant.grant_url}">${grant.title}</a><br />
+                  ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
+                  `
+              )}
+            </div>`
+            :html``}
           </div>
           <div>
-            <h3 class="weight-regular mt-0">
             ${this.inactiveGrant.length != 0  ? html `
-                <i>Completed (${this.inactiveGrant.length})</i>
+              <div>
+                <h3 class="weight-regular mt-0"><i>Completed (${this.inactiveGrant.length})</i></h3>
                 ${this.inactiveGrant.map(grant => 
-                    html`<h3 class="weight-regular mt-0"><a href=${grant.grant_url}>${grant.title}</a><br />
+                    html`<div class="grant-panel"><a href=${grant.grant_url}>${grant.title}</a><br />
                     ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
                     `
                 )}
-            `
+              </div>`
             :html``}
-            </h3>
           </div>
         `
         :html``}
