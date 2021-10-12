@@ -3,6 +3,8 @@ import { renderHTML } from '../../../src/lib/santize-html.js';
 import styles from "../../styles/site.html"
 import layoutCss from "@ucd-lib/theme-sass/5_layout/_index.css.js";
 import base from "@ucd-lib/theme-sass/1_base_html/_index.css.js";
+import baseCss from "@ucd-lib/theme-sass/2_base_class/_index.css.js";
+import utility from "@ucd-lib/theme-sass/6_utility/_index.css.js";
 
 
 
@@ -13,6 +15,8 @@ return html`
   ${styles}
   ${layoutCss}
   ${base}
+  ${utility}
+  ${baseCss}
 
   :host {
     display: block;
@@ -21,37 +25,42 @@ return html`
     background: url(/images/homepage-hero.jpg) no-repeat center center;
     background-size: cover;
     color: var(--ae-tcolor-light);
+    padding: 10px 20px 40px 0px;
+
   }
   .hero .title-container {
     display: flex;
-    padding: 0 20px 30px 20px;
-    justify-content: center;
+    padding: 0 20px 30px 0px;
+    justify-content: left;
+
   }
   .hero img {
     height: auto;
     width: 100%;
     max-width: 350px;
-    padding: 20px;
+    padding: 10px;
   }
   .hero .text {
     flex-grow: 1;
   }
   .hero .content {
-    font-size: var(--ae-font-size);
-    line-height: 23px;
+    font-size: var(--ae-font-size-h1);
+    line-height: 38px;
+    text-align: left;
   }
   .hero h2 {
-    color: var(--ae-tcolor-secondary)
+    color: var(--ae-tcolor-secondary);
   }
   .search .container {
     padding: 30px 0;
+    
   }
   rp-search {
     width: 100%;
   }
   .data .container {
-    padding: 30px 0;
     flex-flow: row wrap;
+
   }
   .data .col-l {
     width: 100%;
@@ -97,12 +106,28 @@ return html`
   h2.title-fix {
     margin: 0;
     padding-top: 20px;
+    text-align:left;
   }
 
   .import-icon{
     margin:auto;
     width:135px; 
     height:135px;
+  }
+
+  .section.rebrand{
+    padding: 40px 40px;
+    justify-content: center;
+    align-items: center;
+  }
+  .section.rebrand:nth-child(even) {
+      background-color: #D7E5F0;
+    }
+
+  .heading--weighted-underline{
+    text-align:center;
+    margin: auto;
+    width:65px;
   }
 
   @media (min-width: 800px){
@@ -121,7 +146,7 @@ return html`
       order: unset;
     }
     .hero .title-container {
-      padding: 50px 0;
+      padding: 50px 50px;
     }
     .hero img {
       padding-top: 0;
@@ -151,6 +176,7 @@ return html`
     .container{
       margin-right: auto;
       margin-left: auto;
+
     }
     rp-search {
       max-width: 500px;
@@ -187,8 +213,8 @@ return html`
 <div class="hero">
   <div class="title-container">
     <!-- <img src="${this.theme.homeHeroImage}" alt=""> -->
-    <div style="text-align: center; max-width: 600px">
-      <h2 class="title-fix">${this.theme.homeHeroTitle}</h2>
+    <div style="padding-left: 50px;text-align: center; max-width: 750px">
+      <h1 class="title-fix" style="color:var(--ae-tcolor-secondary); text-align:left; font-weight:var(--ae-font-weight-bold);">${this.theme.homeHeroTitle}</h1>
       <div class="content">
         <div>${renderHTML(this.theme.homeHeroContentTop)}</div>
         <div>${renderHTML(this.theme.homeHeroContentBottom)}</div>
@@ -211,15 +237,15 @@ return html`
   <div ?hidden="${this._hideStatusSection('error')}" class="error">
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
-  <div class="container" ?hidden="${this._hideStatusSection('loaded')}">
+  <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
 
-    <div class="l-3col layout-columns" style="margin-top:25px">
+    <div class="l-3col layout-columns">
       <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
         <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
       </rp-factoid>
 
       <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works">
-        <span><ucdlib-icon class="import-icon" style="fill:var(-ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
+        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
       </rp-factoid>
 
       <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
@@ -241,15 +267,17 @@ return html`
     </div>     
   </div>
 
-  <div class="container flex" ?hidden="${this._hideStatusSection('loaded')}">
+  <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
 
-      
+    <div class="container flex"> 
     <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
       
       <div id="subjects">
-        <h1 style="text-align:center;color:var(--ae-tcolor-code-text);">
-          <span  style="font-size: 36px;">Recently Updated Subjects</span>
+        <h1 class="weight-regular" style="text-align:center;">
+          <span style="font-size: 36px;">Recently Updated Subjects</span>
         </h1>
+        <div class="heading--weighted-underline"></div>
+
         <div style="text-align:center; color:var(--ae-tcolor-code-text); font-weight:var(--ae-font-weight-bold)">
           ${this.subjects.map(subject => html`
             <rp-badge 
@@ -264,15 +292,35 @@ return html`
           `)}
           <br />
           ${this.subjectsTotal > 10 ? html`
-            <rp-badge title="Browse All Subjects" size="extralg" class="my-1" max-width="280"  href="/concepts">Browse All Subjects</rp-badge>
+            <rp-badge title="Browse All Subjects" size="extralg" max-width="280"  href="/concepts" color-sequence=6>Browse All Subjects</rp-badge>
           ` : html``}
         </div>
       </div>
     </div>
     <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-
+    </div> 
 
   </div>
+
+  <!-- <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
+    <div class="container flex"> 
+    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+      
+      <div id="subjects">
+        <h1 class="weight-regular" style="text-align:center;">
+          <span style="font-size: 36px;">Research News</span>
+        </h1>
+        <div class="heading--weighted-underline"></div>
+
+        <div class="l-basic--flipped"></div>
+
+       
+      </div>
+    </div>
+    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+    </div> 
+
+    </div> -->
 </div>
  
 `;}

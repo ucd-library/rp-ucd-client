@@ -33,8 +33,10 @@ return html`
     border-radius: 2em;
   }
   span.size-extralg {
-    padding: .75em 1.5em;
+    padding: .85em 1.55em;
     border-radius: 2em;
+    background-color:var(--ae-tcolor-primary);
+    color: white;
   }
   span.main.has-max-width {
     white-space: nowrap;
@@ -51,21 +53,31 @@ return html`
   }
   span.color-0 {
     border-color: var(--ae-tcolor-accent0);
+    background-color: var(--ae-tcolor-accent0);
   }
   span.color-1 {
     border-color: var(--ae-tcolor-accent1);
+    background-color: var(--ae-tcolor-accent1);
   }
   span.color-2 {
     border-color: var(--ae-tcolor-accent2);
+    background-color: var(--ae-tcolor-accent2);
   }
   span.color-3 {
     border-color: var(--ae-tcolor-accent3);
+    background-color: var(--ae-tcolor-accent3);
   }
   span.color-4 {
     border-color: var(--ae-tcolor-accent4);
+    background-color: var(--ae-tcolor-accent4);
   }
   span.color-5 {
     border-color: var(--ae-tcolor-accent5);
+    background-color: var(--ae-tcolor-accent5);
+  }
+  span.color-6 {
+    border-color: var(--ae-tcolor-primary);
+    background-color: var(--ae-tcolor-primary);
   }
   a {
     text-decoration: none;

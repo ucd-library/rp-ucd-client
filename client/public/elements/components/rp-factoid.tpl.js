@@ -13,7 +13,7 @@ import { classMap } from 'lit/directives/class-map.js';
             }
 
         </style>
-        <div class="factoid" style="margin-top: 35px;">
+        <div class="factoid" style="margin-top:35px;">
             <a href="${this.href}">
             <div class="factoid-bracket left">
                 <div class="factoid-bracket__thing"></div>
