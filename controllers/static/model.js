@@ -25,7 +25,7 @@ class StaticModelController {
    *  
    * @returns {Object}
    */
-  async handleRequest(req) {
+  async handleRequest(req, roles=[]) {
     let model = req.originalUrl.replace(/^\//, '').split('/')[0];
     if( !config.client.modelRoutes.includes(model) ) {
       return {isModel: false};
@@ -35,7 +35,12 @@ class StaticModelController {
     model = await this.getExpertRecord(
       req.originalUrl.replace(/^\//, '').replace(/\/_\/*/)
     );
+
     if( !model ) {
+      return {is404Model: true, isModel: true};
+    }
+
+    if( model._acl && !model._acl.some(role => roles.includes(role)) ) {
       return {is404Model: true, isModel: true};
     }
 

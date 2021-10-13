@@ -71,6 +71,7 @@ export default (app) => {
 
       let user = await userAuthController.handleRequest(req);
       let roles = (user || {}).roles || [];
+      roles.push('public');
 
       // calc which (if any) sections to head
       let hiddenTypes = [];
@@ -108,7 +109,7 @@ export default (app) => {
       if( res.statusCode === 404 ) {
         appConfig.is404 = true;
       } else {
-        let modelInfo = await staticModelController.handleRequest(req);
+        let modelInfo = await staticModelController.handleRequest(req, roles);
         if( modelInfo.isModel ) {
           if( modelInfo.is404Model ) {
             appConfig.is404 = true;

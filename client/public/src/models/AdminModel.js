@@ -54,7 +54,8 @@ class AdminModel extends BaseModel {
 const model = new AdminModel();
 // test
 // (async function() {
-//   let id = 'ucdrp:person/b78c058911b45047c56f3b5148381715';
+//   // let id = 'ucdrp:person/b78c058911b45047c56f3b5148381715';
+//   // let id = 'ucdrp:grant/1464874';
 //   console.log(await model.get(id));
 // })();
 
