@@ -11,6 +11,14 @@ import '@ucd-lib/theme-elements/ucdlib/ucdlib-icon/ucdlib-icon';
 import '@ucd-lib/theme-elements/ucdlib/ucdlib-iconset/ucdlib-iconset';
 import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/ucdlib-icons';
 import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/academic';
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-branding-bar/ucdlib-branding-bar';
+
+import '@ucd-lib/theme-elements/brand/ucd-theme-header/ucd-theme-header';
+import '@ucd-lib/theme-elements/brand/ucd-theme-primary-nav/ucd-theme-primary-nav';
+import '@ucd-lib/theme-elements/brand/ucd-theme-quick-links/ucd-theme-quick-links';
+import '@ucd-lib/theme-elements/brand/ucd-theme-search-popup/ucd-theme-search-popup';
+import '@ucd-lib/theme-elements/brand/ucd-theme-search-form/ucd-theme-search-form';
+
 
 // Polymer
 import "@polymer/iron-icons/iron-icons";

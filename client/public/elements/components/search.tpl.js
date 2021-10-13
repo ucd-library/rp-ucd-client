@@ -22,7 +22,7 @@ export default function render() {
     }
     .input-container{
       display: flex;
-      padding: 5px 0;
+      padding: 10px 0;
       min-width: 385px;
       background-color:var(--ae-tcolor-light);
 
@@ -30,8 +30,8 @@ export default function render() {
 
     #input {
       /* flex-grow: 1; */
-      height: 44px;
-      min-width: 180px;
+      height: 45px;
+      min-width: 275px;
       border: none;
       background-color: var(--ae-tcolor-light);
       padding-left: 10px;
@@ -47,7 +47,7 @@ export default function render() {
       font-size: var(--ae-font-size);
     }
     rp-dropdown{
-      font-size: var(--ae-font-size-h3);
+      font-size: var(--ae-font-size-h2);
     }
 
     rp-icon {
@@ -63,7 +63,7 @@ export default function render() {
       background-color: var(--ae-tcolor-primary50);
       width: 1px;
       min-width: 1px;
-      height: 42px;
+      height: 45px;
     }
 
     .sr-only {
@@ -78,7 +78,7 @@ export default function render() {
     }
     .icon-container{
       display: flex;
-      padding: 12px 0;
+      padding:17.5px 0;
       background-color:var(--ae-tcolor-secondary);
       justify-content: center;
       align-items: center;

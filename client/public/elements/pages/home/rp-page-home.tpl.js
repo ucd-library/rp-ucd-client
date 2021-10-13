@@ -44,7 +44,7 @@ return html`
     flex-grow: 1;
   }
   .hero .content {
-    font-size: var(--ae-font-size-h1);
+    font-size: 35px;
     line-height: 38px;
     text-align: left;
   }
@@ -225,8 +225,8 @@ return html`
 <div class="hero">
   <div class="title-container">
     <!-- <img src="${this.theme.homeHeroImage}" alt=""> -->
-    <div style="padding-left: 50px;text-align: center; max-width: 750px">
-      <h1 class="title-fix" style="color:var(--ae-tcolor-secondary); text-align:left; font-weight:var(--ae-font-weight-bold);">${this.theme.homeHeroTitle}</h1>
+    <div style="padding-left: 50px;text-align: center; max-width: 900px">
+      <h1 class="title-fix" style="color:var(--ae-tcolor-secondary); text-align:left; font-weight:var(--ae-font-weight-bold);font-size: 60px;">${this.theme.homeHeroTitle}</h1>
       <div class="content">
         <div>${renderHTML(this.theme.homeHeroContentTop)}</div>
         <div>${renderHTML(this.theme.homeHeroContentBottom)}</div>
@@ -277,7 +277,7 @@ return html`
         <h1 class="weight-regular" style="text-align:center;">
           <span style="font-size: 36px;">Recently Updated Subjects</span>
         </h1>
-        <div class="heading--weighted-underline"></div>
+        <div class="heading--weighted-underline" style="margin-bottom:15px; margin-bottom:25px;"></div>
 
         <div style="text-align:center; color:var(--ae-tcolor-code-text); font-weight:var(--ae-font-weight-bold)">
           ${this.subjects.map(subject => html`
@@ -293,32 +293,27 @@ return html`
           `)}
           <br />
           ${this.subjectsTotal > 10 ? html`
-            <rp-badge title="Browse All Subjects" size="extralg" max-width="280"  href="/concepts" color-sequence=6>Browse All Subjects</rp-badge>
+            <rp-badge style="margin-top:25px;" title="Browse All Subjects" size="extralg" max-width="280"  href="/concepts" color-sequence=6>Browse All Subjects</rp-badge>
           ` : html``}
         </div>
     </div>
 
   </div>
 
+
   <!-- <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
-    <div class="container flex"> 
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-      
-      <div id="subjects">
+    <div class="center">
         <h1 class="weight-regular" style="text-align:center;">
           <span style="font-size: 36px;">Research News</span>
         </h1>
-        <div class="heading--weighted-underline"></div>
+        <div class="heading--weighted-underline" style="margin-bottom:15px; margin-bottom:25px;"></div>
 
         <div class="l-basic--flipped"></div>
 
-       
-      </div>
     </div>
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-    </div> 
 
-    </div> -->
+  </div> -->
+
 </div>
  
 `;}

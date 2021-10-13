@@ -352,6 +352,40 @@ return html`
 -->
 <app-route .appRoutes="${this.appRoutes}"></app-route>
 
+<!-- 
+<ucd-theme-header
+  site-name="UC Davis Library"
+  slogan="Books!"
+  figure-src="/img/book-logo.png"
+  is-demo>
+
+  <ucd-theme-primary-nav>
+    <ul link-text="Books" href="#">
+      <li><a href="#">Biographies</a></li>
+      <li><a href="#">Fantasy</a></li>
+      <li><a href="#">Mystery</a></li>
+    </ul>
+    <a href=#>Magazines</a>
+    <a href="#">Journals</a>
+  </ucd-theme-primary-nav>
+
+  <ucd-theme-search-popup>
+    <ucd-theme-search-form
+      @search="${e => console.log(e.detail.searchTerm)}">
+    </ucd-theme-search-form>
+  </ucd-theme-search-popup>
+
+  <ucd-theme-quick-links title="Locations" style-modifiers="highlight">
+    <a href="#">Shields</a>
+    <a href="#">Blaisdell</a>
+    <a href="#">Carlson</a>
+    <a href="#">Special Collections</a>
+  </ucd-theme-quick-links>
+
+</ucd-theme-header> -->
+
+
+
 <div id="app-header">
   ${this._renderMasthead()}
   <div id="app-header-content" class="bg-light text-primary" ?hidden="${this.page === 'app-mobile-menu'}">
