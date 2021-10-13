@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { renderHTML } from '../../src/lib/santize-html.js';
 import "./avatar"
 import urlUtils from "../../src/lib/url-utils"
@@ -12,6 +13,11 @@ export default function render() {
     }
     .container {
       display: flex;
+      flex-flow: row nowrap;
+      align-items: flex-start;
+    }
+    .container-home {
+      display: block;
       flex-flow: row nowrap;
       align-items: flex-start;
     }
@@ -62,7 +68,7 @@ export default function render() {
       font-style: normal;
     }
   </style>
-  <div class=container>
+  <div class=${classMap(this.constructClasses())}>
     <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}" >
       <a class="name" 

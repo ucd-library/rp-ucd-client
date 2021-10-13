@@ -278,7 +278,7 @@ export default class RpPageHome extends Mixin(LitElement)
    * @returns {Promise}
    */
   async _getPeople() {
-    let peopleList = await this.CollectionModel.overview('randomPeople', {limit: 4, total: this.peopleTotal});
+    let peopleList = await this.CollectionModel.overview('randomPeople', {limit: 3, total: this.peopleTotal});
     this.peopleStatus = peopleList.state;
     if (peopleList.state != "loaded") {
       return;
@@ -310,7 +310,7 @@ export default class RpPageHome extends Mixin(LitElement)
    * @returns {Promise}
    */
   async _getSubjects() {
-    let subjects = await this.SubjectModel.getRandomSubjects(10);
+    let subjects = await this.SubjectModel.getRandomSubjects(12);
     this.subjectsStatus = subjects.state;
     this.subjects = subjects.payload;
 

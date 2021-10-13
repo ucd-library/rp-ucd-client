@@ -65,10 +65,8 @@ return html`
     padding-bottom: 20px;
   }
   .people-container {
-    display: grid;
-    grid-template-columns: auto;
-    grid-column-gap: 24px;
-    grid-row-gap: 10px;
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
   }
   #works {
     padding-top: 20px;
@@ -105,9 +103,11 @@ return html`
     height:135px;
   }
   .section.rebrand{
-    padding: 40px 40px;
     justify-content: center;
     align-items: center;
+    min-width:200px;
+    max-width:950px;
+    margin: 0 auto;
   }
   .section.rebrand:nth-child(even) {
       background-color: #D7E5F0;
@@ -117,9 +117,23 @@ return html`
     margin: auto;
     width:65px;
   }
+
+  hr{
+    background-color: #ccc;
+    border: none;
+  }
+  .center{
+    justify-content:center;
+    align-items: center;
+    text-align: center;
+    min-width:200px;
+    max-width:800px;
+    margin: 0 auto;
+  }
+
   @media (min-width: 800px){
     .people-container {
-      grid-template-columns: auto auto;
+      grid-template-columns: auto auto auto;
     }
     .data .container {
       flex-flow: row nowrap;
@@ -152,6 +166,10 @@ return html`
     .error {
       height: 590px;
     }
+    .center{
+      min-width:200px;
+      max-width:800px;
+    }
   }
   @media (min-width: 480px) and (max-width: 799px){
     /* .title-container {
@@ -166,10 +184,16 @@ return html`
     rp-search {
       max-width: 500px;
     }
+    .center{
+      min-width:200px;
+    }
   }
   @media (max-width: 480px) {
     .hero .title-container {
       display: block;
+    }
+    .center{
+      min-width:200px;
     }
   }
   @media (max-width: 325px) {
@@ -180,6 +204,9 @@ return html`
     rp-search {
       max-width: 245px;
     }  
+    .center{
+      min-width:200px;
+    }
   }
   @media (max-width: 250px) {
     .container{
@@ -189,6 +216,9 @@ return html`
     rp-search {
       max-width: 185px;
     }  
+    .center{
+      min-width:200px;
+    }
   }
   
 </style>
@@ -217,88 +247,57 @@ return html`
   <div ?hidden="${this._hideStatusSection('error')}" class="error">
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
-  <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
-    <div class="factoid-container">
-      <div class="l-3col layout-columns">
-        <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
-          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
-        </rp-factoid>
+      <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
+        <div class="l-4col layout-columns">
+          <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
+          </rp-factoid>
 
-        <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works">
-          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
-        </rp-factoid>
+          <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
+          </rp-factoid>
 
-        <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
-          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rec-pool);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
-        </rp-factoid>
-      
-        <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants">
-          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
-        </rp-factoid>
+          <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rec-pool);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
+          </rp-factoid>
+        
+          <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
+          </rp-factoid>
+        </div>
+        <hr style=" margin-bottom:-15px; "/>
 
-        <rp-factoid href="" statistic="${this.coursesTotal}" title="courses">
-          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rose);"  icon="ucdlib:chalkboard-teacher"></ucdlib-icon></span>
-        </rp-factoid>
-
-        <rp-factoid href="" statistic="${this.patentsTotal}" title="patents">
-          <span><ucdlib-icon class="import-icon" style="fill:#F18A00;"  icon="ucdlib:award"></ucdlib-icon></span>
-        </rp-factoid>
       </div>  
-    </div>   
-  </div>
-<div class="data bg-light ${this.pageStatus}">
-  <rp-loading ?hidden="${this._hideStatusSection('loading')}">Loading ${this.theme.siteTitle}</rp-loading>
+
   <div ?hidden="${this._hideStatusSection('error')}" class="error">
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
-  <div class="container flex" ?hidden="${this._hideStatusSection('loaded')}">
-    <div class="col-l">
-      <div id="works">
-        <div class="list-count">
-          <div class="row">
-            <div class="count"><h3 class="mt-0">${this.academicWorksTotal}</h3></div>
-            <div class="text"><h3 class="weight-regular mt-0">Academic Works</h3></div>
-          </div>
-          ${this.academicWorks.map(work => html`
-          <div class="row item">
-            <div class=count>${work.count}</div>
-            <div class="text"><a href="${work.href}">${work.text}</a></div>
-          </div>
-          `)}
-        </div>
-        <div class="flex view-all-row">
-          <a href="/works" class="view-all"><span>View All Works</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
-        </div>
-      </div>
-    </div>
-    <div class="col-r flex-grow-1">
+    <div class="center">
       <div class="people" id="people">
-        <h2 class="mt-0">
-          <span class="bold mr-2">${this.peopleTotal}</span>
-          <span class="weight-regular">People</span>
-        </h2>
+        <h4 class="mt-0" style="text-align:center; margin-bottom:25px;">
+          <span class="weight-regular ">Recently Updated Profiles</span>
+        </h4>
         <div class="people-container">
           ${this.people.map(person => html`
             <rp-person-preview
               .data="${person}"
               avatar-size='sm'
-              text-width=${this.peopleWidth}>
+              text-width=${this.peopleWidth}
+              home-display>
             </rp-person-preview>
             `)}
         </div>
-        <div></div>
         <div class="flex view-all-row">
-          <a href="/people" class="view-all"><span>View All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
+          <a href="/people" class="view-all"><span>Browse All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
         </div>
       </div>
-      
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-      
-      <div id="subjects">
-        <h2>
-          <span class="bold mr-2">${this.subjectsTotal}</span>
-          <span class="weight-regular">Research Subjects</span>
-        </h2>
+    </div>
+    <hr style="margin-left:175px;margin-right:175px;"/>
+      <div class="center">
+        <h4 style="text-align:center; margin-bottom:25px;">
+          <span class="weight-regular">Recently Updated Subjects</span>
+          <br />
+        </h4>
         ${this.subjects.map(subject => html`
           <rp-badge 
             title="${this.SubjectModel.getPreferredLabel(subject)}" 
@@ -311,11 +310,12 @@ return html`
           </rp-badge>
         `)}
         ${this.subjectsTotal > 10 ? html`
-          <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/concepts"></rp-badge>
+          <div class="flex view-all-row">
+            <a href="/concepts" class="view-all"><span>Browse All Subjects</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
+          </div>        
         ` : html``}
       </div>
-    </div>
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+      <br />
     <!-- <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
       <div id="grants">
         <h2>
