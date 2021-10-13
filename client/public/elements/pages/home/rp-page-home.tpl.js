@@ -73,9 +73,8 @@ return html`
   }
   .people-container {
     display: grid;
-    grid-template-columns: auto;
-    grid-column-gap: 24px;
-    grid-row-gap: 10px;
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
   }
   #works {
     padding-top: 20px;
@@ -129,13 +128,23 @@ return html`
     margin: auto;
     width:65px;
   }
+  .center{
+    justify-content:center;
+    align-items: center;
+    text-align: center;
+    min-width:200px;
+    max-width:800px;
+    margin: 0 auto;
+  }
   .factoid-container{
-    margin: 0px 250px;
+    min-width:200px;
+    max-width:1000px;
+    margin: 0 auto;
   }
 
   @media (min-width: 800px){
     .people-container {
-      grid-template-columns: auto auto;
+      grid-template-columns: auto auto auto;
     }
     .data .container {
       flex-flow: row nowrap;
@@ -242,7 +251,7 @@ return html`
   </div>
   <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="factoid-container">
-      <div class="l-3col layout-columns">
+      <div class="l-4col layout-columns">
         <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
           <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
         </rp-factoid>
@@ -259,23 +268,12 @@ return html`
           <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
         </rp-factoid>
 
-        <rp-factoid href="" statistic="${this.coursesTotal}" title="courses">
-          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rose);"  icon="ucdlib:chalkboard-teacher"></ucdlib-icon></span>
-        </rp-factoid>
-
-        <rp-factoid href="" statistic="${this.patentsTotal}" title="patents">
-          <span><ucdlib-icon class="import-icon" style="fill:#F18A00;"  icon="ucdlib:award"></ucdlib-icon></span>
-        </rp-factoid>
       </div>  
     </div>   
   </div>
 
   <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
-
-    <div class="container flex"> 
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-      
-      <div id="subjects">
+    <div class="center">
         <h1 class="weight-regular" style="text-align:center;">
           <span style="font-size: 36px;">Recently Updated Subjects</span>
         </h1>
@@ -298,10 +296,7 @@ return html`
             <rp-badge title="Browse All Subjects" size="extralg" max-width="280"  href="/concepts" color-sequence=6>Browse All Subjects</rp-badge>
           ` : html``}
         </div>
-      </div>
     </div>
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-    </div> 
 
   </div>
 

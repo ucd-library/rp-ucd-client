@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement} from 'lit';
 import render from './person-preview.tpl.js';
 
 import previewUtils from "../../src/lib/preview-utils";
@@ -19,6 +19,7 @@ export class RpPersonPreview extends Mixin(LitElement)
       subjectCt: {type: Number, attribute: 'subject-ct'},
       avatarSize: {type: String, attribute: 'avatar-size'},
       textWidth: {type: String, attribute: 'text-width'},
+      homeDisplay: {type: Boolean, attribute: 'home-display'},
       title: {type: String}
     };
   }
@@ -32,6 +33,7 @@ export class RpPersonPreview extends Mixin(LitElement)
     this.showSubjects = false;
     this.subjectCt = 4;
     this.avatarSize = "md";
+    this.homeDisplay = false;
     this.textWidth = (window.innerWidth - 70) + "px";
   }
 
@@ -72,6 +74,22 @@ export class RpPersonPreview extends Mixin(LitElement)
 
   }
 
+  /**
+   * @method _constructClasses
+   * @description Constructs CSS classes based on element properties
+   * 
+   * @returns {Object}
+   */
+  constructClasses() {
+    let classes = {};
+  
+    if (this.homeDisplay && this.homeDisplay != 'undefined') {
+      classes['container-home'] = true;
+    }else{
+      classes['container'] = true;
+    }
+    return classes;
+  }
   /**
    * @method getName
    * @description calls the getFullName function gets the 
