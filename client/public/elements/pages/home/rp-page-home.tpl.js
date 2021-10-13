@@ -129,6 +129,9 @@ return html`
     margin: auto;
     width:65px;
   }
+  .factoid-container{
+    margin: 0px 250px;
+  }
 
   @media (min-width: 800px){
     .people-container {
@@ -238,33 +241,33 @@ return html`
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
   <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
+    <div class="factoid-container">
+      <div class="l-3col layout-columns">
+        <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
+          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
+        </rp-factoid>
 
-    <div class="l-3col layout-columns">
-      <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
-        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
-      </rp-factoid>
+        <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works">
+          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
+        </rp-factoid>
 
-      <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works">
-        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
-      </rp-factoid>
+        <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
+          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rec-pool);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
+        </rp-factoid>
+      
+        <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants">
+          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
+        </rp-factoid>
 
-      <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
-        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-putah-creek);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
-      </rp-factoid>
-    
-      <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants">
-        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
-      </rp-factoid>
+        <rp-factoid href="" statistic="${this.coursesTotal}" title="courses">
+          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rose);"  icon="ucdlib:chalkboard-teacher"></ucdlib-icon></span>
+        </rp-factoid>
 
-      <rp-factoid href="" statistic="${this.coursesTotal}" title="courses">
-        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rose);"  icon="ucdlib:chalkboard-teacher"></ucdlib-icon></span>
-      </rp-factoid>
-
-      <rp-factoid href="" statistic="${this.patentsTotal}" title="patents">
-        <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-double-decker);"  icon="ucdlib:award"></ucdlib-icon></span>
-      </rp-factoid>
-
-    </div>     
+        <rp-factoid href="" statistic="${this.patentsTotal}" title="patents">
+          <span><ucdlib-icon class="import-icon" style="fill:#F18A00;"  icon="ucdlib:award"></ucdlib-icon></span>
+        </rp-factoid>
+      </div>  
+    </div>   
   </div>
 
   <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
