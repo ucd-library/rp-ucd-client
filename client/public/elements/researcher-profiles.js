@@ -85,22 +85,18 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
     
     //This will change to this.navLinks once the 1.3 release is done
-    this.navLinks_Grant = [
-      {text: 'People', page: 'people', href: '/people'},
-      {text: 'Subjects', page: 'concepts', href: '/concepts'},
-      {text: 'Works', page: 'works', href: '/works'},
-      {text: 'Grants', page: 'grants', href: '/grants'},
+    this.navLinks = [
+      {text: 'People', page: 'people', href: '/people', type: 'person'},
+      {text: 'Subjects', page: 'concepts', href: '/concepts', type: 'concept'},
+      {text: 'Works', page: 'works', href: '/works', type: 'work'},
+      {text: 'Grants', page: 'grants', href: '/grants', type: 'grant'},
       {text: 'Help', page: 'help', href: '/help'}];
 
-
-    // This will be deleted once the 1.3 release is done
-    this.navLinks_NonGrant = [
-      {text: 'People', page: 'people', href: '/people'},
-      {text: 'Subjects', page: 'concepts', href: '/concepts'},
-      {text: 'Works', page: 'works', href: '/works'},
-      {text: 'Help', page: 'help', href: '/help'}];
- 
-    this.navLinks = config.includeGrants ? this.navLinks_Grant : this.navLinks_NonGrant;
+    if( config.hiddenTypes && config.hiddenTypes.length ) {
+      this.navLinks = this.navLinks.filter(link => {
+        return !config.hiddenTypes.includes(link.type);
+      });
+    }
 
     if( config.user && config.user.impersonatedBy ) {
       this.accountLinks.unshift({text: "Stop Impersonating", action: 'stop-impersonating'}); 

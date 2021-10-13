@@ -69,8 +69,20 @@ export default (app) => {
     enable404 : true,
     template : async (req, res, next) => {
 
+      let user = await userAuthController.handleRequest(req);
+      let roles = (user || {}).roles || [];
+
+      // calc which (if any) sections to head
+      let hiddenTypes = [];
+      if( config.data && config.data.private && config.data.private.roles && config.data.private.roles.length ) {
+        if( !config.data.private.roles.some(role => roles.includes(role)) ) {
+          hiddenTypes = config.data.private.types;
+        }
+      }
+
       let appConfig = {
-        user: await userAuthController.handleRequest(req),
+        user,
+        hiddenTypes,
         appRoutes : config.client.appRoutes,
         modelRoutes : config.client.modelRoutes,
         theme : config.client.theme,
