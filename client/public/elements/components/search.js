@@ -25,7 +25,7 @@ export class RpSearch extends LitElement {
     super();
     this.render = render.bind(this);
     this.facets = [{"text": "PEOPLE"}, {"text": "ORGANIZATIONS"}, {"text": "WORKS"}, {"text": "SUBJECTS"}, {"text": "GRANTS"}];
-    this.placeholder = "search";
+    this.placeholder = "Search the registry";
     this.activeFacet = 0;
     this.inputValue = "";
     this.includeAllOption = false;

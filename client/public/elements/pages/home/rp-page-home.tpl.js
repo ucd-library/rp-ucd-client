@@ -7,10 +7,8 @@ import baseCss from "@ucd-lib/theme-sass/2_base_class/_index.css.js";
 import utility from "@ucd-lib/theme-sass/6_utility/_index.css.js";
 
 
-
 export default function render() {
 return html`
-
 <style>
   ${styles}
   ${layoutCss}
@@ -25,42 +23,37 @@ return html`
     background: url(/images/homepage-hero.jpg) no-repeat center center;
     background-size: cover;
     color: var(--ae-tcolor-light);
-    padding: 10px 20px 40px 0px;
-
   }
   .hero .title-container {
     display: flex;
-    padding: 0 20px 30px 0px;
-    justify-content: left;
-
+    padding: 0 20px 30px 20px;
+    justify-content: center;
   }
   .hero img {
     height: auto;
     width: 100%;
     max-width: 350px;
-    padding: 10px;
+    padding: 20px;
   }
   .hero .text {
     flex-grow: 1;
   }
   .hero .content {
-    font-size: var(--ae-font-size-h1);
-    line-height: 38px;
-    text-align: left;
+    font-size: var(--ae-font-size);
+    line-height: 23px;
   }
   .hero h2 {
-    color: var(--ae-tcolor-secondary);
+    color: var(--ae-tcolor-secondary)
   }
   .search .container {
     padding: 30px 0;
-    
   }
   rp-search {
     width: 100%;
   }
   .data .container {
+    padding: 30px 0;
     flex-flow: row wrap;
-
   }
   .data .col-l {
     width: 100%;
@@ -102,19 +95,15 @@ return html`
     justify-content: center;
     height: 100vh;
   }
-
   h2.title-fix {
     margin: 0;
     padding-top: 20px;
-    text-align:left;
   }
-
   .import-icon{
     margin:auto;
     width:135px; 
     height:135px;
   }
-
   .section.rebrand{
     padding: 40px 40px;
     justify-content: center;
@@ -123,16 +112,11 @@ return html`
   .section.rebrand:nth-child(even) {
       background-color: #D7E5F0;
     }
-
   .heading--weighted-underline{
     text-align:center;
     margin: auto;
     width:65px;
   }
-  .factoid-container{
-    margin: 0px 250px;
-  }
-
   @media (min-width: 800px){
     .people-container {
       grid-template-columns: auto auto;
@@ -149,7 +133,7 @@ return html`
       order: unset;
     }
     .hero .title-container {
-      padding: 50px 50px;
+      padding: 50px 0;
     }
     .hero img {
       padding-top: 0;
@@ -169,7 +153,6 @@ return html`
       height: 590px;
     }
   }
-
   @media (min-width: 480px) and (max-width: 799px){
     /* .title-container {
       max-width: 550px; 
@@ -179,7 +162,6 @@ return html`
     .container{
       margin-right: auto;
       margin-left: auto;
-
     }
     rp-search {
       max-width: 500px;
@@ -198,7 +180,6 @@ return html`
     rp-search {
       max-width: 245px;
     }  
-
   }
   @media (max-width: 250px) {
     .container{
@@ -208,16 +189,14 @@ return html`
     rp-search {
       max-width: 185px;
     }  
-
   }
-
   
 </style>
 <div class="hero">
   <div class="title-container">
     <!-- <img src="${this.theme.homeHeroImage}" alt=""> -->
-    <div style="padding-left: 50px;text-align: center; max-width: 750px">
-      <h1 class="title-fix" style="color:var(--ae-tcolor-secondary); text-align:left; font-weight:var(--ae-font-weight-bold);">${this.theme.homeHeroTitle}</h1>
+    <div style="text-align: center; max-width: 600px">
+      <h2 class="title-fix">${this.theme.homeHeroTitle}</h2>
       <div class="content">
         <div>${renderHTML(this.theme.homeHeroContentTop)}</div>
         <div>${renderHTML(this.theme.homeHeroContentBottom)}</div>
@@ -228,13 +207,11 @@ return html`
     </div>
   </div>
 </div>
-
 <!-- <div class="search bg-primary">
   <div class="container flex justify-content-center">
     <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
   </div>
 </div> -->
-
 <div class="data bg-light ${this.pageStatus}">
   <rp-loading ?hidden="${this._hideStatusSection('loading')}">Loading ${this.theme.siteTitle}</rp-loading>
   <div ?hidden="${this._hideStatusSection('error')}" class="error">
@@ -269,61 +246,106 @@ return html`
       </div>  
     </div>   
   </div>
-
-  <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
-
-    <div class="container flex"> 
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-      
-      <div id="subjects">
-        <h1 class="weight-regular" style="text-align:center;">
-          <span style="font-size: 36px;">Recently Updated Subjects</span>
-        </h1>
-        <div class="heading--weighted-underline"></div>
-
-        <div style="text-align:center; color:var(--ae-tcolor-code-text); font-weight:var(--ae-font-weight-bold)">
-          ${this.subjects.map(subject => html`
-            <rp-badge 
-              title="${this.SubjectModel.getPreferredLabel(subject)}" 
-              size="lg" 
-              max-width="180" 
-              text-width=${this.peopleWidth}
-              class="my-1" 
-              href="${this.SubjectModel.getLandingPage(subject)}">
-              ${this.SubjectModel.getPreferredLabel(subject)}
-            </rp-badge>
+<div class="data bg-light ${this.pageStatus}">
+  <rp-loading ?hidden="${this._hideStatusSection('loading')}">Loading ${this.theme.siteTitle}</rp-loading>
+  <div ?hidden="${this._hideStatusSection('error')}" class="error">
+    <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
+  </div>
+  <div class="container flex" ?hidden="${this._hideStatusSection('loaded')}">
+    <div class="col-l">
+      <div id="works">
+        <div class="list-count">
+          <div class="row">
+            <div class="count"><h3 class="mt-0">${this.academicWorksTotal}</h3></div>
+            <div class="text"><h3 class="weight-regular mt-0">Academic Works</h3></div>
+          </div>
+          ${this.academicWorks.map(work => html`
+          <div class="row item">
+            <div class=count>${work.count}</div>
+            <div class="text"><a href="${work.href}">${work.text}</a></div>
+          </div>
           `)}
-          <br />
-          ${this.subjectsTotal > 10 ? html`
-            <rp-badge title="Browse All Subjects" size="extralg" max-width="280"  href="/concepts" color-sequence=6>Browse All Subjects</rp-badge>
-          ` : html``}
+        </div>
+        <div class="flex view-all-row">
+          <a href="/works" class="view-all"><span>View All Works</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
         </div>
       </div>
     </div>
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-    </div> 
-
-  </div>
-
-  <!-- <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
-    <div class="container flex"> 
+    <div class="col-r flex-grow-1">
+      <div class="people" id="people">
+        <h2 class="mt-0">
+          <span class="bold mr-2">${this.peopleTotal}</span>
+          <span class="weight-regular">People</span>
+        </h2>
+        <div class="people-container">
+          ${this.people.map(person => html`
+            <rp-person-preview
+              .data="${person}"
+              avatar-size='sm'
+              text-width=${this.peopleWidth}>
+            </rp-person-preview>
+            `)}
+        </div>
+        <div></div>
+        <div class="flex view-all-row">
+          <a href="/people" class="view-all"><span>View All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
+        </div>
+      </div>
+      
     <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
       
       <div id="subjects">
-        <h1 class="weight-regular" style="text-align:center;">
-          <span style="font-size: 36px;">Research News</span>
-        </h1>
-        <div class="heading--weighted-underline"></div>
-
-        <div class="l-basic--flipped"></div>
-
-       
+        <h2>
+          <span class="bold mr-2">${this.subjectsTotal}</span>
+          <span class="weight-regular">Research Subjects</span>
+        </h2>
+        ${this.subjects.map(subject => html`
+          <rp-badge 
+            title="${this.SubjectModel.getPreferredLabel(subject)}" 
+            size="lg" 
+            max-width="180" 
+            text-width=${this.peopleWidth}
+            class="my-1" 
+            href="${this.SubjectModel.getLandingPage(subject)}">
+            ${this.SubjectModel.getPreferredLabel(subject)}
+          </rp-badge>
+        `)}
+        ${this.subjectsTotal > 10 ? html`
+          <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/concepts"></rp-badge>
+        ` : html``}
       </div>
     </div>
     <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-    </div> 
-
+    <!-- <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
+      <div id="grants">
+        <h2>
+          <span class="bold mr-2">${this.grantsTotal}</span>
+          <span class="weight-regular">Grants</span>
+        </h2>
+        ${this.grants.map(grant => html`
+          <rp-badge 
+            title="${this.GrantModel.getLabel(grant)}" 
+            size="lg" 
+            max-width="280" 
+            class="my-1" 
+            href="${this.GrantModel.getLandingPage(grant)}">
+            ${this.GrantModel.getLabel(grant)}
+          </rp-badge>
+        `)}
+        ${this.grantsTotal > 10 ? html`
+          <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/grants"></rp-badge>
+          ` : html``}
+      </div>
+      <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
     </div> -->
+    
+  </div>
 </div>
  
 `;}
+
+
+
+
+
+
