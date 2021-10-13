@@ -66,7 +66,7 @@ return html`
   }
   .people-container {
     display: inline-grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   #works {
     padding-top: 20px;
@@ -106,7 +106,7 @@ return html`
     justify-content: center;
     align-items: center;
     min-width:200px;
-    max-width:950px;
+    max-width:1000px;
     margin: 0 auto;
   }
   .section.rebrand:nth-child(even) {
@@ -133,7 +133,7 @@ return html`
 
   @media (min-width: 800px){
     .people-container {
-      grid-template-columns: auto auto auto;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     .data .container {
       flex-flow: row nowrap;
@@ -274,9 +274,9 @@ return html`
   </div>
     <div class="center">
       <div class="people" id="people">
-        <h4 class="mt-0" style="text-align:center; margin-bottom:25px;">
-          <span class="weight-regular ">Recently Updated Profiles</span>
-        </h4>
+        <h3 class="mt-0" style="text-align:center; margin-bottom:25px;color:#000000;">
+          <span class="weight-bold ">Recently Updated Profiles</span>
+        </h3>
         <div class="people-container">
           ${this.people.map(person => html`
             <rp-person-preview
@@ -294,8 +294,8 @@ return html`
     </div>
     <hr style="margin-left:175px;margin-right:175px;"/>
       <div class="center">
-        <h4 style="text-align:center; margin-bottom:25px;">
-          <span class="weight-regular">Recently Updated Subjects</span>
+        <h3 style="text-align:center; margin-bottom:25px; color:#000000;">
+          <span class="weight-bold">Recently Updated Subjects</span>
           <br />
         </h4>
         ${this.subjects.map(subject => html`
