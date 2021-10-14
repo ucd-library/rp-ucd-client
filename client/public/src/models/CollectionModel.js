@@ -429,7 +429,6 @@ class CollectionModel extends BaseModel {
    * @returns {Object} - Query object to be passed to API
    */
   convertElementQuery(elementQuery={}){
-    debugger;
     let query = QueryUtils.getBaseQueryObject();
     if (Object.keys(elementQuery).length == 0) return query;
 

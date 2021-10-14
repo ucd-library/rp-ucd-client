@@ -112,6 +112,7 @@ export default (app) => {
         if( modelInfo.isModel ) {
           if( modelInfo.is404Model ) {
             appConfig.is404 = true;
+            res.status(404);
           } else {
             jsonld = staticModelController.transformModel(modelInfo.model);
           }
