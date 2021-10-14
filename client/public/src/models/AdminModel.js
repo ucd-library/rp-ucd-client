@@ -30,14 +30,19 @@ class AdminModel extends BaseModel {
 
   async get(id) {
     let jsonldState = await this.sparqlDescribe(id);
-      
-    let type = jsonldState.payload['@type']
-      .filter(item => item.startsWith('experts:'))[0]
-      .replace(/^experts:/, '');
+    let type;
+    
+    if( Array.isArray(jsonldState.payload['@type']) ) {
+      type = jsonldState.payload['@type']
+        .filter(item => item.startsWith('experts:'))[0];
+    } else {
+      type = jsonldState.payload['@type'];
+    }
+    if( type ) type = type.replace(/^experts:/, '').replace(/.*#/, '').toLowerCase();
 
     let record = await this.record(id);
 
-    let model = await this.esModelService('person', id);
+    let model = await this.esModelService(type, id);
 
     let data = {
       type, id,
@@ -52,11 +57,6 @@ class AdminModel extends BaseModel {
 }
 
 const model = new AdminModel();
-// test
-// (async function() {
-//   // let id = 'ucdrp:person/b78c058911b45047c56f3b5148381715';
-//   // let id = 'ucdrp:grant/1464874';
-//   console.log(await model.get(id));
-// })();
+
 
 export default model;
