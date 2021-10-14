@@ -212,6 +212,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       return import(/* webpackChunkName: "page-search" */ "./pages/bundles/search");
     } else if( bundles.landing.includes(page) ) {
       return import(/* webpackChunkName: "page-landing" */ "./pages/bundles/landing");
+    } else if( bundles.admin.includes(page) ) {
+      return import(/* webpackChunkName: "page-admin" */ "./pages/bundles/admin");
     } else if( page === 'home' ) {
       return import(/* webpackChunkName: "page-home" */ "./pages/home/rp-page-home");
     } else if( page === 'components' ) {

@@ -461,6 +461,7 @@ return html`
   <rp-page-help id="help"></rp-page-help>
   <rp-page-search id="search"></rp-page-search>
   <rp-page-tou id="termsofuse"></rp-page-tou>
+  <rp-page-admin id="admin"></rp-page-admin>
   <rp-page-404 id="404"></rp-page-404>
 </iron-pages>
 <div id="app-footer" ?hidden="${this.page == 'app-mobile-menu'}">

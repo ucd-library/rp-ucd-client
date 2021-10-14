@@ -19,6 +19,7 @@
     "@ucd-lib/theme-elements": "^0.0.3",
     "@ucd-lib/theme-sass": "^5.0.10",
     "isomorphic-fetch": "^2.2.1",
+    "json-formatter-js": "^2.3.4",
     "lit": "^2.0.0",
     "lit-element": "^2.5.1",
     "sanitize-html": "^2.5.1",
