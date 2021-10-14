@@ -22,6 +22,7 @@ class StaticModelController {
    * }
    * 
    * @param {Request} req express request
+   * @param {Array} roles
    *  
    * @returns {Object}
    */

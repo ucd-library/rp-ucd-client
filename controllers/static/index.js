@@ -89,7 +89,6 @@ export default (app) => {
         theme : config.client.theme,
         data : config.client.data,
         verbose : config.client.verbose,
-        includeGrants : config.client.includeGrants,
         defaultTypes : config.client.defaultTypes,
         gaCode : config.client.gaCode,
         enableUpdates : config.client.enableUpdates,
