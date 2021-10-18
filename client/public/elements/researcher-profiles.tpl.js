@@ -5,11 +5,13 @@ import config from "../src/config"
 
 
 
+
 export default function render() {
 return html`
 
 <style>
   ${styles}
+
   :host {
     display: block;
     min-width: 360px;
@@ -352,34 +354,26 @@ return html`
 -->
 <app-route .appRoutes="${this.appRoutes}"></app-route>
 
-<!-- 
-<ucd-theme-header
-  site-name="UC Davis Library"
-  slogan="Books!"
-  figure-src="/img/book-logo.png"
+
+<!-- <ucd-theme-header
+  site-name="Aggie Experts"
+  figure-src="/images/gunrock-running.png"
   is-demo>
 
   <ucd-theme-primary-nav>
-    <ul link-text="Books" href="#">
-      <li><a href="#">Biographies</a></li>
-      <li><a href="#">Fantasy</a></li>
-      <li><a href="#">Mystery</a></li>
-    </ul>
-    <a href=#>Magazines</a>
-    <a href="#">Journals</a>
+    ${this.navLinks.map(link => html`
+          <a href=${link.href} role="menuitem" ?this-page="${link.page == this.page}" class="text-primary no-decoration nav-${link.page}">${link.text}</a>
+        `)}
   </ucd-theme-primary-nav>
 
   <ucd-theme-search-popup>
     <ucd-theme-search-form
-      @search="${e => console.log(e.detail.searchTerm)}">
+      @search="${this._closeQuickSearch}">
     </ucd-theme-search-form>
   </ucd-theme-search-popup>
 
-  <ucd-theme-quick-links title="Locations" style-modifiers="highlight">
-    <a href="#">Shields</a>
-    <a href="#">Blaisdell</a>
-    <a href="#">Carlson</a>
-    <a href="#">Special Collections</a>
+  <ucd-theme-quick-links 
+    title="Login">
   </ucd-theme-quick-links>
 
 </ucd-theme-header> -->
