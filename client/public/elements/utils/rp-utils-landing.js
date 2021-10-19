@@ -1,5 +1,6 @@
 import { LitElement } from 'lit-element';
 import render from "./rp-utils-landing.tpl.js";
+import config from "../../src/config";
 
 /**
  * @class RpUtilsLanding
@@ -50,8 +51,8 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     if (this.assetType == 'person') {
       sections.push(
         {id: 'about', text: 'About'},
-        {id: 'publications', text: 'Publications'},
-        {id: 'grants', text: 'Grants'}
+        {id: 'publications', text: 'Publications', type: 'work'},
+        {id: 'grants', text: 'Grants', type: 'grant'}
       );
     }
     if (this.assetType == 'concept'){
@@ -59,7 +60,7 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         {id: 'about', text:'About'},
         {id: 'relatedSubjects', text:'Related Subjects'},
         {id: 'researchers', text: 'Researchers'},
-        {id: 'publications', text: 'Publications'}
+        {id: 'publications', text: 'Publications', type: 'work'}
       );
     }
     if (this.assetType == 'grant'){
@@ -68,6 +69,14 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         {id: 'contributors', text:'Contributors'},
       );
     }
+
+    if( config.hiddenTypes && config.hiddenTypes.length ) {
+      sections = sections.filter(section => {
+        return !config.hiddenTypes.includes(section.type);
+      });
+    }
+
+
     let i = 0;
     for (let section of sections) {
       if( !this._sectionHasData(section.id) ) {
@@ -86,12 +95,17 @@ export default class RpUtilsLanding extends Mixin(LitElement)
    * @method _hidePageSection
    * @description Bound to 'hidden' attribute of page sections
    * @param {String} section - id of page section
+   * @param {String} type optional type.  will check APP_CONFIG.hiddenTypes list
    * 
    * @returns {Boolean}
    */
-  _hidePageSection(section) {
+  _hidePageSection(section, type) {
     let hasData = this._sectionHasData(section);
     if( !hasData ) return true;
+
+    if( config.hiddenTypes && config.hiddenTypes.length ) {
+      if( config.hiddenTypes.includes(type) ) return true;
+    }
 
     if (this.activeSection.index == 0) {
       return false;
