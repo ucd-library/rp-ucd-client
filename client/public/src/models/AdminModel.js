@@ -13,13 +13,22 @@ class AdminModel extends BaseModel {
     this.register('AdminModel');
   }
 
+  async errors() {
+    try {
+      await this.service.errors();
+    } catch(e) {}
+    return this.store.data.errors;
+  }
+
   async sparqlDescribe(id) {
     await this.service.sparqlDescribe(id);
     return this.store.data.sparql[id];
   }
 
-  async esModelService(type, id) {
-    await this.service.esModelService(type, id);
+  async esModelService(type, id, query) {
+    try {
+      await this.service.esModelService(type, id, query);
+    } catch(e) {}
     return this.store.data.model[id];
   }
 

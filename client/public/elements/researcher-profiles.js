@@ -84,6 +84,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.hasProfile = (this.user && this.user.expertsId);
     this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
     
+    this.firstAppStateUpdate = true;
+
     //This will change to this.navLinks once the 1.3 release is done
     this.navLinks = [
       {text: 'People', page: 'people', href: '/people', type: 'person'},
@@ -165,7 +167,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @description Lit method called when element is first updated.
    */
   firstUpdated() {
-    // this._resizeQuickSearch();
+
   }
 
   /**
@@ -180,6 +182,11 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     if ( e.location.query && e.location.query.s !== undefined ) {
       this.isSearch = true;
       this.textQuery = e.location.query.s;
+
+      if( this.firstAppStateUpdate ) {
+        let ele = this.shadowRoot.getElementById('quick-search');
+        if( !ele.opened ) ele.open();
+      }
     }
     else {
       this.textQuery="";
@@ -197,6 +204,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.page = page;
 
     window.scrollTo(0, 0);
+    this.firstAppStateUpdate = false;
   }
 
   /**
