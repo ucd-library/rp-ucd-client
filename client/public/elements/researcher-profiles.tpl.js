@@ -355,9 +355,8 @@ return html`
 <app-route .appRoutes="${this.appRoutes}"></app-route>
 
 
-<!-- <ucd-theme-header
+<ucd-theme-header
   site-name="Aggie Experts"
-  figure-src="/images/gunrock-running.png"
   is-demo>
 
   <ucd-theme-primary-nav>
@@ -376,11 +375,11 @@ return html`
     title="Login">
   </ucd-theme-quick-links>
 
-</ucd-theme-header> -->
+</ucd-theme-header>
 
 
 
-<div id="app-header">
+<!-- <div id="app-header">
   ${this._renderMasthead()}
   <div id="app-header-content" class="bg-light text-primary" ?hidden="${this.page === 'app-mobile-menu'}">
     <div class="container flex align-items-center justify-content-between">
@@ -419,11 +418,11 @@ return html`
         <li role="none">
           <a href=${link.href} role="menuitem" ?this-page="${link.page == this.page}" class="text-primary no-decoration nav-${link.page}">${link.text}</a>
         </li>`)}
-      </ul>
+      </ul>-->
 
       <!-- TODO: remove -->
       <!-- <button @click="${this.testHarvest}">Harvest</button> -->
-      <div id="nav-right" >
+      <!-- <div id="nav-right" >
         <rp-quick-search 
           id="quick-search" 
           @new-search="${this._onSearch}" 
@@ -433,7 +432,7 @@ return html`
       </div>
     </nav>
   </div>
-</div>
+</div>  -->
 
 
 <iron-pages
@@ -490,6 +489,7 @@ return html`
   <rp-page-help id="help"></rp-page-help>
   <rp-page-search id="search"></rp-page-search>
   <rp-page-tou id="termsofuse"></rp-page-tou>
+  <rp-page-admin id="admin"></rp-page-admin>
   <rp-page-404 id="404"></rp-page-404>
 </iron-pages>
 <div id="app-footer" ?hidden="${this.page == 'app-mobile-menu'}">

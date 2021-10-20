@@ -148,7 +148,7 @@ return html`
   .box-pubsyear .pubs {
     flex-grow: 1;
   }
-  .box-pubsyear .pubs rp-citation {
+  .box-pubsyear .pubs rp-citation, .grant-panel {
     margin-bottom: 8px;
   }
   .box-pub-buttons {
@@ -261,18 +261,6 @@ return html`
             <rp-avatar size="lg"></rp-avatar>
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getFullName()}</h2>
 
-            <div class="text-light h3 mb-2 mt-1 text-center">
-              <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
-                <rp-icon style="vertical-align:middle;"
-                  icon="iron-editor:mode-edit"
-                  has-text
-                  circle-bg
-                  is-link size="lg">
-                  <div slot="tooltip">Edit Positions</div>
-                </rp-icon>
-              </a>
-            </div>
-
             <!--
               SB: Kafka Message Add?
               <rp-toast-message ?hidden="${!this.isOwnProfile}"><rp-toast-message>
@@ -353,7 +341,7 @@ return html`
                     ${this.isOwnProfile ? html`
                       <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
                         <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
-                          <div slot="tooltip">Edit Positions</div>
+                          <div slot="tooltip">Edit Roles</div>
                         </rp-icon>
                       </a>
                       ` : html``
@@ -400,12 +388,11 @@ return html`
 
       <ae-publication-list
         expert-id="${this.assetId}"
-        ?is-own-profile="${this.isOwnProfile}">
+        ?is-own-profile="${this.isOwnProfile}"
+        ?hidden="${this._hidePageSection('publications', 'work')}">
       </ae-publication-list>
 
-      <div ?hidden="${!config.includeGrants}">
-
-      <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('grants')}">
+      <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('grants', 'grant')}">
         <div class="box-title">
           <h1 class="weight-regular mt-0">Grants</h1>
           <div class="box-title-icons">
@@ -428,17 +415,16 @@ return html`
             </h3>
           </div>
           <div>
-            <h3 class="weight-regular mt-0">
             ${this.inactiveGrant.length != 0  ? html `
-                <i>Completed (${this.inactiveGrant.length})</i>
-                ${this.inactiveGrant.map(grant =>
-                    html`<h3 class="weight-regular mt-0"><a href=${grant.grant_url}>${grant.title}</a><br />
+              <div>
+                <h3 class="weight-regular mt-0"><i>Completed (${this.inactiveGrant.length})</i></h3>
+                ${this.inactiveGrant.map(grant => 
+                    html`<div class="grant-panel"><a href=${grant.grant_url}>${grant.title}</a><br />
                     ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
                     `
                 )}
-            `
+              </div>`
             :html``}
-            </h3>
           </div>
         `
         :html``}
@@ -448,8 +434,6 @@ return html`
           @click="${e => this._doGrantQuery()}"
           class="load-pubs more">Show ${Math.min(this.showMoreGrants, 10)} more</button>
       </section>
-
-      </div>
 
     </div>
   </div>
