@@ -1,4 +1,4 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 
 export default function render() {
 return html`
@@ -31,6 +31,13 @@ return html`
   span.size-lg {
     padding: .55em .9em;
     border-radius: 2em;
+  }
+  span.size-extralg {
+    padding: .85em 1.55em;
+    border-radius: 2em;
+    background-color:var(--ae-tcolor-primary);
+    color: white;
+    border-color: var(--ae-tcolor-primary);
   }
   span.main.has-max-width {
     white-space: nowrap;

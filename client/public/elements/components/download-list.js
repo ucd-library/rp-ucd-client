@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html } from 'lit';
 import "@polymer/iron-dropdown/iron-dropdown";
 import render from './download-list.tpl.js';
 

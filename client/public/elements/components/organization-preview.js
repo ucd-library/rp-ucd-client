@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html } from 'lit';
 import render from './organization-preview.tpl.js';
 import config from "../../src/config.js";
 

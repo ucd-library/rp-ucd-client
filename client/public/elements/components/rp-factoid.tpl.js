@@ -1,6 +1,6 @@
 import { html, css } from 'lit';
 
-import { classMap } from 'lit-html/directives/class-map';
+import { classMap } from 'lit/directives/class-map.js';
   
   export function render() {
   return html`
@@ -11,8 +11,16 @@ import { classMap } from 'lit-html/directives/class-map';
                 width:135px; 
                 height:135px;
             }
+            .shrink{
+                -webkit-transform:scale(0.75);
+                -moz-transform:scale(0.75);
+                -ms-transform:scale(0.75);
+                transform:scale(0.75);
+
+                }
+
         </style>
-        <div class="factoid">
+        <div class="factoid shrink" >
             <a href="${this.href}">
             <div class="factoid-bracket left">
                 <div class="factoid-bracket__thing"></div>

@@ -1,6 +1,6 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html } from 'lit';
 import render from './link-list.tpl.js';
-import { classMap } from 'lit-html/directives/class-map';
+import { classMap } from 'lit/directives/class-map.js';
 
 /**
  * @class RpLinkList

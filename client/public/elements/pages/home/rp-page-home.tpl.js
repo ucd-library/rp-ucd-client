@@ -1,12 +1,21 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import { renderHTML } from '../../../src/lib/santize-html.js';
 import styles from "../../styles/site.html"
+import layoutCss from "@ucd-lib/theme-sass/5_layout/_index.css.js";
+import base from "@ucd-lib/theme-sass/1_base_html/_index.css.js";
+import baseCss from "@ucd-lib/theme-sass/2_base_class/_index.css.js";
+import utility from "@ucd-lib/theme-sass/6_utility/_index.css.js";
+
 
 export default function render() {
 return html`
-
 <style>
   ${styles}
+  ${layoutCss}
+  ${base}
+  ${utility}
+  ${baseCss}
+
   :host {
     display: block;
   }
@@ -56,10 +65,8 @@ return html`
     padding-bottom: 20px;
   }
   .people-container {
-    display: grid;
-    grid-template-columns: auto;
-    grid-column-gap: 24px;
-    grid-row-gap: 10px;
+    display: inline-grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   #works {
     padding-top: 20px;
@@ -86,15 +93,47 @@ return html`
     justify-content: center;
     height: 100vh;
   }
-
   h2.title-fix {
     margin: 0;
     padding-top: 20px;
   }
+  .import-icon{
+    margin:auto;
+    width:135px; 
+    height:135px;
+  }
+  .section.rebrand{
+    justify-content: center;
+    align-items: center;
+    min-width:200px;
+    max-width:1000px;
+    margin: 0 auto;
+  }
+  .section.rebrand:nth-child(even) {
+      background-color: #D7E5F0;
+    }
+  .heading--weighted-underline{
+    text-align:center;
+    margin: auto;
+    width:65px;
+  }
+
+  hr{
+    background-color: #ccc;
+    border: none;
+  }
+  .center{
+    justify-content:center;
+    align-items: center;
+    text-align: center;
+    min-width:200px;
+    max-width:800px;
+    margin: 0 auto;
+  }
 
   @media (min-width: 800px){
     .people-container {
-      grid-template-columns: auto auto;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     .data .container {
       flex-flow: row nowrap;
@@ -127,8 +166,11 @@ return html`
     .error {
       height: 590px;
     }
+    .center{
+      min-width:200px;
+      max-width:800px;
+    }
   }
-
   @media (min-width: 480px) and (max-width: 799px){
     /* .title-container {
       max-width: 550px; 
@@ -142,10 +184,16 @@ return html`
     rp-search {
       max-width: 500px;
     }
+    .center{
+      min-width:200px;
+    }
   }
   @media (max-width: 480px) {
     .hero .title-container {
       display: block;
+    }
+    .center{
+      min-width:200px;
     }
   }
   @media (max-width: 325px) {
@@ -156,7 +204,9 @@ return html`
     rp-search {
       max-width: 245px;
     }  
-
+    .center{
+      min-width:200px;
+    }
   }
   @media (max-width: 250px) {
     .container{
@@ -166,9 +216,10 @@ return html`
     rp-search {
       max-width: 185px;
     }  
-
+    .center{
+      min-width:200px;
+    }
   }
-
   
 </style>
 <div class="hero">
@@ -186,71 +237,67 @@ return html`
     </div>
   </div>
 </div>
-
 <!-- <div class="search bg-primary">
   <div class="container flex justify-content-center">
     <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
   </div>
 </div> -->
-
 <div class="data bg-light ${this.pageStatus}">
   <rp-loading ?hidden="${this._hideStatusSection('loading')}">Loading ${this.theme.siteTitle}</rp-loading>
   <div ?hidden="${this._hideStatusSection('error')}" class="error">
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
-  <div class="container flex" ?hidden="${this._hideStatusSection('loaded')}">
+      <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
+        <div class="l-4col layout-columns">
+          <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
+          </rp-factoid>
 
-    <div class="col-l">
-      <div id="works">
-        <div class="list-count">
-          <div class="row">
-            <div class="count"><h2 class="mt-0">${this.academicWorksTotal}</h2></div>
-            <div class="text"><h2 class="weight-regular mt-0">Academic Works</h2></div>
-          </div>
-          ${this.academicWorks.map(work => html`
-          <div class="row item">
-            <div class=count>${work.count}</div>
-            <div class="text"><a href="${work.href}">${work.text}</a></div>
-          </div>
-          `)}
+          <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
+          </rp-factoid>
+
+          <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rec-pool);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
+          </rp-factoid>
+        
+          <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
+          </rp-factoid>
         </div>
+        <hr style=" margin-bottom:-15px; "/>
 
-        <div class="flex view-all-row">
-          <a href="/works" class="view-all"><span>View All Works</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
-        </div>
-      </div>
-    </div>
+      </div>  
 
-
-
-    <div class="col-r flex-grow-1">
+  <div ?hidden="${this._hideStatusSection('error')}" class="error">
+    <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
+  </div>
+    <div class="center">
       <div class="people" id="people">
-        <h2 class="mt-0">
-          <span class="bold mr-2">${this.peopleTotal}</span>
-          <span class="weight-regular">People</span>
-        </h2>
+        <h3 class="mt-0" style="text-align:center; margin-bottom:25px;color:#000000;">
+          <span class="weight-bold ">Recently Updated Profiles</span>
+        </h3>
         <div class="people-container">
           ${this.people.map(person => html`
             <rp-person-preview
               .data="${person}"
               avatar-size='sm'
-              text-width=${this.peopleWidth}>
+              text-width=${this.peopleWidth}
+              home-display>
             </rp-person-preview>
             `)}
         </div>
-        <div></div>
         <div class="flex view-all-row">
-          <a href="/people" class="view-all"><span>View All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
+          <a href="/people" class="view-all"><span>Browse All People</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
         </div>
       </div>
-      
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-      
-      <div id="subjects">
-        <h2>
-          <span class="bold mr-2">${this.subjectsTotal}</span>
-          <span class="weight-regular">Research Subjects</span>
-        </h2>
+    </div>
+    <hr style="margin-left:175px;margin-right:175px;"/>
+      <div class="center">
+        <h3 style="text-align:center; margin-bottom:25px; color:#000000;">
+          <span class="weight-bold">Recently Updated Subjects</span>
+          <br />
+        </h4>
         ${this.subjects.map(subject => html`
           <rp-badge 
             title="${this.SubjectModel.getPreferredLabel(subject)}" 
@@ -263,13 +310,12 @@ return html`
           </rp-badge>
         `)}
         ${this.subjectsTotal > 10 ? html`
-          <rp-badge size="lg" class="my-1" max-width="280" ellipsis href="/concepts"></rp-badge>
+          <div class="flex view-all-row">
+            <a href="/concepts" class="view-all"><span>Browse All Subjects</span><iron-icon icon="av:play-arrow" class="filled-arrow"></iron-icon></a>
+          </div>        
         ` : html``}
       </div>
-    </div>
-    <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
-
-
+      <br />
     <!-- <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
       <div id="grants">
         <h2>
@@ -293,10 +339,13 @@ return html`
       <div class="hidden-desktop w-100"><hr class="dotted m-0"></div>
     </div> -->
     
-
-
-
   </div>
 </div>
  
 `;}
+
+
+
+
+
+

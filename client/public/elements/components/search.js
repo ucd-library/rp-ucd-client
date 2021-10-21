@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import render from './search.tpl.js';
 import './dropdown';
 import "./icon";

@@ -1,7 +1,8 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import render from "./rp-page-home.tpl.js";
 
 import "@ucd-lib/cork-app-utils";
+
 
 import config from "../../../src/config.js";
 import "../../components/alert";
@@ -10,6 +11,10 @@ import "../../components/person-preview";
 import "../../components/grant-preview";
 import "../../components/search";
 import "../../components/rp-loading";
+import "../../components/rp-factoid";
+
+
+
 
 
 /**
@@ -37,6 +42,8 @@ export default class RpPageHome extends Mixin(LitElement)
       subjects: {type: Array},
       subjectsTotal: {type: Number},
       subjectsStatus: {type: String},
+      patentsTotal: {type: Number},
+      coursesTotal: {type: Number},
       textWidth: {type: String, attribute: 'text-width'},
       visible: {type: Boolean}
     };
@@ -54,6 +61,8 @@ export default class RpPageHome extends Mixin(LitElement)
     this.grantsTotal = 0;
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
+    this.patentsTotal = 0,
+    this.coursesTotal = 0,
     this.setPeopleWidth(window.innerWidth);
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
     this.theme = config.theme;
@@ -269,7 +278,7 @@ export default class RpPageHome extends Mixin(LitElement)
    * @returns {Promise}
    */
   async _getPeople() {
-    let peopleList = await this.CollectionModel.overview('randomPeople', {limit: 4, total: this.peopleTotal});
+    let peopleList = await this.CollectionModel.overview('randomPeople', {limit: 3, total: this.peopleTotal});
     this.peopleStatus = peopleList.state;
     if (peopleList.state != "loaded") {
       return;
@@ -301,7 +310,7 @@ export default class RpPageHome extends Mixin(LitElement)
    * @returns {Promise}
    */
   async _getSubjects() {
-    let subjects = await this.SubjectModel.getRandomSubjects(10);
+    let subjects = await this.SubjectModel.getRandomSubjects(12);
     this.subjectsStatus = subjects.state;
     this.subjects = subjects.payload;
 

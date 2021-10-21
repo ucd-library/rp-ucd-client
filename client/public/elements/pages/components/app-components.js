@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import render from "./app-components.tpl.js";
 //import { colorStyles } from '../../styles/site.js';
 

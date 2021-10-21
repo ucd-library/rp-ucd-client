@@ -1,7 +1,9 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import {renderHTML} from '../src/lib/santize-html.js';
 import styles from "./styles/site.html"
 import config from "../src/config"
+
+
 
 export default function render() {
 return html`
@@ -444,8 +446,7 @@ return html`
       <a class="login-button" href="/auth/login">LOG IN</a>
     </div>
     `}
-  </div>
-  <ucdlib-icon style="margin:auto;width:135px; height:135px;"  icon="academic:scopus" size=24></ucdlib-icon>  
+  </div> 
   <app-page-components id="components"></app-page-components>
   <rp-page-home id="home"></rp-page-home>
   <rp-page-people id="people"></rp-page-people>

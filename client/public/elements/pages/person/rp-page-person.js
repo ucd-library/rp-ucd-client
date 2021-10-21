@@ -1,5 +1,5 @@
 import render from "./rp-page-person.tpl.js";
-import { html } from 'lit-element';
+import { html } from 'lit';
 import RpUtilsLanding from "../../utils/rp-utils-landing";
 import UserUtils from "../../../src/lib/user-utils";
 import rdfUtils from "../../../src/lib/rdf-utils";

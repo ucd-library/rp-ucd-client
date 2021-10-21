@@ -1,4 +1,4 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import render from "./rp-page-organizations.tpl.js"
 
 import RpUtilsCollection from "../../utils/rp-utils-collection";

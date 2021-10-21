@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html } from 'lit';
 import render from './avatar.tpl.js';
 import "@polymer/iron-icons";
 
