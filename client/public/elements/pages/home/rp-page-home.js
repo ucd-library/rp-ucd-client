@@ -89,6 +89,18 @@ export default class RpPageHome extends Mixin(LitElement)
   }
 
   /**
+   * @method firstUpdated
+   * @description hiding private content here
+   */
+  firstUpdated() {
+    if( config.hiddenTypes && config.hiddenTypes.length ) {
+      config.hiddenTypes
+        .map(type => this.shadowRoot.querySelector(`rp-factoid[type="${type}"]`))
+        .forEach(ele => ele ? ele.style.display = 'none' : null);
+    }
+  }
+
+  /**
    * @method updated
    * @description lit method called when props update
    * 

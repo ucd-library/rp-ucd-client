@@ -249,19 +249,19 @@ return html`
   </div>
       <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
         <div class="l-4col layout-columns">
-          <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
+          <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people" type="people">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
           </rp-factoid>
 
-          <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works">
+          <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works" type="work">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
           </rp-factoid>
 
-          <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
+          <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects" type="subject">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rec-pool);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
           </rp-factoid>
         
-          <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants">
+          <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants"  type="grant">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
           </rp-factoid>
         </div>
