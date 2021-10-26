@@ -109,9 +109,14 @@ return html`
     max-width:1000px;
     margin: 0 auto;
   }
+  .section.rebrand .layout {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+  }
   .section.rebrand:nth-child(even) {
-      background-color: #D7E5F0;
-    }
+    background-color: #D7E5F0;
+  }
   .heading--weighted-underline{
     text-align:center;
     margin: auto;
@@ -171,10 +176,10 @@ return html`
       max-width:800px;
     }
   }
-  @media (min-width: 480px) and (max-width: 799px){
-    /* .title-container {
-      max-width: 550px; 
-    } */
+  @media (max-width: 900px) {
+    .section.rebrand .layout {
+      flex-direction: column;
+    }
   }
   @media (min-width: 480px) {
     .container{
@@ -248,7 +253,7 @@ return html`
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
       <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
-        <div class="l-4col layout-columns">
+        <div class="layout">
           <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people" type="people">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
           </rp-factoid>
