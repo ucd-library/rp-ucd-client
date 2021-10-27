@@ -35,9 +35,18 @@ class AdminService extends BaseService {
     });
   }
 
-  esModelService(type, id) {
+  esModelService(type, id, query) {
+    let opts = {method: 'GET'};
+    if ( query ) {
+      opts = {
+        method : 'POST',
+        body : query
+      };
+    }
+
     return this.request({
-      url : this.baseUrl+'/indexer/model/'+type+'/'+queryUtils.appendIdPrefix(id),
+      url : this.baseUrl+'/indexer/model/'+type+'/'+queryUtils.appendIdPrefix(id)+'?verbose=true',
+      fetchOptions : opts,
       onLoading : request => this.store.esModelServiceLoading(id, request),
       onLoad : result => this.store.esModelServiceLoaded(id, result.body),
       onError : e => this.store.esModelServiceError(id, e)
@@ -53,6 +62,15 @@ class AdminService extends BaseService {
       onLoading : request => this.store.recordLoading(id, request),
       onLoad : result => this.store.recordLoaded(id, result.body),
       onError : e => this.store.recordError(id, e)
+    });
+  }
+
+  errors() {
+    return this.request({
+      url : this.baseUrl+'/api/indexer/errors?debug=true',
+      onLoading : request => this.store.errorsLoading(request),
+      onLoad : result => this.store.errorsLoaded(result.body),
+      onError : e => this.store.errorsError(e)
     });
   }
 

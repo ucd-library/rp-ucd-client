@@ -8,7 +8,8 @@ class AdminStore extends BaseStore {
     this.data = {
       sparql : {},
       model : {},
-      record : {}
+      record : {},
+      errors : {}
     };
     this.events = {};
   }
@@ -86,6 +87,31 @@ class AdminStore extends BaseStore {
 
   _setRecordState(state) {
     this.data.record[state.id] = state;
+  }
+
+  errorsLoading(request) {
+    this._setErrorsState({
+      state : this.STATE.LOADING,
+      request
+    });
+  }
+
+  errorsLoaded(payload) {
+    this._setErrorsState({
+      state : this.STATE.LOADED,
+      payload
+    });
+  }
+
+  errorsError(error) {
+    this._setErrorsState({
+      state : this.STATE.ERROR,
+      error
+    });
+  }
+
+  _setErrorsState(state) {
+    this.data.errors = state;
   }
 
 }

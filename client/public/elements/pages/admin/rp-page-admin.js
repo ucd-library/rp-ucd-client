@@ -1,15 +1,17 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./rp-page-admin.tpl.js";
-import JSONFormatter from "json-formatter-js";
+
+import '@polymer/iron-pages';
+
+import './rp-admin-dashboard';
+import './rp-admin-record';
 
 export default class RpPageAdmin extends Mixin(LitElement) 
   .with(LitCorkUtils) {
 
   static get properties() {
     return {
-      uri : {type: String},
-      type : {type: String},
-      loadingState : {type: String}
+      view : {type: String}
     };
   }
 
@@ -21,9 +23,7 @@ export default class RpPageAdmin extends Mixin(LitElement)
     super();
     this.render = render.bind(this);
     this._injectModel('AdminModel', 'AppStateModel');
-  
-    this.loadingState = '';
-    this.uri = '';
+    this.view = 'dashboard';
   }
 
   firstUpdated() {
@@ -34,36 +34,12 @@ export default class RpPageAdmin extends Mixin(LitElement)
     if( e.page !== 'admin' ) return;
 
     if( e.location.path.length > 1 ) {
-      let uri = e.location.path.slice(1).join('/');
-      if( !uri.startsWith('ucdrp:') ) uri = 'ucdrp:'+uri;
-      this.load(uri);
+      this.view = 'record';
+    } else {
+      this.view = 'dashboard';
     }
   }
 
-  async load(id) {
-    this.uri = id;
-    this.type = '';
-    this.loadingState = 'loading...';
-
-    this.shadowRoot.querySelector('#fuseki').innerHTML = '';
-    this.shadowRoot.querySelector('#model').innerHTML = '';
-    this.shadowRoot.querySelector('#elasticsearch').innerHTML = '';
-    
-    let data = await this.AdminModel.get(id);
-    this.loadingState = '';
-    this.type = data.type;
-    this.uri = data.id;
-
-    this.shadowRoot.querySelector('#fuseki')
-      .appendChild((new JSONFormatter(data.fuseki.payload || data.fuseki.error, 1)).render());
-
-    this.shadowRoot.querySelector('#model')
-      .appendChild((new JSONFormatter(data.model.payload || data.model.error, 1)).render());
-
-    this.shadowRoot.querySelector('#elasticsearch')
-      .appendChild((new JSONFormatter(data.record.payload || data.record.payload, 1)).render());
-
-  }
 
 }
 
