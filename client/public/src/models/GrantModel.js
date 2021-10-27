@@ -331,7 +331,6 @@ class GrantModel extends BaseModel {
 
     all.sort();
     let resp = await this.getContributors(grant['@id'], all);
-    console.log("Resp:", resp);
 
     let people = rdfUtils.asArray(resp.payload.relates ? resp.payload.relates : resp.payload);
 
@@ -340,10 +339,7 @@ class GrantModel extends BaseModel {
         byRole[label][i] = people.find(person =>  person.inheresIn ? person.inheresIn['@id'] === byRole[label][i] : person['@id'] === byRole[label][i]);
       }
     }
-    let tempRole = [byRole];
-    let nameList = ['Program Director Role','Principal Investigator','Co-Principal Investigator','Project Leader','Core Leader','Key Personnel','Other Role'];
 
-    console.log(tempRole[0]);
     return byRole;
   }
 

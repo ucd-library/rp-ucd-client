@@ -173,7 +173,6 @@ export default class RpPageGrant extends RpUtilsLanding {
 
     let admin = await this.GrantModel.getAdminRole(this.grant.relates);
     this.admin = admin ? admin.label : this.emptyValue;
-    console.log(this.admin);
 
     let contributors = await this.GrantModel.getContributorsByRole(this.grant);
     
