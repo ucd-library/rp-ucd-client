@@ -204,7 +204,7 @@ class PersonModel extends BaseModel {
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
 
     for( let contact of contacts ) {
-      let id=contact.identifier || contact['experts:identifier'];
+      let id=rdfUtils.getFirstValue(contact.identifier || contact['experts:identifier']);
       if( id && id.match('^'+type) ) {
         res.push({
           contact,
@@ -294,25 +294,25 @@ class PersonModel extends BaseModel {
     }
 
     let contact = contacts[0].contact;
-    let id=contact.identifier || contact['experts:identifier'];
+    let id=rdfUtils.getFirstValue(contact.identifier || contact['experts:identifier']);
     if (contact.hasName) {
       if (console.verbose) console.log("hasName "+JSON.stringify(contact));
-      contact=contact.hasName;
+      contact=rdfUtils.getFirstValue(contact.hasName);
     }
 
 
     let parts={};
     let name=[];
     if( contact.givenName ) {
-      parts.givenName=contact.givenName;
+      parts.givenName=rdfUtils.getFirstValue(contact.givenName);
       name.push(parts.givenName);
     }
     if( id && id.match('^odr') && contact.middleName ) {
-      parts.middleName=contact.middleName;
+      parts.middleName=rdfUtils.getFirstValue(contact.middleName);
       name.push(parts.middleName);
     }
     if( contact.familyName ) {
-      parts.familyName=contact.familyName;
+      parts.familyName=rdfUtils.getFirstValue(contact.familyName);
       name.push(parts.familyName);
     }
 
