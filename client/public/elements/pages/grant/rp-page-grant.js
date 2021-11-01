@@ -35,7 +35,10 @@ export default class RpPageGrant extends RpUtilsLanding {
       awardedByLabel: {type: String},
       contributors: {type: Array},
       grantNumber: {type:String},
-      role: {type:String}
+      role: {type:String},
+      admin: {type: String},
+      emptyValue: {type: String},
+      class :{type:String}
     };
   }
 
@@ -62,6 +65,10 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.grantNumber ="";
     this.contributors= [];
     this.role = "";
+    this.admin = "";
+    this.emptyValue = "Not Listed";
+    this.class = "";
+
 
   }
 
@@ -164,13 +171,17 @@ export default class RpPageGrant extends RpUtilsLanding {
     // relateIds = Array.from(new Set(relateIds));
     // this.contributors = rdfUtils.asArray((await this.GrantModel.getContributors(this.grant["@id"], relateIds)).payload);
 
+    let admin = await this.GrantModel.getAdminRole(this.grant.relates);
+    this.admin = admin ? admin.label : this.emptyValue;
+
     let contributors = await this.GrantModel.getContributorsByRole(this.grant);
+    
     let tmp = [];
     for( let label in contributors ) {
       tmp.push({label, contributors: contributors[label]});
     }
     this.contributors = tmp;
-    
+
     this.grantType = this._getGrantType();
 
     return false;
@@ -215,12 +226,12 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.grantAmount = this._grantAmount();
     this.awardedByLabel = this._awardedByLabel();
     this.grantNumber = this._grantNumber();
-
     if (config.verbose) console.log("description:", data);
 
     // this._toggleElements("about", this.about);
     
   }
+
 
   /**
    * @method _dateInterval
@@ -323,8 +334,9 @@ export default class RpPageGrant extends RpUtilsLanding {
    * @returns {String}
    */
   _awardedByLabel(){
-    if (this.grant.assignedBy.label == undefined) return "Not Listed";
-    return this.grant.assignedBy.label;
+    if (!this.grant.assignedBy) return "Not Listed";
+    if (!Array.isArray(this.grant.assignedBy)) this.grant.assignedBy = [this.grant.assignedBy];
+    return this.grant.assignedBy;
   }
 
 

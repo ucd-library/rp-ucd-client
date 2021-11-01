@@ -163,6 +163,31 @@ return html`
     margin-top: .25rem;
     margin-bottom: .75rem;
   }
+  .known_contributors{
+    display:grid;
+  }
+  .item_ProgramDirector {
+    order: 1;
+  }
+  .item_PrincipalInvestigator{
+    order: 2;
+  }
+  .item_Co-PrincipalInvestigator{
+    order: 3;
+  }
+  .item_ProjectLeader{
+    order: 4;
+  }
+  .item_CoreLeader{
+    order: 5;
+  }
+  .item_KeyPersonnel{
+    order: 6;
+  }
+  .item_OtherRole{
+    order: 7;
+  }
+
   @media (min-width: 800px) {
       .hero {
       padding-left: 30px;
@@ -206,7 +231,7 @@ return html`
         <div class="grid-container">
             <div class="grid-item">
                 <h2 aria-label="Awarded By Title">Awarded By</h2>
-                <div>${this.awardedByLabel}</div>
+                ${this.awardedByLabel.map(label => html`<div>${label.label}</div>`)}
             </div> 
             ${this.grantAmount ? html `
               <div class="grid-item">
@@ -221,6 +246,10 @@ return html`
               <div class="grid-item">
                   <h2 aria-label="Grant Number">Grant Number</h2>
                   <div>${this.grantNumber}</div>
+              </div> 
+              <div class="grid-item">
+                  <h2 aria-label="Grant Admin">Grant Admin</h2>
+                  <div>${this.admin}</div>
               </div> 
         </div>
         ${this.purpose ? html `
@@ -237,19 +266,29 @@ return html`
     </section>
 
     <section id="contributors" class="bg-light mt-3" ?hidden="${this._hidePageSection('contributors')}">
-    <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>      
-
+    <div class="known_contributors">
+    <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>   
         ${this.contributors.map(contribType => html`
-          <h2 aria-label="Principal Investigator Section Title">${contribType.label}</h2>
-
+        
+        <div class="${"item_" + (contribType.label).split(" ").join("")}">
+          <h2 aria-label="Contributor Type Section Title">${contribType.label}</h2>
           ${contribType.contributors.map(contributor => html`
-            <rp-person-preview
-              .data=${contributor}
-              text-width="${this.peopleWidth}"
-            ></rp-person-preview>`
-          )}
-        `)}
+            ${contributor.inheresIn || contributor["@id"].includes("ucdrp:person") ? html`
+              <rp-person-preview
+                  .data=${contributor.inheresIn ? contributor.inheresIn : contributor}
+                  text-width="${this.peopleWidth}"
+              ></rp-person-preview>`
+              :html``}
 
+          `)}
+          ${contribType.contributors.map(contributor => html`
+            ${!contributor.inheresIn && !contributor["@id"].includes("ucdrp:person")? html`
+              ${contributor.label} <br />
+            `:html``}
+          `)}
+        </div>
+        `)}
+    </div>
     </section>
   </div>
 </div>

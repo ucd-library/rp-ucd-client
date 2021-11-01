@@ -297,7 +297,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doGrantQuery(){
     let data = await this.PersonModel.getGrants(this.assetId, this.retrievedGrants.length);
-
+    console.log("Payload:",data.payload);
     if( data.state === 'error' ) {
       this.grantStatus = 'error';
       return;
@@ -322,7 +322,6 @@ export default class RpPagePerson extends RpUtilsLanding {
         .find(item => item.inheresIn['@id'] === 'ucdrp:'+this.assetId);
 
       let role = this.GrantModel.getKnownGrantRole(person['@type']) || '';
-
       let grant_url =  grant["@id"].replace('ucdrp:', '/');
       let tempGrantObject = {
         "title": grant.label,
