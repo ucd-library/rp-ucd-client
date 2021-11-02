@@ -198,13 +198,13 @@ class PersonModel extends BaseModel {
    * @param {String} type defaults to odr
    * @returns Array of contact enteries
    */
-  getContacts(individual={}, type='odr' || 'oap') {
+  getContacts(individual={}, type='odr') {
     let res = [];
 
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
 
     for( let contact of contacts ) {
-      let id=contact.identifier || contact['experts:identifier'];
+      let id=rdfUtils.getFirstValue(contact.identifier || contact['experts:identifier']);
       if( id && id.match('^'+type) ) {
         res.push({
           contact,
@@ -223,7 +223,6 @@ class PersonModel extends BaseModel {
     }
 
     res.sort((a,b) => a.number < b.number ? -1 : 1);
-
     return res;
   }
 
@@ -284,9 +283,6 @@ class PersonModel extends BaseModel {
     let contacts = this.getContacts(individual);
     let res = [];
 
-    // Choose best contact via rank.
-    contacts.sort((a, b) => a.rank < b.rank ? -1 : 1);
-
     if( contacts.length === 0) {
       let name = rdfUtils.getFirstValue(individual.label) || '';
       if( type === 'string' ) {
@@ -298,33 +294,31 @@ class PersonModel extends BaseModel {
     }
 
     let contact = contacts[0].contact;
-
-    if( type === 'string' || type === 'array' ) {
-      let name = [];
-
-      if( contact.givenName ) {
-        name.push(rdfUtils.getFirstValue(contact.givenName));
-      }
-      if( contact.middleName ) {
-        name.push(rdfUtils.getFirstValue(contact.middleName));
-      }
-      if( contact.familyName ) {
-        name.push(rdfUtils.getFirstValue(contact.familyName));
-      }
-
-      if( type === 'array' ) return name;
-      return name.join(' ');
+    let id=rdfUtils.getFirstValue(contact.identifier || contact['experts:identifier']);
+    if (contact.hasName) {
+      if (console.verbose) console.log("hasName "+JSON.stringify(contact));
+      contact=rdfUtils.getFirstValue(contact.hasName);
     }
 
-    if( contact.hasName ) {
-      contact = contact.hasName;
+
+    let parts={};
+    let name=[];
+    if( contact.givenName ) {
+      parts.givenName=rdfUtils.getFirstValue(contact.givenName);
+      name.push(parts.givenName);
+    }
+    if( id && id.match('^odr') && contact.middleName ) {
+      parts.middleName=rdfUtils.getFirstValue(contact.middleName);
+      name.push(parts.middleName);
+    }
+    if( contact.familyName ) {
+      parts.familyName=rdfUtils.getFirstValue(contact.familyName);
+      name.push(parts.familyName);
     }
 
-    return {
-      givenName : rdfUtils.getFirstValue(contact.givenName) || '',
-      middleName : rdfUtils.getFirstValue(contact.middleName) || '',
-      familyName : rdfUtils.getFirstValue(contact.familyName) || ''
-    };
+    if( type === 'array' ) return name;
+    if(type==='object' ) return parts;
+    return name.join(' ');
   }
 
   /**

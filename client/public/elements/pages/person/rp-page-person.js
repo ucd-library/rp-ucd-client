@@ -360,11 +360,11 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   _isOwnProfile() {
     try {
-      if (config.user.expertsId === this.assetId) {
+      if ( config.user.expertsId && config.user.expertsId === this.assetId) {
         return true;
       }
     } catch (error) {
-      console.warn("Error parsing username.");
+      if (config.verbose) console.warn(`Own Profile Error: ${error}`);
     }
     return false;
   }
