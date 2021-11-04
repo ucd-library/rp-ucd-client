@@ -87,6 +87,7 @@ class WorkModel extends BaseModel {
    * @returns {Array}
    */
   getAdditionalLinks(work) {
+    console.log("Work:", work);
     let output = [];
     if (typeof work !== 'object' ) return output;
     // ucd elinks

@@ -281,6 +281,7 @@ class PersonModel extends BaseModel {
    */
   getFullName(individual={}, type='string') {
     let contacts = this.getContacts(individual);
+
     let res = [];
 
     if( contacts.length === 0) {
@@ -295,6 +296,8 @@ class PersonModel extends BaseModel {
 
     let contact = contacts[0].contact;
     let id=rdfUtils.getFirstValue(contact.identifier || contact['experts:identifier']);
+    console.log("ID:", id);
+
     if (contact.hasName) {
       if (console.verbose) console.log("hasName "+JSON.stringify(contact));
       contact=rdfUtils.getFirstValue(contact.hasName);
@@ -307,7 +310,7 @@ class PersonModel extends BaseModel {
       parts.givenName=rdfUtils.getFirstValue(contact.givenName);
       name.push(parts.givenName);
     }
-    if( id && id.match('^odr') && contact.middleName ) {
+    if(contact.middleName ) {
       parts.middleName=rdfUtils.getFirstValue(contact.middleName);
       name.push(parts.middleName);
     }
@@ -315,6 +318,8 @@ class PersonModel extends BaseModel {
       parts.familyName=rdfUtils.getFirstValue(contact.familyName);
       name.push(parts.familyName);
     }
+
+    console.log("Name:",name);
 
     if( type === 'array' ) return name;
     if(type==='object' ) return parts;

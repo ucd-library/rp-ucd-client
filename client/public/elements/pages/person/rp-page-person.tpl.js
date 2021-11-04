@@ -365,6 +365,7 @@ return html`
                                        </div>`
                                 :``}
                     </div>
+                  <br />
                 `)}
               </div>
             </div>
@@ -377,6 +378,7 @@ return html`
                 ${this.svgIcon[site.type] ? html`${this.svgIcon[site.type]}` : html`${this.svgIcon.url}`}${site.text}
                       </a>
                     </div>`)}
+                    <br />
               ` : html``}
             </div>
           </div>
@@ -385,13 +387,15 @@ return html`
         `}
 
       </section>
+    ${this.totalPublications != 0 || (this.isLoggedIn && this.isOwnProfile) ? html`
+        <ae-publication-list
+          expert-id="${this.assetId}"
+          ?is-own-profile="${this.isOwnProfile}"
+          ?hidden="${this._hidePageSection('publications', 'work')}">
+        </ae-publication-list>` 
+    : html``}
 
-      <ae-publication-list
-        expert-id="${this.assetId}"
-        ?is-own-profile="${this.isOwnProfile}"
-        ?hidden="${this._hidePageSection('publications', 'work')}">
-      </ae-publication-list>
-
+    ${this.totalGrants != 0 || (this.isLoggedIn && this.isOwnProfile) ? html`
       <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('grants', 'grant')}">
         <div class="box-title">
           <h1 class="weight-regular mt-0">Grants</h1>
@@ -433,7 +437,8 @@ return html`
           ?hidden="${this.showMoreGrants === 0}"
           @click="${e => this._doGrantQuery()}"
           class="load-pubs more">Show ${Math.min(this.showMoreGrants, 10)} more</button>
-      </section>
+      </section>`
+    : html``}
 
     </div>
   </div>
