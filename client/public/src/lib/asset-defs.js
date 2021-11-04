@@ -10,6 +10,57 @@ class AssetDefs {
     this.defaultFacetId = 'none';
     this.defaultAzId = 'all';
     this.defaultSortField = 'label';
+
+    this.textSearchFields = {
+      default : [
+        "doi^10",
+        'hasContactInfo.familyName.text^9',
+        'hasContactInfo.givenName.text^8',
+        "_.organizationLabel.text^6",
+        "_.personLabel.text^6",
+        "_.workLabel.text^6",
+        "_.conceptLabel.text",
+        "_.subjectAreaLabel.text^2",
+        "_.grantLabel.text^6",
+        "hasSubjectArea.label.text^5",
+        "abstract",
+        'hasContactInfo.title.text',
+        'hasResearchArea.label.text',
+        'hasPublicationVenue.issn',
+        "hasPublicationVenue.label.text",
+        'citation.label^10',
+        '_.top20Citation.label^15',
+        '_.lastCitation.label^15',
+        'relates.hasContactInfo.familyName^10',
+        'relates.hasContactInfo.givenName^10',
+        'assignedBy.label^10',
+      ],
+      people : [
+        'hasContactInfo.familyName.text^9',
+        'hasContactInfo.givenName.text^8',
+        'hasContactInfo.title.text^7',
+        'hasResearchArea.label.text^6',
+        'citation.label'
+      ],
+      concepts : [
+        "label.text^10",
+        "prefLabel.text^10"
+      ],
+      works : [
+        "doi^10",
+        "label.text^9",
+        "abstract^8",
+        "hasPublicationVenue.label.text^7",
+        "hasPublicationVenue.issn^5"
+      ],
+      grants: [
+        "label.text^2",
+        "assignedBy.label.text",
+        "sponsorAwardId.text^2",
+        "relates.hasContactInfo.familyName^2",
+        "relates.hasContactInfo.givenName^2"
+      ]
+    };
   }
 
   /**
@@ -35,12 +86,7 @@ class AssetDefs {
         },
         azField: "hasContactInfo.familyName.firstLetter",
         areaField: "hasResearchArea",
-        facetedSearchFields: [
-          'hasContactInfo.familyName.text^9',
-          'hasContactInfo.givenName.text^8',
-          'hasContactInfo.title.text^7',
-          'hasResearchArea.label.text^6',
-          'citation.label']
+        facetedSearchFields: this.textSearchFields.people
       }, 
       {
         id: 'concepts',
@@ -56,10 +102,7 @@ class AssetDefs {
           }
         },
         azField: "prefLabel.firstLetter",
-        facetedSearchFields: [
-          "label.text^10",
-          "prefLabel.text^10"
-        ]
+        facetedSearchFields: this.textSearchFields.concepts
       },
       /*
       {
@@ -90,13 +133,7 @@ class AssetDefs {
         azField: "label.firstLetter",
         // areaField: "hasSubjectArea.@id",
         areaField: "_.allSubjectArea",
-        facetedSearchFields: [
-          "doi^10",
-          "label.text^9",
-          "abstract^8",
-          "hasPublicationVenue.label.text^7",
-          "hasPublicationVenue.issn^5"
-        ]
+        facetedSearchFields: this.textSearchFields.works
       },
     ];
 
@@ -114,13 +151,7 @@ class AssetDefs {
         }
       },
       azField: "label.firstLetter",
-      facetedSearchFields: [
-        "label.text^2",
-        "assignedBy.label.text",
-        "sponsorAwardId.text^2",
-        "relates.hasContactInfo.familyName^2",
-        "relates.hasContactInfo.givenName^2"
-      ]
+      facetedSearchFields: this.textSearchFields.grants
     };
     facet.push(grant);
 
@@ -269,29 +300,7 @@ class AssetDefs {
     for (const f of this.getMainFacets()) {
       if (f.id == facet) return f.facetedSearchFields;
     }
-    return [
-      "doi^10",
-      'hasContactInfo.familyName.text^9',
-      'hasContactInfo.givenName.text^8',
-      "_.organizationLabel.text^6",
-      "_.personLabel.text^6",
-      "_.workLabel.text^6",
-      "_.conceptLabel.text",
-      "_.subjectAreaLabel.text^2",
-      "_.grantLabel.text^6",
-      "hasSubjectArea.label.text^5",
-      "abstract",
-      'hasContactInfo.title.text',
-      'hasResearchArea.label.text',
-      'hasPublicationVenue.issn',
-      "hasPublicationVenue.label.text",
-      'citation.label^10',
-      '_.top20Citation.label^15',
-      '_.lastCitation.label^15',
-      'relates.hasContactInfo.familyName^10',
-      'relates.hasContactInfo.givenName^10',
-      'assignedBy.label^10',
-    ];
+    return this.textSearchFields.default;
   }
  
   /**

@@ -2,6 +2,10 @@ import { LitElement } from 'lit';
 import {render, styles} from "./rp-admin-dashboard.tpl.js";
 
 import "./rp-index-status";
+import assetDefs from '../../../src/lib/asset-defs.js';
+
+import "ace-builds/src-noconflict/ace";
+import "ace-builds/src-noconflict/keybinding-vim";
 
 export default class RpAdminDashboard extends Mixin(LitElement)
   .with(LitCorkUtils) {
@@ -10,7 +14,9 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     return {
       indexes : {type: Array},
       indexInfo : {type: Object},
-      requestingIndex : {type: Boolean}
+      requestingIndex : {type: Boolean},
+      textSearchFields : {type: Array},
+      explainQueryEnabled : {type: Boolean}
     };
   }
 
@@ -21,18 +27,68 @@ export default class RpAdminDashboard extends Mixin(LitElement)
   constructor() {
     super();
     this.render = render.bind(this);
-    this._injectModel('AdminModel', 'SocketModel');
+    this._injectModel('AdminModel', 'SocketModel', 'CollectionModel');
 
     this.indexInfo = {
       pendingDeleteIndexes : []
     };
     this.indexes = [];
     this.requestingIndex = false;
+    this.explainQueryEnabled = window.localStorage.getItem('explainQueryEnabled') === 'true';
+    
+    let textSearchFields = window.localStorage.getItem('textSearchFields');
+    if( textSearchFields ) {
+      assetDefs.textSearchFields = JSON.parse(textSearchFields);
+    }
+
+    textSearchFields = [];
+    for( let type in assetDefs.textSearchFields ) {
+      textSearchFields.push({type, fields: assetDefs.textSearchFields[type] });
+    }
+    this.textSearchFields = textSearchFields;
   }
 
   async firstUpdated() {
     let indexerStatus = (await this.AdminModel.indexerStatus()).payload;
     this.renderIndexStatus(indexerStatus);
+
+    let editorRoots = Array.from(this.shadowRoot.querySelectorAll('.editor-root'));
+    for( let editorRoot of editorRoots ) {
+      this._createEditor(editorRoot);
+    }
+
+    this._onEnableExplainChange();
+  }
+
+  _createEditor(editorRoot) {
+    let editor = ace.edit(editorRoot);
+    let type = editorRoot.getAttribute('type');
+    editor.renderer.attachToShadowRoot();
+    editor.setValue(assetDefs.textSearchFields[type].join('\n'));
+    editor.getSession().on('change', () => {
+      let values = editor.getValue()
+        .split('\n')
+        .map(item => item.trim())
+        .filter(item => item);
+      assetDefs.textSearchFields[type] = values;
+      window.localStorage.setItem('textSearchFields', JSON.stringify(assetDefs.textSearchFields));
+    });
+  }
+
+  _resetTextSearchFields() {
+    window.localStorage.removeItem('textSearchFields');
+    window.location.reload();
+  }
+
+  _onEnableExplainChange() {
+    let value = this.shadowRoot.querySelector('#enableExplain').checked;
+    window.localStorage.setItem('explainQueryEnabled', value);
+
+    if( value ) {
+      this.CollectionModel.queryOptions.explain = true;
+    } else {
+      delete this.CollectionModel.queryOptions.explain;
+    }
   }
 
   _onSocketMessage(msg) {

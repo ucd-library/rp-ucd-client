@@ -74,5 +74,7 @@ export default function render() {
       ` : html``}
       </div>
     </div>
+
+    <rp-query-explanation .data="${this.data._explanation}" show-details></rp-query-explanation>
   `;
 }

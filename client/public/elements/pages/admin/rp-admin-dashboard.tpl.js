@@ -19,6 +19,12 @@ export function styles() {
     .request-index > div {
       flex: .5;
     }
+    .text-field-panel {
+      width: 350px;
+    }
+    .text-field-panel .editor-root {
+      height: 500px;
+    }
   `;
 
   return [elementStyles, siteStyles];
@@ -28,6 +34,13 @@ export function render() {
 return html`
 
 <h1>Admin Dashboard</h1>
+
+<div>
+  <h3>
+    <label for="enableExplain">Enable Explain Descriptions</label>
+    <input type="checkbox" id="enableExplain" .checked="${this.explainQueryEnabled}" @change="${this._onEnableExplainChange}" />
+  </h3>
+</div>
 
 <div ?hidden="${this.requestingIndex}" class="request-index">
   <div>
@@ -60,11 +73,20 @@ return html`
     `)}
   </div>
 
-
   <div>
-
     ${this.indexes.map(index => html`<rp-index-status .data=${index}></rp-index-status>`)}
+  </div>
+</div>
 
+<div>
+  <h2>Text Search Fields <button @click="${this._resetTextSearchFields}">Reset</button></h2>
+  <div style="display: flex; flex-flow: wrap;">
+  ${this.textSearchFields.map(item => html`
+      <div class="text-field-panel">
+        <h4>${item.type}</h4>
+        <div class="editor-root" type="${item.type}"></div>
+      </div>
+  `)}
   </div>
 </div>
 

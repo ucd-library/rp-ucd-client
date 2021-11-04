@@ -25,6 +25,13 @@ class CollectionModel extends BaseModel {
     this.subFacets = AssetDefs.getSubFacets();
     this.pgPer = 8;
 
+    // for admins.  possible values are debug=true or explain=true
+    this.queryOptions = {debug: true};
+
+    let explainQueryEnabled = window.localStorage.getItem('explainQueryEnabled') === 'true';
+    if( explainQueryEnabled ) {
+      this.queryOptions.explain = true;
+    }
 
     this.register('CollectionModel');
   }
@@ -143,10 +150,8 @@ class CollectionModel extends BaseModel {
 
     if( current && current.request ) {
       await current.request;
-    } 
-    else {
-      await this.service.query(id, queryObject);
-
+    } else {
+      await this.service.query(id, queryObject, this.queryOptions);
     }
     return this.store.data.queryById[id];
   }
