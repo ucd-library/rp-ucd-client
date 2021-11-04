@@ -33,8 +33,11 @@ export default class RpProgressBar extends LitElement {
 
   updateProgress() {
     if( !this.total || !this.progress.length ) return;
+    let offset = 0;
     for( let part of this.progress ) {
-      part.percent = Math.floor((part.value / this.total) * 100);
+      part.offset = offset;
+      part.percent = (part.value / this.total) * 100;
+      offset += part.percent;
     }
     this.progressUi = [...this.progress];
 
