@@ -65,12 +65,22 @@ class AdminService extends BaseService {
     });
   }
 
-  errors() {
+  indexerStatus() {
     return this.request({
-      url : this.baseUrl+'/api/indexer/errors?debug=true',
-      onLoading : request => this.store.errorsLoading(request),
-      onLoad : result => this.store.errorsLoaded(result.body),
-      onError : e => this.store.errorsError(e)
+      url : this.baseUrl+'/api/indexer/stats',
+      onLoading : request => this.store.indexerStatusLoading(request),
+      onLoad : result => this.store.indexerStatusLoaded(result.body),
+      onError : e => this.store.indexerStatusError(e)
+    });
+  }
+
+  requestIndex(qs={}) {
+    return this.request({
+      url : this.baseUrl+'/api/indexer/reindex',
+      qs,
+      onLoading : request => this.store.requestIndexLoading(request),
+      onLoad : result => this.store.requestIndexLoaded(result.body),
+      onError : e => this.store.requestIndexError(e)
     });
   }
 
