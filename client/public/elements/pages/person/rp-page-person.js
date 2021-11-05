@@ -45,6 +45,7 @@ export default class RpPagePerson extends RpUtilsLanding {
       tempGrantObject: {type: Object},
       activeGrant: {type:Array},
       inactiveGrant: {type:Array},
+      isLoggedIn: {type: Boolean},
 
       title : {type: Object},
       additionalTitles : {type: Array}
@@ -57,6 +58,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.submitText = "Edit Publication";
     this.activeGrant = [];
     this.inactiveGrant = [];
+    this.isLoggedIn = config.user ? true : false;
 
     this._injectModel('PersonModel', 'GrantModel', 'AppStateModel');
 

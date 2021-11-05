@@ -96,6 +96,7 @@ return html`
   h2.title-fix {
     margin: 0;
     padding-top: 20px;
+    font-weight: 600;
   }
   .import-icon{
     margin:auto;
@@ -280,7 +281,7 @@ return html`
     <div class="center">
       <div class="people" id="people">
         <h3 class="mt-0" style="text-align:center; margin-bottom:25px;color:#000000;">
-          <span class="weight-bold ">Recently Updated Profiles</span>
+          <span class="weight-regular">Recently Updated Profiles</span>
         </h3>
         <div class="people-container">
           ${this.people.map(person => html`
@@ -300,7 +301,7 @@ return html`
     <hr style="margin-left:175px;margin-right:175px;"/>
       <div class="center">
         <h3 style="text-align:center; margin-bottom:25px; color:#000000;">
-          <span class="weight-bold">Recently Updated Subjects</span>
+          <span class="weight-regular">Recently Updated Subjects</span>
           <br />
         </h4>
         ${this.subjects.map(subject => html`
