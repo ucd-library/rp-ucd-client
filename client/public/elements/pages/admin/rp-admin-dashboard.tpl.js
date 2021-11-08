@@ -42,6 +42,10 @@ return html`
   </h3>
 </div>
 
+<div>
+  <h2>Indexes</h2>
+</div>
+
 <div ?hidden="${this.requestingIndex}" class="request-index">
   <div>
     <button @click="${this._onRequestReindexClicked}">Request Reindex</button>
@@ -59,7 +63,6 @@ return html`
 </div>
 
 <div>
-  <h2>Indexes</h2>
   <div>
     Search Index: <span class="index-label">${this.indexInfo.searchIndex || 'loading...'}</span>
   </div>

@@ -130,7 +130,7 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     }
     setTimeout(() => {
       this.requestingIndex = false;
-    }, 5000);
+    }, 15000);
   }
 
 
