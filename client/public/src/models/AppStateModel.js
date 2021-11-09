@@ -63,7 +63,7 @@ class AppStateModelImpl extends AppStateModel {
    * @description send a google analytics event if pathname has changed
    */
   _sendGA() {
-    if( this._gaEnabled() ) return;
+    if( !this._gaEnabled() ) return;
     if( this.lastGaLocation === window.location.pathname ) return;
     this.lastGaLocation = window.location.pathname;
 
