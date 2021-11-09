@@ -40,6 +40,10 @@ class AppStateModelImpl extends AppStateModel {
     // if page needs to be loaded, set update.page='loading'
     // then set page
 
+    let roles = (config.user || {}).roles || [];
+    if( update.page === 'admin' && !roles.includes('admin') ) {
+      update.page = 'home';
+    }
     
     let res = super.set(update);
     this._sendGA();
