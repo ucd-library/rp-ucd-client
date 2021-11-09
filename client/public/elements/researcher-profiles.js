@@ -105,6 +105,9 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     if( config.user && config.user.impersonatedBy ) {
       this.accountLinks.unshift({text: "Stop Impersonating", action: 'stop-impersonating'}); 
     }
+    if( config.user && (config.user.roles || []).includes('admin') ) {
+      this.accountLinks.unshift({text: "Admin Dashboard", href: '/admin'}); 
+    }
     if( this.hasProfile ){
       this.accountLinks.unshift({text: "My Profile", href: '/'+this.user.expertsId}); 
     }

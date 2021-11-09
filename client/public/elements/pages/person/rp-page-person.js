@@ -63,8 +63,6 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.assetType = "person";
     this.defaultResearchSubjectCount = 8;
 
-    this.isAdmin = UserUtils.isAdmin(config.user);
-
     this._resetEleProps();
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
