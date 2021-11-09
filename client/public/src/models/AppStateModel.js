@@ -127,7 +127,7 @@ class AppStateModelImpl extends AppStateModel {
    * @returns 
    */
   triggerGaEvent(action, opts) {
-    if( this._gaEnabled() ) return;
+    if( !this._gaEnabled() ) return;
 
     if( opts.event_category === undefined ) opts.event_category = '';
     if( opts.event_label === undefined ) opts.event_label = '';
