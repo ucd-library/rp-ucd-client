@@ -11,6 +11,7 @@ import '@ucd-lib/theme-elements/ucdlib/ucdlib-icon/ucdlib-icon';
 import '@ucd-lib/theme-elements/ucdlib/ucdlib-iconset/ucdlib-iconset';
 import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/ucdlib-icons';
 import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/academic';
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/sitefarm';
 import '@ucd-lib/theme-elements/ucdlib/ucdlib-branding-bar/ucdlib-branding-bar';
 
 import '@ucd-lib/theme-elements/brand/ucd-theme-header/ucd-theme-header.js';
