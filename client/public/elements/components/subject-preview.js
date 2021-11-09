@@ -17,7 +17,7 @@ export class RpSubjectPreview extends Mixin(LitElement)
 
   constructor(){
     super();
-    this._injectModel('SubjectModel');
+    this._injectModel('SubjectModel', 'AppStateModel');
     this.render = render.bind(this);
 
     this.showSnippet = false;

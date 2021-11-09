@@ -28,7 +28,7 @@ export class RpPersonPreview extends Mixin(LitElement)
   constructor() {
     super();
     this.render = render.bind(this);
-    this._injectModel('PersonModel');
+    this._injectModel('PersonModel', 'AppStateModel');
     this.data = {};
     this.showSnippet = false;
     this.showSubjects = false;

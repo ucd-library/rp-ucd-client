@@ -61,6 +61,7 @@ export default function render() {
       
       <a class="title" 
         href="${this.getLink()}" 
+        @click="${e => this.AppStateModel.sendGaSearchClickEvent(this.getLink())}"
         ?disabled="${!this.getLink()}">
         ${renderHTML(this.title)}
       </a>
