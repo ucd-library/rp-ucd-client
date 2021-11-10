@@ -357,7 +357,7 @@ return html`
 
 <ucd-theme-header
   site-name="Aggie Experts"
-  is-demo>
+  prevent-fixed>
 
   <ucd-theme-primary-nav>
     ${this.navLinks.map(link => html`
