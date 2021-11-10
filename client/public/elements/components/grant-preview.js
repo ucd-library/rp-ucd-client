@@ -28,7 +28,7 @@ export class RpGrantPreview extends Mixin(LitElement)
     this.showSnippet = false;
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
     
-    this._injectModel('GrantModel', 'AppStateModel');
+    this._injectModel('GrantModel');
     this.render = render.bind(this);
   }
 

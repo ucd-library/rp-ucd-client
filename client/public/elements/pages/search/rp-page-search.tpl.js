@@ -62,7 +62,7 @@ ${this._renderMobileSubFacets()}
     </div>
     <div class="data" ?hidden="${this.dataStatus == 'loading' || this.dataStatus == 'error' }">
       ${this.data.map((searchResult, i) => html`
-        ${this._renderAssetPreview(searchResult)}
+        ${this._renderAssetPreview(searchResult, i)}
         ${this.data.length - i == 1 && this.dataTotal <= this.pgPer ? html`
         ` : html`
           <hr class="dotted">

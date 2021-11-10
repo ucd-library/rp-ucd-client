@@ -6,6 +6,7 @@
     "APP_CONFIG": "readonly",
     "WebComponents": "readonly",
     "AGGIE_EXPERTS_LOADER": "readonly",
-    "rpLogger": "readonly"
+    "rpLogger": "readonly",
+    "gtag": "readonly"
   }
 }

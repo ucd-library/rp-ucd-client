@@ -72,8 +72,7 @@ export default function render() {
     <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}" >
       <a class="name" 
-        href="${this.getLandingPage()}" 
-        @click="${e => this.AppStateModel.sendGaSearchClickEvent(this.getLink())}"
+        href="${this.getLandingPage()}"
         ?disabled="${!this.getLandingPage()}">
         ${renderHTML(this.title)}
       </a>

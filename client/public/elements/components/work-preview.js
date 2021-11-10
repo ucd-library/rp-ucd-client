@@ -28,9 +28,8 @@ export class RpWorkPreview extends Mixin(LitElement)
     this.showSnippet = false;
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
 
-    this._injectModel('WorkModel', 'AppStateModel');
+    this._injectModel('WorkModel');
     this.render = render.bind(this);
-    
   }
 
   /**

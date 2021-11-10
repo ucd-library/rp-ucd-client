@@ -11,6 +11,7 @@
   "author": "jrmerz@ucdavis.edu",
   "license": "MIT",
   "dependencies": {
+    "@babel/preset-env": "^7.16.0",
     "@types/socket.io-client": "^3.0.0",
     "@ucd-lib/spa-router-middleware": "^0.2.1",
     "@ucd-lib/theme-elements": "0.0.2",

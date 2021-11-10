@@ -60,8 +60,7 @@ export default function render() {
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}">
       
       <a class="title" 
-        href="${this.getLink()}" 
-        @click="${e => this.AppStateModel.sendGaSearchClickEvent(this.getLink())}"
+        href="${this.getLink()}"
         ?disabled="${!this.getLink()}">
         ${renderHTML(this.title)}
       </a>

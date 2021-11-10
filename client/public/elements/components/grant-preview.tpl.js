@@ -62,10 +62,8 @@ export default function render() {
     <div class=container>
       <div class="icon-container"><rp-icon icon="iron-receipt" circle-bg theme-color='grant' size-icon="extralgIconGrants" size="extralg"></rp-icon></div>
       <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}">
-        <a class="title" 
-          href="${this.getLink()}" 
-          @click="${e => this.AppStateModel.sendGaSearchClickEvent(this.getLink())}">
-            ${renderHTML(this.title)}
+        <a class="title" href="${this.getLink()}">
+          ${renderHTML(this.title)}
         </a>
         <div class="below-title">
           <span>Research Grant</span>
