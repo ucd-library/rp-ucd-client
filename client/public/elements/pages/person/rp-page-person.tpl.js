@@ -406,25 +406,24 @@ return html`
         ${this.totalGrants != 0 ? html `
         <h2 class="mb-0">Selected Grants</h2>
           <div>
-            <h3 class="weight-regular mt-0">
-              ${this.activeGrant.length != 0 ? html `
-                <i>Active (${this.activeGrant.length})</i>
-                ${this.activeGrant.map(grant =>
-                    html`<h3 class="weight-regular mt-0"><a href="${grant.grant_url}">${grant.title}</a><br />
-                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
-                    `
-                )}
-              `
-              :html``}
-            </h3>
+          ${this.activeGrant.length != 0 ? html `
+              <div><i>Active (${this.activeGrant.length})</i>
+              ${this.activeGrant.map(grant => 
+                  html`<div class="grant-panel"><a href="${grant.grant_url}">${grant.title}</a><br />
+                  ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
+                  `
+              )}
+            </div>`
+            :html``}
           </div>
+          <br />
           <div>
             ${this.inactiveGrant.length != 0  ? html `
               <div>
-                <h3 class="weight-regular mt-0"><i>Completed (${this.inactiveGrant.length})</i></h3>
+              <i>Completed (${this.inactiveGrant.length})</i>
                 ${this.inactiveGrant.map(grant => 
                     html`<div class="grant-panel"><a href=${grant.grant_url}>${grant.title}</a><br />
-                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
+                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} 
                     `
                 )}
               </div>`

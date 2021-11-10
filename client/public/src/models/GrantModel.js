@@ -178,7 +178,6 @@ class GrantModel extends BaseModel {
     for (let author of auths) {
       let id = author.inheresIn["@id"].split(":")[1];
       let person = await this.PersonModel.get(id);
-      console.log(person);
     }
     return contributor;
   }
@@ -328,11 +327,13 @@ class GrantModel extends BaseModel {
         all.push(id);
 
       });
-
     all.sort();
-    let resp = await this.getContributors(grant['@id'], all);
 
-    let people = rdfUtils.asArray(resp.payload.relates ? resp.payload.relates : resp.payload);
+    /* All Array Mechanics */
+    //let resp = await this.getContributors(grant['@id'], all);
+    //let people = rdfUtils.asArray(resp.payload.relates ? resp.payload.relates : resp.payload);
+
+    let people = rdfUtils.asArray(grant.relates ? grant.relates : grant);
 
     for( let label in byRole ) {
       for( let i = 0; i < byRole[label].length; i++  ) {

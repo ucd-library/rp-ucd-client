@@ -231,7 +231,9 @@ return html`
         <div class="grid-container">
             <div class="grid-item">
                 <h2 aria-label="Awarded By Title">Awarded By</h2>
-                ${this.awardedByLabel.map(label => html`<div>${label.label}</div>`)}
+                ${this.awardedByLabel ? html`
+                  ${this.awardedByLabel.map(label => html`<div>${label.label}</div>`)}
+                `:html ``}
             </div> 
             ${this.grantAmount ? html `
               <div class="grid-item">
@@ -247,10 +249,12 @@ return html`
                   <h2 aria-label="Grant Number">Grant Number</h2>
                   <div>${this.grantNumber}</div>
               </div> 
+              ${this.admin != this.emptyValue ? html `
               <div class="grid-item">
                   <h2 aria-label="Grant Admin">Grant Admin</h2>
                   <div>${this.admin}</div>
               </div> 
+              `: html``}
         </div>
         ${this.purpose ? html `
           <h2 aria-label="Grant Purpose">Purpose</h2>
@@ -268,28 +272,40 @@ return html`
     <section id="contributors" class="bg-light mt-3" ?hidden="${this._hidePageSection('contributors')}">
     <div class="known_contributors">
     <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>   
-        ${this.contributors.map(contribType => html`
-        
-        <div class="${"item_" + (contribType.label).split(" ").join("")}">
-          <h2 aria-label="Contributor Type Section Title">${contribType.label}</h2>
-          ${contribType.contributors.map(contributor => html`
-            ${contributor.inheresIn || contributor["@id"].includes("ucdrp:person") ? html`
-              <rp-person-preview
-                  .data=${contributor.inheresIn ? contributor.inheresIn : contributor}
-                  text-width="${this.peopleWidth}"
-              ></rp-person-preview>`
-              :html``}
 
-          `)}
-          ${contribType.contributors.map(contributor => html`
-            ${!contributor.inheresIn && !contributor["@id"].includes("ucdrp:person")? html`
-              ${contributor.label} <br />
-            `:html``}
-          `)}
-        </div>
+    ${this.members.key.length != 0 ? html`
+      <h2 aria-label="Aggie Experts Contributor Title" class="weight-regular mt-0">Aggie Experts Contributor</h2>
+        ${this.members.key.map((title, index) => html`
+            <h3 style="margin-bottom: 5px;">${title}</h3>
+            ${this.members.value[index].map(item =>
+              html`
+                  <rp-person-preview
+                      .data=${item.inheresIn ? item.inheresIn : item}
+                      text-width="${this.peopleWidth}"
+                      style="margin:5px 0;"
+                  ></rp-person-preview>
+                `
+              )}   
         `)}
+    `: html``}
+    <br />
+    ${this.others.key.length != 0 ? html`
+      <h2 aria-label="Other Known Contributor Title" class="weight-regular mt-0" style="margin:5px 0;">Other Known Contributor</h2>
+        ${this.others.key.map((title, index) => html`
+          <h3 style="margin-bottom: 5px;">${title}</h3>
+            ${this.others.value[index].map(item =>
+              html`
+                  ${item.label} <br />
+                `
+              )}  
+        `)}
+    `: html``}
+
     </div>
     </section>
+
+
+
   </div>
 </div>
 

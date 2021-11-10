@@ -309,7 +309,7 @@ class PersonModel extends BaseModel {
       parts.givenName=rdfUtils.getFirstValue(contact.givenName);
       name.push(parts.givenName);
     }
-    if( id && id.match('^odr') && contact.middleName ) {
+    if(id && id.match('^odr') && contact.middleName) {
       parts.middleName=rdfUtils.getFirstValue(contact.middleName);
       name.push(parts.middleName);
     }

@@ -107,17 +107,37 @@ class WorkModel extends BaseModel {
     // Citation Link
     try {
       if(work.uri){
-        let label = "Citation Link";
+        let uri = work.uri;
+        let label = '';
+        let icon = ''; 
+        if (uri.match(/^http[s]?:\/\/arxiv\.org\//g)){
+          label = 'Arxiv';
+          icon = 'arxiv';
+        }
+        else if (uri.match(/^http[s]?:\/\/escholarship\.org\//g)){
+          label = 'eScholarship';
+        }
+        else if (uri.match(/^http[s]?:\/\/(www\.)?ncbi\.nlm\.nih\.gov\//g)){
+          label = 'NLH National Library of Medicine';
+        }
+        else if (uri.match(/^http[s]?:\/\/(www\.)?gateway\.webofknowledge(.com)?\//g)){
+          label = 'Web of Science';
+        }
+        else {
+          label = work.uri;
+        }
+        
 
         if (Array.isArray(work.uri)){
           let uriCollection = [];
           for(let i = 0; i < work.uri.length; i++)
             uriCollection.push(work.uri[i]); 
-          output.push({label, url: uriCollection});
+          output.push({label, url: uriCollection, icons:icon});
         }
         else{
-          output.push({label, url: work.uri});
+          output.push({label, url: work.uri, icons:icon});
         }
+        console.log("Output:", output);
       }
     } catch (error) {
       console.error('Error processing additional links uri', error);
