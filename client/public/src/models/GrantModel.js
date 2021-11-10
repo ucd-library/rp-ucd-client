@@ -329,9 +329,11 @@ class GrantModel extends BaseModel {
       });
     all.sort();
 
-    /* All Array Mechanics */
+    /* TODO: SB - remove later*/
     //let resp = await this.getContributors(grant['@id'], all);
     //let people = rdfUtils.asArray(resp.payload.relates ? resp.payload.relates : resp.payload);
+    
+    console.log("All:", all);
 
     let people = rdfUtils.asArray(grant.relates ? grant.relates : grant);
 
