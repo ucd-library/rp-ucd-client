@@ -73,22 +73,12 @@ class GoogleAnalytics {
       item_list_name: search.type+ " search",
       items: [this._createGaProductItem(search, results, item, index)]
     });
-  }
 
-  sendLandingView(item) {
-    if( !this.enabled() ) return;
-
-    let type = item['@type'].find(type => type.match(/^experts:/)) || '';
-    type = type.replace(/^experts/, '');
-
-    gtag("event", "view_item", {
-      value: 1,
-      items: [{
-        item_id : item['@id'],
-        item_name : rdfUtils.getFirstValue(item.label) || '',
-        item_category : type,
-        quantity: 1
-      }]
+    gtag("event", "purchase", {
+      currency : 'USD',
+      transaction_id : Date.now()+'',
+      value: item._score || 0,
+      items: [this._createGaProductItem(search, results, item, index)]
     });
   }
 
@@ -101,11 +91,10 @@ class GoogleAnalytics {
       item_list_id: id,
       item_list_name: search.type+ " search",
       index : results.offset + index,
-      price : item._score || -1,
+      price : item._score || 0,
       item_category : type,
-      item_category2 : search.type,
+      item_category2 : search.type || '',
       item_category3 : search.subtype || '',
-      item_category4 : search.subtype || '',
       location_id : 'page_'+search.page+'_'+search.itemsPerPage,
       quantity: 1
     };
