@@ -70,7 +70,7 @@ class GoogleAnalytics {
 
     gtag("event", "select_item", {
       item_list_id: this.getSearchVersionId(search),
-      item_list_name: type+ " search",
+      item_list_name: search.type+ " search",
       items: [this._createGaProductItem(search, results, item, index)]
     });
   }
