@@ -141,6 +141,20 @@ return html`
     max-width:1000px;
     margin: 0 auto;
   }
+  .parent {
+    display: flex;
+    flex-wrap: wrap;
+    text-align:center; 
+    color:var(--ae-tcolor-code-text); 
+    font-weight:var(--ae-font-weight-bold)
+  }
+
+  .child {
+    display: inline-block;
+    background-color:red;
+    padding:0px;
+    flex: 1 0 21%; /* explanation below */
+  }
 
   @media (min-width: 800px){
     .people-container {
@@ -279,14 +293,14 @@ return html`
         </h1>
         <div class="heading--weighted-underline" style="margin-bottom:15px; margin-bottom:25px;"></div>
 
-        <div style="text-align:center; color:var(--ae-tcolor-code-text); font-weight:var(--ae-font-weight-bold)">
+        <div class="parent"><!-- <div style="text-align:center; color:var(--ae-tcolor-code-text); font-weight:var(--ae-font-weight-bold)"> -->
           ${this.subjects.map(subject => html`
             <rp-badge 
               title="${this.SubjectModel.getPreferredLabel(subject)}" 
               size="lg" 
               max-width="180" 
               text-width=${this.peopleWidth}
-              class="my-1" 
+              class="child" 
               href="${this.SubjectModel.getLandingPage(subject)}">
               ${this.SubjectModel.getPreferredLabel(subject)}
             </rp-badge>

@@ -371,10 +371,17 @@ return html`
     </ucd-theme-search-form>
   </ucd-theme-search-popup>
 
-  <ucd-theme-quick-links 
-    title="Login">
-  </ucd-theme-quick-links>
-
+  ${this.user ? html`  
+      <ucd-theme-quick-links title="${this.userFirstName}" >
+        ${this.accountLinks.map(link => html`
+          <a href="${link.href}">${link.text}</a>
+        `)}
+      </ucd-theme-quick-links> 
+    `: html`
+    <ucd-theme-quick-links title="Login" >
+      <a href="/auth/login">Login to Aggie Experts</a>
+    </ucd-theme-quick-links>
+  `}
 </ucd-theme-header>
 
 
