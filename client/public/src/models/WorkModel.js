@@ -118,7 +118,7 @@ class WorkModel extends BaseModel {
           label = 'eScholarship';
         }
         else if (uri.match(/^http[s]?:\/\/(www\.)?ncbi\.nlm\.nih\.gov\//g)){
-          label = 'NLH National Library of Medicine';
+          label = 'PubMed';
         }
         else if (uri.match(/^http[s]?:\/\/(www\.)?gateway\.webofknowledge(.com)?\//g)){
           label = 'Web of Science';
