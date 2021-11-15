@@ -153,6 +153,9 @@ return html`
     display: inline-block;
     background-color:red;
     padding:0px;
+    margin: 2px;
+    width:fit-content;
+            height:fit-content;
     flex: 1 0 21%; /* explanation below */
   }
 
