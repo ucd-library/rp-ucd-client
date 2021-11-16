@@ -304,7 +304,8 @@ return html`
           <span class="weight-regular">Recently Updated Subjects</span>
           <br />
         </h4>
-        ${this.subjects.map(subject => html`
+        ${this.subjects.map((subject, key) => html`
+          ${key %4 == 0 && key != 0 ? html`<br />`:html``}
           <rp-badge 
             title="${this.SubjectModel.getPreferredLabel(subject)}" 
             size="lg" 
