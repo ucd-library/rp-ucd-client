@@ -141,22 +141,13 @@ return html`
     max-width:1000px;
     margin: 0 auto;
   }
-  .parent {
-    display: flex;
-    flex-wrap: wrap;
+  .parent:nth-child(5n) {
     text-align:center; 
     color:var(--ae-tcolor-code-text); 
-    font-weight:var(--ae-font-weight-bold)
+    font-weight:var(--ae-font-weight-bold);
   }
 
-  .child {
-    display: inline-block;
-    background-color:red;
-    padding:0px;
-    margin: 2px;
-    width:fit-content;
-            height:fit-content;
-    flex: 1 0 21%; /* explanation below */
+  .child{
   }
 
   @media (min-width: 800px){
@@ -296,8 +287,9 @@ return html`
         </h1>
         <div class="heading--weighted-underline" style="margin-bottom:15px; margin-bottom:25px;"></div>
 
-        <div class="parent"><!-- <div style="text-align:center; color:var(--ae-tcolor-code-text); font-weight:var(--ae-font-weight-bold)"> -->
-          ${this.subjects.map(subject => html`
+        <div class="parent">
+          ${this.subjects.map((subject, key) => html`
+            ${key %4 == 0 && key != 0 ? html`<br />`:html``}
             <rp-badge 
               title="${this.SubjectModel.getPreferredLabel(subject)}" 
               size="lg" 
