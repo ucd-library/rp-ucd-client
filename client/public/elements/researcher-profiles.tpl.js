@@ -367,7 +367,7 @@ return html`
 
   <ucd-theme-search-popup>
     <ucd-theme-search-form
-      @search="${this._closeQuickSearch}">
+      @search="${this._onSearch}">
     </ucd-theme-search-form>
   </ucd-theme-search-popup>
 
@@ -382,64 +382,8 @@ return html`
       <a href="/auth/login">Login to Aggie Experts</a>
     </ucd-theme-quick-links>
   `}
+
 </ucd-theme-header>
-
-
-
-<!-- <div id="app-header">
-  ${this._renderMasthead()}
-  <div id="app-header-content" class="bg-light text-primary" ?hidden="${this.page === 'app-mobile-menu'}">
-    <div class="container flex align-items-center justify-content-between">
-      <a href="/" class="no-decoration">
-        <h1>
-          ${this.theme.siteTitle? html`<span class="text-primary">${this.theme.siteTitle}</span>` : html``}
-          ${this.theme.siteSubTitle? html`<span class="weight-regular italic text-primary50">${this.theme.siteSubTitle}</span>` : html``}
-        </h1>
-      </a>
-      <div class="small bold hlist" id="desktop-menu">
-        <a class="no-decoration" href="/help">Help</a>
-        ${this.user ? html`     
-          <rp-dropdown 
-            no-padding
-            sticky-title="${this.userFirstName}"
-            use-links
-            .choices= ${this.accountLinks}
-            @new-selection=${this._handleUserDropdownSelection}>
-          </rp-dropdown>
-          ` : html`
-          <a class="no-decoration" href="/auth/login">Login</a>
-          `}
-
-      </div>
-    </div>
-    <div class="container">
-    <hr class="mb-0 mt-0 light dashed">
-    </div>
-
-
-    <nav id="nav-container"  class="container flex align-items-center justify-content-between" ?quick-search-opened="${this.quickSearchOpened}">
-      <rp-icon id="close-quick-search" @click="${this._closeQuickSearch}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
-
-      <ul id="nav-left" role="menubar" aria-label="primary navigation" class="align-items-center bold">
-        ${this.navLinks.map(link => html`
-        <li role="none">
-          <a href=${link.href} role="menuitem" ?this-page="${link.page == this.page}" class="text-primary no-decoration nav-${link.page}">${link.text}</a>
-        </li>`)}
-      </ul>-->
-
-      <!-- TODO: remove -->
-      <!-- <button @click="${this.testHarvest}">Harvest</button> -->
-      <!-- <div id="nav-right" >
-        <rp-quick-search 
-          id="quick-search" 
-          @new-search="${this._onSearch}" 
-          @toggled="${this._onQuickSearchToggle}"
-          input-value="${this.textQuery}">
-        </rp-quick-search>
-      </div>
-    </nav>
-  </div>
-</div>  -->
 
 
 <iron-pages
