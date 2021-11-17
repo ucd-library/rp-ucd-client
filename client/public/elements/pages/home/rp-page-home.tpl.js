@@ -140,15 +140,18 @@ return html`
     min-width:200px;
     max-width:1000px;
     margin: 0 auto;
+    position:relative;
+
   }
   .parent:nth-child(5n) {
     text-align:center; 
     color:var(--ae-tcolor-code-text); 
     font-weight:var(--ae-font-weight-bold);
   }
-
-  .child{
+  .test{
+      position:absolute;
   }
+
 
   @media (min-width: 800px){
     .people-container {
@@ -259,24 +262,26 @@ return html`
   </div>
   <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="factoid-container">
-      <div class="l-4col layout-columns">
-        <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people">
+
+      <div class="l-4col">
+        <rp-factoid class="l-first panel o-box" href="/people" statistic="${this.peopleTotal}" title="people">
           <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
         </rp-factoid>
 
-        <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works">
-          <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
-        </rp-factoid>
+          <rp-factoid class="l-second panel o-box" href="/works" statistic="${this.academicWorksTotal}" title="works">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
+          </rp-factoid>
 
-        <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
+        <rp-factoid class="l-third panel o-box" href="/concepts" statistic="${this.subjectsTotal}" title="subjects">
           <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rec-pool);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
         </rp-factoid>
       
-        <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants">
+        <rp-factoid class="l-fourth panel o-box" href="/grants" statistic="${this.grantsTotal}" title="grants">
           <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
         </rp-factoid>
-
       </div>  
+      
+
     </div>   
   </div>
 
