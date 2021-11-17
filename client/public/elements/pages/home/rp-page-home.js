@@ -45,7 +45,9 @@ export default class RpPageHome extends Mixin(LitElement)
       patentsTotal: {type: Number},
       coursesTotal: {type: Number},
       textWidth: {type: String, attribute: 'text-width'},
-      visible: {type: Boolean}
+      visible: {type: Boolean},
+      isLoggedIn: {type: Boolean},
+
     };
   }
 
@@ -67,6 +69,8 @@ export default class RpPageHome extends Mixin(LitElement)
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
     this.theme = config.theme;
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
+    this.isLoggedIn = config.user ? true : false;
+
 
     this._handleResize = this._handleResize.bind(this);
   }
