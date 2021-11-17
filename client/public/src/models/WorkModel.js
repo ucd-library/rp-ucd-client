@@ -2,6 +2,7 @@ const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const WorkService = require('../services/WorkService');
 const WorkStore = require('../stores/WorkStore');
 const rdfUtils = require('../lib/rdf-utils').default;
+const config = require('../config.js').default;
 
 const CollectionModel = require('./CollectionModel');
 
@@ -88,10 +89,9 @@ class WorkModel extends BaseModel {
   getAdditionalLinks(work) {
     let output = [];
     if (typeof work !== 'object' ) return output;
-
     // ucd elinks
     try {
-      let label = "UCD-eLinks";
+      let label = "Get it at UC";
       let url = 'https://ucelinks.cdlib.org/sfx_local?';
       if (work.doi) {
         output.push({label, url: `${url}id=doi:${work.doi}`});
@@ -102,6 +102,45 @@ class WorkModel extends BaseModel {
       }
     } catch (error) {
       console.error('Error processing additional links', error);
+    }
+
+    // Citation Link
+    try {
+      if(work.uri){
+        let uri = work.uri;
+        let label = '';
+        let icon = ''; 
+        if (uri.match(/^http[s]?:\/\/arxiv\.org\//g)){
+          label = 'Arxiv';
+          icon = 'arxiv';
+        }
+        else if (uri.match(/^http[s]?:\/\/escholarship\.org\//g)){
+          label = 'eScholarship';
+        }
+        else if (uri.match(/^http[s]?:\/\/(www\.)?ncbi\.nlm\.nih\.gov\//g)){
+          label = 'PubMed';
+        }
+        else if (uri.match(/^http[s]?:\/\/(www\.)?gateway\.webofknowledge(.com)?\//g)){
+          label = 'Web of Science';
+        }
+        else {
+          label = work.uri;
+        }
+        
+
+        if (Array.isArray(work.uri)){
+          let uriCollection = [];
+          for(let i = 0; i < work.uri.length; i++)
+            uriCollection.push(work.uri[i]); 
+          output.push({label, url: uriCollection, icons:icon});
+        }
+        else{
+          output.push({label, url: work.uri, icons:icon});
+        }
+        console.log("Output:", output);
+      }
+    } catch (error) {
+      console.error('Error processing additional links uri', error);
     }
 
     // publisher page
@@ -125,8 +164,8 @@ class WorkModel extends BaseModel {
    * @returns {Boolean}
    */
   isUsersWork(work) {
-    if( !APP_CONFIG.user ) return false;
-    if( !APP_CONFIG.user.expertsId ) return false;
+    if( !config.user ) return false;
+    if( !config.user.expertsId ) return false;
 
     try {
       let workAuthors = this.getAuthors(work);
@@ -135,7 +174,7 @@ class WorkModel extends BaseModel {
 
         for (let author of authors) {
           let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
-          if (APP_CONFIG.user.expertsId === authorId.toLowerCase()) {
+          if (config.user.expertsId === authorId.toLowerCase()) {
             return true;
           }
         }
@@ -254,7 +293,6 @@ class WorkModel extends BaseModel {
    */
   _getAuthorVcardName(relates) {
     relates = rdfUtils.asArray(relates);
-
     let vcard = null;
     for( let person of relates ) {
       vcard = rdfUtils.asArray(person.hasName).find(item => 
@@ -262,7 +300,6 @@ class WorkModel extends BaseModel {
       );
       if( vcard ) break;
     }
-
     if( vcard ) return this._correctName(vcard);
     return null;
   }

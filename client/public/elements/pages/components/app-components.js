@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import render from "./app-components.tpl.js";
 //import { colorStyles } from '../../styles/site.js';
 
@@ -83,6 +83,10 @@ export class AppPageComponents extends Mixin(LitElement)
     this.exampleOrgs = data.payload.results;
     console.log(this.exampleOrgs);
 
+  }
+
+  addToast(){
+    this.shadowRoot.querySelector("#ToastMessage").appendChild(document.createElement('rp-toast-message'));
   }
 }
 customElements.define('app-page-components', AppPageComponents);

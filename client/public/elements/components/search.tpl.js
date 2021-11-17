@@ -1,13 +1,13 @@
-import { html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
-import { styleMap } from 'lit-html/directives/style-map';
+import { html } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 export default function render() {
   return html`
   <style>
     :host {
       display: inline-block;
-      background-color: var(--tcolor-light);
+      background-color: var(--ae-tcolor-light);
     }
 
     .container {
@@ -21,8 +21,8 @@ export default function render() {
       height: 44px;
       min-width: 30px;
       border: none;
-      background-color: var(--tcolor-light);
-      font-size: var(--font-size);
+      background-color: var(--ae-tcolor-light);
+      font-size: var(--ae-font-size);
       padding-left: 10px;
       box-sizing: border-box;
       flex: 1;
@@ -41,11 +41,11 @@ export default function render() {
       /* justify-content: flex-end; */
       padding-left: 15px;
       padding-right: 15px;
-      background-color: var(--tcolor-light);
+      background-color: var(--ae-tcolor-light);
     }
 
     .line {
-      background-color: var(--tcolor-primary10);
+      background-color: var(--ae-tcolor-primary10);
       width: 1px;
       min-width: 1px;
       height: 34px;

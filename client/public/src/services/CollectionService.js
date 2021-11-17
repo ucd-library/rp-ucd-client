@@ -1,5 +1,6 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const CollectionStore = require('../stores/CollectionStore');
+const config = require('../config').default;
 
 class CollectionService extends BaseService {
 
@@ -7,8 +8,8 @@ class CollectionService extends BaseService {
     super();
     this.store = CollectionStore;
 
-    this.baseUrl = APP_CONFIG.data.apiUrl;
-    this.searchUrl = APP_CONFIG.data.apiUrl + "/search";
+    this.baseUrl = config.data.apiUrl;
+    this.searchUrl = config.data.apiUrl + "/search";
   }
   
   async overview(id, searchObject) {

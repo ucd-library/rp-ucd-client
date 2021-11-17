@@ -1,5 +1,6 @@
-import { html } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
+import { html } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { renderHTML } from '../../src/lib/santize-html.js';
 import "./avatar"
 import urlUtils from "../../src/lib/url-utils"
@@ -15,35 +16,40 @@ export default function render() {
       flex-flow: row nowrap;
       align-items: flex-start;
     }
+    .container-home {
+      display: block;
+      flex-flow: row nowrap;
+      align-items: flex-start;
+    }
     .text-container {
       margin-left: 12px;
       flex-grow: 1;
       align-self: center;
     }
     .name {
-      font-size: var(--font-size);
-      color : var(--tcolor-link-text);
-      font-weight : var(--font-weight-bold);
+      font-size: var(--ae-font-size);
+      color : var(--ae-tcolor-link-text);
+      font-weight : var(--ae-font-weight-bold);
       /* white-space: nowrap; */
       /* overflow: hidden; */
       /* text-overflow: ellipsis; */
       display: block;
     }
     .name:hover {
-      color : var(--tcolor-link-hover-text);
+      color : var(--ae-tcolor-link-hover-text);
     }
     .name[disabled] {
       pointer-events: none;
       text-decoration: none;
     }
     .name[disabled]:hover {
-      color : var(--tcolor-link-text);
+      color : var(--ae-tcolor-link-text);
     }
     .title {
-      font-size: var(--font-size-small);
+      font-size: var(--ae-font-size-small);
     }
     small {
-      font-size : var(--font-size-small);
+      font-size : var(--ae-font-size-small);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -54,15 +60,15 @@ export default function render() {
       margin-top: 10px;
     }
     .snippet {
-      font-size : var(--font-size-small);
-      color: var(--tcolor-link-disabled-text);
+      font-size : var(--ae-font-size-small);
+      color: var(--ae-tcolor-link-disabled-text);
     }
     .snippet em {
       font-weight: bold;
       font-style: normal;
     }
   </style>
-  <div class=container>
+  <div class=${classMap(this.constructClasses())}>
     <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}" >
       <a class="name" 

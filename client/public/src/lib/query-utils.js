@@ -1,4 +1,4 @@
-//const AssetDefs = require('./asset-defs');
+const config = require('../config').default;
 
 /**
  * @class QueryUtils
@@ -82,10 +82,10 @@ class QueryUtils {
    * @returns {String} 
    */
   appendIdPrefix(id) {
-    if( id.startsWith(APP_CONFIG.data.prefix.ucdId) ) {
+    if( id.startsWith(config.data.prefix.ucdId) ) {
       return id;
     }
-    return APP_CONFIG.data.prefix.ucdId+':'+id;
+    return config.data.prefix.ucdId+':'+id;
   }
 }
 

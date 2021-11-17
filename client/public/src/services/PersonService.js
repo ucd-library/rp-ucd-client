@@ -1,6 +1,7 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const PersonStore = require('../stores/PersonStore');
 const queryUtils = require('../lib/query-utils');
+const config = require('../config').default;
 
 class PersonService extends BaseService {
 
@@ -8,8 +9,8 @@ class PersonService extends BaseService {
     super();
     this.store = PersonStore;
 
-    this.baseUrl = APP_CONFIG.data.apiUrl;
-    this.jsonContext = APP_CONFIG.data.prefix.ucdId;
+    this.baseUrl = (config.host || '') + config.data.apiUrl;
+    this.jsonContext = config.data.prefix.ucdId;
   }
 
   /**
@@ -102,7 +103,7 @@ class PersonService extends BaseService {
         '@type' : {
           type : 'keyword',
           op : 'and',
-          value : [APP_CONFIG.data.types.grant]
+          value : [config.data.types.grant]
         }
       },
       facets: {}
@@ -167,6 +168,23 @@ class PersonService extends BaseService {
       onLoading : request => this.store.setPubsLoading(cacheId, request),
       onLoad : result => this.store.setPubsLoaded(cacheId, result.body),
       onError : e => this.store.setPubsError(cacheId, e)
+    });
+  }
+
+  /**
+   * @method harvest
+   * @description start the harvest process for a person
+   * 
+   * @param {String} id user id
+   * 
+   * @returns {Promise}
+   */
+  async harvest(id) {
+    return this.request({
+      url : '/harvest/'+id,
+      fetchOptions : {
+        method : 'POST'
+      }
     });
   }
 

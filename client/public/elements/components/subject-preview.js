@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import render from './subject-preview.tpl.js';
 
 import previewUtils from "../../src/lib/preview-utils";

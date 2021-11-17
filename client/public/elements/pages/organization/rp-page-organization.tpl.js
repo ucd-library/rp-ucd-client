@@ -1,4 +1,4 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import styles from "../../styles/site.html";
 
 export default function render() { 
@@ -20,7 +20,7 @@ return html`
     align-items: center;
   }
   .icon-container {
-      background-color: var(--tcolor-bg-primary);
+      background-color: var(--ae-tcolor-bg-primary);
       height: 150px;
       width: 150px;
       min-height: 150px;
@@ -31,7 +31,7 @@ return html`
       align-items: center;
     }
   iron-icon {
-    color: var(--tcolor-primary);
+    color: var(--ae-tcolor-primary);
     height: 50%;
     width: 50%;
   }

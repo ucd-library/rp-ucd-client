@@ -1,6 +1,7 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const GrantStore = require('../stores/GrantStore');
 const queryUtils = require('../lib/query-utils');
+const config = require('../config').default;
 
 /**
  * @class GrantService
@@ -14,8 +15,8 @@ class GrantService extends BaseService {
     super();
     this.store = GrantStore;
 
-    this.baseUrl = APP_CONFIG.data.apiUrl;
-    this.jsonContext = APP_CONFIG.data.prefix.ucdId;
+    this.baseUrl = config.data.apiUrl;
+    this.jsonContext = config.data.prefix.ucdId;
   }
  
   /**

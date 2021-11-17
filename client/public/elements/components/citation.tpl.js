@@ -1,14 +1,14 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 
 export default function render() {
   return html`
   <style>
     :host {
       display: block;
-      font-size: var(--font-size);
+      font-size: var(--ae-font-size);
     }
     a {
-      color: var(--tcolor-link-text)
+      color: var(--ae-tcolor-link-text)
     }
     .venue {
       text-transform: capitalize;

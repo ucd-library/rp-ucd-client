@@ -2,6 +2,7 @@ import render from "./rp-page-concept.tpl.js";
 
 import RpUtilsLanding from "../../utils/rp-utils-landing";
 import rdfUtils from "../../../src/lib/rdf-utils.js";
+import config from "../../../src/config.js";
 
 import "../../components/alert";
 import "../../components/badge";
@@ -152,7 +153,7 @@ export default class RpPageConcept extends RpUtilsLanding {
       return false;
     }
     this.subject = data.payload;
-    if (APP_CONFIG.verbose) console.log("subject payload:", data);
+    if (config.verbose) console.log("subject payload:", data);
 
     this.subjectType = this._getSubjectType();
     this.fullTextLinks = this._getFullTextLinks();
@@ -189,7 +190,7 @@ export default class RpPageConcept extends RpUtilsLanding {
     // }
     
 
-    if (APP_CONFIG.verbose) console.log("description:", data);
+    if (config.verbose) console.log("description:", data);
 
     this._toggleElements("about", this.about);
     
@@ -211,7 +212,7 @@ export default class RpPageConcept extends RpUtilsLanding {
       return;
     }
     this.researchers = data.payload;
-    if (APP_CONFIG.verbose) console.log("researchers payload:", data);
+    if (config.verbose) console.log("researchers payload:", data);
     this._toggleElements("researchers", this.researchers.results);
 
   }
@@ -227,7 +228,7 @@ export default class RpPageConcept extends RpUtilsLanding {
     if (data.state != 'loaded') {
       return;
     }
-    if (APP_CONFIG.verbose) console.log('pub overview:', data);
+    if (config.verbose) console.log('pub overview:', data);
     let pubTypeCounts = data.payload.aggregations.facets['@type'];
     let pubTypes = [];
     for (const pubType of this.CollectionModel.subFacets.works) {
@@ -254,7 +255,7 @@ export default class RpPageConcept extends RpUtilsLanding {
       return;
     }
 
-    if (APP_CONFIG.verbose) console.log(`${pubType.id} pubs`, data);
+    if (config.verbose) console.log(`${pubType.id} pubs`, data);
     this.publications[pubType.id] = {'total': data.payload.total, 'results': data.payload.results};
     this.requestUpdate();
 

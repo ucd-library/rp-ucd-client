@@ -1,12 +1,12 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 export default function render() {
   return html`
   <style>
     :host {
       display: block;
-      font-size: var(--font-size-small);
-      font-weight: var(--font-weight-bold);
-      color: var(--tcolor-primary);
+      font-size: var(--ae-font-size-small);
+      font-weight: var(--ae-font-weight-bold);
+      color: var(--ae-tcolor-primary);
     }
     .container {
       display: flex;
@@ -31,15 +31,15 @@ export default function render() {
       min-height: 40px;
     }
     .page:hover {
-      color: var(--tcolor-link-hover-text);
+      color: var(--ae-tcolor-link-hover-text);
     }
     .page.selected {
-      background-color: var(--tcolor-secondary);
+      background-color: var(--ae-tcolor-secondary);
       pointer-events: none;
       cursor: auto;
     }
     .page.selected:hover {
-      color: var(--tcolor-primary);
+      color: var(--ae-tcolor-primary);
     }
     .ellipsis {
       display: flex;
@@ -54,13 +54,13 @@ export default function render() {
       cursor: pointer;
     }
     iron-icon:hover {
-      color: var(--tcolor-link-hover-text);
+      color: var(--ae-tcolor-link-hover-text);
     }
     iron-icon[disabled]:hover {
-      color: var(--tcolor-primary-disabled);
+      color: var(--ae-tcolor-primary-disabled);
     }
     iron-icon[disabled] {
-      color: var(--tcolor-primary-disabled);
+      color: var(--ae-tcolor-primary-disabled);
       pointer-events: none;
     }
   </style>

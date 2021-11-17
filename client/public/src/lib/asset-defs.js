@@ -1,4 +1,5 @@
-const TYPES = APP_CONFIG.data.types;
+import config from '../config.js';
+let TYPES = config.data.types;
 
 /**
  * @class AssetDefs
@@ -99,31 +100,29 @@ class AssetDefs {
       },
     ];
 
-    if(APP_CONFIG.includeGrants){
-      let grant = {
-        id: 'grants', 
-        idSingular: 'grant',
-        text: 'Grants', 
-        es: TYPES.grant,
-        defaultSortField: this.defaultSortField,
-        baseFilter: {
-          "@type": {
-            type: "keyword", 
-            op: "and", 
-            value: [TYPES.grant]
-          }
-        },
-        azField: "label.firstLetter",
-        facetedSearchFields: [
-          "label.text^2",
-          "assignedBy.label.text",
-          "sponsorAwardId.text^2",
-          "relates.hasContactInfo.familyName^2",
-          "relates.hasContactInfo.givenName^2"
-        ]
-      };
-      facet.push(grant);
-    }
+    let grant = {
+      id: 'grants', 
+      idSingular: 'grant',
+      text: 'Grants', 
+      es: TYPES.grant,
+      defaultSortField: this.defaultSortField,
+      baseFilter: {
+        "@type": {
+          type: "keyword", 
+          op: "and", 
+          value: [TYPES.grant]
+        }
+      },
+      azField: "label.firstLetter",
+      facetedSearchFields: [
+        "label.text^2",
+        "assignedBy.label.text",
+        "sponsorAwardId.text^2",
+        "relates.hasContactInfo.familyName^2",
+        "relates.hasContactInfo.givenName^2"
+      ]
+    };
+    facet.push(grant);
 
     return facet;
     
@@ -417,5 +416,6 @@ class AssetDefs {
   }
 }
 
-//export default new AssetDefs();
-module.exports = new AssetDefs();
+let assetDefs = new AssetDefs();
+export default assetDefs;
+

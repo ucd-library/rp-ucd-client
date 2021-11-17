@@ -1,4 +1,4 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import styles from "../../styles/site.html";
 
 export default function render() { 
@@ -21,7 +21,7 @@ return html`
   }
 
   .topic{
-    color: var(--color-blue);
+    color: var(--ae-color-blue);
     font-size: 100px;
     margin: 40px 0 0 0;
   }

@@ -7,6 +7,7 @@ import esmUtils from '../../lib/esm-utils.js';
 import rpNodeUtils from '@ucd-lib/rp-node-utils';
 import {userAuthController} from './user.js';
 import {staticModelController} from './model.js';
+import harvest from '../../lib/harvest.js';
 
 const {logger, elasticSearch, redis} = rpNodeUtils;
 const {__dirname} = esmUtils.moduleLocation(import.meta);
@@ -64,20 +65,33 @@ export default (app) => {
     htmlFile : path.join(assetsDir, 'index.html'), // pass the file you want to use
     isRoot : true, // are we serving from host root (/)?
     appRoutes : config.client.appRoutes, // array of root paths.  ie appRoutes = ['foo', 'bar'] to server /foo/* /bar/*
-    static : {dir : assetsDir},
+    static : {dir : assetsDir, opts : {maxAge: 1000 * 60 * 60 * 24 * 30 }},
     enable404 : true,
     template : async (req, res, next) => {
 
+      let user = await userAuthController.handleRequest(req);
+      let roles = (user || {}).roles || [];
+      roles.push('public');
+
+      // calc which (if any) sections to head
+      let hiddenTypes = [];
+      if( config.data && config.data.private && config.data.private.roles && config.data.private.roles.length ) {
+        if( !config.data.private.roles.some(role => roles.includes(role)) ) {
+          hiddenTypes = config.data.private.types;
+        }
+      }
+
       let appConfig = {
-        user: await userAuthController.handleRequest(req),
+        user,
+        hiddenTypes,
         appRoutes : config.client.appRoutes,
         modelRoutes : config.client.modelRoutes,
         theme : config.client.theme,
         data : config.client.data,
         verbose : config.client.verbose,
-        includeGrants : config.client.includeGrants,
         defaultTypes : config.client.defaultTypes,
         gaCode : config.client.gaCode,
+        enableUpdates : config.client.enableUpdates,
         env : {
           CLIENT_TAG : process.env.CLIENT_TAG || '',
           VESSEL_TAG : process.env.VESSEL_TAG || '',
@@ -86,14 +100,19 @@ export default (app) => {
         }
       };
 
+      if( appConfig.user ) {
+        appConfig.harvest = (await harvest.state(appConfig.user.uid)) || 'not-running';
+      }
+
       let jsonld = '';
       if( res.statusCode === 404 ) {
         appConfig.is404 = true;
       } else {
-        let modelInfo = await staticModelController.handleRequest(req);
+        let modelInfo = await staticModelController.handleRequest(req, roles);
         if( modelInfo.isModel ) {
           if( modelInfo.is404Model ) {
             appConfig.is404 = true;
+            res.status(404);
           } else {
             jsonld = staticModelController.transformModel(modelInfo.model);
           }

@@ -1,5 +1,5 @@
-import { html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
+import { html } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
 
 export default function render() {
   return html`
@@ -11,7 +11,7 @@ export default function render() {
       display: none !important;
     }
     iron-icon {
-      color: var(--tcolor-secondary);
+      color: var(--ae-tcolor-secondary);
       width: 24px;
       min-width: 24px;
       height: 24px;
@@ -25,16 +25,16 @@ export default function render() {
       display: flex;
     }
     #title:hover {
-      color: var(--tcolor-link-hover-text);
+      color: var(--ae-tcolor-link-hover-text);
     }
     #title {
-      color: var(--tcolor-link-text);
-      font-weight: var(--font-weight-bold);
-      font-size: var(--font-size);
+      color: var(--ae-tcolor-link-text);
+      font-weight: var(--ae-font-weight-bold);
+      font-size: var(--ae-font-size);
     }
     #content {
       padding-left: 24px;
-      font-size: var(--font-size);
+      font-size: var(--ae-font-size);
       margin-top: 14px;
     }
   </style>

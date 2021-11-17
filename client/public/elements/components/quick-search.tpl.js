@@ -1,13 +1,13 @@
-import { html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
-import { styleMap } from 'lit-html/directives/style-map';
+import { html } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 export default function render() {
   return html`
   <style>
     :host {
       display: block;
-      font-size: var(--font-size-h3);
+      font-size: var(--ae-font-size-h3);
     }
 
     .container {
@@ -18,13 +18,13 @@ export default function render() {
     }
 
     input {
-      font-size: var(--font-size);
+      font-size: var(--ae-font-size);
       padding-left: 10px;
       padding-right: 32px;
       width: 100%;
       background-color: inherit;
       box-sizing: border-box;
-      border: 2px solid var(--tcolor-secondary);
+      border: 2px solid var(--ae-tcolor-secondary);
       border-radius: 20px;
       position: relative;
       height: 35px;

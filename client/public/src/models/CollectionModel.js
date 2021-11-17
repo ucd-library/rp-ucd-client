@@ -2,9 +2,10 @@ const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const CollectionService = require('../services/CollectionService');
 const CollectionStore = require('../stores/CollectionStore');
 const PersonModel = require('./PersonModel');
+const config = require('../config').default;
 
 //import AssetDefs from "../lib/asset-definitions";
-const AssetDefs = require('../lib/asset-defs');
+const AssetDefs = require('../lib/asset-defs').default;
 const QueryUtils = require('../lib/query-utils');
 
 /**
@@ -134,7 +135,7 @@ class CollectionModel extends BaseModel {
     let queryObject = this.convertElementQuery(elementQuery);
     // in no type specified, use our default types
     if( !queryObject.filters['@type'] ) {
-      queryObject.filters['@type'] = QueryUtils.getKeywordFilter(APP_CONFIG.defaultTypes, 'or');
+      queryObject.filters['@type'] = QueryUtils.getKeywordFilter(config.defaultTypes, 'or');
     }
 
     let id = QueryUtils.getQueryId(queryObject);
@@ -344,7 +345,6 @@ class CollectionModel extends BaseModel {
         subFacets.push(this._fmtSubFacetMenuObject(facet, counts, elementQuery));
       }
     }
-    if (APP_CONFIG.verbose) console.log('Subfacet menu object:', subFacets);
     return subFacets;
 
   }
@@ -393,10 +393,8 @@ class CollectionModel extends BaseModel {
       if (!Object.keys(counts).includes(facetOption.es)) facetOption.disabled = true;
       mainFacets.push(facetOption);
     }
-    console.log("MainFacet:", mainFacets);
-    if (APP_CONFIG.verbose) console.log("Main facet menu:", mainFacets);
-    return mainFacets;
 
+    return mainFacets;
   }
 
   /**

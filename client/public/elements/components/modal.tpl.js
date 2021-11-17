@@ -1,4 +1,4 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 
 export default function render() {
   return html`
@@ -23,7 +23,7 @@ export default function render() {
       display: none !important;
     }
     .film {
-      background-color: var(--tcolor-modal-film);
+      background-color: var(--ae-tcolor-modal-film);
       width: 100%;
       height: 100%;
       z-index: 99;
@@ -32,7 +32,7 @@ export default function render() {
       top: 0;
     }
     .box-content {
-        background-color: var(--tcolor-light);
+        background-color: var(--ae-tcolor-light);
         width: 85%;
         max-width: 910px;
         min-height: 200px;
@@ -45,14 +45,14 @@ export default function render() {
         padding: 10px 30px 0 30px;
     }
     iron-icon[icon=close] {
-        color: var(--tcolor-primary);
+        color: var(--ae-tcolor-primary);
         cursor: pointer;
     }
     iron-icon[icon=close]:hover {
-        color: var(--tcolor-link-hover-text);
+        color: var(--ae-tcolor-link-hover-text);
     }
     hr {
-        border-color: var(--tcolor-primary20);
+        border-color: var(--ae-tcolor-primary20);
         border-style: dotted;
         border-width: 2px;
         border-bottom-width: 0;
@@ -69,18 +69,18 @@ export default function render() {
         
     }
     .button {
-        color: var(--tcolor-primary);
+        color: var(--ae-tcolor-primary);
         padding: 8px;
-        background-color: var(--tcolor-light);
-        border: 2px solid var(--tcolor-bg-primary);
+        background-color: var(--ae-tcolor-light);
+        border: 2px solid var(--ae-tcolor-bg-primary);
         cursor: pointer;
         transition: .3s;
         margin: 5px;
     }
     .button:hover {
-        background-color: var(--tcolor-hover-bg);
-        color: var(--tcolor-hover-text);
-        border: 2px solid var(--tcolor-hover-bg);
+        background-color: var(--ae-tcolor-hover-bg);
+        color: var(--ae-tcolor-hover-text);
+        border: 2px solid var(--ae-tcolor-hover-bg);
     }
   </style>
   <div class="container" ?hidden="${!this.visible}">

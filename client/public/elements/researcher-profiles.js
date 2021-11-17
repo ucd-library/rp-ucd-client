@@ -1,10 +1,16 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html } from 'lit';
 import render from "./researcher-profiles.tpl.js";
-import { styleMap } from 'lit-html/directives/style-map';
+import { styleMap } from 'lit/directives/style-map.js';
 import {renderHTML} from '../src/lib/santize-html.js';
+
 
 // sets globals Mixin and EventInterface
 import "@ucd-lib/cork-app-utils";
+
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-icon/ucdlib-icon';
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-iconset/ucdlib-iconset';
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/ucdlib-icons';
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/academic';
 
 // Polymer
 import "@polymer/iron-icons/iron-icons";
@@ -19,6 +25,7 @@ import "./styles/site";
 
 // main library
 import "../src";
+import config from "../src/config";
 import userUtils from "../src/lib/user-utils";
 
 // app elements
@@ -61,12 +68,12 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   constructor() {
     super();
     this.render = render.bind(this);
-    this.appRoutes = APP_CONFIG.appRoutes;
-    this.theme = APP_CONFIG.theme;
+    this.appRoutes = config.appRoutes;
+    this.theme = config.theme;
     this.page = 'loading';
     this.loadedPages = {};
-    this.user = APP_CONFIG.user;
-    this.eSearch = APP_CONFIG.client;
+    this.user = config.user;
+    this.eSearch = config.client;
     this.hideMainNav = false;
     this.textQuery = "";
     this.quickSearchOpened = false;
@@ -79,25 +86,23 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.hasProfile = (this.user && this.user.expertsId);
     this.accountLinks = [{text: "Logout", href: "/auth/logout"}];
     
+    this.firstAppStateUpdate = true;
+
     //This will change to this.navLinks once the 1.3 release is done
-    this.navLinks_Grant = [
-      {text: 'People', page: 'people', href: '/people'},
-      {text: 'Subjects', page: 'concepts', href: '/concepts'},
-      {text: 'Works', page: 'works', href: '/works'},
-      {text: 'Grants', page: 'grants', href: '/grants'},
+    this.navLinks = [
+      {text: 'People', page: 'people', href: '/people', type: 'person'},
+      {text: 'Subjects', page: 'concepts', href: '/concepts', type: 'concept'},
+      {text: 'Works', page: 'works', href: '/works', type: 'work'},
+      {text: 'Grants', page: 'grants', href: '/grants', type: 'grant'},
       {text: 'Help', page: 'help', href: '/help'}];
 
+    if( config.hiddenTypes && config.hiddenTypes.length ) {
+      this.navLinks = this.navLinks.filter(link => {
+        return !config.hiddenTypes.includes(link.type);
+      });
+    }
 
-    // This will be deleted once the 1.3 release is done
-    this.navLinks_NonGrant = [
-      {text: 'People', page: 'people', href: '/people'},
-      {text: 'Subjects', page: 'concepts', href: '/concepts'},
-      {text: 'Works', page: 'works', href: '/works'},
-      {text: 'Help', page: 'help', href: '/help'}];
- 
-    this.navLinks = APP_CONFIG.includeGrants ? this.navLinks_Grant : this.navLinks_NonGrant;
-
-    if( APP_CONFIG.user && APP_CONFIG.user.impersonatedBy ) {
+    if( config.user && config.user.impersonatedBy ) {
       this.accountLinks.unshift({text: "Stop Impersonating", action: 'stop-impersonating'}); 
     }
     if( this.hasProfile ){
@@ -105,13 +110,13 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     }
 
 
-    if( !APP_CONFIG.env ) {
-      APP_CONFIG.env = {APP_VERSION:''};
+    if( !config.env ) {
+      config.env = {APP_VERSION:''};
     }
-    this.showVersion = APP_CONFIG.env.APP_VERSION.match(/(alpha|beta|rc)/) ? true : false;
+    this.showVersion = config.env.APP_VERSION.match(/(alpha|beta|rc)/) ? true : false;
     this.logVersion();
 
-    this._injectModel('AppStateModel', 'CollectionModel');
+    this._injectModel('AppStateModel', 'CollectionModel', 'PersonModel');
     this._onResize = this._onResize.bind(this);
 
     this._init404();
@@ -123,7 +128,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * event handler.  Either condition will show the 404 page
    */
   async _init404() {
-    if( APP_CONFIG.is404 ) {
+    if( config.is404 ) {
       // await this.loadPage('404');
       this.AppStateModel.show404Page();
     }
@@ -138,7 +143,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @description Logs the versions of this build.
    */
   logVersion() {
-    console.log('App Tags:', APP_CONFIG.env);
+    console.log('App Tags:', config.env);
   }
 
   /**
@@ -164,7 +169,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
    * @description Lit method called when element is first updated.
    */
   firstUpdated() {
-    // this._resizeQuickSearch();
+
   }
 
   /**
@@ -179,6 +184,11 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     if ( e.location.query && e.location.query.s !== undefined ) {
       this.isSearch = true;
       this.textQuery = e.location.query.s;
+
+      if( this.firstAppStateUpdate ) {
+        let ele = this.shadowRoot.getElementById('quick-search');
+        if( !ele.opened ) ele.open();
+      }
     }
     else {
       this.textQuery="";
@@ -196,6 +206,7 @@ export default class ResearcherProfiles extends Mixin(LitElement)
     this.page = page;
 
     window.scrollTo(0, 0);
+    this.firstAppStateUpdate = false;
   }
 
   /**
@@ -211,6 +222,8 @@ export default class ResearcherProfiles extends Mixin(LitElement)
       return import(/* webpackChunkName: "page-search" */ "./pages/bundles/search");
     } else if( bundles.landing.includes(page) ) {
       return import(/* webpackChunkName: "page-landing" */ "./pages/bundles/landing");
+    } else if( bundles.admin.includes(page) ) {
+      return import(/* webpackChunkName: "page-admin" */ "./pages/bundles/admin");
     } else if( page === 'home' ) {
       return import(/* webpackChunkName: "page-home" */ "./pages/home/rp-page-home");
     } else if( page === 'components' ) {
@@ -429,6 +442,10 @@ export default class ResearcherProfiles extends Mixin(LitElement)
   _stopImpersonating() {
     document.cookie = "impersonate=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     location.reload();
+  }
+
+  testHarvest() {
+    this.PersonModel.harvest(config.user.uid);
   }
 
 }

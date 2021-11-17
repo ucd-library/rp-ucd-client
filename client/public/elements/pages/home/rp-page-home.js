@@ -1,14 +1,20 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import render from "./rp-page-home.tpl.js";
 
 import "@ucd-lib/cork-app-utils";
 
+
+import config from "../../../src/config.js";
 import "../../components/alert";
 import "../../components/badge";
 import "../../components/person-preview";
 import "../../components/grant-preview";
 import "../../components/search";
 import "../../components/rp-loading";
+import "../../components/rp-factoid";
+
+
+
 
 
 /**
@@ -36,8 +42,12 @@ export default class RpPageHome extends Mixin(LitElement)
       subjects: {type: Array},
       subjectsTotal: {type: Number},
       subjectsStatus: {type: String},
+      patentsTotal: {type: Number},
+      coursesTotal: {type: Number},
       textWidth: {type: String, attribute: 'text-width'},
-      visible: {type: Boolean}
+      visible: {type: Boolean},
+      isLoggedIn: {type: Boolean},
+
     };
   }
 
@@ -53,10 +63,14 @@ export default class RpPageHome extends Mixin(LitElement)
     this.grantsTotal = 0;
     this.peopleTotal = 0;
     this.subjectsTotal = 0;
+    this.patentsTotal = 0,
+    this.coursesTotal = 0,
     this.setPeopleWidth(window.innerWidth);
     this.textWidth = (window.innerWidth.toString() - 70) + "px";
-    this.theme = APP_CONFIG.theme;
+    this.theme = config.theme;
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
+    this.isLoggedIn = config.user ? true : false;
+
 
     this._handleResize = this._handleResize.bind(this);
   }
@@ -76,6 +90,18 @@ export default class RpPageHome extends Mixin(LitElement)
     this.subjectsStatus = 'loading';
     this.grantsStatus = 'loading';
 
+  }
+
+  /**
+   * @method firstUpdated
+   * @description hiding private content here
+   */
+  firstUpdated() {
+    if( config.hiddenTypes && config.hiddenTypes.length ) {
+      config.hiddenTypes
+        .map(type => this.shadowRoot.querySelector(`rp-factoid[type="${type}"]`))
+        .forEach(ele => ele ? ele.style.display = 'none' : null);
+    }
   }
 
   /**
@@ -268,13 +294,13 @@ export default class RpPageHome extends Mixin(LitElement)
    * @returns {Promise}
    */
   async _getPeople() {
-    let peopleList = await this.CollectionModel.overview('randomPeople', {limit: 4, total: this.peopleTotal});
+    let peopleList = await this.CollectionModel.overview('randomPeople', {limit: 3, total: this.peopleTotal});
     this.peopleStatus = peopleList.state;
     if (peopleList.state != "loaded") {
       return;
     }
     this.people = peopleList.payload.results;
-    if (APP_CONFIG.verbose) console.log('people: ', this.people);
+    if (config.verbose) console.log('people: ', this.people);
   }
 
   /**
@@ -290,7 +316,7 @@ export default class RpPageHome extends Mixin(LitElement)
       return;
     }
     this.grants = grantsList.payload.results;
-    if (APP_CONFIG.verbose) console.log('grants: ', this.grants);
+    if (config.verbose) console.log('grants: ', this.grants);
   }
 
   /**
@@ -300,11 +326,11 @@ export default class RpPageHome extends Mixin(LitElement)
    * @returns {Promise}
    */
   async _getSubjects() {
-    let subjects = await this.SubjectModel.getRandomSubjects(10);
+    let subjects = await this.SubjectModel.getRandomSubjects(12);
     this.subjectsStatus = subjects.state;
     this.subjects = subjects.payload;
 
-    if (APP_CONFIG.verbose) console.log('subjects: ', this.subjects);
+    if (config.verbose) console.log('subjects: ', this.subjects);
   }
 
   /**
@@ -320,7 +346,7 @@ export default class RpPageHome extends Mixin(LitElement)
       return;
     }
     this.facets = facetList.payload.aggregations.facets['@type'];
-    if (APP_CONFIG.verbose) console.log('facets: ', this.facets);
+    if (config.verbose) console.log('facets: ', this.facets);
     for (let facet in this.facets) {
       for (let recognizedFacet of this.CollectionModel.subFacets.works) {
         if (facet == recognizedFacet.es) {
@@ -328,16 +354,16 @@ export default class RpPageHome extends Mixin(LitElement)
           break;
         }
       }
-      if (facet == APP_CONFIG.data.types.concept ) {
+      if (facet == config.data.types.concept ) {
         this.subjectsTotal = this.facets[facet];
       }
-      if (facet == APP_CONFIG.data.types.work ) {
+      if (facet == config.data.types.work ) {
         this.academicWorksTotal = this.facets[facet];
       }
-      if (facet == APP_CONFIG.data.types.person ) {
+      if (facet == config.data.types.person ) {
         this.peopleTotal = this.facets[facet];
       }
-      if (facet == APP_CONFIG.data.types.grant ) {
+      if (facet == config.data.types.grant ) {
         this.grantsTotal = this.facets[facet];
       }
     }

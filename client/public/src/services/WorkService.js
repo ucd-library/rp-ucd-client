@@ -1,6 +1,7 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const WorkStore = require('../stores/WorkStore');
 const queryUtils = require('../lib/query-utils');
+const config = require('../config').default;
 
 class WorkService extends BaseService {
 
@@ -8,8 +9,8 @@ class WorkService extends BaseService {
     super();
     this.store = WorkStore;
 
-    this.baseUrl = APP_CONFIG.data.apiUrl;
-    this.jsonContext = APP_CONFIG.data.prefix.ucdId;
+    this.baseUrl = config.data.apiUrl;
+    this.jsonContext = config.data.prefix.ucdId;
   }
  
   /**

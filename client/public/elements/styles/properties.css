@@ -1,0 +1,68 @@
+html {
+  /* UCD-Colors. Not called directly in application */
+  --ae-color-blue : #022851;
+  --ae-color-blue70 : #355B85;
+  --ae-color-blue50 : #6884A3;
+  --ae-color-blue20 : #B3C1D1;
+  --ae-color-blue10 : #CDD6E0;
+  --ae-color-gold : #FFBF00;
+  --ae-color-black90 : #191919;
+  --ae-color-black60 : #666666;
+  --ae-color-black10 : #E5E5E5;
+  --ae-color-white : #FFFFFF;
+  --ae-color-rec-pool : #6FCFEB;
+  --ae-color-sunflower : #FFDC00;
+  --ae-color-farmers-market : #AADA91;
+  --ae-color-thiebaud-icing : #F095CD;
+  --ae-color-rose : #FF8189;
+  --ae-color-putah-creek : #008EAA;
+  --ae-color-double-decker : #C10230;
+
+  /* Theme colors called throughout application.  */
+  --ae-tcolor-primary : var(--ae-color-blue);
+  --ae-tcolor-primary70 : var(--ae-color-blue70);
+  --ae-tcolor-primary50 : var(--ae-color-blue50);
+  --ae-tcolor-primary20 : var(--ae-color-blue20);
+  --ae-tcolor-primary10 : var(--ae-color-blue10);
+  --ae-tcolor-primary-disabled : var(--ae-color-blue20);
+  --ae-tcolor-secondary : var(--ae-color-gold);
+  --ae-tcolor-light : var(--ae-color-white);
+  --ae-tcolor-danger : var(--ae-color-double-decker);
+  --ae-tcolor-text : var(--ae-color-black90);
+  --ae-tcolor-bg : var(--ae-color-black10);
+  --ae-tcolor-bg-primary : var(--ae-color-blue10);
+  --ae-tcolor-hero-film : linear-gradient(rgba(2, 40, 81, 0.8), rgba(2, 40, 81, 0.8));
+  --ae-tcolor-modal-film : rgba(179, 193, 209, 0.8);
+  --ae-tcolor-hover-bg : var(--ae-color-putah-creek);
+  --ae-tcolor-hover-text : var(--ae-color-white);
+  --ae-tcolor-link-text : var(--ae-color-blue70);
+  --ae-tcolor-link-disabled-text : var(--ae-color-black60);
+  --ae-tcolor-link-hover-text : var(--ae-color-putah-creek);
+  --ae-tcolor-block-bg : var(--ae-color-white);
+  --ae-tcolor-accent0 : var(--ae-color-rec-pool);
+  --ae-tcolor-accent1 : var(--ae-color-sunflower);
+  --ae-tcolor-accent2 : var(--ae-color-farmers-market);
+  --ae-tcolor-accent3 : var(--ae-color-thiebaud-icing);
+  --ae-tcolor-accent4 : var(--ae-color-rose);
+  --ae-tcolor-accent5 : var(--ae-color-blue20);
+  --ae-tcolor-code-text : var(--ae-color-blue );
+  --ae-tcolor-placeholder-text : var(--ae-color-black60);
+  --ae-tcolor-code-bg : var(--ae-color-black10 );
+  --ae-tcolor-border : var(--ae-color-blue20);
+
+  /* Theme font variables */
+  --ae-font-size : 16px;
+  --ae-font-size-h1 : 26px;
+  --ae-font-size-h2 : 22px;
+  --ae-font-size-h3 : 18px;
+  --ae-font-size-small : 14px;
+  --ae-font-weight : 400;
+  --ae-font-weight-bold : 700;
+
+  /* Misc. theme variables */
+  --ae-hr-color : var(--ae-color-blue20);
+  --ae-hr-color-light : var(--ae-color-blue10);
+  --ae-hr-weight : 1px;
+  --ae-masthead-height: 50px;
+  --ae-masthead-logo-height: 20px;
+}

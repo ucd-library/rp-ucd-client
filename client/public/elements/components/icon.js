@@ -1,6 +1,8 @@
-import { LitElement, html, svg } from 'lit-element';
+import { LitElement, html, svg } from 'lit';
 import render from './icon.tpl.js';
-import { styleMap } from 'lit-html/directives/style-map';
+
+
+import { styleMap } from 'lit/directives/style-map.js';
 
 /**
  * @class RpIcon
@@ -20,7 +22,11 @@ export class RpIcon extends LitElement {
       sizeIconSVG:  {type: String, attribute: 'size-icon-svg'},
       _customIcons: {type: Object},
       iconPixelSize: {type: Number},
-      circlePixelSize: {type: Number}
+      circlePixelSize: {type: Number},
+      iconSets: {type: Array},
+      selectedSet: {type: Number},
+      ucdlib: {type: Boolean},
+      iconset: {type: String, attribute: 'iconset'}
     };
   }
 
@@ -38,6 +44,9 @@ export class RpIcon extends LitElement {
     this.sizeIconSVG = "";
     this.iconPixelSize = 24;
     this.circlePixelSize = this.iconPixelSize + 6;
+    this.ucdlib = false;
+    this.iconset = "";
+
 
     // Non Iron-icon icons that are prefaced with 'rp-'. i.e. <rp-icon icon="rp-search"></rp-icon>
     this._customIcons = {
@@ -61,6 +70,13 @@ export class RpIcon extends LitElement {
         <path d="M18.1,5.64a.7.7,0,0,1,.39-.56c.62-.37,1.24-.74,1.87-1.09a.83.83,0,1,1,.83,1.43c-.62.36-1.24.73-1.87,1.08A.83.83,0,0,1,18.1,5.64Z"/>
         <path d="M9.25,18.83a1.19,1.19,0,0,0,.19.61l.59.89a1.12,1.12,0,0,0,.92.49h2.12a1.12,1.12,0,0,0,.92-.49l.59-.89a1.09,1.09,0,0,0,.18-.61V17.51H9.25ZM6,9.24a6,6,0,0,0,1.5,4,9.75,9.75,0,0,1,1.79,3.15v0h5.52v0a10,10,0,0,1,1.8-3.15A6.06,6.06,0,1,0,6,9.24ZM12,6.49A2.76,2.76,0,0,0,9.25,9.24a.55.55,0,0,1-.55.56.56.56,0,0,1-.55-.56A3.86,3.86,0,0,1,12,5.39a.55.55,0,0,1,.55.55A.55.55,0,0,1,12,6.49Z"/>`
     };
+  }
+
+  _getIconName(iconName, setName){
+    if ( setName == "ucdlib" ) {
+      return iconName;
+    }
+    return `${setName}:${iconName}`;
   }
 
   /**
@@ -203,6 +219,11 @@ export class RpIcon extends LitElement {
     if (this._isCustomIcon(this.icon)) {
       let icon = this.icon.split("-").slice(1).join('-');
       return html`<svg class="icon rp ${this.sizeIconSVG ? this.sizeIconSVG : ''}" viewBox="${this._calculateViewBox()}" style="${styleMap(this.getIconSizeStyles())}" xmlns="http://www.w3.org/2000/svg">${this._renderCustomIcon(icon)}</svg>`;
+    }
+
+    if(this.ucdlib) {
+      let icon = this.icon.split("-").slice(1).join('-');
+      return html`<ucdlib-icon icon="${this.iconset}:${icon}" ></ucdlib-icon>`;
     }
     return html``;
   }

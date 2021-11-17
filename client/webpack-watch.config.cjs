@@ -1,11 +1,20 @@
-let configs = require('@ucd-lib/cork-app-build').watch({
+const appBuild = require('@ucd-lib/cork-app-build');
+
+let configs = [appBuild.watch({
   root : __dirname,
   entry : 'public/elements/researcher-profiles.js',
   preview : 'public/js',
   clientModules : 'public/node_modules'
-});
+})];
 
-if( !Array.isArray(configs) ) configs = [configs];
+configs = [...configs, appBuild.watch({
+  root : __dirname,
+  entry : 'public/elements/external',
+  preview : 'public/js',
+  modern : 'external.js',
+  clientModules : 'public/node_modules'
+})];
+
 
 // add .xml and .csl loading support
 configs.forEach((config, index) => {
@@ -16,10 +25,10 @@ configs.forEach((config, index) => {
   });
   */
 
-  config.output.publicPath = '/js/'
+  config.output.publicPath = '/js/';
   config.output.chunkFilename = '[name].'+config.output.filename;
 
-  if( index === 1 ) {
+  if( index % 2 === 1 ) {
     // add dynamic loader plugin for ie
     config.module.rules.forEach(plugin => {
       if( !plugin.use ) return;

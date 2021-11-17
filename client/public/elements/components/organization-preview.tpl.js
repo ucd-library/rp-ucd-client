@@ -1,5 +1,5 @@
-import { html } from 'lit-element';
-//import { styleMap } from 'lit-html/directives/style-map';
+import { html } from 'lit';
+//import { styleMap } from 'lit/directives/style-map.js';
 
 export default function render() {
   return html`
@@ -13,7 +13,7 @@ export default function render() {
       align-items: center;
     }
     .icon-container {
-      background-color: var(--tcolor-bg-primary);
+      background-color: var(--ae-tcolor-bg-primary);
       height: 70px;
       width: 70px;
       min-height: 70px;
@@ -24,7 +24,7 @@ export default function render() {
       align-items: center;
     }
     iron-icon {
-      color: var(--tcolor-primary);
+      color: var(--ae-tcolor-primary);
       height: 50%;
       width: 50%;
     }
@@ -33,19 +33,19 @@ export default function render() {
       flex-grow: 1;
     }
     .name {
-      font-size: var(--font-size);
-      color : var(--tcolor-link-text);
-      font-weight : var(--font-weight-bold);
+      font-size: var(--ae-font-size);
+      color : var(--ae-tcolor-link-text);
+      font-weight : var(--ae-font-weight-bold);
     }
     .author {
-      color : var(--tcolor-link-text);
+      color : var(--ae-tcolor-link-text);
     }
     a[disabled] {
       pointer-events: none;
       text-decoration: none;
     }
     a[disabled]:hover {
-      color : var(--tcolor-link-text);
+      color : var(--ae-tcolor-link-text);
     }
   </style>
   <div class=container>

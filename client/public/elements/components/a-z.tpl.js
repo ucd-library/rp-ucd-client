@@ -1,10 +1,10 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 export default function render() {
   return html`
   <style>
     :host {
       display: block;
-      font-size: var(--font-size-small);
+      font-size: var(--ae-font-size-small);
       line-height: 1.8;
     }
     .container {
@@ -13,7 +13,7 @@ export default function render() {
       align-items: center;
     }
     .letter {
-      color: var(--tcolor-primary);
+      color: var(--ae-tcolor-primary);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -23,15 +23,15 @@ export default function render() {
       cursor: pointer;
     }
     .letter:hover {
-      color: var(--tcolor-link-hover-text);
+      color: var(--ae-tcolor-link-hover-text);
     }
     .letter[disabled] {
       pointer-events: none;
       cursor: auto;
-      color: var(--tcolor-link-disabled-text);
+      color: var(--ae-tcolor-link-disabled-text);
     }
     .letter.selected {
-      font-weight: var(--font-weight-bold);
+      font-weight: var(--ae-font-weight-bold);
       pointer-events: none;
       cursor: auto;
       z-index: 1;
@@ -39,24 +39,24 @@ export default function render() {
     .letter.selected::before {
       content: "";
       border-radius: 50%;
-      background-color: var(--tcolor-secondary);
+      background-color: var(--ae-tcolor-secondary);
       min-width: 30px;
       min-height: 30px;
       position: absolute;
       z-index: -1;
     }
     .letter.selected:hover {
-      color: var(--tcolor-primary);
+      color: var(--ae-tcolor-primary);
     }
     a {
       text-decoration: none;
-      color: var(--tcolor-primary);
+      color: var(--ae-tcolor-primary);
     }
     a:visited {
-      color: var(--tcolor-primary);
+      color: var(--ae-tcolor-primary);
     }
     .letter[disabled] a {
-      color: var(--tcolor-link-disabled-text);
+      color: var(--ae-tcolor-link-disabled-text);
     }
   </style>
   <div class=container>

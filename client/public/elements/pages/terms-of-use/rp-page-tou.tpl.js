@@ -1,4 +1,4 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import styles from "../../styles/site.html"
 
 export default function render() {
@@ -7,7 +7,7 @@ return html`
 <style>
   :host {
     display: block;
-    background-color: var(--color-white);
+    background-color: var(--ae-color-white);
   }
 
 

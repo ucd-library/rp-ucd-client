@@ -1,5 +1,7 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import styles from "../../styles/site.html";
+import "../../components/rp-toast-message"
+import config from "../../../src/config.js";
 
 export default function render() {
 return html`
@@ -17,7 +19,7 @@ return html`
   }
   .data section rp-loading {
     height: 150px;
-    --rp-loading-color: var(--tcolor-primary);
+    --rp-loading-color: var(--ae-tcolor-primary);
   }
   .herotop {
     display: flex;
@@ -39,33 +41,35 @@ return html`
   #about .cols {
     display: flex;
     flex-wrap: wrap;
+
   }
   #about .cols > div {
     width: 100%;
+    word-wrap: break-word;
   }
   .pub-count {
-    background-color: var(--tcolor-primary);
-    color: var(--tcolor-light);
+    background-color: var(--ae-tcolor-primary);
+    color: var(--ae-tcolor-light);
     min-height: 60px;
     min-width: 60px;
     border-radius: 50%;
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-h2);
+    font-weight: var(--ae-font-weight-bold);
+    font-size: var(--ae-font-size-h2);
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .button {
-    color: var(--tcolor-primary);
+    color: var(--ae-tcolor-primary);
     padding: 10px;
-    background-color: var(--tcolor-bg-primary);
+    background-color: var(--ae-tcolor-bg-primary);
     cursor: pointer;
     transition: .3s;
     margin: 5px;
-    }
+  }
   .button:hover {
-    background-color: var(--tcolor-hover-bg);
-    color: var(--tcolor-hover-text);
+    background-color: var(--ae-tcolor-hover-bg);
+    color: var(--ae-tcolor-hover-text);
   }
   rp-badge {
     margin-left: 8px;
@@ -78,26 +82,26 @@ return html`
   }
   .load-pubs {
     height: 42px;
-    font-size: var(--font-size);
-    color: var(--tcolor-text);
-    font-weight: var(--font-weight);
-    border: 2px solid var(--tcolor-primary10);
+    font-size: var(--ae-font-size);
+    color: var(--ae-tcolor-text);
+    font-weight: var(--ae-font-weight);
+    border: 2px solid var(--ae-tcolor-primary10);
     padding: 0 15px;
     cursor: pointer;
     transition: .3s;
-    color: var(--tcolor-primary);
+    color: var(--ae-tcolor-primary);
   }
   .load-pubs.more {
-    background-color: var(--tcolor-primary10);
+    background-color: var(--ae-tcolor-primary10);
   }
   .load-pubs.less {
-    background-color: var(--tcolor-light);
+    background-color: var(--ae-tcolor-light);
     margin-right: 8px;
   }
   .load-pubs:hover {
-    background-color: var(--tcolor-hover-bg);
-    border: 2px solid var(--tcolor-hover-bg);
-    color: var(--tcolor-light);
+    background-color: var(--ae-tcolor-hover-bg);
+    border: 2px solid var(--ae-tcolor-hover-bg);
+    color: var(--ae-tcolor-light);
   }
   .site .logo {
     vertical-align: middle;
@@ -129,7 +133,7 @@ return html`
     order: -1;
   }
   #publications h3 {
-    font-weight: var(--font-weight);
+    font-weight: var(--ae-font-weight);
     font-style: italic;
 
   }
@@ -137,7 +141,7 @@ return html`
     display: flex;
   }
   .box-pubsyear .year {
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--ae-font-weight-bold);
     width: 60px;
     min-width: 60px;
   }
@@ -167,13 +171,13 @@ return html`
 
   #pronoun {
     margin: 0;
-    font-size: var(--font-size);
-    color: var(--color-blue10);
+    font-size: var(--ae-font-size);
+    color: var(--ae-color-blue10);
   }
   /* #showMore{
     display:block;
-    margin:0 auto; 
-    padding:10px; 
+    margin:0 auto;
+    padding:10px;
     border-radius: 20px;
     color:white;
     background-color: transparent;
@@ -181,9 +185,9 @@ return html`
   }
 
   #showMore:hover{
-    background-color: var(--tcolor-hover-bg);
-    color: var(--tcolor-hover-text);
-    border-color: var(--tcolor-hover-bg);
+    background-color: var(--ae-tcolor-hover-bg);
+    color: var(--ae-tcolor-hover-text);
+    border-color: var(--ae-tcolor-hover-bg);
   } */
 
   rp-modal ol li:before, rp-modal ol li::marker {
@@ -192,6 +196,17 @@ return html`
   }
   rp-modal ol li {
     padding-left: 5px;
+  }
+  .svg-icon {
+    width: 20px;
+    height: 20px;
+    fill: #73ABDD;
+    margin-right: 5px;
+  }
+  .contact-container {
+    display: flex;
+    align-items: center;
+    word-wrap: break-word;
   }
 
   @media (min-width: 800px){
@@ -213,14 +228,14 @@ return html`
 
 
 <rp-modal content-title='Edit Keywords' id="modal-keyword-edit">
-  Keywords are managed via the "Fields of Research" section of your <b>UC Publication Management System</b> profile. 
-  Clicking the "Edit Keywords" button below will redirect you to the UC Publication Management System. Any changes 
-  made there will be reflected on your Aggie Experts profile. 
+  Keywords are managed via the "Fields of Research" section of your <b>UC Publication Management System</b> profile.
+  Clicking the "Edit Keywords" button below will redirect you to the UC Publication Management System. Any changes
+  made there will be reflected on your Aggie Experts profile.
 
   <div style="margin-top: 15px"><b>Steps to Add/Delete Keywords:</b></div>
   <ol style="margin-top: 5px; padding-left: 20px;">
     <li>In the "About" block, select the "Edit" button located just to the right of the "Fields of Research" label.</li>
-    <li>To add keywords, search for and select a subject from "Available values." To remove keywords, select an item 
+    <li>To add keywords, search for and select a subject from "Available values." To remove keywords, select an item
       from the "Your Selection" list.</li>
     <li>Select "Save" to confirm your changes.</li>
   </ol>
@@ -229,13 +244,14 @@ return html`
     <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/userprofile.html?uid=${this._getOAId()}&em=true'>
     <div class="button">Edit Keywords</div>
     </a>
-  </div> 
+  </div>
 </rp-modal>
 
 <div class="individual top ${this.isOwnProfile ? "own-profile" : ""}">
   <div class="data ${this.individualStatus}" ?hidden="${!this.showPage() }">
     <div class="page-header container-wide">
       <rp-hero-image id="hero">
+
         ${this.individualStatus === 'loaded' ? html`
           <div class="hidden" slot="top" class="herotop">
             <rp-icon icon="iron-link" circle-bg is-link style="margin-right:5px;"></rp-icon>
@@ -245,23 +261,16 @@ return html`
             <rp-avatar size="lg"></rp-avatar>
             <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getFullName()}</h2>
 
-            <div class="text-light h3 mb-2 mt-1 text-center">
-              ${this.title.title}, ${this.title.org} 
-              <a href="https://org.ucdavis.edu/odr/" ?hidden="${!this.isOwnProfile}" target="_blank" rel="noopener">
-                <rp-icon style="vertical-align:middle;" 
-                  icon="iron-editor:mode-edit" 
-                  has-text 
-                  circle-bg 
-                  is-link size="lg">
-                  <div slot="tooltip">Edit Positions</div>
-                </rp-icon> 
-              </a>
-            </div>
+            <!--
+              SB: Kafka Message Add?
+              <rp-toast-message ?hidden="${!this.isOwnProfile}"><rp-toast-message>
+            -->
+
 
             ${this.getPronouns() ? html `
-              <p id="pronoun">(${this.getPronouns()})</p>   
+              <p id="pronoun">(${this.getPronouns()})</p>
             `: html ``}
-                     
+
 
             ${this.getResearchSubjects(1).length > 0 ? html`
               <div>
@@ -274,19 +283,19 @@ return html`
                       <rp-badge size="lg" class="text-light my-1" href="${subject.href}">
                         ${subject.bestLabel}
                       </rp-badge>
-                    `)} 
-                    <rp-badge size="lg" 
+                    `)}
+                    <rp-badge size="lg"
                       ellipsis
-                      ?hidden="${(this.showResearchSubjectCount >= this.getResearchSubjects().length)}" 
+                      ?hidden="${(this.showResearchSubjectCount >= this.getResearchSubjects().length)}"
                       @click="${this._showAllResearchSubjects}">
                     </rp-badge>
                     ${this.isOwnProfile ? html`
                       &nbsp;&nbsp;
                       <rp-icon style="vertical-align:middle;"
                         @click="${e => this.shadowRoot.getElementById('modal-keyword-edit').toggle()}"
-                        icon="iron-editor:mode-edit" 
+                        icon="iron-editor:mode-edit"
                         role="button"
-                        circle-bg 
+                        circle-bg
                         is-link has-text
                         size="lg">
                         <div slot="tooltip">Edit Keywords</div>
@@ -296,7 +305,7 @@ return html`
                     <br />
                     </div>
                   </div>
-                  
+
               </div>
             ` : html``}
             <div ?hidden="${!this.isAdmin}" style="margin-top: 20px">
@@ -308,7 +317,7 @@ return html`
         `}
 
       </rp-hero-image>
-      <rp-link-list class="bg-light p-3" 
+      <rp-link-list class="bg-light p-3"
         direction="horizontal"
         .links="${this.getPageSections()}"
         use-hash
@@ -328,39 +337,48 @@ return html`
             <div>
               <div ?hidden="${this.additionalTitles.length === 0}">
                 <div>
-                  <h2 class="h3 mb-2">Additional Roles&nbsp;&nbsp;
+                  <h2 class="h3 mb-2">Roles&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
                       <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
                         <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
-                          <div slot="tooltip">Edit Positions</div>
+                          <div slot="tooltip">Edit Roles</div>
                         </rp-icon>
                       </a>
                       ` : html``
                     }
                   </h2>
-                </div> 
-
-
-                ${this.additionalTitles.map(t => html`<div>${t.title}, ${t.org}</div>`)}
-
-                
-              </div> 
-              ${this._showSubSection('contact') ? html`
-                <div>
-                  <h2 class="h3 mb-2">Contact</h2>${this.getEmailAddresses().map(addr => html`<div><a href="${'mailto:' + addr}">${addr}</a></div>`)}
                 </div>
-              ` : html``}
-              
+
+
+                ${this.additionalTitles.map(t =>
+                  html`
+                    <div>
+                      <div>${t.title}, ${t.org}</div>
+                      ${t.url ? html`<div class="contact-container">
+                                        ${this.svgIcon.url}
+                                        <a href="${t.url}">${t.urlFaceResult}</a>
+                                     </div>`
+                                :``}
+                      ${t.email ? html`<div class="contact-container">
+                                        ${this.svgIcon.email}
+                                        <a href="mailto:${t.email}">${t.email}</a>
+                                       </div>`
+                                :``}
+                    </div>
+                  <br />
+                `)}
+              </div>
             </div>
             <div>
               ${this._showSubSection('websites') ? html`
-                <div>
                   <h2 class="h3 mb-2">Websites</h2>
                   ${this.getWebsites().map(site => html`
-                    <div class="site">
-                      <a href="${site.href}" target="_blank" rel="noopener">${site.icon ? html`<img class="logo" alt="site logo" src="${site.icon}">` : html``}${site.text}</a>
+                    <div class="contact-container">
+                      <a href="${site.href}" target="_blank" rel="noopener">
+                ${this.svgIcon[site.type] ? html`${this.svgIcon[site.type]}` : html`${this.svgIcon.url}`}${site.text}
+                      </a>
                     </div>`)}
-                </div>
+                    <br />
               ` : html``}
             </div>
           </div>
@@ -369,105 +387,27 @@ return html`
         `}
 
       </section>
+    ${this.totalPublications != 0 || (this.isLoggedIn && this.isOwnProfile) ? html`
+        <ae-publication-list
+          expert-id="${this.assetId}"
+          ?is-own-profile="${this.isOwnProfile}"
+          ?hidden="${this._hidePageSection('publications', 'work')}">
+        </ae-publication-list>` 
+    : html``}
 
-      <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
-        <div class="box-title">
-          <h1 class="weight-regular mt-0">Publications</h1>
-          <div class="box-title-icons">
-            <div class="pub-icons">
-              ${this.isOwnProfile ? html`
-                  <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
-                    <div slot="tooltip">Edit Publications</div>
-                  </rp-icon>
-                  <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
-
-                ` : html``
-              }
-            </div>
-
-            <div class="pub-count">${this.totalPublications}</div>
-          
-            <rp-modal content-title='Edit Publications' id="modal-pub-edit">
-              Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
-              redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
-              <div slot="confirmButton">
-                <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/objects.html?as=3&am=false&cid=1&ipr=false&iqf=true'>
-                <div class="button">Edit Publications</div>
-                </a>
-              </div> 
-            </rp-modal>
-          </div>
-        </div>
-        ${this.publicationOverviewStatus === 'loaded' ? html`
-          <h2 class="mb-0">Selected Publications</h2>
-          <div class="data">
-            ${ Object.values(this.publicationOverview).map(pubType => html`
-              <h3>${pubType.text} (${pubType.ct})</h3>
-              ${this.getPubsByYear(pubType.id).map(yr => html`
-                <div class="box-pubsyear">
-                  <div class="year">${yr.year}</div>
-                  <div class="pubs">${yr.pubs.map(pub => html`
-                    <rp-citation .data="${pub}"></rp-citation>
-                  `)}</div>
-                </div>
-              `)}
-
-              <div class="box-pub-buttons" ?hidden="${!this.showMoreButton(pubType)}">
-                <div class="padding"></div>
-                <div class="buttons">
-                  <button type="button" 
-                    ?hidden="${!this.showLessButton(pubType)}"
-                    @click="${e => this._loadPubs(pubType.id, false)}" 
-                    class="load-pubs less">Show ${this.showLessCount(pubType)} less</button>
-
-                  <button type="button" 
-                    ?hidden="${!this.showMoreButton(pubType)}"
-                    @click="${e => this._loadPubs(pubType.id, true)}" 
-                    class="load-pubs more">Show ${this.showMoreCount(pubType)} more</button>
-                </div>
-              </div>
-            `)}
-          </div>
-        ` : html``}
-        ${this.publicationOverviewStatus === 'loading' ? html`
-          <rp-loading>Loading publications</rp-loading>
-        ` : html``}
-        ${this.publicationOverviewStatus === 'error' ? html`
-          <div class="load-error">
-            <rp-alert>Error loading publications. Try again later.</rp-alert>
-          </div>
-        ` : html``}
-        
-
-      </section>
-
-      <div ?hidden="${!APP_CONFIG.includeGrants}">
-
-      <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('grants')}">
+    ${this.totalGrants != 0 || (this.isLoggedIn && this.isOwnProfile) ? html`
+      <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('grants', 'grant')}">
         <div class="box-title">
           <h1 class="weight-regular mt-0">Grants</h1>
           <div class="box-title-icons">
-            <div class="pub-icons">
-              ${this.isOwnProfile ? html`
-                  <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-pub-edit').toggle()}">
-                    <div slot="tooltip">Edit Publications</div>
-                  </rp-icon>
-                  <rp-download-list title="Download Publications List" .choices="${this.getPubExports()}"></rp-download-list>
-
-                ` : html``
-              }
-            </div>
-
             <div class="pub-count">${this.totalGrants}</div>
-        
           </div>
         </div>
         ${this.totalGrants != 0 ? html `
-        <h2 class="mb-0">Selected Grants</h2>       
+        <h2 class="mb-0">Selected Grants</h2>
           <div>
-            ${this.activeGrant.length != 0 ? html `
-              <div>
-                <h3 class="weight-regular mt-0"><i>Active (${this.activeGrant.length})</i></h3>
+          ${this.activeGrant.length != 0 ? html `
+              <div><i>Active (${this.activeGrant.length})</i>
               ${this.activeGrant.map(grant => 
                   html`<div class="grant-panel"><a href="${grant.grant_url}">${grant.title}</a><br />
                   ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
@@ -476,13 +416,14 @@ return html`
             </div>`
             :html``}
           </div>
+          <br />
           <div>
             ${this.inactiveGrant.length != 0  ? html `
               <div>
-                <h3 class="weight-regular mt-0"><i>Completed (${this.inactiveGrant.length})</i></h3>
+              <i>Completed (${this.inactiveGrant.length})</i>
                 ${this.inactiveGrant.map(grant => 
                     html`<div class="grant-panel"><a href=${grant.grant_url}>${grant.title}</a><br />
-                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
+                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} 
                     `
                 )}
               </div>`
@@ -491,13 +432,12 @@ return html`
         `
         :html``}
 
-        <button type="button" 
+        <button type="button"
           ?hidden="${this.showMoreGrants === 0}"
-          @click="${e => this._doGrantQuery()}" 
+          @click="${e => this._doGrantQuery()}"
           class="load-pubs more">Show ${Math.min(this.showMoreGrants, 10)} more</button>
-      </section>
-
-      </div>
+      </section>`
+    : html``}
 
     </div>
   </div>

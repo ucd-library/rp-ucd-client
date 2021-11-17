@@ -1,5 +1,10 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import styles from "../../styles/site.html"
+import layoutCss from "@ucd-lib/theme-sass/5_layout/_index.css.js";
+
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/ucdlib-icons.js';
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-icons/academic.js';
+
 
 import "../../components/a-z"
 import "../../components/accordian"
@@ -11,6 +16,7 @@ import "../../components/download-list"
 import "../../components/dropdown"
 import "../../components/hero-image"
 import "../../components/icon"
+import "../../components/rp-factoid"
 import "../../components/link-list"
 import "../../components/modal"
 import "../../components/organization-preview"
@@ -22,6 +28,9 @@ import "../../components/edit-profile"
 import "../../components/work-preview"
 import "../../components/subject-preview"
 import "../../components/grant-preview"
+import "../../components/rp-toast-message"
+
+import ToastMessage from "../../components/rp-toast-message"
 
 
 
@@ -97,7 +106,7 @@ return html`
     justify-content: center;
   }
   .search-blue {
-    background-color: var(--tcolor-primary);
+    background-color: var(--ae-tcolor-primary);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -105,6 +114,7 @@ return html`
   }
   
   ${styles}
+  ${layoutCss}
 </style>
 
 <h1 class="text-primary">Site Components</h1>
@@ -119,14 +129,24 @@ You control them with attributes, and build more complicated (bus-connected) ele
 <rp-a-z hide-all=true selected-letter="f" disabled-letters=${JSON.stringify(['g','q', 'S'])}></rp-a-z>
 </section>
 
+<section id="ToastMessage">
+  <h2>Toaster Message</h2>
+  <p>One toast message will pop up automatically with just adding <code>rp-toast-message</code></p>
+  <rp-toast-message></rp-toast-message> 
+  <p>You can add a button for toast message by <code>@click</code> with function <code>addToast</code></p>
+  <button @click="${this.addToast}">Add Toast Message</button>
+</section>
+
+
+
 <section>
-<h2>Accordians for FAQ section</h2>
-<p>Use the <code>title</code> attribute to specify the link text. The expandable content is an unnamed slot.</p>
-<rp-accordian title="How often do you update the data in the registry?">${'Hello world! '.repeat(40)}</rp-accordian>
-<rp-accordian></rp-accordian>
-<rp-accordian expanded title="Use the expanded attribute or toggle method to control expansion">
-This is open on page load because I'm using the expanded attribute.
-</rp-accordian>
+  <h2>Accordians for FAQ section</h2>
+  <p>Use the <code>title</code> attribute to specify the link text. The expandable content is an unnamed slot.</p>
+  <rp-accordian title="How often do you update the data in the registry?">${'Hello world! '.repeat(40)}</rp-accordian>
+  <rp-accordian></rp-accordian>
+  <rp-accordian expanded title="Use the expanded attribute or toggle method to control expansion">
+  This is open on page load because I'm using the expanded attribute.
+  </rp-accordian>
 </section>
 
 <section>
@@ -201,11 +221,40 @@ Otherwise, a <code>new-selection</code> event will fire when an option is clicke
 <h2>Dropdown</h2>
 <p>A stylized dropdown. Listen with <code>@new-selection="\${e => console.log(e.target.choices[e.target.chosen])}</code></p>
 <rp-dropdown choices='["People",
-                       {"text": "Subjects"}
+                       {"text": "Subjects"},
                        {"text": "Organizations"},
                        {"text": "Works"}]'
              @new-selection="${e => console.log(e.target.choices[e.target.chosen])}">
 </rp-dropdown>
+</section>
+
+<section>
+  <H2> Factoids </H2>
+  
+  <p>Factoids are small components of a statistic,title,icon and link, that are
+  typically used to display a brief datum, with a link to more information.  The
+  factoids are an encompassing div tag with some bracket decoration.</p>
+  
+  <p>Factoids can be generated using only the CSS styling included in the ucdlib-theme, but they can be pretty complicated.</p>
+  <rp-factoid href="http://library.ucdavis.edu" statistic="40" title="Cats">
+    <span style="font-size:100px;">⑁</span>
+  </rp-factoid>
+
+  <div class="l-3col layout-columns" style="margin-top:25px">
+  
+      <rp-factoid href="http://library.ucdavis.edu" statistic="4,000,000" title="Books">
+        <span><ucdlib-icon slot="ucdIcon" style="margin:auto;width:135px;height:135px;"  icon="ucdlib:book"  size=24></ucdlib-icon></span>
+      </rp-factoid>
+  
+      <rp-factoid href="http://library.ucdavis.edu" statistic="800" title="Scorpus IDs">
+        <span><ucdlib-icon style="margin:auto;width:135px;height:135px;"  icon="academic:scopus" ></ucdlib-icon></span>
+      </rp-factoid>
+  
+      <rp-factoid href="http://library.ucdavis.edu" statistic="5000" title="Seats">
+        <span><ucdlib-icon style="margin:auto;width:135px;height:135px;"  icon="academic:stackoverflow" ></ucdlib-icon></span>
+      </rp-factoid>
+  
+    </div> 
 </section>
 
 <section class="hero">
@@ -254,6 +303,8 @@ There are three slots to populate the hero content - "top", "main", and "bottom"
 <rp-icon icon="iron-description" theme-color='work' circle-bg sizeIcon="extralgIconWorks" size="extralg"></rp-icon>
 <rp-icon icon="rp-subject" circle-bg theme-color='subject' sizeIconSVG="extralgSVGIcon" size="extralg"></rp-icon>
 <rp-avatar></rp-avatar>
+<p>Temporary addition of the call to ucdlib icon through rp background.</p>
+<rp-icon ucdlib iconset="academic" icon="ucdlib-pubmed" theme-color='work' circle-bg sizeIcon="extralgIconWorks" size="extralg"></rp-icon>
 
 </section>
 

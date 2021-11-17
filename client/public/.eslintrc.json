@@ -4,6 +4,8 @@
     "LitCorkUtils": "readonly",
     "Mixin": "readonly",
     "APP_CONFIG": "readonly",
+    "WebComponents": "readonly",
+    "AGGIE_EXPERTS_LOADER": "readonly",
     "rpLogger": "readonly"
   }
 }

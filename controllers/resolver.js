@@ -21,7 +21,6 @@ const MATCHES = {
 async function register(app) {
   // strip ucdrp
   app.get(/\/ucdrp:.*/, (req, res) => {
-    console.log(req.path.replace(/\/ucdrp:/, '/'));
     res.redirect(req.path.replace(/\/ucdrp:/, '/'));
   });
 
