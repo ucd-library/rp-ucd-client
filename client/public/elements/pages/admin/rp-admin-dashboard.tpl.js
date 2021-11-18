@@ -93,4 +93,25 @@ return html`
   </div>
 </div>
 
+<div>
+  <h2>Service Tokens</h2>
+  <div>Generate long-lived service tokens</div>
+  <div>
+    <div>Username <input id="service-token-username" type="text"></div>
+    <div>User to associated with service account.  Contact email would be good to use here</div>
+  </div>
+  <div>
+    <div>Roles <input id="service-token-roles" type="text"></div>
+    <div>Comma separated list of roles.  Then admin role is not allowed.</div>
+  </div>
+  <div>
+    <div>Allowed IP Address <input id="service-token-ips" type="text"></div>
+    <div>Comma separated list of addresses. IP Address or CIDR range allowed.</div>
+  </div>
+  <div>
+    <button @click="${this._generateServiceToken}">Create Token</button>
+  </div>
+  <div>${this.serviceTokenMessage}</div>
+</div>
+
 `;}

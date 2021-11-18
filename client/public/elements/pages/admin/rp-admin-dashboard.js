@@ -16,7 +16,8 @@ export default class RpAdminDashboard extends Mixin(LitElement)
       indexInfo : {type: Object},
       requestingIndex : {type: Boolean},
       textSearchFields : {type: Array},
-      explainQueryEnabled : {type: Boolean}
+      explainQueryEnabled : {type: Boolean},
+      serviceTokenMessage : {type: String}
     };
   }
 
@@ -35,6 +36,7 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     this.indexes = [];
     this.requestingIndex = false;
     this.explainQueryEnabled = window.localStorage.getItem('explainQueryEnabled') === 'true';
+    this.serviceTokenMessage = '';
     
     let textSearchFields = window.localStorage.getItem('textSearchFields');
     if( textSearchFields ) {
@@ -46,6 +48,8 @@ export default class RpAdminDashboard extends Mixin(LitElement)
       textSearchFields.push({type, fields: assetDefs.textSearchFields[type] });
     }
     this.textSearchFields = textSearchFields;
+
+    this.serviceTokenProperties = ['username', 'roles', 'ips'];
   }
 
   async firstUpdated() {
@@ -133,7 +137,32 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     }, 15000);
   }
 
+  async _generateServiceToken() {
+    let payload = {};
 
+    for( let key of this.serviceTokenProperties ) {
+      payload[key] = this.shadowRoot.querySelector('#service-token-'+key).value;
+      if( !payload[key] ) {
+        this.serviceTokenMessage = key+' is required';
+        return;
+      }
+    }
+
+    payload.roles = payload.roles.split(',').map(item => item.trim());
+
+    this.serviceTokenMessage = 'Generating service token...';
+    let resp = await this.AdminModel.generateServiceToken(payload);
+
+    if( resp.error ) {
+      this.serviceTokenMessage = resp.error.message;
+      return;
+    }
+
+    this.serviceTokenMessage = 'Service Token: '+resp.payload.token;
+    for( let key of this.serviceTokenProperties ) {
+      this.shadowRoot.querySelector('#service-token-'+key).value = '';
+    }
+  }
 
 }
 

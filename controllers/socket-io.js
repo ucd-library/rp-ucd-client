@@ -57,7 +57,7 @@ async function handleConnection(socket) {
 
   // Verify the token
   try {
-    token = await auth.verifyToken(token);
+    token = await auth.verifyToken(token, socket.handshake);
   } catch(e) {
     // TODO: need to boot user here
     logger.error('User connected to websocket but bad auth token provided');

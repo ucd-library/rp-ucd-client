@@ -13,6 +13,13 @@ class AdminModel extends BaseModel {
     this.register('AdminModel');
   }
 
+  async generateServiceToken(payload) {
+    try {
+      await this.service.generateServiceToken(payload);
+    } catch(e) {}
+    return this.store.data.serviceToken;
+  }
+
   async requestIndex(opts) {
     try {
       await this.service.requestIndex(opts);

@@ -10,10 +10,12 @@ class AdminStore extends BaseStore {
       model : {},
       record : {},
       indexerStatus : {},
-      requestIndex : {}
+      requestIndex : {},
+      serviceToken : {}
     };
     this.events = {
-      REQUEST_INDEX : 'request-index-update'
+      REQUEST_INDEX : 'request-index-update',
+      SERVICE_TOKEN : 'generate-service-token-update'
     };
   }
 
@@ -141,6 +143,32 @@ class AdminStore extends BaseStore {
   _setRequestIndexState(state) {
     this.data.requestIndex = state;
     this.emit(this.events.REQUEST_INDEX, state);
+  }
+
+  generateServiceTokenLoading(request) {
+    this._setSenerateServiceTokenState({
+      state : this.STATE.LOADING,
+      request
+    });
+  }
+
+  generateServiceTokenLoaded(payload) {
+    this._setSenerateServiceTokenState({
+      state : this.STATE.LOADED,
+      payload
+    });
+  }
+
+  generateServiceTokenError(error) {
+    this._setSenerateServiceTokenState({
+      state : this.STATE.ERROR,
+      error
+    });
+  }
+
+  _setSenerateServiceTokenState(state) {
+    this.data.serviceToken = state;
+    this.emit(this.events.SERVICE_TOKEN, state);
   }
 
 }

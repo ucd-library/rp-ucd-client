@@ -24,7 +24,7 @@ class UserAuthController {
     let token = auth.getTokenFromRequest(req);
     if( token ) {
       try {
-        user = await auth.verifyToken(token);
+        user = await auth.verifyToken(token, auth.getRequestIp(req));
 
         // set has profile flag
         try {

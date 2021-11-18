@@ -84,6 +84,20 @@ class AdminService extends BaseService {
     });
   }
 
+  generateServiceToken(payload={}) {
+    return this.request({
+      url : this.baseUrl+'/api/token/service-token',
+      fetchOptions : {
+        method : 'POST',
+        body : payload
+      },
+      json: true,
+      onLoading : request => this.store.generateServiceTokenLoading(request),
+      onLoad : result => this.store.generateServiceTokenLoaded(result.body),
+      onError : e => this.store.generateServiceTokenError(e)
+    });
+  }
+
 }
 
 const service = new AdminService();
