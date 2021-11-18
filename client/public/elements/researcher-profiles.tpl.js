@@ -382,7 +382,6 @@ return html`
       <a href="/auth/login">Login to Aggie Experts</a>
     </ucd-theme-quick-links>
   `}
-
 </ucd-theme-header>
 
 

@@ -249,11 +249,6 @@ return html`
   </div>
 </div>
 
-<!-- <div class="search bg-primary">
-  <div class="container flex justify-content-center">
-    <rp-search .facets="${this.CollectionModel.mainFacets}" @new-search="${this._onSearch}" include-all-option></rp-search>
-  </div>
-</div> -->
 
 <div class="data bg-light ${this.pageStatus}">
   <rp-loading ?hidden="${this._hideStatusSection('loading')}">Loading ${this.theme.siteTitle}</rp-loading>
