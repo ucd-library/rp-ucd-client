@@ -7,14 +7,12 @@ import config from "../src/config"
 
 export default function render() {
 return html`
-
 <style>
   ${styles}
   :host {
     display: block;
     min-width: 360px;
   }
-
   #loading {
     width: 100%;
     min-height: 700px;
@@ -25,26 +23,21 @@ return html`
     align-items: center;
     background-color: white;
   }
-
   #loading img {
     animation: showLoading 400ms ease-in;
   }
-
   @keyframes showLoading {
     0% { opacity: 0; }
     100% { opacity: 1; }
   }
-
   #loading img {
     animation: showLoading 400ms ease-in;
   }
-
   .loading-dots {
     text-align: center;
     z-index: 5;
     color: var(--ae-tcolor-primary);
   }
-
   .dot {
     display: inline;
     margin-left: 0.2em;
@@ -54,18 +47,15 @@ return html`
     opacity: 0;
     animation: showHideDot 2.5s ease-in-out infinite;
   }
-
   .dot.one { animation-delay: 0.2s; }
   .dot.two { animation-delay: 0.4s; }
   .dot.three { animation-delay: 0.6s; }
-
   @keyframes showHideDot {
     0% { opacity: 0; }
     50% { opacity: 1; }
     60% { opacity: 1; }
     100% { opacity: 0; }
   }
-
   #masthead {
     width: 100%;
     height: var(--ae-masthead-height);
@@ -177,18 +167,15 @@ return html`
   #app-header-content:after {
     content: "";
     height: 2px;
-
     /* Expand element */
     position: absolute;
     left: 0px;
     /* top: 0px; */
     right: 0px;
     bottom: 0px;
-
     -moz-box-shadow: inset 0 2px 1px rgba(0,40,85,0.15);
     -webkit-box-shadow: inset 0 2px 1px rgba(0,40,85,0.15);
     box-shadow: 0 2px 1px rgba(0,40,85,0.15);
-
     /* Disable click events */
     pointer-events: none;
   }
@@ -198,7 +185,6 @@ return html`
   #nav-container {
     min-height: 66px;
   }
-
   #nav-left {
     list-style-type: none;
     margin: 0;
@@ -208,7 +194,6 @@ return html`
   [quick-search-opened] #nav-left {
     display: none;
   }
-
   #nav-left a {
     padding: 15px 12px;
     text-transform: uppercase;
@@ -222,26 +207,22 @@ return html`
   #nav-left a:hover {
     color: var(--ae-tcolor-link-hover-text) !important;
   }
-
   #nav-right {
     flex: 1;
     margin-left: 10px;
   }
-
   #close-quick-search {
     display: none;
   }
   [quick-search-opened] #close-quick-search {
     display: inline-block;
   }
-
   .nav-help {
     display: none;
   }
   .nav-grants {
     display: none;
   }
-
   #app-footer {
     background-color: var(--ae-tcolor-primary);
     color: var(--ae-tcolor-light);
@@ -289,7 +270,6 @@ return html`
   #app-footer .col-item {
     padding: 5px 0;
   }
-
   @media (min-width: 480px) {
     #desktop-menu {
       display: flex;
@@ -310,7 +290,6 @@ return html`
       display: none !important;
     }
   }
-
   @media (min-width: 500px) {
     .nav-help {
       display: inline-block !important;
@@ -321,7 +300,6 @@ return html`
       display: inline-block !important;
     }
   }
-
   @media (min-width: 800px) {
     #nav-left a:first-child {
       padding-left: 20px;
@@ -343,15 +321,12 @@ return html`
       display: none;
     }
   }
-
 </style>
-
 <!--
   Required for AppStateModel
   @ucd-lib/app-state-model imports this element
 -->
 <app-route .appRoutes="${this.appRoutes}"></app-route>
-
 <div id="app-header">
   ${this._renderMasthead()}
   <div id="app-header-content" class="bg-light text-primary" ?hidden="${this.page === 'app-mobile-menu'}">
@@ -375,24 +350,19 @@ return html`
           ` : html`
           <a class="no-decoration" href="/auth/login">Login</a>
           `}
-
       </div>
     </div>
     <div class="container">
     <hr class="mb-0 mt-0 light dashed">
     </div>
-
-
     <nav id="nav-container"  class="container flex align-items-center justify-content-between" ?quick-search-opened="${this.quickSearchOpened}">
       <rp-icon id="close-quick-search" @click="${this._closeQuickSearch}" icon="iron-chevron-right" circle-bg is-link></rp-icon>
-
       <ul id="nav-left" role="menubar" aria-label="primary navigation" class="align-items-center bold">
         ${this.navLinks.map(link => html`
         <li role="none">
           <a href=${link.href} role="menuitem" ?this-page="${link.page == this.page}" class="text-primary no-decoration nav-${link.page}">${link.text}</a>
         </li>`)}
       </ul>
-
       <!-- TODO: remove -->
       <!-- <button @click="${this.testHarvest}">Harvest</button> -->
       <div id="nav-right" >
@@ -406,13 +376,10 @@ return html`
     </nav>
   </div>
 </div>
-
-
 <iron-pages
   selected="${this.page}"
   attr-for-selected="id"
   selected-attribute="visible">
-
   <div id="loading" class="my-3">
     <img src="${this.theme.loadingIcon}" style="max-width: 128px" />
     <div class="loading-dots">
