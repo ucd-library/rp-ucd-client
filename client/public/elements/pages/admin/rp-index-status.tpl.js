@@ -26,15 +26,15 @@ export function render() {
 return html`
 
 <h2>${this.data.name} <span class="active-index" ?hidden="${!this.data.active}"> ACTIVE</span></h2>
-<div class="l-2col l-2col--75-25">
-  <div class="l-second panel o-box">
+<div >
+  <div >
     ${this.services.map(service => html`
       <h4>${service.name}</h4>
-      <rp-progress-bar style="max-width:775px;" .progress="${service.progress}" .total="${this.total}"></rp-progress-bar>
+      <rp-progress-bar style="max-width:70%" .progress="${service.progress}" .total="${this.total}"></rp-progress-bar>
     `)}
   </div>
 
-  <div class="l-first panel o-box">
+  <div >
     ${this.types.map(type => html`
       <div>${type.key}: ${type.value}</div>
     `)}

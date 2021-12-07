@@ -6,6 +6,8 @@ import assetDefs from '../../../src/lib/asset-defs.js';
 
 import "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/keybinding-vim";
+import "@ucd-lib/theme-elements/brand/ucd-theme-collapse/ucd-theme-collapse.js";
+
 
 export default class RpAdminDashboard extends Mixin(LitElement)
   .with(LitCorkUtils) {
