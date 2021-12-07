@@ -60,7 +60,7 @@ return html`
 <div style="margin: 20px 10px">
   <ucd-theme-collapse title="Service Token">
   <div>
-        <label>Generate long-lived service tokens</label>
+      <label>Generate long-lived service tokens</label>
         <div>
           <div>Username <input class="form-input" id="service-token-username" type="text"></div>
           <p>User to associated with service account.  Contact email would be good to use here</p>
