@@ -18,7 +18,7 @@ class AdminService extends BaseService {
     DESCRIBE <${id.replace(config.data.prefix.ucdId+':', 'http://experts.ucdavis.edu/')}>`;
 
     return this.request({
-      url : this.baseUrl+'/fuseki',
+      url : this.baseUrl+'/fuseki/experts',
       fetchOptions : {
         method : 'POST',
         headers : {
