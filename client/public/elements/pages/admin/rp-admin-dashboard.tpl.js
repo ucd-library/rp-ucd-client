@@ -46,6 +46,9 @@ export function styles() {
       max-width:200px;
       display:block;
     }
+    .status{
+      overflow:hidden;
+    }
   `;
 
   return [elementStyles, siteStyles, layoutCss, baseCss, baseHtml];
@@ -116,10 +119,12 @@ return html`
         `)}
       </div>
     </div>
-    <div>
+    
+    <div class="status">
       ${this.indexes.map(index => html`<rp-index-status .data=${index}></rp-index-status>`)}
     </div>  
   </ucd-theme-collapse>
+
 
   <ucd-theme-collapse title="Text Search Fields">
     <div style="margin: 10px">
