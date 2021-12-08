@@ -28,6 +28,7 @@ export function styles() {
     }
     .title-center{
       text-align:center;
+      font-weight: normal;
     }
     #editor {
       min-height: 500px;
@@ -38,6 +39,16 @@ export function styles() {
       border-style: inset;
       border-color: #EBF3FA;
     }
+    #fuseki {
+      overflow: auto;
+    }
+    #model {
+      overflow: auto;
+    }
+    #elasticsearch {
+      overflow: auto;
+    }
+
     ${unsafeCSS(jsonStyles)}
   `;
   return [elementStyles, siteStyles, layoutCss, base, baseCss];
@@ -47,8 +58,8 @@ export function render() {
 return html`
 
 <div style="text-align: center">
-  <h1>${this.uri}</h1>
-  <h2>${this.type}</h2>
+  <h1 style="font-weight: normal;">${this.uri}</h1>
+  <h2 style="font-weight: normal;">${this.type}</h2>
   <div>${this.loadingState}</div>
 </div>
 <div class="l-3col">
@@ -66,8 +77,8 @@ return html`
   </div>
 </div>
 
-<div style="background-color:#EBF3FA;">
-<h4 style="margin:25px">Model Sparql Query <br /></h4>
+<div>
+<h4 style="margin:25px; font-weight: normal;">Model Sparql Query <br /></h4>
 <div style="display:flex">
   <div style="flex:.5">
     <div id="editor"></div>

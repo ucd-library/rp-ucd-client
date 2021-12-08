@@ -80,6 +80,11 @@ return html`
     </div>
   </ucd-theme-collapse>
   <ucd-theme-collapse title="Indexes">
+  <span style="margin: 0 10px;">
+        <label style="display:inline-block" for="enableExplain">Enable Explain Descriptions</label>
+        <input type="checkbox" id="enableExplain" .checked="${this.explainQueryEnabled}" @change="${this._onEnableExplainChange}" />
+  </span>
+
   <div ?hidden="${this.requestingIndex}">
       <div style="display:inline-block;">
         <div style="white-space: nowrap;">
@@ -103,10 +108,7 @@ return html`
       <div style="margin: 0 10px;">
         Write Index: <span class="index-label">${this.indexInfo.writeIndex || 'loading...'}</span>
       </div>
-      <span style="margin: 0 10px;">
-        <label style="display:inline-block" for="enableExplain">Enable Explain Descriptions</label>
-        <input type="checkbox" id="enableExplain" .checked="${this.explainQueryEnabled}" @change="${this._onEnableExplainChange}" />
-      </span>
+
       <div ?hidden=${this.indexInfo.pendingDeleteIndexes.length === 0}>
         <div>Indexes Pending Deletion:</div>
         ${this.indexInfo.pendingDeleteIndexes.map(item => html`
