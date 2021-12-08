@@ -9,7 +9,7 @@ class AppStateModelImpl extends AppStateModel {
     super();
 
     if( !window.gtag || !config.gaCode ) {
-      return console.warn('No global gtag variable set for analytics events');
+      console.warn('No global gtag variable set for analytics events');
     }
 
     this.firstLoad = true;
