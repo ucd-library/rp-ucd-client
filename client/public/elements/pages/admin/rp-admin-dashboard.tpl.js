@@ -119,11 +119,12 @@ return html`
         `)}
       </div>
     </div>
-
+    
     <div class="status">
       ${this.indexes.map(index => html`<rp-index-status .data=${index}></rp-index-status>`)}
     </div>  
   </ucd-theme-collapse>
+
 
   <ucd-theme-collapse title="Text Search Fields">
     <div style="margin: 10px">
