@@ -61,7 +61,6 @@ export default class RpPageWorks extends RpUtilsCollection {
     if (facetAggs.state != 'loaded') {
       return;
     }
-    //console.log("peopleaggs", peopleAggs);
     this.subFacets = this.CollectionModel._getSubFacets(facetAggs.payload, this.currentQuery);
   }
 
