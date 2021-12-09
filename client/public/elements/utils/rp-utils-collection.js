@@ -79,7 +79,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.currentQuery = {};
     this.subjectFilter = "";
 
-    this.pgPer = 16;
+    this.pgPer = 8;
     this.pgCurrent = 1;
 
     this.mainFacet = this.defaultFacetId;
@@ -233,6 +233,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (azAggField) {
       this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[azAggField]))].filter(x => x != 'all');
     }
+
     console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`, data);
 
   }
