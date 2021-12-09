@@ -70,6 +70,11 @@ class AssetDefs {
    * @returns {Object[]}
    */
   getMainFacets(){
+    let alteredTextSearchField = JSON.parse(window.localStorage.getItem('textSearchFields'));
+    if( alteredTextSearchField) {
+      this.textSearchFields = alteredTextSearchField;
+    }
+    
     let facet = [
       {
         id: 'people',

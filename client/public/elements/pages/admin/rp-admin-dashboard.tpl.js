@@ -61,6 +61,12 @@ return html`
   <h1>Admin Dashboard</h1>
 </div>
 <div style="margin: 20px 10px">
+
+  <span style="margin: 0 10px;">
+        <label style="display:inline-block" for="enableExplain">Enable Explain Descriptions</label>
+        <input type="checkbox" id="enableExplain" .checked="${this.explainQueryEnabled}" @change="${this._onEnableExplainChange}" />
+  </span>
+  
   <ucd-theme-collapse title="Service Token">
   <div>
       <label>Generate long-lived service tokens</label>
@@ -83,10 +89,6 @@ return html`
     </div>
   </ucd-theme-collapse>
   <ucd-theme-collapse title="Indexes">
-  <span style="margin: 0 10px;">
-        <label style="display:inline-block" for="enableExplain">Enable Explain Descriptions</label>
-        <input type="checkbox" id="enableExplain" .checked="${this.explainQueryEnabled}" @change="${this._onEnableExplainChange}" />
-  </span>
 
   <div ?hidden="${this.requestingIndex}">
       <div style="display:inline-block;">
@@ -119,12 +121,11 @@ return html`
         `)}
       </div>
     </div>
-    
+
     <div class="status">
       ${this.indexes.map(index => html`<rp-index-status .data=${index}></rp-index-status>`)}
     </div>  
   </ucd-theme-collapse>
-
 
   <ucd-theme-collapse title="Text Search Fields">
     <div style="margin: 10px">
