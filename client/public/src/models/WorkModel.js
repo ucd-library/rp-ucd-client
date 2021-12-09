@@ -137,7 +137,6 @@ class WorkModel extends BaseModel {
         else{
           output.push({label, url: work.uri, icons:icon});
         }
-        console.log("Output:", output);
       }
     } catch (error) {
       console.error('Error processing additional links uri', error);
