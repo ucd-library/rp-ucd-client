@@ -257,19 +257,12 @@ return html`
           <rp-factoid class="l-first panel o-box" href="/people" statistic="${this.peopleTotal}" title="people" type="people">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
           </rp-factoid>
-<<<<<<< HEAD
-          <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works" type="work">
-            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
-          </rp-factoid>
-          <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects" type="subject">
-=======
 
           <rp-factoid class="l-second panel o-box" href="/works" statistic="${this.academicWorksTotal}" title="works" type="work">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
           </rp-factoid>
 
           <rp-factoid class="l-third panel o-box" href="/concepts" statistic="${this.subjectsTotal}" title="subjects" type="subject">
->>>>>>> dev
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rec-pool);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
           </rp-factoid>
         

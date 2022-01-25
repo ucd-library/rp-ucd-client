@@ -16,6 +16,9 @@ export default function render() {
       flex-flow: row nowrap;
       align-items: flex-start;
     }
+    .query{
+      
+    }
     .container-home {
       display: block;
       flex-flow: row nowrap;
@@ -72,6 +75,7 @@ export default function render() {
 
     }
   </style>
+  <div>
   <div class=${classMap(this.constructClasses())}>
     <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}" >
@@ -91,12 +95,15 @@ export default function render() {
         `)}
         </small>
       </div>
+
+
       ` : html``}
       
     </div>
   </div>
-
+  </div>
   <rp-query-explanation .data="${this.data._explanation}" show-details></rp-query-explanation>
+
 
   `;
 }
