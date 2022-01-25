@@ -16,9 +16,6 @@ export default function render() {
       flex-flow: row nowrap;
       align-items: flex-start;
     }
-    .query{
-      
-    }
     .container-home {
       display: block;
       flex-flow: row nowrap;
@@ -95,8 +92,6 @@ export default function render() {
         `)}
         </small>
       </div>
-
-
       ` : html``}
       
     </div>
