@@ -94,7 +94,6 @@ class WorkModel extends BaseModel {
       let label = "Get it at UC";
       let url = 'https://search.library.ucdavis.edu/openurl/01UCD_INST/01UCD_INST:UCD?';
 
-      console.log("Work:", work);
       if (work.doi) {
         output.push({label, url: `${url}id=doi:${work.doi}`});
       }
