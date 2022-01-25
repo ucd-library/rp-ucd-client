@@ -119,7 +119,7 @@ export function styles() {
   return [elementStyles, siteStyles];
 }
 
-export function render() { 
+export function render() {
 return html`
 <section id="publications" class="bg-light mt-3">
 
@@ -138,15 +138,15 @@ return html`
       </div>
 
       <div class="pub-count">${this.totalPublications}</div>
-    
+
       <rp-modal content-title='Edit Publications' id="modal-pub-edit">
-        Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will 
+        Publication information is managed via the <b>UC Publication Management System</b>. Clicking the "Edit Publications" button below will
         redirect you to the UC Publication Management System. Any changes made there will be reflected on your Aggie Experts profile.
         <div slot="confirmButton">
-          <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/objects.html?as=3&am=false&cid=1&ipr=false&iqf=true'>
+          <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/listobjects.html?as=1&am=false&cid=1'>
           <div class="button">Edit Publications</div>
           </a>
-        </div> 
+        </div>
       </rp-modal>
     </div>
   </div>
@@ -168,14 +168,14 @@ return html`
         <div class="box-pub-buttons" ?hidden="${!this.showMoreButton(pubType)}">
           <div class="padding"></div>
           <div class="buttons">
-            <button type="button" 
+            <button type="button"
               ?hidden="${!this.showLessButton(pubType)}"
-              @click="${e => this._loadPubs(pubType.id, false)}" 
+              @click="${e => this._loadPubs(pubType.id, false)}"
               class="load-pubs less">Show ${this.showLessCount(pubType)} less</button>
 
-            <button type="button" 
+            <button type="button"
               ?hidden="${!this.showMoreButton(pubType)}"
-              @click="${e => this._loadPubs(pubType.id, true)}" 
+              @click="${e => this._loadPubs(pubType.id, true)}"
               class="load-pubs more">Show ${this.showMoreCount(pubType)} more</button>
           </div>
         </div>
@@ -190,7 +190,7 @@ return html`
       <rp-alert>Error loading publications. Try again later.</rp-alert>
     </div>
   ` : html``}
-  
+
 
 </section>
 

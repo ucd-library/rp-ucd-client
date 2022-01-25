@@ -365,6 +365,7 @@ return html`
                                        </div>`
                                 :``}
                     </div>
+                  <br />
                 `)}
               </div>
             </div>
@@ -377,6 +378,7 @@ return html`
                 ${this.svgIcon[site.type] ? html`${this.svgIcon[site.type]}` : html`${this.svgIcon.url}`}${site.text}
                       </a>
                     </div>`)}
+                    <br />
               ` : html``}
             </div>
           </div>
@@ -385,13 +387,15 @@ return html`
         `}
 
       </section>
+    ${this.totalPublications != 0 || (this.isLoggedIn && this.isOwnProfile) ? html`
+        <ae-publication-list
+          expert-id="${this.assetId}"
+          ?is-own-profile="${this.isOwnProfile}"
+          ?hidden="${this._hidePageSection('publications', 'work')}">
+        </ae-publication-list>` 
+    : html``}
 
-      <ae-publication-list
-        expert-id="${this.assetId}"
-        ?is-own-profile="${this.isOwnProfile}"
-        ?hidden="${this._hidePageSection('publications', 'work')}">
-      </ae-publication-list>
-
+    ${this.totalGrants != 0 || (this.isLoggedIn && this.isOwnProfile) ? html`
       <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('grants', 'grant')}">
         <div class="box-title">
           <h1 class="weight-regular mt-0">Grants</h1>
@@ -402,25 +406,24 @@ return html`
         ${this.totalGrants != 0 ? html `
         <h2 class="mb-0">Selected Grants</h2>
           <div>
-            <h3 class="weight-regular mt-0">
-              ${this.activeGrant.length != 0 ? html `
-                <i>Active (${this.activeGrant.length})</i>
-                ${this.activeGrant.map(grant =>
-                    html`<h3 class="weight-regular mt-0"><a href="${grant.grant_url}">${grant.title}</a><br />
-                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
-                    `
-                )}
-              `
-              :html``}
-            </h3>
+          ${this.activeGrant.length != 0 ? html `
+              <div><i>Active (${this.activeGrant.length})</i>
+              ${this.activeGrant.map(grant => 
+                  html`<div class="grant-panel"><a href="${grant.grant_url}">${grant.title}</a><br />
+                  ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
+                  `
+              )}
+            </div>`
+            :html``}
           </div>
+          <br />
           <div>
             ${this.inactiveGrant.length != 0  ? html `
               <div>
-                <h3 class="weight-regular mt-0"><i>Completed (${this.inactiveGrant.length})</i></h3>
+              <i>Completed (${this.inactiveGrant.length})</i>
                 ${this.inactiveGrant.map(grant => 
                     html`<div class="grant-panel"><a href=${grant.grant_url}>${grant.title}</a><br />
-                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
+                    ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} 
                     `
                 )}
               </div>`
@@ -433,7 +436,8 @@ return html`
           ?hidden="${this.showMoreGrants === 0}"
           @click="${e => this._doGrantQuery()}"
           class="load-pubs more">Show ${Math.min(this.showMoreGrants, 10)} more</button>
-      </section>
+      </section>`
+    : html``}
 
     </div>
   </div>

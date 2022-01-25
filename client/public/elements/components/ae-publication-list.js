@@ -3,7 +3,7 @@ import {render, styles} from "./ae-publication-list.tpl.js";
 import "../../src/models/PersonModel.js";
 import "../../src/models/ResolverModel.js";
 import config from "../../src/config.js";
-
+import RdfUtils from "../../src/lib/rdf-utils.js"
 import "./citation.js";
 import "./modal.js";
 
@@ -85,10 +85,10 @@ export default class AePublicationList extends Mixin(LitElement)
    * @method _loadPubs
    * @description Retrieves publications and adds them to the master publication object.
    * Attached to "Get More" buttons in the publication section of profile.
-   * 
+   *
    * @param {String} pubType - the id of the publication type to retrieve. i.e. article, conference-paper, etc
    * @param {Boolean} getMore - Have we already retrieved a few publications of this type?
-   * 
+   *
    * @returns {Promise}
    */
   async _loadPubs(pubType, getMore=true){
@@ -103,11 +103,11 @@ export default class AePublicationList extends Mixin(LitElement)
     await this._doPubQuery(this.publicationOverview[pubType], offset);
   }
 
-  /** 
+  /**
    * @method _doPubOverviewQuery
    * @description Gets aggregation counts of all publication types for this individual.
    * Kicks off further queries for the actual publication records if applicable.
-   * 
+   *
    * @returns {Promise}
    */
   async _doPubOverviewQuery() {
@@ -130,9 +130,9 @@ export default class AePublicationList extends Mixin(LitElement)
       if (ct) {
         totalPubs += ct;
         pubTypes[possiblePubType.id] = {
-          ...possiblePubType, 
-          ct: ct, 
-          displayedOffset: 0, 
+          ...possiblePubType,
+          ct: ct,
+          displayedOffset: 0,
           dataStatus: 'loading'};
       }
     }
@@ -153,10 +153,10 @@ export default class AePublicationList extends Mixin(LitElement)
   /**
    * @method _doPubQuery
    * @description Retrieves publications in chronological order. Rerenders.
-   * 
+   *
    * @param {Object} pubTypeObject - Object containing metadata about the publication type.
    * @param {Number} offset - Offsets query by this value.
-   * 
+   *
    * @returns {Promise}
    */
   async _doPubQuery(pubTypeObject, offset=0){
@@ -182,7 +182,7 @@ export default class AePublicationList extends Mixin(LitElement)
   /**
    * @method getPubsByYear
    * @description Formats retrieved publications according to section layout
-   * 
+   *
    * @param {String} pubType - The type of publication (article, book, etc)
    * @returns {Array} Ordered array of objects with publications for a given year.
    */
@@ -192,7 +192,7 @@ export default class AePublicationList extends Mixin(LitElement)
     if (!this.publicationOverview[pubType] || !this.retrievedPublications[pubType] ) {
       return output;
     }
-    
+
     let minToShow = this.hasMultiplePubTypes ? 5 : 10;
     let nToShow = this.publicationOverview[pubType].displayedOffset;
     if (nToShow < minToShow) nToShow = minToShow;
@@ -202,7 +202,7 @@ export default class AePublicationList extends Mixin(LitElement)
     let yrs = [];
     for (let pub of pubs) {
       if (!pub.publicationDate) continue;
-      let dt = new Date(pub.publicationDate);
+      let dt = RdfUtils.getLatestDate(pub.publicationDate);
       let yr = dt.getFullYear();
       if (!yrs.includes(yr)) {
         yrs.push(yr);
@@ -221,7 +221,7 @@ export default class AePublicationList extends Mixin(LitElement)
   /**
    * @method getPubExports
    * @description Returns the ways a user can export their publications.
-   * 
+   *
    * @returns {Array}
    */
   getPubExports() {
@@ -231,34 +231,34 @@ export default class AePublicationList extends Mixin(LitElement)
   /**
    * @method showMoreLessButton
    * @description used to toggle pub buttons panel
-   * 
-   * @param {Object} pubType 
-   * 
+   *
+   * @param {Object} pubType
+   *
    * @returns {Boolean}
    */
   showMoreLessButton(pubType) {
     return (this.showMoreButton(pubType)) || (this.showLessButton(pubType));
     // return (pubType.displayedOffset > 10) || (pubType.displayedOffset + 10 <= Math.ceil(pubType.ct / 10) * 10);
   }
-  
+
   /**
    * @method showMoreButton
    * @description used to toggle show more button
-   * 
-   * @param {Object} buttonType 
-   * 
+   *
+   * @param {Object} buttonType
+   *
    * @returns {Boolean}
    */
   showMoreButton(buttonType) {
     return buttonType.displayedOffset < buttonType.ct;
   }
-  
+
   /**
    * @method showMoreButton
    * @description used to toggle show less button
-   * 
-   * @param {Object} buttonType 
-   * 
+   *
+   * @param {Object} buttonType
+   *
    * @returns {Boolean}
    */
   showLessButton(buttonType) {
@@ -268,9 +268,9 @@ export default class AePublicationList extends Mixin(LitElement)
   /**
    * @method showMoreButton
    * @description used to show more button value
-   * 
-   * @param {Object} buttonType 
-   * 
+   *
+   * @param {Object} buttonType
+   *
    * @returns {Number}
    */
   showMoreCount(buttonType) {
@@ -280,15 +280,15 @@ export default class AePublicationList extends Mixin(LitElement)
   /**
    * @method showLessCount
    * @description used to show less button value
-   * 
-   * @param {Object} buttonType 
-   * 
+   *
+   * @param {Object} buttonType
+   *
    * @returns {Number}
    */
   showLessCount(buttonType) {
     return buttonType.displayedOffset > buttonType.ct ? buttonType.ct - (buttonType.displayedOffset - 10) : 10;
   }
-  
+
 
 
 }
