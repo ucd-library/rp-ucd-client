@@ -13,7 +13,7 @@ class AssetDefs {
 
     this.textSearchFields = {
       default : [
-        "doi^10",
+        'doi.text^10',
         'hasContactInfo.familyName.text^9',
         'hasContactInfo.givenName.text^8',
         "_.organizationLabel.text^6",
@@ -47,7 +47,7 @@ class AssetDefs {
         "prefLabel.text^10"
       ],
       works : [
-        "doi^10",
+        "doi.text^10",
         "label.text^9",
         "abstract^8",
         "hasPublicationVenue.label.text^7",

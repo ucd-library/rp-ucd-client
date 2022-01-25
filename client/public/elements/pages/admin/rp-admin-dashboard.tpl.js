@@ -27,10 +27,9 @@ export function styles() {
       width: 350px;
 
     }
-    .text-field-panel .editor-root {
+    .text-field-panel .editor-root, .analyze-query-root {
       height: 400px;
       margin=15px;
-
     }
     #button-margin{
       margin: 10px;
@@ -129,17 +128,37 @@ return html`
 
   <ucd-theme-collapse title="Text Search Fields">
     <div style="margin: 10px">
-    <div style="display: flex; flex-flow: wrap;">
-    ${this.textSearchFields.map(item => html`
-        <div style="margin:15px;" class="text-field-panel">
-          <h4>${item.type}</h4>
-          <div class="editor-root" type="${item.type}"></div>
-        </div>
-    `)}
-    </div>
-    <button style="margin: 10px 0;" @click="${this._resetTextSearchFields}" class="btn btn--alt btn--round btn--sm">Reset</button>
+      <div style="display: flex; flex-flow: wrap;">
+      ${this.textSearchFields.map(item => html`
+          <div style="margin:15px;" class="text-field-panel">
+            <h4>${item.type}</h4>
+            <div class="editor-root" type="${item.type}"></div>
+          </div>
+      `)}
+      </div>
+      <button style="margin: 10px 0;" @click="${this._resetTextSearchFields}" class="btn btn--alt btn--round btn--sm">Reset</button>
 
-  </div></ucd-theme-collapse>
+    </div>
+  </ucd-theme-collapse>
+
+  <ucd-theme-collapse title="Analyze Text">
+    <div style="margin: 10px">
+      <div>Submit text to ElasticSearch for realtime analysis on how it is or could be indexed.  The default 'analyzer' is already
+        set for you (${this.defaultAnalyzer}).  More information: 
+        <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-analyze.html" target="_blank">Analyze API</a>
+        <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-analyzers.html" target="_blank">Built-in analyzer reference</a>
+      </div>
+      <div style="display: flex; flex-flow: wrap;">
+        <div style="margin:15px;" class="text-field-panel">
+          <div class="analyze-query-root" type="analyze-request"></div>
+        </div>
+        <div style="margin:15px;" class="text-field-panel">
+          <div class="analyze-query-root" type="analyze-response"></div>
+        </div>
+      </div>
+      <button style="margin: 10px 0;" @click="${this._runAnalyzeQuery}" class="btn btn--alt btn--round btn--sm">Submit Query</button>
+    </div>
+  </ucd-theme-collapse>
 </div>
 
 `;}
