@@ -13,9 +13,10 @@ class AssetDefs {
 
     this.textSearchFields = {
       default : [
-        "doi^10",
+        'doi.text^10',
         'hasContactInfo.familyName.text^9',
-        'hasContactInfo.givenName.text^8',
+        'hasContactInfo.givenName^8',
+        'hasContactInfo.middleName^8',
         "_.organizationLabel.text^6",
         "_.personLabel.text^6",
         "_.workLabel.text^6",
@@ -37,7 +38,8 @@ class AssetDefs {
       ],
       people : [
         'hasContactInfo.familyName.text^9',
-        'hasContactInfo.givenName.text^8',
+        'hasContactInfo.givenName^8',
+        'hasContactInfo.middleName^8',
         'hasContactInfo.title.text^7',
         'hasResearchArea.label.text^6',
         'citation.label'
@@ -47,7 +49,7 @@ class AssetDefs {
         "prefLabel.text^10"
       ],
       works : [
-        "doi^10",
+        "doi.text^10",
         "label.text^9",
         "abstract^8",
         "hasPublicationVenue.label.text^7",

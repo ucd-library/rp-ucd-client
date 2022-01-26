@@ -19,7 +19,8 @@ export default class RpAdminDashboard extends Mixin(LitElement)
       requestingIndex : {type: Boolean},
       textSearchFields : {type: Array},
       explainQueryEnabled : {type: Boolean},
-      serviceTokenMessage : {type: String}
+      serviceTokenMessage : {type: String},
+      defaultAnalyzer : {type: String}
     };
   }
 
@@ -52,6 +53,8 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     this.textSearchFields = textSearchFields;
 
     this.serviceTokenProperties = ['username', 'roles', 'ips'];
+
+    this.defaultAnalyzer = 'defaultAnalyzer';
   }
 
   async firstUpdated() {
@@ -62,6 +65,16 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     for( let editorRoot of editorRoots ) {
       this._createEditor(editorRoot);
     }
+
+    this.queryRoots = {};
+    let queryRoots = Array.from(this.shadowRoot.querySelectorAll('.analyze-query-root'));
+    for( let queryRoot of queryRoots ) {
+      this._createQuery(queryRoot);
+    }
+    this.queryRoots['analyze-request'].setValue(JSON.stringify({
+      analyzer : this.defaultAnalyzer,
+      text : '10.4028/0-87849-371-9.379 $Q$-Learning for Robust Satisfaction of Signal Temporal Logic Specifications'
+    }, '  ', '  '));
 
     this._onEnableExplainChange();
   }
@@ -79,6 +92,13 @@ export default class RpAdminDashboard extends Mixin(LitElement)
       assetDefs.textSearchFields[type] = values;
       window.localStorage.setItem('textSearchFields', JSON.stringify(assetDefs.textSearchFields));
     });
+  }
+
+  _createQuery(queryRoot) {
+    let editor = ace.edit(queryRoot);
+    let type = queryRoot.getAttribute('type');
+    editor.renderer.attachToShadowRoot();
+    this.queryRoots[type] = editor;
   }
 
   _resetTextSearchFields() {
@@ -164,6 +184,12 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     for( let key of this.serviceTokenProperties ) {
       this.shadowRoot.querySelector('#service-token-'+key).value = '';
     }
+  }
+
+  async _runAnalyzeQuery() {
+    let payload = JSON.parse(this.queryRoots['analyze-request'].getValue());
+    let response = await this.AdminModel.analyze(payload);
+    this.queryRoots['analyze-response'].setValue(JSON.stringify(response.error || response.payload, '  ', '  '));
   }
 
 }

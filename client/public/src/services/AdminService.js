@@ -98,6 +98,20 @@ class AdminService extends BaseService {
     });
   }
 
+  analyze(payload) {
+    return this.request({
+      url : this.baseUrl+'/api/indexer/analyze',
+      fetchOptions : {
+        method : 'POST',
+        body : payload
+      },
+      json: true,
+      onLoading : request => this.store.analyzeLoading(request, payload),
+      onLoad : result => this.store.analyzeLoaded(result.body),
+      onError : e => this.store.analyzeError(e)
+    });
+  }
+
 }
 
 const service = new AdminService();
