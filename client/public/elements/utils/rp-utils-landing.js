@@ -1,6 +1,7 @@
 import { LitElement } from 'lit';
 import render from "./rp-utils-landing.tpl.js";
 import config from "../../src/config";
+import UserUtils from "../../src/lib/user-utils";
 
 /**
  * @class RpUtilsLanding
@@ -16,7 +17,8 @@ export default class RpUtilsLanding extends Mixin(LitElement)
       assetId: {type: String},
       disabledSections: {type: Array},
       activeSection: {type: Object},
-      peopleWidth: {type: Number}
+      peopleWidth: {type: Number},
+      isAdmin: {type: Boolean}
     };
   }
 
@@ -29,6 +31,7 @@ export default class RpUtilsLanding extends Mixin(LitElement)
     this.peopleWidth = this.setPeopleWidth(window.innerWidth);
     this.disabledSections = [];
     this.activeSection = {};
+    this.isAdmin = UserUtils.isAdmin(config.user);
   }
 
   /**
@@ -68,6 +71,12 @@ export default class RpUtilsLanding extends Mixin(LitElement)
         {id: 'about', text:'About'},
         {id: 'contributors', text:'Contributors'},
       );
+    }
+
+    if( this.isAdmin ) {
+      sections.push({
+        id : 'debug', text: 'Debug Record', href: '/admin/'+this.assetId, forceNoHash: true
+      });
     }
 
     if( config.hiddenTypes && config.hiddenTypes.length ) {

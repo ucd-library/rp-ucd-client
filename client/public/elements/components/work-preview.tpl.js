@@ -60,7 +60,7 @@ export default function render() {
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}">
       
       <a class="title" 
-        href="${this.getLink()}" 
+        href="${this.getLink()}"
         ?disabled="${!this.getLink()}">
         ${renderHTML(this.title)}
       </a>
@@ -78,5 +78,6 @@ export default function render() {
     </div>
   </div>
 
+  <rp-query-explanation .data="${this.data._explanation}" show-details></rp-query-explanation>
   `;
 }

@@ -3,6 +3,7 @@ import render from './person-preview.tpl.js';
 
 import previewUtils from "../../src/lib/preview-utils";
 import "./badge";
+import "./rp-query-explanation";
 
 /**
  * @class RpPersonPreview

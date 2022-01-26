@@ -13,11 +13,25 @@ class AdminModel extends BaseModel {
     this.register('AdminModel');
   }
 
-  async errors() {
+  async generateServiceToken(payload) {
     try {
-      await this.service.errors();
+      await this.service.generateServiceToken(payload);
     } catch(e) {}
-    return this.store.data.errors;
+    return this.store.data.serviceToken;
+  }
+
+  async requestIndex(opts) {
+    try {
+      await this.service.requestIndex(opts);
+    } catch(e) {}
+    return this.store.data.requestIndex;
+  }
+
+  async indexerStatus() {
+    try {
+      await this.service.indexerStatus();
+    } catch(e) {}
+    return this.store.data.indexerStatus;
   }
 
   async sparqlDescribe(id) {

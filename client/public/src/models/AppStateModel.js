@@ -1,11 +1,16 @@
 const {AppStateModel} = require('@ucd-lib/cork-app-state');
 const AppStateStore = require('../stores/AppStateStore');
 const config = require('../config').default;
+const ga = require('../lib/ga').default;
 
 class AppStateModelImpl extends AppStateModel {
 
   constructor() {
     super();
+
+    if( !window.gtag || !config.gaCode ) {
+      console.warn('No global gtag variable set for analytics events');
+    }
 
     this.firstLoad = true;
     this.defaultPage = 'home';
@@ -32,28 +37,22 @@ class AppStateModelImpl extends AppStateModel {
       }
       this.firstLoad = false;
     }
-    console.log(update);
     // TODO: add bundle loading for pages
     // if page needs to be loaded, set update.page='loading'
     // then set page
 
-    this._sendGA();
-    return super.set(update);
+    let roles = (config.user || {}).roles || [];
+    if( update.page === 'admin' && !roles.includes('admin') ) {
+      update.page = 'home';
+    }
+    
+    let res = super.set(update);
+    ga.sendPageView();
+
+    return res;
   }
 
-  /**
-   * @method _sendGA
-   * @description send a google analytics event if pathname has changed
-   */
-  _sendGA() {
-    if( !window.gtag || !config.gaCode ) return console.warn('No global gtag variable set for analytics events');
-    if( this.lastGaLocation === window.location.pathname ) return;
-    this.lastGaLocation = window.location.pathname;
 
-    gtag('config', config.gaCode, {
-      page_path: window.location.pathname
-    });
-  }
 
 }
 

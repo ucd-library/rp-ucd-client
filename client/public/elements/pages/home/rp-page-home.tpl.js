@@ -15,7 +15,6 @@ return html`
   ${base}
   ${utility}
   ${baseCss}
-
   :host {
     display: block;
   }
@@ -123,7 +122,6 @@ return html`
     margin: auto;
     width:65px;
   }
-
   hr{
     background-color: #ccc;
     border: none;
@@ -136,7 +134,6 @@ return html`
     max-width:800px;
     margin: 0 auto;
   }
-
   @media (min-width: 800px){
     .people-container {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -290,9 +287,7 @@ return html`
         
         `}
         <hr style=" margin-bottom:-15px; "/>
-
       </div>  
-
   <div ?hidden="${this._hideStatusSection('error')}" class="error">
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
@@ -368,9 +363,3 @@ return html`
 </div>
  
 `;}
-
-
-
-
-
-

@@ -9,9 +9,14 @@ class AdminStore extends BaseStore {
       sparql : {},
       model : {},
       record : {},
-      errors : {}
+      indexerStatus : {},
+      requestIndex : {},
+      serviceToken : {}
     };
-    this.events = {};
+    this.events = {
+      REQUEST_INDEX : 'request-index-update',
+      SERVICE_TOKEN : 'generate-service-token-update'
+    };
   }
 
   sparqlLoading(id, request) {
@@ -89,29 +94,81 @@ class AdminStore extends BaseStore {
     this.data.record[state.id] = state;
   }
 
-  errorsLoading(request) {
-    this._setErrorsState({
+  indexerStatusLoading(request) {
+    this._setIndexerStatusState({
       state : this.STATE.LOADING,
       request
     });
   }
 
-  errorsLoaded(payload) {
-    this._setErrorsState({
+  indexerStatusLoaded(payload) {
+    this._setIndexerStatusState({
       state : this.STATE.LOADED,
       payload
     });
   }
 
-  errorsError(error) {
-    this._setErrorsState({
+  indexerStatusError(error) {
+    this._setIndexerStatusState({
       state : this.STATE.ERROR,
       error
     });
   }
 
-  _setErrorsState(state) {
-    this.data.errors = state;
+  _setIndexerStatusState(state) {
+    this.data.indexerStatus = state;
+  }
+
+  requestIndexLoading(request) {
+    this._setRequestIndexState({
+      state : this.STATE.LOADING,
+      request
+    });
+  }
+
+  requestIndexLoaded(payload) {
+    this._setRequestIndexState({
+      state : this.STATE.LOADED,
+      payload
+    });
+  }
+
+  requestIndexError(error) {
+    this._setRequestIndexState({
+      state : this.STATE.ERROR,
+      error
+    });
+  }
+
+  _setRequestIndexState(state) {
+    this.data.requestIndex = state;
+    this.emit(this.events.REQUEST_INDEX, state);
+  }
+
+  generateServiceTokenLoading(request) {
+    this._setSenerateServiceTokenState({
+      state : this.STATE.LOADING,
+      request
+    });
+  }
+
+  generateServiceTokenLoaded(payload) {
+    this._setSenerateServiceTokenState({
+      state : this.STATE.LOADED,
+      payload
+    });
+  }
+
+  generateServiceTokenError(error) {
+    this._setSenerateServiceTokenState({
+      state : this.STATE.ERROR,
+      error
+    });
+  }
+
+  _setSenerateServiceTokenState(state) {
+    this.data.serviceToken = state;
+    this.emit(this.events.SERVICE_TOKEN, state);
   }
 
 }

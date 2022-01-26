@@ -18,7 +18,7 @@ class AdminService extends BaseService {
     DESCRIBE <${id.replace(config.data.prefix.ucdId+':', 'http://experts.ucdavis.edu/')}>`;
 
     return this.request({
-      url : this.baseUrl+'/fuseki',
+      url : this.baseUrl+'/fuseki/experts',
       fetchOptions : {
         method : 'POST',
         headers : {
@@ -65,12 +65,36 @@ class AdminService extends BaseService {
     });
   }
 
-  errors() {
+  indexerStatus() {
     return this.request({
-      url : this.baseUrl+'/api/indexer/errors?debug=true',
-      onLoading : request => this.store.errorsLoading(request),
-      onLoad : result => this.store.errorsLoaded(result.body),
-      onError : e => this.store.errorsError(e)
+      url : this.baseUrl+'/api/indexer/stats',
+      onLoading : request => this.store.indexerStatusLoading(request),
+      onLoad : result => this.store.indexerStatusLoaded(result.body),
+      onError : e => this.store.indexerStatusError(e)
+    });
+  }
+
+  requestIndex(qs={}) {
+    return this.request({
+      url : this.baseUrl+'/api/indexer/reindex',
+      qs,
+      onLoading : request => this.store.requestIndexLoading(request),
+      onLoad : result => this.store.requestIndexLoaded(result.body),
+      onError : e => this.store.requestIndexError(e)
+    });
+  }
+
+  generateServiceToken(payload={}) {
+    return this.request({
+      url : this.baseUrl+'/api/token/service-token',
+      fetchOptions : {
+        method : 'POST',
+        body : payload
+      },
+      json: true,
+      onLoading : request => this.store.generateServiceTokenLoading(request),
+      onLoad : result => this.store.generateServiceTokenLoaded(result.body),
+      onError : e => this.store.generateServiceTokenError(e)
     });
   }
 
