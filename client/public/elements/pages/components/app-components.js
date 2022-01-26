@@ -60,7 +60,6 @@ export class AppPageComponents extends Mixin(LitElement)
       return;
     }
     this.exampleSubjects = data.payload.results;
-    console.log(this.exampleSubjects);
   }
 
   async getGrants(){
@@ -70,7 +69,6 @@ export class AppPageComponents extends Mixin(LitElement)
       return;
     }
     this.exampleGrants = data.payload.results;
-    console.log(this.exampleGrants);
   }
 
   async getOrgs(){
@@ -81,7 +79,6 @@ export class AppPageComponents extends Mixin(LitElement)
       return;
     }
     this.exampleOrgs = data.payload.results;
-    console.log(this.exampleOrgs);
 
   }
 

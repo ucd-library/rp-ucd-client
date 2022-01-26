@@ -95,6 +95,7 @@ return html`
   h2.title-fix {
     margin: 0;
     padding-top: 20px;
+    font-weight: 600;
   }
   .import-icon{
     margin:auto;
@@ -250,21 +251,41 @@ return html`
     <rp-alert>Error loading ${this.theme.siteTitle}. Try again later.</rp-alert>
   </div>
       <div class="section rebrand" ?hidden="${this._hideStatusSection('loaded')}">
-        <div class="layout">
-          <rp-factoid href="/people" statistic="${this.peopleTotal}" title="people" type="people">
+
+      ${this.isLoggedIn ? html`
+        <div class="l-4col">
+          <rp-factoid class="l-first panel o-box" href="/people" statistic="${this.peopleTotal}" title="people" type="people">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
           </rp-factoid>
-          <rp-factoid href="/works" statistic="${this.academicWorksTotal}" title="works" type="work">
+
+          <rp-factoid class="l-second panel o-box" href="/works" statistic="${this.academicWorksTotal}" title="works" type="work">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
           </rp-factoid>
-          <rp-factoid href="/concepts" statistic="${this.subjectsTotal}" title="subjects" type="subject">
+
+          <rp-factoid class="l-third panel o-box" href="/concepts" statistic="${this.subjectsTotal}" title="subjects" type="subject">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rec-pool);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
           </rp-factoid>
         
-          <rp-factoid href="/grants" statistic="${this.grantsTotal}" title="grants"  type="grant">
+          <rp-factoid class="l-fourth panel o-box"href="/grants" statistic="${this.grantsTotal}" title="grants"  type="grant">
             <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-thiebaud-icing);"  icon="ucdlib:hand-holding-usd"></ucdlib-icon></span>
           </rp-factoid>
         </div>
+        `:html`
+          <div class="l-3col">
+          <rp-factoid class="l-first panel o-box" href="/people" statistic="${this.peopleTotal}" title="people" type="people">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-sunflower);"  icon="ucdlib:users"></ucdlib-icon></span>
+          </rp-factoid>
+
+          <rp-factoid class="l-second panel o-box" href="/works" statistic="${this.academicWorksTotal}" title="works" type="work">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-farmers-market);"  icon="ucdlib:book-open"></ucdlib-icon></span>
+          </rp-factoid>
+
+          <rp-factoid class="l-third panel o-box" href="/concepts" statistic="${this.subjectsTotal}" title="subjects" type="subject">
+            <span><ucdlib-icon class="import-icon" style="fill:var(--ae-color-rec-pool);"  icon="ucdlib:lightbulb"></ucdlib-icon></span>
+          </rp-factoid>
+        </div>
+        
+        `}
         <hr style=" margin-bottom:-15px; "/>
       </div>  
   <div ?hidden="${this._hideStatusSection('error')}" class="error">
@@ -273,7 +294,7 @@ return html`
     <div class="center">
       <div class="people" id="people">
         <h3 class="mt-0" style="text-align:center; margin-bottom:25px;color:#000000;">
-          <span class="weight-bold ">Recently Updated Profiles</span>
+          <span class="weight-regular">Recently Updated Profiles</span>
         </h3>
         <div class="people-container">
           ${this.people.map(person => html`
@@ -293,10 +314,11 @@ return html`
     <hr style="margin-left:175px;margin-right:175px;"/>
       <div class="center">
         <h3 style="text-align:center; margin-bottom:25px; color:#000000;">
-          <span class="weight-bold">Recently Updated Subjects</span>
+          <span class="weight-regular">Recently Updated Subjects</span>
           <br />
         </h4>
-        ${this.subjects.map(subject => html`
+        ${this.subjects.map((subject, key) => html`
+          ${key %4 == 0 && key != 0 ? html`<br />`:html``}
           <rp-badge 
             title="${this.SubjectModel.getPreferredLabel(subject)}" 
             size="lg" 

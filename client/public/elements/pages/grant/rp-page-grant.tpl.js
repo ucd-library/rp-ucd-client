@@ -163,6 +163,31 @@ return html`
     margin-top: .25rem;
     margin-bottom: .75rem;
   }
+  .known_contributors{
+    display:grid;
+  }
+  .item_ProgramDirector {
+    order: 1;
+  }
+  .item_PrincipalInvestigator{
+    order: 2;
+  }
+  .item_Co-PrincipalInvestigator{
+    order: 3;
+  }
+  .item_ProjectLeader{
+    order: 4;
+  }
+  .item_CoreLeader{
+    order: 5;
+  }
+  .item_KeyPersonnel{
+    order: 6;
+  }
+  .item_OtherRole{
+    order: 7;
+  }
+
   @media (min-width: 800px) {
       .hero {
       padding-left: 30px;
@@ -206,7 +231,9 @@ return html`
         <div class="grid-container">
             <div class="grid-item">
                 <h2 aria-label="Awarded By Title">Awarded By</h2>
-                <div>${this.awardedByLabel}</div>
+                ${this.awardedByLabel ? html`
+                  ${this.awardedByLabel.map(label => html`<div>${label.label}</div>`)}
+                `:html ``}
             </div> 
             ${this.grantAmount ? html `
               <div class="grid-item">
@@ -222,6 +249,12 @@ return html`
                   <h2 aria-label="Grant Number">Grant Number</h2>
                   <div>${this.grantNumber}</div>
               </div> 
+              ${this.admin != this.emptyValue ? html `
+              <div class="grid-item">
+                  <h2 aria-label="Grant Admin">Grant Admin</h2>
+                  <div>${this.admin}</div>
+              </div> 
+              `: html``}
         </div>
         ${this.purpose ? html `
           <h2 aria-label="Grant Purpose">Purpose</h2>
@@ -237,20 +270,42 @@ return html`
     </section>
 
     <section id="contributors" class="bg-light mt-3" ?hidden="${this._hidePageSection('contributors')}">
-    <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>      
+    <div class="known_contributors">
+    <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>   
 
-        ${this.contributors.map(contribType => html`
-          <h2 aria-label="Principal Investigator Section Title">${contribType.label}</h2>
-
-          ${contribType.contributors.map(contributor => html`
-            <rp-person-preview
-              .data=${contributor}
-              text-width="${this.peopleWidth}"
-            ></rp-person-preview>`
-          )}
+    ${this.members.key.length != 0 ? html`
+      <h2 aria-label="Aggie Experts Contributor Title" class="weight-regular mt-0">Aggie Experts Contributor</h2>
+        ${this.members.key.map((title, index) => html`
+            <h3 style="margin-bottom: 5px;">${title}</h3>
+            ${this.members.value[index].map(item =>
+              html`
+                  <rp-person-preview
+                      .data=${item.inheresIn ? item.inheresIn : item}
+                      text-width="${this.peopleWidth}"
+                      style="margin:5px 0;"
+                  ></rp-person-preview>
+                `
+              )}   
         `)}
+    `: html``}
+    <br />
+    ${this.others.key.length != 0 ? html`
+      <h2 aria-label="Other Known Contributor Title" class="weight-regular mt-0" style="margin:5px 0;">Other Known Contributor</h2>
+        ${this.others.key.map((title, index) => html`
+          <h3 style="margin-bottom: 5px;">${title}</h3>
+            ${this.others.value[index].map(item =>
+              html`
+                  ${item.label} <br />
+                `
+              )}  
+        `)}
+    `: html``}
 
+    </div>
     </section>
+
+
+
   </div>
 </div>
 

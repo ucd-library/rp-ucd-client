@@ -28,7 +28,14 @@ class GrantModel extends BaseModel {
     // Only roles in this map will be shown in the UI
     // map should contain rdf @type property mapped to a UI label
     this.knownRoleMap = {
-      'vivo:PrincipalInvestigatorRole' : 'Principal Investigator'
+      'experts:GrantProgramDirectorRole' : 'Program Director Role',
+      'experts:GrantPrincipalInvestigatorRole' : 'Principal Investigator',
+      'experts:GrantCoPrincipalInvestigatorRole' : 'Co-Principal Investigator',
+      'experts:GrantProjectLeaderRole' : 'Project Leader',
+      'experts:GrantCoreLeaderRole' : 'Core Leader',
+      'experts:GrantKeyPersonnelRole' : 'Key Personnel',
+      'experts:GrantOtherRole' : 'Other Role',
+      
     };
 
     // TODO: JM - this needs to be fixed, I don't think it indicates a 'UCD Author'
@@ -171,7 +178,6 @@ class GrantModel extends BaseModel {
     for (let author of auths) {
       let id = author.inheresIn["@id"].split(":")[1];
       let person = await this.PersonModel.get(id);
-      console.log(person);
     }
     return contributor;
   }
@@ -282,6 +288,23 @@ class GrantModel extends BaseModel {
   }
 
   /**
+   * @method getAdminRole
+   * @description given a grant object, return a string of admin role
+   * 
+   * @param {Object} relates
+   * 
+   * @returns {Object} 
+   */
+  async getAdminRole(relates) {
+    let adminString = {};
+    relates = rdfUtils.asArray(relates);
+    for(let i=0; i < relates.length; i++){
+      adminString = relates.find(relate => relate["@type"] === 'vivo:AdminRole');
+    }
+    return adminString;
+  }
+
+  /**
    * @method getContributorsByRole
    * @description given a grant object, return an object of role labels to contributes with that
    * role
@@ -295,22 +318,26 @@ class GrantModel extends BaseModel {
     let all = [];
 
     grant.relates
-      .filter(item => item.inheresIn)
       .filter(item => this.getKnownGrantRole(item['@type']))
       .forEach(item => {
         let label = this.getKnownGrantRole(item['@type']);
         if( !byRole[label] ) byRole[label] = [];
-        let id = item.inheresIn['@id'];
+        let id = item.inheresIn ? item.inheresIn['@id'] : item["@id"];
         byRole[label].push(id);
         all.push(id);
-      });
 
-    let resp = await this.getContributors(grant['@id'], all);
-    let people = rdfUtils.asArray(resp.payload);
+      });
+    all.sort();
+
+    /* TODO: SB - remove later*/
+    //let resp = await this.getContributors(grant['@id'], all);
+    //let people = rdfUtils.asArray(resp.payload.relates ? resp.payload.relates : resp.payload);
+  
+    let people = rdfUtils.asArray(grant.relates ? grant.relates : grant);
 
     for( let label in byRole ) {
       for( let i = 0; i < byRole[label].length; i++  ) {
-        byRole[label][i] = people.find(person => person['@id'] === byRole[label][i]);
+        byRole[label][i] = people.find(person =>  person.inheresIn ? person.inheresIn['@id'] === byRole[label][i] : person['@id'] === byRole[label][i]);
       }
     }
 

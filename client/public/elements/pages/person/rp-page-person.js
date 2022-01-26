@@ -45,6 +45,7 @@ export default class RpPagePerson extends RpUtilsLanding {
       tempGrantObject: {type: Object},
       activeGrant: {type:Array},
       inactiveGrant: {type:Array},
+      isLoggedIn: {type: Boolean},
 
       title : {type: Object},
       additionalTitles : {type: Array}
@@ -57,6 +58,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.submitText = "Edit Publication";
     this.activeGrant = [];
     this.inactiveGrant = [];
+    this.isLoggedIn = config.user ? true : false;
 
     this._injectModel('PersonModel', 'GrantModel', 'AppStateModel');
 
@@ -297,7 +299,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doGrantQuery(){
     let data = await this.PersonModel.getGrants(this.assetId, this.retrievedGrants.length);
-
+    console.log("Payload:",data.payload);
     if( data.state === 'error' ) {
       this.grantStatus = 'error';
       return;
@@ -322,7 +324,6 @@ export default class RpPagePerson extends RpUtilsLanding {
         .find(item => item.inheresIn['@id'] === 'ucdrp:'+this.assetId);
 
       let role = this.GrantModel.getKnownGrantRole(person['@type']) || '';
-
       let grant_url =  grant["@id"].replace('ucdrp:', '/');
       let tempGrantObject = {
         "title": grant.label,
@@ -361,11 +362,11 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   _isOwnProfile() {
     try {
-      if (config.user.expertsId === this.assetId) {
+      if ( config.user.expertsId && config.user.expertsId === this.assetId) {
         return true;
       }
     } catch (error) {
-      console.warn("Error parsing username.");
+      if (config.verbose) console.warn(`Own Profile Error: ${error}`);
     }
     return false;
   }

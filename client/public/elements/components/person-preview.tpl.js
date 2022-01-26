@@ -67,7 +67,12 @@ export default function render() {
       font-weight: bold;
       font-style: normal;
     }
+    .badge-container{
+      max-width: 700px;
+
+    }
   </style>
+  <div>
   <div class=${classMap(this.constructClasses())}>
     <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}" >
@@ -80,17 +85,20 @@ export default function render() {
       ${this.showSnippet && this.getSnippet() ? html`
         <div class="snippet">${renderHTML(this.getSnippet())}</div>
       ` : html``}
+      <div class="badge-container">
       ${this.showSubjects && this.getSubjects() ? html`
         <small class="badges">${this.getSubjects().map(subject => html`
           <rp-badge class="my-1" href="${urlUtils.idAsLocalUrlPath(subject['@id'])}">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
         `)}
         </small>
+      </div>
       ` : html``}
       
     </div>
   </div>
-
+  </div>
   <rp-query-explanation .data="${this.data._explanation}" show-details></rp-query-explanation>
+
 
   `;
 }

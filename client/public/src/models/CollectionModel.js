@@ -140,6 +140,7 @@ class CollectionModel extends BaseModel {
    */
   async query(elementQuery={}){
     let queryObject = this.convertElementQuery(elementQuery);
+
     // in no type specified, use our default types
     if( !queryObject.filters['@type'] ) {
       queryObject.filters['@type'] = QueryUtils.getKeywordFilter(config.defaultTypes, 'or');
@@ -435,6 +436,7 @@ class CollectionModel extends BaseModel {
    */
   convertElementQuery(elementQuery={}){
     let query = QueryUtils.getBaseQueryObject();
+
     if (Object.keys(elementQuery).length == 0) return query;
 
     // Apply primary facets

@@ -34,8 +34,15 @@ export default class RpPageGrant extends RpUtilsLanding {
       grantAmount: {type: String},
       awardedByLabel: {type: String},
       contributors: {type: Array},
+      members: {type: Array},
+      others: {type: Array},
       grantNumber: {type:String},
-      role: {type:String}
+      role: {type:String},
+      admin: {type: String},
+      emptyValue: {type: String},
+      class :{type:String},
+      reference: {type: Object},
+
     };
   }
 
@@ -61,7 +68,21 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.awardedByLabel = "";
     this.grantNumber ="";
     this.contributors= [];
+    this.members = [];
+    this.others = [];
     this.role = "";
+    this.admin = "";
+    this.emptyValue = "Not Listed";
+    this.reference = {
+      "Program Director": null, 
+      "Principal Investigator": null, 
+      "Co-Principal Investigator": null,
+      "Project Leader": null, 
+      "Core Leader": null, 
+      "Key Personnel": null,
+      "Other Role": null};
+    this.class = "";
+
 
   }
 
@@ -164,13 +185,10 @@ export default class RpPageGrant extends RpUtilsLanding {
     // relateIds = Array.from(new Set(relateIds));
     // this.contributors = rdfUtils.asArray((await this.GrantModel.getContributors(this.grant["@id"], relateIds)).payload);
 
-    let contributors = await this.GrantModel.getContributorsByRole(this.grant);
-    let tmp = [];
-    for( let label in contributors ) {
-      tmp.push({label, contributors: contributors[label]});
-    }
-    this.contributors = tmp;
-    
+    let admin = await this.GrantModel.getAdminRole(this.grant.relates);
+    this.admin = admin ? admin.label : this.emptyValue;
+
+
     this.grantType = this._getGrantType();
 
     return false;
@@ -187,6 +205,24 @@ export default class RpPageGrant extends RpUtilsLanding {
   async _doAboutQuery(id){
 
     let data = await this.GrantModel.getGrant(id);
+
+    let contributors = await this.GrantModel.getContributorsByRole(this.grant);
+    
+    let tmp = [];
+    for( let label in contributors ) {
+      tmp.push({label, contributors: contributors[label]});
+    }
+
+    this.contributor = await this._contributors(tmp);
+
+    this.members["key"] = Object.keys(this.contributor[0].member); 
+    this.members["value"] = Object.values(this.contributor[0].member); 
+
+    this.others["key"] = Object.keys(this.contributor[1].others); 
+    this.others["value"] = Object.values(this.contributor[1].others); 
+
+    this.contributor = [this.members, this.others];
+    for(let i = 0; i < this.others.value; i++);
     //Add location of the description and add to array if there is none
     this.purpose = data.payload.description;
 
@@ -210,16 +246,75 @@ export default class RpPageGrant extends RpUtilsLanding {
     //                 ex ea commodo consequat.`;
     // }
     
-    this.grantAwardStatus = this._grantAwardStatus();
-    this.grantUrl = this._grantUrl();
-    this.grantAmount = this._grantAmount();
-    this.awardedByLabel = this._awardedByLabel();
-    this.grantNumber = this._grantNumber();
-
+    this.grantAwardStatus = await this._grantAwardStatus();
+    this.grantUrl = await this._grantUrl();
+    this.grantAmount = await this._grantAmount();
+    this.awardedByLabel = await this._awardedByLabel();
+    this.grantNumber = await this._grantNumber();
     if (config.verbose) console.log("description:", data);
 
     // this._toggleElements("about", this.about);
     
+  }
+
+
+
+
+  /**
+   * @method _contributors
+   * @description returns the sorted contributors.
+   * @param {Array} contributor
+   * 
+   * @returns {String}
+   */
+  async _contributors(contributor){
+    let others = {};
+    let members = {};
+
+    for(let i = 0; i < contributor.length; i++){
+      let contArray = contributor[i].contributors;
+      for(let j = 0; j < contArray.length; j++){
+        if(contArray[j].inheresIn || contArray[j].hasContactInfo){
+          let lab =contributor[i].label;
+          if (!(lab in members)) members[lab] = [];
+          members[lab].push(contArray[j]);
+
+        } 
+        else{
+          let lab =contributor[i].label;
+          if (!(lab in others)) others[lab] = [];
+          others[lab].push(contArray[j]);
+        }
+      }
+    }  
+    let referenceOthers = JSON.parse(JSON.stringify(this.reference));
+    let referenceMembers = JSON.parse(JSON.stringify(this.reference));
+
+    let newOthers = Object.assign(referenceOthers, others);
+    others = Object.fromEntries(Object.entries(newOthers).filter(([_, v]) => v != null));
+
+
+    let newMember = Object.assign(referenceMembers, members);
+    members = Object.fromEntries(Object.entries(newMember).filter(([_, v]) => v != null));
+
+    for(let i = 0; i < Object.values(others).length; i++){
+      Object.values(others)[i].sort(function(a, b) {
+        if(a.label < b.label) { return -1; }
+        if(a.label > b.label) { return 1; }
+        return 0;
+      });
+    }
+    for(let i = 0; i < Object.values(members).length; i++){
+      Object.values(members)[i].sort(function(a, b) {
+        if(a.label < b.label) { return -1; }
+        if(a.label > b.label) { return 1; }
+        return 0;
+      });
+    }
+
+    this.contributor = [{"member" : members} ,{"others": others}];
+
+    return this.contributor;
   }
 
   /**
@@ -258,7 +353,7 @@ export default class RpPageGrant extends RpUtilsLanding {
    * 
    * @returns {String}
    */
-  _grantAwardStatus(){
+  async _grantAwardStatus(){
     this.dateStart = this.grant.dateTimeInterval.start.dateTime;
     this.dateEnd = this.grant.dateTimeInterval.end.dateTime;
 
@@ -283,7 +378,7 @@ export default class RpPageGrant extends RpUtilsLanding {
    * 
    * @returns {String}
    */
-  _grantUrl(){
+  async _grantUrl(){
     return this.grant.url;
   }
 
@@ -294,7 +389,7 @@ export default class RpPageGrant extends RpUtilsLanding {
    * 
    * @returns {String}
    */
-  _grantNumber(){
+  async _grantNumber(){
     if (this.grant.sponsorAwardId == undefined) return "Not Listed";
     return this.grant.sponsorAwardId;
   }
@@ -306,7 +401,7 @@ export default class RpPageGrant extends RpUtilsLanding {
    * 
    * @returns {String}
    */
-  _grantAmount(){
+  async _grantAmount(){
     var formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -322,9 +417,10 @@ export default class RpPageGrant extends RpUtilsLanding {
    * 
    * @returns {String}
    */
-  _awardedByLabel(){
-    if (this.grant.assignedBy.label == undefined) return "Not Listed";
-    return this.grant.assignedBy.label;
+  async _awardedByLabel(){
+    if (!this.grant.assignedBy) return "Not Listed";
+    if (!Array.isArray(this.grant.assignedBy)) this.grant.assignedBy = [this.grant.assignedBy];
+    return this.grant.assignedBy;
   }
 
 

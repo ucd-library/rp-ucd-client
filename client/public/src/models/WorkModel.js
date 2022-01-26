@@ -92,7 +92,8 @@ class WorkModel extends BaseModel {
     // ucd elinks
     try {
       let label = "Get it at UC";
-      let url = 'https://ucelinks.cdlib.org/sfx_local?';
+      let url = 'https://search.library.ucdavis.edu/openurl/01UCD_INST/01UCD_INST:UCD?';
+
       if (work.doi) {
         output.push({label, url: `${url}id=doi:${work.doi}`});
       }
@@ -107,16 +108,35 @@ class WorkModel extends BaseModel {
     // Citation Link
     try {
       if(work.uri){
-        let label = "Citation Link";
+        let uri = work.uri;
+        let label = '';
+        let icon = ''; 
+        if (uri.match(/^http[s]?:\/\/arxiv\.org\//g)){
+          label = 'Arxiv';
+          icon = 'arxiv';
+        }
+        else if (uri.match(/^http[s]?:\/\/escholarship\.org\//g)){
+          label = 'eScholarship';
+        }
+        else if (uri.match(/^http[s]?:\/\/(www\.)?ncbi\.nlm\.nih\.gov\//g)){
+          label = 'PubMed';
+        }
+        else if (uri.match(/^http[s]?:\/\/(www\.)?gateway\.webofknowledge(.com)?\//g)){
+          label = 'Web of Science';
+        }
+        else {
+          label = work.uri;
+        }
+        
 
         if (Array.isArray(work.uri)){
           let uriCollection = [];
           for(let i = 0; i < work.uri.length; i++)
             uriCollection.push(work.uri[i]); 
-          output.push({label, url: uriCollection});
+          output.push({label, url: uriCollection, icons:icon});
         }
         else{
-          output.push({label, url: work.uri});
+          output.push({label, url: work.uri, icons:icon});
         }
       }
     } catch (error) {
