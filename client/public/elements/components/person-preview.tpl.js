@@ -56,6 +56,10 @@ export default function render() {
       display: block;
       line-height: 1.4;
     }
+    .badge-container:hover small {
+      display: inline-grid;
+    }
+
     small.badges {
       margin-top: 10px;
     }
