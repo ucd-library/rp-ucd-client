@@ -65,7 +65,10 @@ export default function render() {
     <div class=container>
       <div class="icon-container"><rp-icon icon="rp-subject" circle-bg theme-color='subject' size-icon-svg="extralgSVGIcon" size="extralg"></rp-icon></div>
       <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}">
-        <a class="title" href="${this.getLink()}">${renderHTML(this.title)}</a>
+        <a class="title" 
+          href="${this.getLink()}">
+          ${renderHTML(this.title)}
+        </a>
         <div class="below-title">
           <span>Research Subject</span>
         </div>
@@ -74,5 +77,7 @@ export default function render() {
       ` : html``}
       </div>
     </div>
+
+    <rp-query-explanation .data="${this.data._explanation}" show-details></rp-query-explanation>
   `;
 }

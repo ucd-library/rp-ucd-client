@@ -4,7 +4,8 @@ let configs = [appBuild.watch({
   root : __dirname,
   entry : 'public/elements/researcher-profiles.js',
   preview : 'public/js',
-  clientModules : 'public/node_modules'
+  clientModules : 'public/node_modules',
+  debugBabel : true
 })];
 
 configs = [...configs, appBuild.watch({

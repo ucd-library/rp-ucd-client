@@ -11,6 +11,7 @@ import "../components/subject-preview";
 import "../components/grant-preview";
 
 import AssetDefs from "../../src/lib/asset-defs";
+import ga from "../../src/lib/ga";
 
 /**
  * @class RpUtilsCollection
@@ -162,7 +163,6 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    */
   async _doMainQuery(){
     let q = this.currentQuery;
-
     let data = await this.CollectionModel.query(q);
 
     let facetAggDoneHere = false;
@@ -190,7 +190,37 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     else {
       this.hasAz = true;
     }
-    this.data = data.payload.results;    
+    this.searchData = data.payload;
+    this.data = data.payload.results;
+
+    if( this.AppStateModel.store.data.page === 'search' ) {
+      ga.sendSearchView({
+        text : q.textQuery,
+        type : q.mainFacet || 'all',
+        subtype : q.subFacet || '',
+        page : q.pgCurrent || 1,
+        itemsPerPage : q.pgPer
+      }, data.payload);
+    }
+  }
+
+  _onSearchResultClicked(e) {
+    let firstEle = e.path[0];
+    if(firstEle.nodeName !== 'A' ) return;
+    
+    let index = parseInt(e.currentTarget.getAttribute('index'));
+    let item = this.data[index];
+
+    // kinda hackish, better way?
+    if( item['@id'].replace(/^ucdrp:/, '/') !== firstEle.getAttribute('href') ) return;
+    
+    ga.sendSearchClick({
+      text : this.currentQuery.textQuery,
+      type : this.currentQuery.mainFacet || 'all',
+      subtype : this.currentQuery.subFacet || '',
+      page : this.currentQuery.pgCurrent || 1,
+      itemsPerPage : this.currentQuery.pgPer
+    }, this.searchData, item, index);
   }
 
   /**
@@ -546,7 +576,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    * 
    * @returns {TemplateResult}
    */
-  _renderAssetPreview(data) {
+  _renderAssetPreview(data, index) {
     let assetType = this._getAssetType(data);
     if (assetType == 'person') {
       return html`
@@ -554,33 +584,57 @@ export default class RpUtilsCollection extends Mixin(LitElement)
         .data="${data}"
         show-snippet
         show-subjects
+        index="${index}"
         text-width="${this.peopleWidth}"
-        class="my-3">
+        class="my-3"
+        @click="${this._onSearchResultClicked}">
       </rp-person-preview>
       `;
     }
 
     if (assetType == 'concept') {
       return html`
-      <rp-subject-preview .data="${data}" class="my-3" show-snippet></rp-subject-preview>
+      <rp-subject-preview 
+        .data="${data}" 
+        class="my-3" 
+        show-snippet
+        index="${index}"
+        @click="${this._onSearchResultClicked}">
+      </rp-subject-preview>
       `;
     }
 
     if (assetType == 'work') {
       return html`
-      <rp-work-preview .data="${data}" show-snippet class="my-3"></rp-work-preview>
+      <rp-work-preview 
+        .data="${data}" 
+        show-snippet 
+        class="my-3"
+        index="${index}"
+        @click="${this._onSearchResultClicked}">
+      </rp-work-preview>
       `;
     }
 
     if (assetType == 'organization') {
       return html`
-      <rp-organization-preview .data="${data}" class="my-3"></rp-organization-preview>
+      <rp-organization-preview 
+        .data="${data}" 
+        class="my-3"
+        index="${index}"
+        @click="${this._onSearchResultClicked}">
+      </rp-organization-preview>
       `;
     }
 
     if (assetType == 'grant') {
       return html`
-      <rp-grant-preview .data="${data}" class="my-3"></rp-grant-preview>
+      <rp-grant-preview 
+        .data="${data}" 
+        class="my-3"
+        index="${index}"
+        @click="${this._onSearchResultClicked}">
+      </rp-grant-preview>
       `;
     }
   

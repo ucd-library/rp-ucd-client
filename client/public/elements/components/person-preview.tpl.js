@@ -72,11 +72,12 @@ export default function render() {
 
     }
   </style>
+  <div>
   <div class=${classMap(this.constructClasses())}>
     <rp-avatar size="${this.avatarSize}" src="${this.getAvatar()}"></rp-avatar>
     <div class="text-container" style="${styleMap({"max-width" : this.textWidth+'px'})}" >
       <a class="name" 
-        href="${this.getLandingPage()}" 
+        href="${this.getLandingPage()}"
         ?disabled="${!this.getLandingPage()}">
         ${renderHTML(this.title)}
       </a>
@@ -95,6 +96,9 @@ export default function render() {
       
     </div>
   </div>
+  </div>
+  <rp-query-explanation .data="${this.data._explanation}" show-details></rp-query-explanation>
+
 
   `;
 }

@@ -63,9 +63,10 @@ class CollectionService extends BaseService {
     });
   }
 
-  async query(id, searchObject) {
+  async query(id, searchObject, qs) {
     return this.request({
-      url : this.searchUrl+'?debug=true',
+      url : this.searchUrl,
+      qs,
       fetchOptions : {
         method : 'POST',
         headers : {
