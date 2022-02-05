@@ -1,7 +1,6 @@
 import render from "./rp-page-person.tpl.js";
 import { html } from 'lit';
 import RpUtilsLanding from "../../utils/rp-utils-landing";
-import UserUtils from "../../../src/lib/user-utils";
 import rdfUtils from "../../../src/lib/rdf-utils";
 import config from "../../../src/config.js";
 
@@ -25,6 +24,8 @@ import "../../components/ae-publication-list";
  */
 export default class RpPagePerson extends RpUtilsLanding {
 
+  #privateField = 42;
+
   static get properties() {
     return {
       individual: {type: Object},
@@ -39,7 +40,6 @@ export default class RpPagePerson extends RpUtilsLanding {
       totalGrants: {type: Number},
       isOwnProfile: {type: Boolean},
       submitText: {type: String, attribute: 'submitText'},
-      isAdmin: {type: Boolean},
       showResearchSubjectCount : {type: Number},
       defaultResearchSubjectCount : {type: Number},
       tempGrantObject: {type: Object},
@@ -65,11 +65,11 @@ export default class RpPagePerson extends RpUtilsLanding {
     this.assetType = "person";
     this.defaultResearchSubjectCount = 8;
 
-    this.isAdmin = UserUtils.isAdmin(config.user);
-
     this._resetEleProps();
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
+    
+    console.log(this.#privateField)
   }
 
   /**

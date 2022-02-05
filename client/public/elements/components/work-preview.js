@@ -30,7 +30,6 @@ export class RpWorkPreview extends Mixin(LitElement)
 
     this._injectModel('WorkModel');
     this.render = render.bind(this);
-    
   }
 
   /**

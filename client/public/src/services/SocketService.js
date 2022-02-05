@@ -21,6 +21,10 @@ class SocketService extends BaseService {
     });
 
     this.socket.on('message', (msg) => {
+      console.log(msg);
+      this.store.setSocketMessageLoaded(msg);
+    });
+    this.socket.on('admin-message', (msg) => {
       this.store.setSocketMessageLoaded(msg);
     });
 

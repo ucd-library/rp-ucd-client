@@ -58,6 +58,7 @@ export class RpLinkList extends LitElement {
     let href = "";
     let disabled = false;
     let classes = {link: true};
+    let forceNoHash = false;
     if (typeof link === 'string') {
       text = link;
     }
@@ -67,6 +68,7 @@ export class RpLinkList extends LitElement {
         disabled = true;
       }
       if (link.href) href = link.href;
+      forceNoHash = link.forceNoHash || false;
     }
 
     if (index == this.currentLink) {
@@ -78,7 +80,7 @@ export class RpLinkList extends LitElement {
     classes['disabled'] = disabled;
 
     if (href !== undefined) {
-      if( this.useHash ) {
+      if( this.useHash && forceNoHash !== true ) {
         href = "#"+href;
       }
 

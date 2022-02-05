@@ -14,7 +14,7 @@ async function authMiddleware(req, res, next) {
 
   // Verify the header
   try {
-    token = await auth.verifyToken(token);
+    token = await auth.verifyToken(token, auth.getRequestIp(req));
   } catch(e) {
     return res.status(403).json({error: true, message: 'Forbidden'});
   }

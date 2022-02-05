@@ -11,6 +11,7 @@ import rpNodeUtils from '@ucd-lib/rp-node-utils';
 import cookieParser from 'cookie-parser';
 import cors from "cors";
 import harvest from './lib/harvest.js';
+import './lib/status-broker.js';
 
 
 const {logger} = rpNodeUtils;

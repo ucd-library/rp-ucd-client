@@ -25,6 +25,13 @@ class CollectionModel extends BaseModel {
     this.subFacets = AssetDefs.getSubFacets();
     this.pgPer = 8;
 
+    // for admins.  possible values are debug=true or explain=true
+    this.queryOptions = {debug: true};
+
+    let explainQueryEnabled = window.localStorage.getItem('explainQueryEnabled') === 'true';
+    if( explainQueryEnabled ) {
+      this.queryOptions.explain = true;
+    }
 
     this.register('CollectionModel');
   }
@@ -133,6 +140,7 @@ class CollectionModel extends BaseModel {
    */
   async query(elementQuery={}){
     let queryObject = this.convertElementQuery(elementQuery);
+
     // in no type specified, use our default types
     if( !queryObject.filters['@type'] ) {
       queryObject.filters['@type'] = QueryUtils.getKeywordFilter(config.defaultTypes, 'or');
@@ -143,10 +151,8 @@ class CollectionModel extends BaseModel {
 
     if( current && current.request ) {
       await current.request;
-    } 
-    else {
-      await this.service.query(id, queryObject);
-
+    } else {
+      await this.service.query(id, queryObject, this.queryOptions);
     }
     return this.store.data.queryById[id];
   }
@@ -430,6 +436,7 @@ class CollectionModel extends BaseModel {
    */
   convertElementQuery(elementQuery={}){
     let query = QueryUtils.getBaseQueryObject();
+
     if (Object.keys(elementQuery).length == 0) return query;
 
     // Apply primary facets
