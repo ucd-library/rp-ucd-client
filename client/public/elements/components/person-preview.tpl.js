@@ -56,11 +56,6 @@ export default function render() {
       display: block;
       line-height: 1.4;
     }
-    /* small:hover {
-      display: inline-table;
-      white-space: normal;
-
-    } */
 
     small.badges {
       margin-top: 10px;
