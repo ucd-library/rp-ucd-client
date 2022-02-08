@@ -36,6 +36,8 @@ export class RpPersonPreview extends Mixin(LitElement)
     this.avatarSize = "md";
     this.homeDisplay = false;
     this.textWidth = (window.innerWidth - 70) + "px";
+
+
   }
 
   /**
@@ -45,6 +47,8 @@ export class RpPersonPreview extends Mixin(LitElement)
    * @param {Object} props 
    */
   updated(props) {
+    this._isEllipsisActive();
+
     if( props.has('data') ) {
 
       let result = previewUtils.getSnippetTitle(
@@ -73,6 +77,29 @@ export class RpPersonPreview extends Mixin(LitElement)
       badge.hideFromTab = cumWidth > containerWidth;
     });
 
+  }
+
+  /**
+   * @method _isEllipsisActive
+   * @description Checks if the preview badges are activating the ellipsis
+   */
+  _isEllipsisActive() {
+    this.shadowRoot.querySelectorAll("small").forEach(badge => {
+      if( badge.offsetWidth < badge.scrollWidth ){
+        badge.addEventListener("mouseenter", function() {
+          badge.style.display = "inline-table";
+          badge.style.whiteSpace = "normal";
+        }, false);
+      
+        badge.addEventListener("mouseleave", function() {
+          badge.style.display = "block";
+          badge.style.whiteSpace = "nowrap";
+          badge.style.textOverflow = "ellipsis";
+          badge.style.overflow = "hidden";
+
+        }, false);
+      }
+    });
   }
 
   /**
