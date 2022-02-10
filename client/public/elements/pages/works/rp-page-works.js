@@ -15,7 +15,6 @@ export default class RpPageWorks extends RpUtilsCollection {
   constructor() {
     super();
     this.render = render.bind(this);
-
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
   }
 
@@ -27,6 +26,7 @@ export default class RpPageWorks extends RpUtilsCollection {
    */
   async _onAppStateUpdate(state) {
     this.doUpdate(state);
+    this.requestUpdate();
   }
 
   /**
@@ -37,13 +37,26 @@ export default class RpPageWorks extends RpUtilsCollection {
    */
   async doUpdate(state) {
     if( state.page !== 'works' ) return;
-
     this._parseUrlQuery(state);
     await Promise.all([
       this._doMainQuery(), 
       this._getFacets(), 
       this._getAzAgg()
     ]);
+
+  }
+
+  /**
+   * @method _pubRedirect
+   * @description redirect
+   * 
+   */
+  _pubRedirect(e){
+    // e.path[1].style.display = "none";
+    let href = '/works';
+    this.AppStateModel.setLocation(href);
+    this.searchsubject = '';
+    this.requestUpdate();
   }
 
   /**

@@ -38,6 +38,7 @@ class SubjectModel extends BaseModel {
       await this.service.getSubject(id);
     }
 
+
     return this.store.data.bySubject[id];
   }
 
