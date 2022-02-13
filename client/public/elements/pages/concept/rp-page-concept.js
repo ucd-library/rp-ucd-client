@@ -136,6 +136,7 @@ export default class RpPageConcept extends RpUtilsLanding {
    * @description Retrieves the subject from the id given and saves in this.subject array
    * Called on AppStateUpdate
    * 
+   * 
    * Calls the functions: this._getSubjectType(), 
    *                      this._getFullTextLinks(),
    *                      this._getRelatedSubjectsNarrow(), 
@@ -205,8 +206,8 @@ export default class RpPageConcept extends RpUtilsLanding {
    */
   async _doResearcherQuery(id) {
     let data = await this.SubjectModel.getResearchers(id);
-
     this.tempResearch = data.payload.results;
+    console.log(this.tempResearch );
     this.researchersStatus = data.state;
     if (data.state != 'loaded') {
       return;
@@ -298,6 +299,18 @@ export default class RpPageConcept extends RpUtilsLanding {
     let href = '/works/' + k + "?" + "subject=" + this.urlPathId;
     this.AppStateModel.setLocation(href);
   }
+
+    /**
+   * @method _pubRedirectPeople
+   * @description creates the href that specifies the subject and 
+   * type of document for the publication redirect
+   * 
+   * @param {String} k
+   */
+     _pubRedirectPeople(k){
+      let href = '/people/' + k + "?" + "subject=" + this.urlPathId;
+      this.AppStateModel.setLocation(href);
+    }
 
   /**
    * @method _isEmpty
