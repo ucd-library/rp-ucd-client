@@ -229,7 +229,7 @@ return html`
           ${ this.tempResearch.length > 8 ? 
             html`
               <div class="buttons">
-                <button @click=${() => this._pubRedirect(k)} class="load-pubs less">
+                <button @click=${() => this._peopleRedirect()} class="load-pubs less">
                   View All Related People
                 </button>
               </div>

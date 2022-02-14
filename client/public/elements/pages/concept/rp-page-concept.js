@@ -301,16 +301,16 @@ export default class RpPageConcept extends RpUtilsLanding {
   }
 
     /**
-   * @method _pubRedirectPeople
+   * @method _peopleRedirect
    * @description creates the href that specifies the subject and 
    * type of document for the publication redirect
    * 
    * @param {String} k
    */
-     _pubRedirectPeople(k){
-      let href = '/people/' + k + "?" + "subject=" + this.urlPathId;
-      this.AppStateModel.setLocation(href);
-    }
+  _peopleRedirect(){
+    let href = '/people/'; //+ k + "?" + "subject=" + this.urlPathId;
+    this.AppStateModel.setLocation(href);
+  }
 
   /**
    * @method _isEmpty
