@@ -308,7 +308,7 @@ export default class RpPageConcept extends RpUtilsLanding {
    * @param {String} k
    */
   _peopleRedirect(){
-    let href = '/people/'; //+ k + "?" + "subject=" + this.urlPathId;
+    let href = '/people?subject=' + this.urlPathId;
     this.AppStateModel.setLocation(href);
   }
 

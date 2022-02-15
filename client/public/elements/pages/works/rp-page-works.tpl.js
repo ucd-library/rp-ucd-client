@@ -47,14 +47,14 @@ return html`
   ${styles} 
 </style>
 <div class="collections works container bg-light top ${this.dataStatus}">
-  ${this.searchsubject != '' ?
+  ${this.currentQuery.subjectFilter ?
     html `
       <div class="hero">
         <div class="title mb-0"> 
           <h1 class="text-light h1 bold mb-0 text-center">
             <div>
               <div style="display:inline-block;">Subject: </div>
-              ${this.searchsubject != '' ? 
+              ${this.currentQuery.subjectFilter ? 
                 html`
                   <div style="display:inline-block;">
                     <button class="subjectButton">

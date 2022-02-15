@@ -268,8 +268,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (azAggField) {
       this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[azAggField]))].filter(x => x != 'all');
     }
-
+    
     let searchsubject = await SubjectModel.getSubject(data["id"].split("__")[2]);
+
 
     this.searchsubject = searchsubject.payload.prefLabel ? searchsubject.payload.prefLabel : '';
     this.requestUpdate();

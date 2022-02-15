@@ -46,6 +46,7 @@ class CollectionModel extends BaseModel {
    */
   async overview(id, kwargs={}) {
     let queryObject = QueryUtils.getBaseQueryObject();
+
     if (id == "facets") {
       queryObject.facets["@type"] = {"type" : "facet"};
       queryObject.limit = 0;
@@ -85,6 +86,13 @@ class CollectionModel extends BaseModel {
     }
     else if (id == "peopleAggs") {
       Object.assign(queryObject.filters, AssetDefs.getMainFacetById('people').baseFilter);
+      if (kwargs.subjectFilter) {
+        queryObject.filters[AssetDefs.getAreaField('people')] = QueryUtils.getKeywordFilter(
+          QueryUtils.appendIdPrefix(kwargs.subjectFilter)
+        );
+        id = `${id}?subject=${kwargs.subjectFilter}`;
+      }
+      
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
@@ -253,6 +261,8 @@ class CollectionModel extends BaseModel {
       return subFacets;
     }
 
+    console.log("MainFacet", payload);
+
     // Extract type aggregation counts from payload
     let counts = {};
     try {
@@ -299,6 +309,8 @@ class CollectionModel extends BaseModel {
         text: `All People (${dataTotal})`, 
         href: this.constructUrl(elementQuery, urlParamsToIgnore)
       });
+      console.log("subFacets:", subFacets);
+
 
       for (let facet of AssetDefs.getSubFacetsByMainId('people')) {
         subFacets.push(this._fmtSubFacetMenuObject(facet, counts, elementQuery));
@@ -312,6 +324,7 @@ class CollectionModel extends BaseModel {
         text: `All Works (${dataTotal})`, 
         href: this.constructUrl(elementQuery, urlParamsToIgnore)
       });
+      console.log("subFacets:", subFacets);
 
       for (let facet of AssetDefs.getSubFacetsByMainId('works')) {
         subFacets.push(this._fmtSubFacetMenuObject(facet, counts, elementQuery));

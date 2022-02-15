@@ -41,6 +41,20 @@ export default class RpPagePeople extends RpUtilsCollection {
     await Promise.all([this._doMainQuery(), this._getFacets(), this._getAzAgg()]);
   }
 
+
+    /**
+   * @method _pubRedirect
+   * @description redirect
+   * 
+   */
+     _pubRedirect(e){
+      // e.path[1].style.display = "none";
+      let href = '/people';
+      this.AppStateModel.setLocation(href);
+      this.searchsubject = '';
+      this.requestUpdate();
+    }
+
   /**
    * @method _getFacets
    * @description load and render the current overview subject facet list
@@ -49,12 +63,15 @@ export default class RpPagePeople extends RpUtilsCollection {
    */
   async _getFacets() {
     let activeFilters = {};
-    let peopleAggs = await this.CollectionModel.overview('peopleAggs');
+    let kwargs = {}
+
+    if (this.currentQuery.subjectFilter) kwargs.subjectFilter = this.currentQuery.subjectFilter;
+
+    let peopleAggs = await this.CollectionModel.overview('peopleAggs', kwargs);
     this.subFacetStatus = peopleAggs.state;
     if (peopleAggs.state != 'loaded') {
       return;
     }
-    console.log("peopleaggs", peopleAggs);
     this.subFacets = this.CollectionModel._getSubFacets(peopleAggs.payload, this.currentQuery);
   }
 

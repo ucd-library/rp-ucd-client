@@ -26,6 +26,8 @@ export default class RpPageWorks extends RpUtilsCollection {
    */
   async _onAppStateUpdate(state) {
     this.doUpdate(state);
+    this.searchsubject = '';
+
     this.requestUpdate();
   }
 
@@ -67,8 +69,9 @@ export default class RpPageWorks extends RpUtilsCollection {
    */
   async _getFacets() {
     let activeFilters = {};
-    let kwargs = {}
+    let kwargs = {};
     if (this.currentQuery.subjectFilter) kwargs.subjectFilter = this.currentQuery.subjectFilter;
+
     let facetAggs = await this.CollectionModel.overview('worksAggs', kwargs);
     this.subFacetStatus = facetAggs.state;
     if (facetAggs.state != 'loaded') {
