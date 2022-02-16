@@ -207,7 +207,6 @@ export default class RpPageConcept extends RpUtilsLanding {
   async _doResearcherQuery(id) {
     let data = await this.SubjectModel.getResearchers(id);
     this.tempResearch = data.payload.results;
-    console.log(this.tempResearch );
     this.researchersStatus = data.state;
     if (data.state != 'loaded') {
       return;

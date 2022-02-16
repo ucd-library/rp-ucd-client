@@ -261,8 +261,6 @@ class CollectionModel extends BaseModel {
       return subFacets;
     }
 
-    console.log("MainFacet", payload);
-
     // Extract type aggregation counts from payload
     let counts = {};
     try {
@@ -309,7 +307,6 @@ class CollectionModel extends BaseModel {
         text: `All People (${dataTotal})`, 
         href: this.constructUrl(elementQuery, urlParamsToIgnore)
       });
-      console.log("subFacets:", subFacets);
 
 
       for (let facet of AssetDefs.getSubFacetsByMainId('people')) {
@@ -324,7 +321,6 @@ class CollectionModel extends BaseModel {
         text: `All Works (${dataTotal})`, 
         href: this.constructUrl(elementQuery, urlParamsToIgnore)
       });
-      console.log("subFacets:", subFacets);
 
       for (let facet of AssetDefs.getSubFacetsByMainId('works')) {
         subFacets.push(this._fmtSubFacetMenuObject(facet, counts, elementQuery));

@@ -226,7 +226,7 @@ return html`
 
           `  
           )}   
-          ${ this.tempResearch.length > 8 ? 
+          ${ this.tempResearch.length > 10 ? 
             html`
               <div class="buttons">
                 <button @click=${() => this._peopleRedirect()} class="load-pubs less">
