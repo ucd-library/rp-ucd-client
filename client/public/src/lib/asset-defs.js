@@ -92,7 +92,7 @@ class AssetDefs {
           }
         },
         azField: "hasContactInfo.familyName.firstLetter",
-        areaField: "hasResearchArea",
+        areaField: "hasResearchArea.@id",
         facetedSearchFields: [
           "doi^10",
           'hasContactInfo.familyName.text^9',
