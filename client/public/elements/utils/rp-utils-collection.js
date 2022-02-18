@@ -12,6 +12,7 @@ import "../components/grant-preview";
 
 import AssetDefs from "../../src/lib/asset-defs";
 import ga from "../../src/lib/ga";
+import SubjectModel from '../../src/models/SubjectModel';
 
 /**
  * @class RpUtilsCollection
@@ -53,12 +54,15 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
   constructor() {
     super();
-    this._injectModel('CollectionModel', 'AppStateModel');
+    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel');
     this.azOptions = new Set(['all', ...'abcdefghijklmnopqrstuvwxyz']);
     this.hasPagination = false;
     this.visible = false;
     this.urlQuery = {};
     this.defaultFacetId = AssetDefs.defaultFacetId;
+    this.searchsubject = '';
+
+
 
     this._resetQueryProperties();
 
@@ -99,6 +103,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.azSelected = 'All';
     this.azDisabled = [];
     this.azStatus = 'loading';
+
 
   }
 
@@ -263,6 +268,12 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     if (azAggField) {
       this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[azAggField]))].filter(x => x != 'all');
     }
+    
+    let searchsubject = await SubjectModel.getSubject(data["id"].split("__")[2]);
+
+
+    this.searchsubject = searchsubject.payload.prefLabel ? searchsubject.payload.prefLabel : '';
+    this.requestUpdate();
 
     console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`, data);
 

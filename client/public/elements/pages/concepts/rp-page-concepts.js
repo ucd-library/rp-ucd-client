@@ -55,7 +55,9 @@ export default class RpPageConcepts extends RpUtilsCollection {
   
   async _getFacets() {
     //let activeFilters = {};
-    let subjectsAggs = await this.CollectionModel.overview('subjectsAggs');
+    let kwargs = {}
+    if (this.currentQuery.subjectFilter) kwargs.subjectFilter = this.currentQuery.subjectFilter;
+    let subjectsAggs = await this.CollectionModel.overview('subjectsAggs', kwargs);
     this.subFacetStatus = subjectsAggs.state;
     if (subjectsAggs.state != 'loaded'){
       return;

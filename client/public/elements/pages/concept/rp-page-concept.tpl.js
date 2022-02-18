@@ -213,14 +213,29 @@ return html`
       <div class="box-title">
         <h1 class="weight-regular mt-0">Researchers</h1>
       </div>    
-          ${this.tempResearch.map(researcher => html`
-            <rp-person-preview
-              .data="${researcher}"
-              text-width="${this.peopleWidth}"
-              show-subjects
-              class="my-3">
-            </rp-person-preview>
-          `)}   
+          ${this.tempResearch.map((researcher,v) => 
+            html`
+            ${v <= 10 ? html`
+              <rp-person-preview
+                .data="${researcher}"
+                text-width="${this.peopleWidth}"
+                show-subjects
+                class="my-3">
+              </rp-person-preview>
+            `:html``}
+
+          `  
+          )}   
+          ${ this.tempResearch.length > 10 ? 
+            html`
+              <div class="buttons">
+                <button @click=${() => this._peopleRedirect()} class="load-pubs less">
+                  View All Related People
+                </button>
+              </div>
+              `: 
+            html ``
+          }
     </section>
     <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
       <div class="box-title">
