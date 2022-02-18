@@ -493,9 +493,11 @@ class CollectionModel extends BaseModel {
       query.offset = elementQuery.offset;
     }
     else if (elementQuery.pgCurrent) {
-      let pg = this.pgPer;
-      if (elementQuery.pgPer) pg = elementQuery.pgPer;
-      query.offset = elementQuery.pgCurrent * pg - pg;
+      let page = parseInt(elementQuery.pgCurrent) - 1;
+      let pgPer = this.pgPer;
+      if (elementQuery.pgPer) pgPer = parseInt(elementQuery.pgPer);
+      query.offset = page * pgPer;
+      query.limit = pgPer;
     }
 
     return query;

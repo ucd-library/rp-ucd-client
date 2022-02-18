@@ -17,11 +17,8 @@ class AssetDefs {
         'hasContactInfo.familyName.text^9',
         'hasContactInfo.givenName^8',
         'hasContactInfo.middleName^8',
-        "_.organizationLabel.text^6",
         "_.personLabel.text^6",
         "_.workLabel.text^6",
-        "_.conceptLabel.text",
-        "_.subjectAreaLabel.text^2",
         "_.grantLabel.text^6",
         "hasSubjectArea.label.text^5",
         "abstract",
@@ -32,36 +29,36 @@ class AssetDefs {
         'citation.label^10',
         '_.top20Citation.label^15',
         '_.lastCitation.label^15',
+        'assignedBy.label.text',
+        'sponsorAwardId.text^2',
         'relates.hasContactInfo.familyName^10',
         'relates.hasContactInfo.givenName^10',
         'assignedBy.label^10',
       ],
-      people : [
-        'hasContactInfo.familyName.text^9',
-        'hasContactInfo.givenName^8',
-        'hasContactInfo.middleName^8',
-        'hasContactInfo.title.text^7',
-        'hasResearchArea.label.text^6',
-        'citation.label'
-      ],
+      // people : [
+      //   'hasContactInfo.familyName.text^9',
+      //   'hasContactInfo.givenName^8',
+      //   'hasContactInfo.middleName^8',
+      //   'hasContactInfo.title.text^7',
+      //   'hasResearchArea.label.text^6',
+      //   'citation.label'
+      // ],
       concepts : [
         "label.text^10",
         "prefLabel.text^10"
       ],
-      works : [
-        "doi.text^10",
-        "label.text^9",
-        "abstract^8",
-        "hasPublicationVenue.label.text^7",
-        "hasPublicationVenue.issn^5"
-      ],
-      grants: [
-        "label.text^2",
-        "assignedBy.label.text",
-        "sponsorAwardId.text^2",
-        "relates.hasContactInfo.familyName^2",
-        "relates.hasContactInfo.givenName^2"
-      ]
+      // works : [
+      //   "doi.text^10",
+      //   "abstract^8",
+      //   "hasPublicationVenue.label.text^7",
+      //   "hasPublicationVenue.issn^5"
+      // ],
+      // grants: [
+      //   "assignedBy.label.text",
+      //   "sponsorAwardId.text^2",
+      //   "relates.hasContactInfo.familyName^2",
+      //   "relates.hasContactInfo.givenName^2"
+      // ]
     };
   }
 
@@ -326,9 +323,15 @@ class AssetDefs {
    * @returns {String[]}
    */
   getSearchFields(facet) {
-    for (const f of this.getMainFacets()) {
-      if (f.id == facet) return f.facetedSearchFields;
+    // TODO: we are removing most of these in issue #318.
+    // For now, just commenting out the facets access portion.
+    // for (const f of this.getMainFacets()) {
+    //   if (f.id == facet) return f.facetedSearchFields;
+    // }
+    if( facet === 'concepts' ) {
+      return this.getMainFacets()['concepts'];
     }
+
     return this.textSearchFields.default;
   }
 
