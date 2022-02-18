@@ -34,6 +34,8 @@ class AssetDefs {
         'relates.hasContactInfo.familyName^10',
         'relates.hasContactInfo.givenName^10',
         'assignedBy.label^10',
+        'role.relatedBy.label.text^5',
+        'role.relatedBy.sponsorAwardId.text^5'
       ],
       // people : [
       //   'hasContactInfo.familyName.text^9',
