@@ -77,10 +77,9 @@ export class RpAZ extends LitElement {
       let disabled = this.disabledLettersFmt.includes(letter);
       let href = "#";
       if( !disabled ) {
-        let azlink=new URL(this.baseHref,window.location.href);
-        azlink.searchParams.set('az',letter.toLowerCase());
-        href=azlink.href;
-//        href = `/${this.baseHref}${this.baseHref.includes('?')?'&':'?'}az=${letter.toLowerCase()}`;
+        let u=new URL(`/${this.baseHref}`,window.location.href);
+        u.searchParams.set('az',letter.toLowerCase());
+        href=u.pathname+u.search;
       }
 
       return html`<div class="letter ${selected}" ?disabled="${disabled}">
