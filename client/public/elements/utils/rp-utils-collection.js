@@ -12,6 +12,7 @@ import "../components/grant-preview";
 
 import AssetDefs from "../../src/lib/asset-defs";
 import ga from "../../src/lib/ga";
+import SubjectModel from '../../src/models/SubjectModel';
 
 /**
  * @class RpUtilsCollection
@@ -53,12 +54,15 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
   constructor() {
     super();
-    this._injectModel('CollectionModel', 'AppStateModel');
+    this._injectModel('CollectionModel', 'AppStateModel', 'SubjectModel');
     this.azOptions = new Set(['all', ...'abcdefghijklmnopqrstuvwxyz']);
     this.hasPagination = false;
     this.visible = false;
     this.urlQuery = {};
     this.defaultFacetId = AssetDefs.defaultFacetId;
+    this.searchsubject = '';
+
+
 
     this._resetQueryProperties();
 
@@ -100,12 +104,13 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.azDisabled = [];
     this.azStatus = 'loading';
 
+
   }
 
   /**
    * @method updated
    * @description Lit method called when element is updated
-   * 
+   *
    * @param {Map} props - changed properties.
    */
   updated(props) {
@@ -158,7 +163,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   /**
    * @method _doMainQuery
    * @description Performs primary browse/search query for page based on url path and parameters
-   * 
+   *
    * @returns {Promise}
    */
   async _doMainQuery(){
@@ -207,13 +212,13 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   _onSearchResultClicked(e) {
     let firstEle = e.path[0];
     if(firstEle.nodeName !== 'A' ) return;
-    
+
     let index = parseInt(e.currentTarget.getAttribute('index'));
     let item = this.data[index];
 
     // kinda hackish, better way?
     if( item['@id'].replace(/^ucdrp:/, '/') !== firstEle.getAttribute('href') ) return;
-    
+
     ga.sendSearchClick({
       text : this.currentQuery.textQuery,
       type : this.currentQuery.mainFacet || 'all',
@@ -226,7 +231,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   /**
    * @method _getSearchAggs
    * @description Does query to retrieve the total counts for any facets/subfacets.
-   * 
+   *
    * @returns {Promise}
    */
   async _getSearchAggs() {
@@ -250,7 +255,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   /**
    * @method _getAzAgg
    * @description Does query to retrieve the total counts for all letters in the A-Z element
-   * 
+   *
    * @returns {Promise}
    */
   async _getAzAgg() {
@@ -264,6 +269,12 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[azAggField]))].filter(x => x != 'all');
     }
 
+    let searchsubject = await SubjectModel.getSubject(data["id"].split("__")[2]);
+
+
+    this.searchsubject = searchsubject.payload.prefLabel ? searchsubject.payload.prefLabel : '';
+    this.requestUpdate();
+
     console.log(`az for ${this.currentQuery.mainFacet}, ${this.currentQuery.subFacet}`, data);
 
   }
@@ -272,7 +283,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    * @method _parseUrlQuery
    * @description Parses url path and parameters and sets the currentQuery property.
    * Called on app-state-update
-   * 
+   *
    * Primary route structure:
    *  Search: /search/<mainFacet>/<subFacet>?s=search&p=page
    *  Browse: /<mainFacet>/<subFacet>?p=page
@@ -331,7 +342,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   /**
    * @method _constructQuery
    * @description Constructs and returns a query object out of element properties.
-   * 
+   *
    * @returns {Object} Query Object
    */
   _constructQuery(){
@@ -437,9 +448,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   /**
    * @method setDifference
    * @description Gets the difference between two sets.
-   * @param {Set} setA 
-   * @param {Set} setB 
-   * 
+   * @param {Set} setA
+   * @param {Set} setB
+   *
    * @returns {Set}
    */
   _setDifference(setA, setB) {
@@ -453,8 +464,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   /**
    * @method _getAssetType
    * @description Returns asset type based on data object returned in a query.
-   * @param {Object} data 
-   * 
+   * @param {Object} data
+   *
    * @returns {String}
    */
   _getAssetType(data) {
@@ -479,7 +490,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    * @method _urlEncode
    * @description Constructs encoded url parameters
    * @param {Object} obj - key:value pairs of url arguments.
-   * 
+   *
    * @returns {String}
    */
   _urlEncode(obj) {
@@ -496,7 +507,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       }
       str.push(encodeURIComponent(p) + "=" + encodeURIComponent( JSON.stringify(obj[p]) ));
     }
-          
+
     if (!str.length) {
       return "";
     }
@@ -517,7 +528,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    * @description Renders the page header of browse pages
    * @param {String} title - Page Title
    * @param {String} Azselected - Selected letter in AZ index.
-   * 
+   *
    * @returns {TemplateResult}
    */
   _renderBrowseHeader(title, Azselected) {
@@ -536,7 +547,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       ${this.hasAz ? html`
         <rp-a-z selected-letter="${this.azSelected}"
                 .disabledLetters="${this.azDisabled}"
-                base-href="${this.id+(this.subFacet !== 'none' ? '/'+this.subFacet : '')}"
+                base-href="${this.id+(this.subFacet !== 'none' ? '/'+this.subFacet : '')+(this.currentQuery.subjectFilter ? '?subject='+this.currentQuery.subjectFilter : '')}"
                 @changed-letter=${e => this._onUserAction("az", e.target.selectedLetter)}>
         </rp-a-z>
       ` : html``}
@@ -549,7 +560,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
   /**
    * @method _renderFacets
    * @description Renders subfacet list
-   * 
+   *
    * @returns {TemplateResult}
    */
   _renderFacets() {
@@ -573,7 +584,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    * @method _renderAssetPreview
    * @description Renders the appropriate asset preview
    * @param {Object} data - An asset data object.
-   * 
+   *
    * @returns {TemplateResult}
    */
   _renderAssetPreview(data, index) {
@@ -594,9 +605,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
     if (assetType == 'concept') {
       return html`
-      <rp-subject-preview 
-        .data="${data}" 
-        class="my-3" 
+      <rp-subject-preview
+        .data="${data}"
+        class="my-3"
         show-snippet
         index="${index}"
         @click="${this._onSearchResultClicked}">
@@ -606,9 +617,9 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
     if (assetType == 'work') {
       return html`
-      <rp-work-preview 
-        .data="${data}" 
-        show-snippet 
+      <rp-work-preview
+        .data="${data}"
+        show-snippet
         class="my-3"
         index="${index}"
         @click="${this._onSearchResultClicked}">
@@ -618,8 +629,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
     if (assetType == 'organization') {
       return html`
-      <rp-organization-preview 
-        .data="${data}" 
+      <rp-organization-preview
+        .data="${data}"
         class="my-3"
         index="${index}"
         @click="${this._onSearchResultClicked}">
@@ -629,15 +640,15 @@ export default class RpUtilsCollection extends Mixin(LitElement)
 
     if (assetType == 'grant') {
       return html`
-      <rp-grant-preview 
-        .data="${data}" 
+      <rp-grant-preview
+        .data="${data}"
         class="my-3"
         index="${index}"
         @click="${this._onSearchResultClicked}">
       </rp-grant-preview>
       `;
     }
-  
+
 
     return html``;
 
@@ -647,13 +658,13 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    * @method _renderMobileSubFacets
    * @description Renders the subfacet dropdown in the mobile view.
    * @param {Boolean} isBrowsePage - Is this a browse or search page?
-   * 
+   *
    * @returns {TemplateResult}
    */
   _renderMobileSubFacets(isBrowsePage=false){
     if (this.data.length == 0 || this.mainFacet == 'none') return html``;
     let singleFacetText = "";
-    
+
     if (!this.subFacetsWithResultsCt && this.subFacets.length > 0 ){
       singleFacetText = this.subFacets[0].text;
     }
@@ -700,7 +711,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
    * @method _renderPagination
    * @description Renders the pagination element
    * @param {Number} totalResults - Total number of results of the current query.
-   * 
+   *
    * @returns {TemplateResult}
    */
   _renderPagination(totalResults) {

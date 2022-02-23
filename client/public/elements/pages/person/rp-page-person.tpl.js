@@ -259,7 +259,17 @@ return html`
           </div>
           <div slot="main" class="heromain">
             <rp-avatar size="lg"></rp-avatar>
-            <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getFullName()}</h2>
+            <h2 class="name text-secondary h1 bold mb-0 text-center">${this.getFullName()}
+            ${this.isOwnProfile ? html`
+                      <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
+                        <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
+                          <div slot="tooltip">Edit Name</div>
+                        </rp-icon>
+                      </a>
+                      ` : html``
+                    }
+            
+            </h2>
 
             <!--
               SB: Kafka Message Add?
@@ -371,7 +381,14 @@ return html`
             </div>
             <div>
               ${this._showSubSection('websites') ? html`
-                  <h2 class="h3 mb-2">Websites</h2>
+                  <h2 class="h3 mb-2">Websites
+                    ${this.isOwnProfile ? html`
+                        <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-web-edit').toggle()}">
+                          <div slot="tooltip">Edit Websites</div>
+                        </rp-icon>
+                      ` : html``
+                    }
+                  </h2>
                   ${this.getWebsites().map(site => html`
                     <div class="contact-container">
                       <a href="${site.href}" target="_blank" rel="noopener">
@@ -379,6 +396,17 @@ return html`
                       </a>
                     </div>`)}
                     <br />
+                    <rp-modal content-title='Edit Websites' id="modal-web-edit">
+                      Websites are managed via the "Web addresses and social media" section of your <b>UC Publication 
+                      Management System</b> profile. Clicking the "Edit Websites" button below will redirect you to 
+                      the UC Publication Management System. Any changes made there will be reflected on your 
+                      Aggie Experts profile.
+                      <div slot="confirmButton">
+                        <a style = "text-decoration:none;" target="_blank" rel="noopener" href='https://oapolicy.universityofcalifornia.edu/listobjects.html?as=1&am=false&cid=1'>
+                          <div class="button">Edit Websites</div>
+                        </a>
+                      </div>
+                    </rp-modal>
               ` : html``}
             </div>
           </div>

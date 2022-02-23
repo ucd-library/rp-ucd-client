@@ -61,8 +61,8 @@ export class RpAZ extends LitElement {
   /**
    * @method _renderAz
    * @description Renders a single letter.
-   * @param {*} letter 
-   * 
+   * @param {*} letter
+   *
    * @returns {TemplateResult}
    */
   _renderAz(letter) {
@@ -73,13 +73,13 @@ export class RpAZ extends LitElement {
       }
     }
 
-
-
     if( this.baseHref ) {
       let disabled = this.disabledLettersFmt.includes(letter);
       let href = "#";
       if( !disabled ) {
-        href = `/${this.baseHref}?az=${letter.toLowerCase()}`;
+        let u=new URL(`/${this.baseHref}`,window.location.href);
+        u.searchParams.set('az',letter.toLowerCase());
+        href=u.pathname+u.search;
       }
 
       return html`<div class="letter ${selected}" ?disabled="${disabled}">
@@ -89,7 +89,7 @@ export class RpAZ extends LitElement {
     }
 
     return html`
-    <div 
+    <div
       @click="${this.handleClick}"
       @keyup="${this._onKeyup}"
       ?disabled="${this.disabledLettersFmt.includes(letter)}"
@@ -103,7 +103,7 @@ export class RpAZ extends LitElement {
   /**
    * @method handleClick
    * @description Attached to letter click listener
-   * @param {Event} e 
+   * @param {Event} e
    */
   handleClick(e) {
     this._onInteraction(e.target);
@@ -112,7 +112,7 @@ export class RpAZ extends LitElement {
   /**
    * @method _onKeyup
    * @description Bound to Enter keypress event on letter div
-   * @param {Event} e 
+   * @param {Event} e
    */
   _onKeyup(e) {
     if (e.keyCode === 13 || e.code === 'Enter') {

@@ -46,6 +46,7 @@ class CollectionModel extends BaseModel {
    */
   async overview(id, kwargs={}) {
     let queryObject = QueryUtils.getBaseQueryObject();
+
     if (id == "facets") {
       queryObject.facets["@type"] = {"type" : "facet"};
       queryObject.limit = 0;
@@ -85,6 +86,13 @@ class CollectionModel extends BaseModel {
     }
     else if (id == "peopleAggs") {
       Object.assign(queryObject.filters, AssetDefs.getMainFacetById('people').baseFilter);
+      if (kwargs.subjectFilter) {
+        queryObject.filters[AssetDefs.getAreaField('people')] = QueryUtils.getKeywordFilter(
+          QueryUtils.appendIdPrefix(kwargs.subjectFilter)
+        );
+        id = `${id}?subject=${kwargs.subjectFilter}`;
+      }
+      
       queryObject.limit = 0;
       queryObject.facets["@type"] = {"type" : "facet"};
     }
@@ -300,6 +308,7 @@ class CollectionModel extends BaseModel {
         href: this.constructUrl(elementQuery, urlParamsToIgnore)
       });
 
+
       for (let facet of AssetDefs.getSubFacetsByMainId('people')) {
         subFacets.push(this._fmtSubFacetMenuObject(facet, counts, elementQuery));
       }
@@ -484,9 +493,11 @@ class CollectionModel extends BaseModel {
       query.offset = elementQuery.offset;
     }
     else if (elementQuery.pgCurrent) {
-      let pg = this.pgPer;
-      if (elementQuery.pgPer) pg = elementQuery.pgPer;
-      query.offset = elementQuery.pgCurrent * pg - pg;
+      let page = parseInt(elementQuery.pgCurrent) - 1;
+      let pgPer = this.pgPer;
+      if (elementQuery.pgPer) pgPer = parseInt(elementQuery.pgPer);
+      query.offset = page * pgPer;
+      query.limit = pgPer;
     }
 
     return query;
