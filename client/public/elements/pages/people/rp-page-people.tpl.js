@@ -9,9 +9,66 @@ return html`
   :host {
     display: block;
   }
-  
+  .hero {
+    background-color: var(--ae-tcolor-primary);
+    padding: 30px 20px;
+  }
+
+  .hero .type {
+    color: var(--ae-tcolor-primary10);
+    text-transform: uppercase;
+    font-size: var(--ae-font-size-small);
+  }
+  .subjectButton {
+    font-size: 18px;
+    border-radius: 30px;
+    border-color: var(--ae-tcolor-primary);
+    color: var(--ae-tcolor-primary);
+    padding: 5px 15px;
+    background-color: var(--ae-tcolor-secondary);
+    display: grid;
+    grid-template-columns: auto 15px;
+    align-items:center;
+    margin: 0 auto;
+
+  }
+  iron-icon {
+    vertical-align:middle;
+    text-align:center;
+    color: var(--ae-tcolor-primary);
+    cursor: pointer;
+
+  }
+  iron-icon:hover {
+    color: var(--ae-tcolor-light);
+
+
+  }
 </style>
 <div class="collections container bg-light top ${this.dataStatus}">
+
+  ${this.currentQuery.subjectFilter ?
+    html `
+      <div class="hero">
+        <div class="title mb-0"> 
+          <h1 class="text-light h1 bold mb-0 text-center">
+            <div>
+              <div style="display:inline-block;">Subject: </div>
+              ${this.currentQuery.subjectFilter ? 
+                html`
+                  <div style="display:inline-block;">
+                    <button class="subjectButton">
+                      <div><b>${this.searchsubject}</b></div>
+                      <div><iron-icon @click=${this._pubRedirect} icon='clear'></iron-icon></div>
+                    </button>
+                  </div>
+                `: html``}
+            </div>
+          </h1>
+        </div>
+      </div>
+    `: html``
+  }
   ${this._renderBrowseHeader('People')}
   <hr class="mb-0">
   <div class="body flex">

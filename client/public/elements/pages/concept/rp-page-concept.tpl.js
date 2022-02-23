@@ -5,7 +5,7 @@ import {renderHTML} from '../../../src/lib/santize-html.js';
 
 export default function render() {
 return html`
- 
+
 <style>
   ${styles}
   :host {
@@ -156,7 +156,7 @@ return html`
   <div class="data" ?hidden="${this._hideStatusSection('loaded')}">
     <div class="page-header container-wide">
       <div class="hero">
-        <div class="title mb-0"> 
+        <div class="title mb-0">
           <h1  class="text-secondary h1 bold mb-0 text-center">
           ${renderHTML(this._labelTitle())}
           </h1>
@@ -175,7 +175,7 @@ return html`
         current-link="${this.activeSection.index}">
       </rp-link-list>
     </div>
-   
+
   </div>
   <div class="sections container">
 
@@ -185,42 +185,57 @@ return html`
     </section>
     <section id="relatedSubjects" class="bg-light mt-3" ?hidden="${this._hidePageSection('relatedSubjects')}">
       <h1 class="weight-regular mt-0">Related Subjects</h1>
-      
-      ${this._isEmpty(this.broadRelatedSubjects) ? html `` : 
+
+      ${this._isEmpty(this.broadRelatedSubjects) ? html `` :
             html `
-              <b style="font-size: 18px;">Broader Scope</b>   
-            <br /> 
-            ${this.broadRelatedSubjects.map(broad => html ` 
+              <b style="font-size: 18px;">Broader Scope</b>
+            <br />
+            ${this.broadRelatedSubjects.map(broad => html `
               <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(broad)}">
                 ${(broad.prefLabel) ? broad.prefLabel: broad.label}
               </rp-badge>`)}`
        }
-       <br />   
+       <br />
 
-       ${this._isEmpty(this.narrowRelatedSubjects) ? html `` : 
+       ${this._isEmpty(this.narrowRelatedSubjects) ? html `` :
             html `
-              <b style="font-size: 18px; ">Narrower Scope</b>   
-            <br /> 
-            ${this.narrowRelatedSubjects.map(narrow => html ` 
+              <b style="font-size: 18px; ">Narrower Scope</b>
+            <br />
+            ${this.narrowRelatedSubjects.map(narrow => html `
               <rp-badge size="lg" class="my-1" href="${this.SubjectModel.getLandingPage(narrow)}">
                 ${(narrow.prefLabel) ? narrow.prefLabel: narrow.label}
               </rp-badge>`)}`
-       }        
+       }
 
     </section>
-    
+
     <section id="researchers" class="bg-light mt-3" ?hidden="${this._hidePageSection('researchers')}">
       <div class="box-title">
         <h1 class="weight-regular mt-0">Researchers</h1>
-      </div>    
-          ${this.tempResearch.map(researcher => html`
-            <rp-person-preview
-              .data="${researcher}"
-              text-width="${this.peopleWidth}"
-              show-subjects
-              class="my-3">
-            </rp-person-preview>
-          `)}   
+      </div>
+          ${this.tempResearch.map((researcher,v) =>
+            html`
+            ${v <= 8 ? html`
+              <rp-person-preview
+                .data="${researcher}"
+                text-width="${this.peopleWidth}"
+                show-subjects
+                class="my-3">
+              </rp-person-preview>
+            `:html``}
+
+          `
+          )}
+          ${ this.tempResearch.length > 8 ?
+            html`
+              <div class="buttons">
+                <button @click=${() => this._peopleRedirect()} class="load-pubs less">
+                  View All Related People
+                </button>
+              </div>
+              `:
+            html ``
+          }
     </section>
     <section id="publications" class="bg-light mt-3" ?hidden="${this._hidePageSection('publications')}">
       <div class="box-title">
@@ -233,22 +248,22 @@ return html`
               <div class="box-pubsyear">
                 <div class="year">${this._getYear(pub, i, pubs)}</div>
                 <div id="wrapped-text" class="pubs"><rp-citation .data="${pub}"></rp-citation></div>
-              </div> 
+              </div>
             `)}
             <div class="box-pub-buttons">
             <div class="padding"></div>
-            ${ v.total > 5 ? 
+            ${ v.total > 5 ?
               html`
               <div class="buttons">
                 <button @click=${() => this._pubRedirect(k)} class="load-pubs less">
                   View All Related ${this._publicationTitle(k)}
                 </button>
               </div>
-              `: 
+              `:
               html ``
              }
             </div>
-        `)} 
+        `)}
         </div>
     </section>
   </div>
