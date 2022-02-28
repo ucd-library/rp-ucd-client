@@ -46,7 +46,7 @@ return html`
   }
   ${styles} 
 </style>
-<div class="collections works container bg-light top ${this.dataStatus}">
+<div class="search container bg-light pb-3 ${this.dataStatus}" >
   ${this.currentQuery.subjectFilter ?
     html `
       <div class="hero">
@@ -57,9 +57,9 @@ return html`
               ${this.currentQuery.subjectFilter ? 
                 html`
                   <div style="display:inline-block;">
-                    <button class="subjectButton">
+                    <button  style="margin-right:5px" class="subjectButton">
                       <div><b>${this.searchsubject}</b></div>
-                      <div><iron-icon @click=${this._pubRedirect} icon='clear'></iron-icon></div>
+                      <div><iron-icon style="padding-left:5px;" @click=${this._pubRedirect} icon='clear'></iron-icon></div>
                     </button>
                   </div>
                 `: html``}
@@ -67,7 +67,10 @@ return html`
           </h1>
         </div>
       </div>
-    `: html``
+    `: html`
+    <div class="collections container bg-light top ${this.dataStatus}" >
+
+    `
   }
   ${this._renderBrowseHeader('Works')}
   <hr class="mb-0">
