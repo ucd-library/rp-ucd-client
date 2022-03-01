@@ -35,7 +35,9 @@ class AssetDefs {
         'relates.hasContactInfo.givenName^10',
         'assignedBy.label^10',
         'role.relatedBy.label.text^5',
-        'role.relatedBy.sponsorAwardId.text^5'
+        'role.relatedBy.sponsorAwardId.text^5',
+        "label.text^5",
+        "prefLabel.text^5"
       ],
       // people : [
       //   'hasContactInfo.familyName.text^9',
@@ -331,7 +333,16 @@ class AssetDefs {
     //   if (f.id == facet) return f.facetedSearchFields;
     // }
     if( facet === 'concepts' ) {
-      return this.getMainFacets()['concepts'];
+      
+      for (const x of this.getMainFacets()){
+        if(x["id"] == 'concepts'){
+          console.log(x.facetedSearchFields);
+          return x.facetedSearchFields;
+        }
+      
+      }
+      
+      //return this.getMainFacets()['concepts'];
     }
 
     return this.textSearchFields.default;
