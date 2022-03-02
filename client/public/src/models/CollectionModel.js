@@ -499,7 +499,6 @@ class CollectionModel extends BaseModel {
       query.offset = page * pgPer;
       query.limit = pgPer;
     }
-    console.log("M:", query);
 
     return query;
   }

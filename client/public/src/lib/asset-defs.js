@@ -336,13 +336,11 @@ class AssetDefs {
       
       for (const x of this.getMainFacets()){
         if(x["id"] == 'concepts'){
-          console.log(x.facetedSearchFields);
           return x.facetedSearchFields;
         }
       
       }
       
-      //return this.getMainFacets()['concepts'];
     }
 
     return this.textSearchFields.default;
