@@ -180,6 +180,7 @@ export class RpDropdown extends LitElement {
       }
       i += 1;
     }
+
     return choices;
   }
 

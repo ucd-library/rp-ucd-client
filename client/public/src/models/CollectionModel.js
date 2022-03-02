@@ -239,6 +239,7 @@ class CollectionModel extends BaseModel {
     else {
       await this.service.azAgg(id, q);
     }
+
     return this.store.data.azAggs[id];
   }
 
@@ -408,7 +409,6 @@ class CollectionModel extends BaseModel {
       if (!Object.keys(counts).includes(facetOption.es)) facetOption.disabled = true;
       mainFacets.push(facetOption);
     }
-
     return mainFacets;
   }
 
