@@ -12,8 +12,8 @@ class AdminService extends BaseService {
   }
 
   sparqlDescribe(id) {
-    let query = `PREFIX experts: <http://experts.ucdavis.edu/schema#>
-    PREFIX ucdrp: <http://experts.ucdavis.edu/>
+    let query = `PREFIX ${config.data.prefix.expertsSchema}: <http://experts.ucdavis.edu/schema#>
+    PREFIX ${config.data.prefix.ucdId}: <http://experts.ucdavis.edu/>
 
     DESCRIBE <${id.replace(config.data.prefix.ucdId+':', 'http://experts.ucdavis.edu/')}>`;
 

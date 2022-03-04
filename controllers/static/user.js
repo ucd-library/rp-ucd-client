@@ -84,7 +84,7 @@ class UserAuthController {
     try {
       let resp = await elasticSearch.client.get({
         index: config.elasticSearch.indexAlias,
-        id : 'ucdrp:'+id
+        id : config.client.data.prefix.ucdId+':'+id
       });
       return resp._source;
     } catch(e) {
@@ -117,7 +117,7 @@ class UserAuthController {
       });
   
       if( resp.hits && resp.hits.hits && resp.hits.hits.length ) {
-        return resp.hits.hits[0]._source['@id'].replace('ucdrp:', '');
+        return resp.hits.hits[0]._source['@id'].replace(config.client.data.prefix.ucdId+':', '');
       }
   
     } catch(e) {
