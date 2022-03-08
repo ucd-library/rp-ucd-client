@@ -1,5 +1,6 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./rp-index-status.tpl.js";
+import JSONFormatter from "json-formatter-js";
 
 import "./rp-progress-bar";
 
@@ -41,6 +42,11 @@ export default class RpIndexStatus extends LitElement {
     if( props.has('data') ) {
       this.total = this.data.total;
       this.active = this.data.active;
+
+      console.log(this.data.schema);
+      this.shadowRoot.querySelector('#schema').innerHTML = '';
+      this.shadowRoot.querySelector('#schema')
+        .appendChild((new JSONFormatter(this.data.schema, 1)).render());
 
       let services = [];
       ['debouncer', 'indexer'].forEach(service => {
