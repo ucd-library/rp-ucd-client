@@ -112,6 +112,15 @@ class AdminService extends BaseService {
     });
   }
 
+  getIndexSchema(name) {
+    return this.request({
+      url : this.baseUrl+'/api/indexer/schema/'+name,
+      onLoading : request => this.store.getIndexSchemaLoading(name, request),
+      onLoad : result => this.store.getIndexSchemaLoaded(name, result.body),
+      onError : e => this.store.getIndexSchemaError(name, e)
+    });
+  }
+
 }
 
 const service = new AdminService();

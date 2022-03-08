@@ -54,11 +54,16 @@ export default class RpAdminDashboard extends Mixin(LitElement)
 
     this.serviceTokenProperties = ['username', 'roles', 'ips'];
 
-    this.defaultAnalyzer = 'defaultAnalyzer';
+    this.defaultAnalyzer = 'default';
   }
 
   async firstUpdated() {
     let indexerStatus = (await this.AdminModel.indexerStatus()).payload;
+
+    for( let index in indexerStatus.indexes ) {
+      indexerStatus.indexes[index].schema = (await this.AdminModel.getIndexSchema(index)).payload;
+    }
+
     this.renderIndexStatus(indexerStatus);
 
     let editorRoots = Array.from(this.shadowRoot.querySelectorAll('.editor-root'));

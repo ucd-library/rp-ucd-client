@@ -27,6 +27,13 @@ class AdminModel extends BaseModel {
     return this.store.data.serviceToken;
   }
 
+  async getIndexSchema(name) {
+    try {
+      await this.service.getIndexSchema(name);
+    } catch(e) {}
+    return this.store.data.indexSchema[name];
+  }
+
   async requestIndex(opts) {
     try {
       await this.service.requestIndex(opts);
