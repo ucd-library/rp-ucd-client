@@ -10,7 +10,6 @@ class PersonService extends BaseService {
     this.store = PersonStore;
 
     this.baseUrl = (config.host || '') + config.data.apiUrl;
-    this.jsonContext = config.data.prefix.ucdId;
   }
 
   /**

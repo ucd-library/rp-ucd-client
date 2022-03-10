@@ -13,7 +13,7 @@ class OrganizationService extends BaseService {
 
   async getOrganization(id) {
     return this.request({
-      url : `${this.baseUrl}/${this.jsonContext}%3Ag-${id}`,
+      url : `${this.baseUrl}/${config.data.prefix.ucdId}%3Ag-${id}`,
       fetchOptions : {
         method : 'GET',
         headers : {

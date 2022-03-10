@@ -16,7 +16,6 @@ class GrantService extends BaseService {
     this.store = GrantStore;
 
     this.baseUrl = config.data.apiUrl;
-    this.jsonContext = config.data.prefix.ucdId;
   }
  
   /**
