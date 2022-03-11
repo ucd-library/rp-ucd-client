@@ -273,7 +273,7 @@ return html`
     <div class="known_contributors">
     <h1 aria-label="Known Contributors Section Title" class="weight-regular mt-0">Known Contributors</h1>   
 
-    ${this.members.key.length != 0 ? html`
+    ${(this.members.key || []).length > 0 ? html`
       <h2 aria-label="Aggie Experts Contributor Title" class="weight-regular mt-0">Aggie Experts Contributor</h2>
         ${this.members.key.map((title, index) => html`
             <h3 style="margin-bottom: 5px;">${title}</h3>
@@ -289,7 +289,7 @@ return html`
         `)}
     `: html``}
     <br />
-    ${this.others.key.length != 0 ? html`
+    ${(this.others.key || []).length > 0 ? html`
       <h2 aria-label="Other Known Contributor Title" class="weight-regular mt-0" style="margin:5px 0;">Other Known Contributor</h2>
         ${this.others.key.map((title, index) => html`
           <h3 style="margin-bottom: 5px;">${title}</h3>

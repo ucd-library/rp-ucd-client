@@ -173,7 +173,7 @@ class WorkModel extends BaseModel {
         let authors = workAuthors[type];
 
         for (let author of authors) {
-          let authorId = author['@id'].replace(this.service.jsonContext + ":", "");
+          let authorId = author['@id'].replace(config.data.prefix.ucdId + ":", "");
           if (config.user.expertsId === authorId.toLowerCase()) {
             return true;
           }
@@ -260,7 +260,7 @@ class WorkModel extends BaseModel {
             .find(item => item['@type'].includes('foaf:Person'));
 
           if( person ) {
-            let authorId = person['@id'].replace(this.service.jsonContext + ":", "");
+            let authorId = person['@id'].replace(config.data.prefix.ucdId + ":", "");
             author._client.apiEndpoint = person['@id'];
             author._client.href = '/' + authorId;
             author._client.aggieExpertsAuthor = true;

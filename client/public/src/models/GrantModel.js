@@ -117,7 +117,7 @@ class GrantModel extends BaseModel {
       let contributors = this.getContributors(grant);
       for (let grantContribute of contributors) {
         // for (let id of author.identifiers) {
-        let contributorId = grantContribute['@id'].replace(this.service.jsonContext + ":", "");
+        let contributorId = grantContribute['@id'].replace(config.data.prefix.ucdId + ":", "");
         if (config.user.username.toLowerCase().split('@')[0] === contributorId.toLowerCase()) {
           return true;
         }

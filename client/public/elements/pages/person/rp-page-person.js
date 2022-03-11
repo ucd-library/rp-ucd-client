@@ -321,10 +321,10 @@ export default class RpPagePerson extends RpUtilsLanding {
 
       let person = grant.relates
         .filter(item => item.inheresIn)
-        .find(item => item.inheresIn['@id'] === 'ucdrp:'+this.assetId);
+        .find(item => item.inheresIn['@id'] === config.data.prefix.ucdId+':'+this.assetId);
 
       let role = this.GrantModel.getKnownGrantRole(person['@type']) || '';
-      let grant_url =  grant["@id"].replace('ucdrp:', '/');
+      let grant_url =  grant["@id"].replace(config.data.prefix.ucdId+':', '/');
       let tempGrantObject = {
         "title": grant.label,
         "yearStart": dateStart.getFullYear(),
