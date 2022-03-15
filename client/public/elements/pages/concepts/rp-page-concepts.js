@@ -62,7 +62,6 @@ export default class RpPageConcepts extends RpUtilsCollection {
     if (subjectsAggs.state != 'loaded'){
       return;
     }
-    console.log("subjectsAggs", subjectsAggs);
     this.subFacets = this.CollectionModel._getSubFacets(subjectsAggs.payload, this.currentQuery);
   }
 

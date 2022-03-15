@@ -272,7 +272,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
 
     //This searchsubject code get the subject preferred name from query and assigns it for later subject Filter use
-    let searchsubject = await SubjectModel.getSubject(data["id"].split("__")[2]);
+    let searchsubject = await SubjectModel.getSubject(this.currentQuery.subjectFilter);
     this.searchsubject = searchsubject.payload.prefLabel ? searchsubject.payload.prefLabel : '';
     this.requestUpdate();
 
