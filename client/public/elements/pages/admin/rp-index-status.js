@@ -43,7 +43,6 @@ export default class RpIndexStatus extends LitElement {
       this.total = this.data.total;
       this.active = this.data.active;
 
-      console.log(this.data.schema);
       this.shadowRoot.querySelector('#schema').innerHTML = '';
       this.shadowRoot.querySelector('#schema')
         .appendChild((new JSONFormatter(this.data.schema, 1)).render());

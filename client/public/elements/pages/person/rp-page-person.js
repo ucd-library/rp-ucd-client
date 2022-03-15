@@ -274,7 +274,6 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doPubQuery(pubTypeObject, offset=0){
     let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
-
     this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
     if( data.state === 'error' ) {
       this.publicationOverviewStatus = 'error';
@@ -299,7 +298,6 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doGrantQuery(){
     let data = await this.PersonModel.getGrants(this.assetId, this.retrievedGrants.length);
-    console.log("Payload:",data.payload);
     if( data.state === 'error' ) {
       this.grantStatus = 'error';
       return;
