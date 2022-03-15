@@ -439,6 +439,7 @@ export default class RpPageConcept extends RpUtilsLanding {
     else if(name == "conference-papers") return "Conference Papers";
     else if(name == "books") return "Books";
     else if(name == "chapters") return "Chapters";
+    else if(name == "preprints") return "Preprints";
     return '';
   }
 

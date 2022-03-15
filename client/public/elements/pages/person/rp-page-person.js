@@ -69,7 +69,6 @@ export default class RpPagePerson extends RpUtilsLanding {
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
     
-    console.log(this.#privateField)
   }
 
   /**
