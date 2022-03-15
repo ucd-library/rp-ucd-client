@@ -271,6 +271,18 @@ class AssetDefs {
               value: [TYPES.conferencePaper]
             }
           }
+        },
+        {
+          id: 'preprints',
+          es: TYPES.preprints,
+          text: 'Preprints',
+          baseFilter: {
+            "@type": {
+              type: "keyword",
+              op: "and",
+              value: [TYPES.preprints]
+            }
+          }
         }
       ],
       subjects: [
