@@ -289,6 +289,7 @@ return html`
         `)}
     `: html``}
     <br />
+
     ${(this.others.key || []).length > 0 ? html`
       <h2 aria-label="Other Known Contributor Title" class="weight-regular mt-0" style="margin:5px 0;">Other Known Contributor</h2>
         ${this.others.key.map((title, index) => html`

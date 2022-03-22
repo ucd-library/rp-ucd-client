@@ -207,7 +207,7 @@ export default class RpPageGrant extends RpUtilsLanding {
     let data = await this.GrantModel.getGrant(id);
 
     let contributors = await this.GrantModel.getContributorsByRole(this.grant);
-    
+
     let tmp = [];
     for( let label in contributors ) {
       tmp.push({label, contributors: contributors[label]});
@@ -222,6 +222,7 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.others["value"] = Object.values(this.contributor[1].others); 
 
     this.contributor = [this.members, this.others];
+
     for(let i = 0; i < this.others.value; i++);
     //Add location of the description and add to array if there is none
     this.purpose = data.payload.description;
@@ -251,6 +252,8 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.grantAmount = await this._grantAmount();
     this.awardedByLabel = await this._awardedByLabel();
     this.grantNumber = await this._grantNumber();
+
+
     if (config.verbose) console.log("description:", data);
 
     // this._toggleElements("about", this.about);
