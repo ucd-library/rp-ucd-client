@@ -85,11 +85,11 @@ class StaticModelController {
     try {
       let resp = await elasticSearch.client.get({
         index: config.elasticSearch.indexAlias,
-        id : 'ucdrp:'+id
+        id : config.client.data.prefix.ucdId+':'+id
       });
       return resp._source;
     } catch(e) {
-      logger.info('unable to locate experts record for: '+'ucdrp:'+id);
+      logger.info('unable to locate experts record for: '+config.client.data.prefix.ucdId+':'+id);
     }
     return null;
   }

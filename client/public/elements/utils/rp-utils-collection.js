@@ -13,6 +13,7 @@ import "../components/grant-preview";
 import AssetDefs from "../../src/lib/asset-defs";
 import ga from "../../src/lib/ga";
 import SubjectModel from '../../src/models/SubjectModel';
+import config from "../../src/config.js";
 
 /**
  * @class RpUtilsCollection
@@ -217,7 +218,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     let item = this.data[index];
 
     // kinda hackish, better way?
-    if( item['@id'].replace(/^ucdrp:/, '/') !== firstEle.getAttribute('href') ) return;
+    let re = new RegExp(`^${config.data.prefix.ucdId}:`);
+    if( item['@id'].replace(re, '/') !== firstEle.getAttribute('href') ) return;
 
     ga.sendSearchClick({
       text : this.currentQuery.textQuery,
@@ -269,9 +271,8 @@ export default class RpUtilsCollection extends Mixin(LitElement)
       this.azDisabled = [...this._setDifference(this.azOptions, Object.keys(data.payload.aggregations.facets[azAggField]))].filter(x => x != 'all');
     }
 
-    let searchsubject = await SubjectModel.getSubject(data["id"].split("__")[2]);
-
-
+    //This searchsubject code get the subject preferred name from query and assigns it for later subject Filter use
+    let searchsubject = await SubjectModel.getSubject(this.currentQuery.subjectFilter);
     this.searchsubject = searchsubject.payload.prefLabel ? searchsubject.payload.prefLabel : '';
     this.requestUpdate();
 

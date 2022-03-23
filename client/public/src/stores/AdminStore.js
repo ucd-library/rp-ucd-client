@@ -12,7 +12,8 @@ class AdminStore extends BaseStore {
       indexerStatus : {},
       requestIndex : {},
       serviceToken : {},
-      analyze : {}
+      analyze : {},
+      indexSchema : {}
     };
     this.events = {
       REQUEST_INDEX : 'request-index-update',
@@ -196,6 +197,32 @@ class AdminStore extends BaseStore {
   _setAnalyzeState(state) {
     this.data.analyze = state;
   }
+
+  getIndexSchemaLoading(name, request) {
+    this._setIndexSchemaState({
+      state : this.STATE.LOADING,
+      request, name
+    });
+  }
+
+  getIndexSchemaLoaded(name, payload) {
+    this._setIndexSchemaState({
+      state : this.STATE.LOADED,
+      payload, name
+    });
+  }
+
+  getIndexSchemaError(name, error) {
+    this._setIndexSchemaState({
+      state : this.STATE.ERROR,
+      error, name
+    });
+  }
+
+  _setIndexSchemaState(state) {
+    this.data.indexSchema[state.name] = state;
+  }
+
 
 }
 

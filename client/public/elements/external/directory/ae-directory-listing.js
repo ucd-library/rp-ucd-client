@@ -4,6 +4,7 @@ import fetch from "isomorphic-fetch";
 import "../../components/avatar";
 import PersonModel from "../../../src/models/PersonModel";
 import titleCleanup from "../utils/title-cleanup";
+import config from "../../../src/config.js";
 
 export default class AeDirectoryListing extends LitElement {
 
@@ -109,7 +110,8 @@ export default class AeDirectoryListing extends LitElement {
 
   _getHref(item) {
     if( !this.renderLink ) {
-      return (AGGIE_EXPERTS_LOADER.host || '') + item['@id'].replace(/^ucdrp:/, '/');
+      let re = new RegExp(`^${config.data.prefix.ucdId}:`);
+      return (AGGIE_EXPERTS_LOADER.host || '') + item['@id'].replace(re, '/');
     }
     return this.renderLink(item);
   }

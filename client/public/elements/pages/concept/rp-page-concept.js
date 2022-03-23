@@ -146,6 +146,7 @@ export default class RpPageConcept extends RpUtilsLanding {
   async _doMainQuery(id){
     let data = await this.SubjectModel.getSubject(id);
 
+
     this.subjectStatus = data.state;
     if( data.state === 'error' ) {
       return this.AppStateModel.show404Page(data);
@@ -176,7 +177,6 @@ export default class RpPageConcept extends RpUtilsLanding {
    */
   async _doAboutQuery(id){
     let data = await this.SubjectModel.getSubject(id);
-
     //Add location of the description and add to array if there is none
     this.about = data.payload.description;
 
@@ -295,6 +295,7 @@ export default class RpPageConcept extends RpUtilsLanding {
    * @param {String} k
    */
   _pubRedirect(k){
+   // this.searchsubject = this._labelTitle();
     let href = '/works/' + k + "?" + "subject=" + this.urlPathId;
     this.AppStateModel.setLocation(href);
   }
@@ -307,6 +308,7 @@ export default class RpPageConcept extends RpUtilsLanding {
    * @param {String} k
    */
   _peopleRedirect(){
+    //this.searchsubject = this._labelTitle();
     let href = '/people?subject=' + this.urlPathId;
     this.AppStateModel.setLocation(href);
   }
@@ -437,6 +439,7 @@ export default class RpPageConcept extends RpUtilsLanding {
     else if(name == "conference-papers") return "Conference Papers";
     else if(name == "books") return "Books";
     else if(name == "chapters") return "Chapters";
+    else if(name == "preprints") return "Preprints";
     return '';
   }
 

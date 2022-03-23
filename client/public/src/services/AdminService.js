@@ -12,8 +12,8 @@ class AdminService extends BaseService {
   }
 
   sparqlDescribe(id) {
-    let query = `PREFIX experts: <http://experts.ucdavis.edu/schema#>
-    PREFIX ucdrp: <http://experts.ucdavis.edu/>
+    let query = `PREFIX ${config.data.prefix.expertsSchema}: <http://experts.ucdavis.edu/schema#>
+    PREFIX ${config.data.prefix.ucdId}: <http://experts.ucdavis.edu/>
 
     DESCRIBE <${id.replace(config.data.prefix.ucdId+':', 'http://experts.ucdavis.edu/')}>`;
 
@@ -109,6 +109,15 @@ class AdminService extends BaseService {
       onLoading : request => this.store.analyzeLoading(request, payload),
       onLoad : result => this.store.analyzeLoaded(result.body),
       onError : e => this.store.analyzeError(e)
+    });
+  }
+
+  getIndexSchema(name) {
+    return this.request({
+      url : this.baseUrl+'/api/indexer/schema/'+name,
+      onLoading : request => this.store.getIndexSchemaLoading(name, request),
+      onLoad : result => this.store.getIndexSchemaLoaded(name, result.body),
+      onError : e => this.store.getIndexSchemaError(name, e)
     });
   }
 

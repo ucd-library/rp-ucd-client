@@ -225,7 +225,7 @@ export default class AePublicationList extends Mixin(LitElement)
    * @returns {Array}
    */
   getPubExports() {
-    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/ucdrp:${this.expertId}`}];
+    return [{text: "RIS", subtext: "(imports to MIV, Zotero, Mendeley)", href:`/api/miv/${config.data.prefix.ucdId}:${this.expertId}`}];
   }
 
   /**

@@ -1,6 +1,7 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./rp-admin-record.tpl.js";
 import JSONFormatter from "json-formatter-js";
+import config from "../../../src/config.js";
 
 import "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/keybinding-vim";
@@ -42,7 +43,8 @@ export default class RpAdminRecord extends Mixin(LitElement)
 
     if( e.location.path.length > 1 ) {
       let uri = e.location.path.slice(1).join('/');
-      if( !uri.startsWith('ucdrp:') ) uri = 'ucdrp:'+uri;
+      let prefix = config.data.prefix.ucdId;
+      if( !uri.startsWith(prefix+':') ) uri = prefix+':'+uri;
       this.load(uri);
     }
   }

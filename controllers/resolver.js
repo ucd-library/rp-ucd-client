@@ -19,9 +19,9 @@ const MATCHES = {
  * @param {Object} app 
  */
 async function register(app) {
-  // strip ucdrp
-  app.get(/\/ucdrp:.*/, (req, res) => {
-    res.redirect(req.path.replace(/\/ucdrp:/, '/'));
+  // strip ucdId prefix
+  app.get(new RegExp(`/${config.client.data.prefix.ucdId}:.*`), (req, res) => {
+    res.redirect(req.path.replace(new RegExp(`/${config.client.data.prefix.ucdId}:`), '/'));
   });
 
   for( let key in MATCHES ) {

@@ -345,8 +345,9 @@ export default class RpPageHome extends Mixin(LitElement)
     if (facetList.state != 'loaded') {
       return;
     }
+
     this.facets = facetList.payload.aggregations.facets['@type'];
-    if (config.verbose) console.log('facets: ', this.facets);
+
     for (let facet in this.facets) {
       for (let recognizedFacet of this.CollectionModel.subFacets.works) {
         if (facet == recognizedFacet.es) {

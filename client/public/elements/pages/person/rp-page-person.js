@@ -69,7 +69,6 @@ export default class RpPagePerson extends RpUtilsLanding {
 
     this.AppStateModel.get().then(e => this._onAppStateUpdate(e));
     
-    console.log(this.#privateField)
   }
 
   /**
@@ -274,7 +273,6 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doPubQuery(pubTypeObject, offset=0){
     let data = await this.PersonModel.getPublications(this.assetId, pubTypeObject, offset);
-
     this.publicationOverview[pubTypeObject.id].dataStatus = data.state;
     if( data.state === 'error' ) {
       this.publicationOverviewStatus = 'error';
@@ -299,7 +297,6 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   async _doGrantQuery(){
     let data = await this.PersonModel.getGrants(this.assetId, this.retrievedGrants.length);
-    console.log("Payload:",data.payload);
     if( data.state === 'error' ) {
       this.grantStatus = 'error';
       return;
@@ -315,16 +312,18 @@ export default class RpPagePerson extends RpUtilsLanding {
     let inactiveGrant = [];
 
     this.retrievedGrants.forEach(grant => {
+
       let dateStart = new Date(grant.dateTimeInterval.start.dateTime);
       let dateEnd = new Date(grant.dateTimeInterval.end.dateTime);
       let today = new Date();
 
       let person = grant.relates
         .filter(item => item.inheresIn)
-        .find(item => item.inheresIn['@id'] === 'ucdrp:'+this.assetId);
+        .find(item => item.inheresIn['@id'] === config.data.prefix.ucdId+':'+this.assetId);
 
       let role = this.GrantModel.getKnownGrantRole(person['@type']) || '';
-      let grant_url =  grant["@id"].replace('ucdrp:', '/');
+      let grant_url =  grant["@id"].replace(config.data.prefix.ucdId+':', '/');
+
       let tempGrantObject = {
         "title": grant.label,
         "yearStart": dateStart.getFullYear(),
