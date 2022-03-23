@@ -312,6 +312,7 @@ export default class RpPagePerson extends RpUtilsLanding {
     let inactiveGrant = [];
 
     this.retrievedGrants.forEach(grant => {
+
       let dateStart = new Date(grant.dateTimeInterval.start.dateTime);
       let dateEnd = new Date(grant.dateTimeInterval.end.dateTime);
       let today = new Date();
@@ -322,6 +323,7 @@ export default class RpPagePerson extends RpUtilsLanding {
 
       let role = this.GrantModel.getKnownGrantRole(person['@type']) || '';
       let grant_url =  grant["@id"].replace(config.data.prefix.ucdId+':', '/');
+
       let tempGrantObject = {
         "title": grant.label,
         "yearStart": dateStart.getFullYear(),

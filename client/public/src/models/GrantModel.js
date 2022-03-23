@@ -24,19 +24,33 @@ class GrantModel extends BaseModel {
     this.UrlLanding = '/grant/';
     this.urlBrowse = '/grants';
     this.urlContributor = "/person/";
-
+    this.knownRoleMap = {};
+    let roleList = ['GrantPrincipalInvestigatorRole',
+      'GrantPrincipalInvestigatorRole',
+      'GrantCoPrincipalInvestigatorRole',
+      'GrantProjectLeaderRole',
+      'GrantCoreLeaderRole', 
+      'GrantKeyPersonnelRole',
+      'GrantOtherRole'];
     // Only roles in this map will be shown in the UI
     // map should contain rdf @type property mapped to a UI label
-    this.knownRoleMap = {
-      'experts:GrantProgramDirectorRole' : 'Program Director Role',
-      'experts:GrantPrincipalInvestigatorRole' : 'Principal Investigator',
-      'experts:GrantCoPrincipalInvestigatorRole' : 'Co-Principal Investigator',
-      'experts:GrantProjectLeaderRole' : 'Project Leader',
-      'experts:GrantCoreLeaderRole' : 'Core Leader',
-      'experts:GrantKeyPersonnelRole' : 'Key Personnel',
-      'experts:GrantOtherRole' : 'Other Role',
-      
-    };
+
+
+    for( let i of roleList){
+      let prefix = `${config.data.prefix.expertsSchema}:` + i;
+      if(prefix.includes('GrantPrincipalInvestigatorRole'))
+        this.knownRoleMap[prefix] ="Principal Investigator";
+      else if (prefix.includes('GrantCoPrincipalInvestigatorRole'))
+        this.knownRoleMap[prefix] ="Co-Principal Investigator";
+      else if(prefix.includes('GrantProjectLeaderRole'))
+        this.knownRoleMap[prefix] ="Project Leader";
+      else if(prefix.includes('GrantCoreLeaderRole'))
+        this.knownRoleMap[prefix] ="Core Leader";
+      else if(prefix.includes('GrantKeyPersonnelRole'))
+        this.knownRoleMap[prefix] ="Key Personnel";
+      else if(prefix.includes('GrantOtherRole'))
+        this.knownRoleMap[prefix] ="Other Role";
+    }
 
     // TODO: JM - this needs to be fixed, I don't think it indicates a 'UCD Author'
     // as shown in the UI.
@@ -334,6 +348,7 @@ class GrantModel extends BaseModel {
     //let people = rdfUtils.asArray(resp.payload.relates ? resp.payload.relates : resp.payload);
   
     let people = rdfUtils.asArray(grant.relates ? grant.relates : grant);
+
 
     for( let label in byRole ) {
       for( let i = 0; i < byRole[label].length; i++  ) {
