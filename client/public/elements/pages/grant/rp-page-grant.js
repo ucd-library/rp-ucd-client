@@ -259,9 +259,7 @@ export default class RpPageGrant extends RpUtilsLanding {
     if (config.verbose) console.log("description:", data);
 
     // this._toggleElements("about", this.about);
-    
   }
-
 
   /**
    * @method _grantSubAward
@@ -270,7 +268,11 @@ export default class RpPageGrant extends RpUtilsLanding {
    * @returns {String}
    */
   async _grantSubAward(){
-    return this.grant.subAwardOf.assignedBy.label;
+    let subAwardLabel = '';
+    if (this.grant.subAwardOf && this.grant.subAwardOf.assignedBy && this.grant.subAwardOf.assignedBy.label) {
+      subAwardLabel = this.grant.subAwardOf.assignedBy.label;
+    }
+    return subAwardLabel;
   }
 
 
