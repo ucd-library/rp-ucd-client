@@ -232,7 +232,8 @@ return html`
             <div class="grid-item">
                 <h2 aria-label="Awarded By Title">Awarded By</h2>
                 ${this.awardedByLabel ? html`
-                  ${this.awardedByLabel.map(label => html`<div>${label.label}</div>`)}
+                  ${this.subAward ? html`${this.subAward} <br> via`: html``}
+                  ${this.awardedByLabel.map(label => html`<span>${label.label}</span>`)}
                 `:html ``}
             </div> 
             ${this.grantAmount ? html `

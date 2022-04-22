@@ -34,6 +34,7 @@ export default class RpPageGrant extends RpUtilsLanding {
       grantAmount: {type: String},
       awardedByLabel: {type: String},
       contributors: {type: Array},
+      subAward: {type: String},
       members: {type: Array},
       others: {type: Array},
       grantNumber: {type:String},
@@ -72,6 +73,7 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.others = [];
     this.role = "";
     this.admin = "";
+    this.subAward = "";
     this.emptyValue = "Not Listed";
     this.reference = {
       "Program Director": null, 
@@ -252,15 +254,26 @@ export default class RpPageGrant extends RpUtilsLanding {
     this.grantAmount = await this._grantAmount();
     this.awardedByLabel = await this._awardedByLabel();
     this.grantNumber = await this._grantNumber();
-
+    this.subAward = await this._grantSubAward();
 
     if (config.verbose) console.log("description:", data);
 
     // this._toggleElements("about", this.about);
-    
   }
 
-
+  /**
+   * @method _grantSubAward
+   * @description returns the subAward of grant.
+   * 
+   * @returns {String}
+   */
+  async _grantSubAward(){
+    let subAwardLabel = '';
+    if (this.grant.subAwardOf && this.grant.subAwardOf.assignedBy && this.grant.subAwardOf.assignedBy.label) {
+      subAwardLabel = this.grant.subAwardOf.assignedBy.label;
+    }
+    return subAwardLabel;
+  }
 
 
   /**
