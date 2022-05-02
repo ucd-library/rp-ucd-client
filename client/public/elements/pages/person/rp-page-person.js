@@ -15,6 +15,7 @@ import "../../components/link-list";
 import "../../components/modal";
 import "../../components/rp-loading";
 import "../../components/ae-publication-list";
+// import '@ucd-lib/theme-elements/ucdlib/ucdlib-md/ucdlib-md';
 
 
 /**
@@ -104,8 +105,11 @@ export default class RpPagePerson extends RpUtilsLanding {
     ]);
 
     this.isOwnProfile = this._isOwnProfile();
-  }
 
+    this._renderOverview();
+    this._renderTeachingSummary();
+    this._renderResearchInterests();
+  }
 
 
   /**
@@ -118,6 +122,7 @@ export default class RpPagePerson extends RpUtilsLanding {
       this.shadowRoot.getElementById('hero').shuffle();
     }
   }
+
 
   /**
    * @method _resetEleProps
@@ -258,8 +263,6 @@ export default class RpPagePerson extends RpUtilsLanding {
       this.publicationOverviewStatus = 'loaded';
     }
   }
-
-
 
 
   /**
@@ -513,6 +516,48 @@ export default class RpPagePerson extends RpUtilsLanding {
   }
 
   /**
+   * @method _renderOverview
+   * @description Gets overview of a person (optionally with markdown), and updates the ui.
+   * @private
+   */
+  _renderOverview() {
+    if (this.individual.overview) {
+      this.shadowRoot.querySelector('#overview').data = this.individual.overview;
+    }
+  }
+
+  /**
+   * @method _renderResearchInterests
+   * @description Gets research interests of a person (optionally with markdown), and updates the ui.
+   * @private
+   */
+   _renderResearchInterests() {
+    if (this.individual.researchInterests) {
+      this.shadowRoot.querySelector('#research-interests').data = this.individual.researchInterests;
+    }
+  }
+
+  /**
+   * @method _renderTeachingSummary
+   * @description Gets teaching summary of a person (optionally with markdown), and updates the ui.
+   * @private
+   */
+   _renderTeachingSummary() {
+    if (this.individual.teachingSummary) {
+      this.shadowRoot.querySelector('#teaching-summary').data = this.individual.teachingSummary;
+    }
+  }
+  
+  /**
+   * @method _hideMoreDetails
+   * @description Returns true if there is no data in overview, teaching summary and  research interests
+   * @private
+   */
+  _hideMoreDetails() {
+    return !this.individual.overview && !this.individual.teachingSummary && !this.individual.researchInterests;
+  }
+
+  /**
    * @method getPronouns
    * @description Gets name of a person.
    *
@@ -542,6 +587,34 @@ export default class RpPagePerson extends RpUtilsLanding {
   getWebsites() {
     if (this.websitesArray.length > 0) return this.websitesArray;
     return this.PersonModel.getWebsites(this.individual);
+  }
+
+  /**
+   * @method getTeachingSummary
+   * @description Gets teaching summary for person if it exists
+   *
+   * @returns {String}
+   */
+  getTeachingSummary() {
+    let teachingSummary = '';
+    if (this.individual.teachingSummary && this.individual.teachingSummary.length) {
+      teachingSummary = this.individual.teachingSummary;
+    }  
+    return teachingSummary;
+  }
+
+  /**
+   * @method getResearchInterests
+   * @description Gets research interests for person if it exists
+   *
+   * @returns {String}
+   */
+  getResearchInterests() {
+    let researchInterests = '';
+    if (this.individual.researchInterests && this.individual.researchInterests.length) {
+      researchInterests = this.individual.researchInterests;
+    }  
+    return researchInterests;
   }
 
   /**
@@ -577,6 +650,13 @@ export default class RpPagePerson extends RpUtilsLanding {
 
     } else if (subsection == 'websites') {
       if (this.getWebsites().length > 0) return true;
+
+    } else if (subsection === 'teaching-summary') {
+      if (this.getTeachingSummary()) return true;
+
+    } else if (subsection === 'research-interests') {
+      if (this.getResearchInterests()) return true;
+
     }
 
     return false;

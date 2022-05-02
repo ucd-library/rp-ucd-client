@@ -2,6 +2,7 @@ import { html } from 'lit';
 import styles from "../../styles/site.html";
 import "../../components/rp-toast-message"
 import config from "../../../src/config.js";
+// import "@ucd-lib/theme-elements/utils/mutation-observer";
 
 export default function render() {
 return html`
@@ -415,6 +416,54 @@ return html`
         `}
 
       </section>
+
+      <section id="more-details" class="bg-light mt-3" ?hidden="${this._hideMoreDetails()}">
+        <h1 class="weight-regular mt-0">More Detail</h1>
+        ${this.individualStatus === 'loaded' ? html`
+          <div ?hidden="${!this.individual.overview || this.individual.overview.length === 0}">
+            <h2>Overview</h2>
+            <p id="overview"></p>
+          </div>
+          <div>
+            <div>
+              <div>
+                ${this._showSubSection('teaching-summary') ? html`
+                  <h2 class="h3 mb-2">Teaching Summary
+                    ${this.isOwnProfile ? html`
+                      <a href="https://oapolicy.universityofcalifornia.edu/" target="_blank" rel="noopener">
+                        <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
+                          <div slot="tooltip">Edit Summary</div>
+                        </rp-icon>
+                      </a>
+                      ` : html``
+                    }
+                  </h2>
+                  <p id="teaching-summary"></p>
+                ` : html``}
+              </div>
+              <div>
+                ${this._showSubSection('research-interests') ? html`
+                  <h2 class="h3 mb-2">Research Interests
+                    ${this.isOwnProfile ? html`
+                      <a href="https://oapolicy.universityofcalifornia.edu/" target="_blank" rel="noopener">
+                        <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
+                          <div slot="tooltip">Edit Interests</div>
+                        </rp-icon>
+                      </a>
+                      ` : html``              
+                    }
+                  </h2>
+                  <ucdlib-md id="research-interests"></ucdlib-md>
+                ` : html``}
+              </div>
+            </div>
+          </div>
+        ` : html`
+          <rp-loading></rp-loading>
+        `}
+      </section>
+      
+
     ${this.totalPublications != 0 || (this.isLoggedIn && this.isOwnProfile) ? html`
         <ae-publication-list
           expert-id="${this.assetId}"
