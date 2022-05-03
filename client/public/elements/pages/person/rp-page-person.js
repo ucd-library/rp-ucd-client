@@ -15,8 +15,6 @@ import "../../components/link-list";
 import "../../components/modal";
 import "../../components/rp-loading";
 import "../../components/ae-publication-list";
-// import '@ucd-lib/theme-elements/ucdlib/ucdlib-md/ucdlib-md';
-
 
 /**
  * @class RpPagePerson

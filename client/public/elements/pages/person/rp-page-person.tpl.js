@@ -2,7 +2,7 @@ import { html } from 'lit';
 import styles from "../../styles/site.html";
 import "../../components/rp-toast-message"
 import config from "../../../src/config.js";
-// import "@ucd-lib/theme-elements/utils/mutation-observer";
+import '@ucd-lib/theme-elements/ucdlib/ucdlib-md/ucdlib-md';
 
 export default function render() {
 return html`
@@ -422,7 +422,7 @@ return html`
         ${this.individualStatus === 'loaded' ? html`
           <div ?hidden="${!this.individual.overview || this.individual.overview.length === 0}">
             <h2>Overview</h2>
-            <p id="overview"></p>
+            <ucdlib-md id="overview"></ucdlib-md>
           </div>
           <div>
             <div>
@@ -438,7 +438,7 @@ return html`
                       ` : html``
                     }
                   </h2>
-                  <p id="teaching-summary"></p>
+                  <ucdlib-md id="teaching-summary"></ucdlib-md>
                 ` : html``}
               </div>
               <div>
