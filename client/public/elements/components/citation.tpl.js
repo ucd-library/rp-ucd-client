@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import urlUtils from '../../src/lib/url-utils';
 
 export default function render() {
   return html`
@@ -32,6 +33,15 @@ export default function render() {
       <span class="venue-location">${this.venueLocation}.</span>
     ` : html``}
   ` : html``}
+  </div>
+
+  <div class="badge-container">
+    ${this.citationSubjects && this.citationSubjects.length > 0 ? html`
+      <small class="badges">${this.citationSubjects.map(subject => html`
+        <rp-badge class="ellipsis" href="${urlUtils.idAsLocalUrlPath(subject['@id'])}">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
+      `)}
+      </small>
+    ` : html``}
   </div>
   `;
 }

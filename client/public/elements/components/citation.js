@@ -19,6 +19,7 @@ export class RpCitation extends Mixin(LitElement)
       venue: {type: String},
       authors: {type: Array},
       citationStyle: {type: String, attribute: 'citation-style'},
+      citationSubjects: {type: Array}
     };
   }
 
@@ -31,6 +32,7 @@ export class RpCitation extends Mixin(LitElement)
     this.href = "";
     this.venue = "";
     this.venueLocation = "";
+    this.citationSubjects = [];
     this.authors = {ranked:[], unranked: []};
 
     this._injectModel('WorkModel');
@@ -62,6 +64,7 @@ export class RpCitation extends Mixin(LitElement)
     this.venue = this._getVenue(d.hasPublicationVenue);
     this.venueLocation = this._getVenueLocation(d);
     this.authors = this.WorkModel.getAuthors(d);
+    this.citationSubjects = d.hasSubjectArea;
   }
 
   /**
