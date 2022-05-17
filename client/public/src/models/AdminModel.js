@@ -1,6 +1,7 @@
 import {BaseModel} from '@ucd-lib/cork-app-utils';
 import AdminService from '../services/AdminService.js';
 import AdminStore from '../stores/AdminStore.js';
+const config = require('../config').default;
 
 class AdminModel extends BaseModel {
 
@@ -71,11 +72,14 @@ class AdminModel extends BaseModel {
     
     if( Array.isArray(jsonldState.payload['@type']) ) {
       type = jsonldState.payload['@type']
-        .filter(item => item.startsWith('experts:'))[0];
+        .filter(item => item.startsWith(`${config.data.prefix.expertsSchema}:`))[0];
     } else {
       type = jsonldState.payload['@type'];
     }
-    if( type ) type = type.replace(/^experts:/, '').replace(/.*#/, '').toLowerCase();
+    if( type ) {
+      const re = new RegExp(String.raw`${config.data.prefix.expertsSchema}:`);
+      type = type.replace(re, '').replace(/.*#/, '').toLowerCase();
+    }
 
     let record = await this.record(id);
 
