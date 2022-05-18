@@ -152,10 +152,10 @@ return html`
   </div>
 
   ${this.publicationOverviewStatus === 'loaded' ? html`
-    <h2 class="mb-0" ?hidden="${this.hideHeader}">Selected Publications</h2>
+    <!-- <h2 class="mb-0" ?hidden="${this.hideHeader}">Selected Publications</h2> -->
     <div class="data">
       ${ Object.values(this.publicationOverview).map(pubType => html`
-        <h3>${pubType.text} (${pubType.ct})</h3>
+        <h2>${pubType.text} (${pubType.ct})</h2>
         ${this.getPubsByYear(pubType.id).map(yr => html`
           <div class="box-pubsyear">
             <div class="year">${yr.year}</div>

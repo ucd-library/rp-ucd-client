@@ -338,7 +338,7 @@ return html`
 
     <div class="sections container">
       <section id="about" class="bg-light mt-3" ?hidden="${this._hidePageSection('about')}">
-        <h1 class="weight-regular mt-0">About</h1>
+        <h1 class="weight-regular mt-0">Contact Information</h1>
         ${this.individualStatus === 'loaded' ? html`
           <h2 hidden>Overview</h2>
             <p hidden>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
@@ -348,7 +348,7 @@ return html`
             <div>
               <div ?hidden="${this.additionalTitles.length === 0}">
                 <div>
-                  <h2 class="h3 mb-2">Roles&nbsp;&nbsp;
+                  <h2 class="mb-2">Roles&nbsp;&nbsp;
                     ${this.isOwnProfile ? html`
                       <a href="https://org.ucdavis.edu/odr/" target="_blank" rel="noopener">
                         <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
@@ -382,7 +382,7 @@ return html`
             </div>
             <div>
               ${this._showSubSection('websites') ? html`
-                  <h2 class="h3 mb-2">Websites
+                  <h2 class="mb-2">Websites
                     ${this.isOwnProfile ? html`
                         <rp-icon icon="iron-editor:mode-edit" circle-bg is-link has-text size="lg" @click="${e => this.shadowRoot.getElementById('modal-web-edit').toggle()}">
                           <div slot="tooltip">Edit Websites</div>
@@ -418,17 +418,17 @@ return html`
       </section>
 
       <section id="more-details" class="bg-light mt-3" ?hidden="${this._hideMoreDetails()}">
-        <h1 class="weight-regular mt-0">More Detail</h1>
+        <h1 class="weight-regular mt-0">About</h1>
         ${this.individualStatus === 'loaded' ? html`
           <div ?hidden="${!this.individual.overview || this.individual.overview.length === 0}">
-            <h2>Overview</h2>
+            <h2 class="mt-4">Overview</h2>
             <ucdlib-md id="overview"></ucdlib-md>
           </div>
           <div>
             <div>
               <div>
                 ${this._showSubSection('teaching-summary') ? html`
-                  <h2 class="h3 mb-2">Teaching Summary
+                  <h2 class="mb-2">Teaching Summary
                     ${this.isOwnProfile ? html`
                       <a href="https://oapolicy.universityofcalifornia.edu/" target="_blank" rel="noopener">
                         <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
@@ -443,7 +443,7 @@ return html`
               </div>
               <div>
                 ${this._showSubSection('research-interests') ? html`
-                  <h2 class="h3 mb-2">Research Interests
+                  <h2 class="mb-2">Research Interests
                     ${this.isOwnProfile ? html`
                       <a href="https://oapolicy.universityofcalifornia.edu/" target="_blank" rel="noopener">
                         <rp-icon style="vertical-align:middle;" icon="iron-editor:mode-edit" has-text circle-bg is-link size="lg">
@@ -481,10 +481,10 @@ return html`
           </div>
         </div>
         ${this.totalGrants != 0 ? html `
-        <h2 class="mb-0">Selected Grants</h2>
+        <!-- <h2 class="mb-0">Selected Grants</h2> -->
           <div>
           ${this.activeGrant.length != 0 ? html `
-              <div><i>Active (${this.activeGrant.length})</i>
+              <div><h2>Active (${this.activeGrant.length})</h2>
               ${this.activeGrant.map(grant => 
                   html`<div class="grant-panel"><a href="${grant.grant_url}">${grant.title}</a><br />
                   ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} </h3>
@@ -497,7 +497,7 @@ return html`
           <div>
             ${this.inactiveGrant.length != 0  ? html `
               <div>
-              <i>Completed (${this.inactiveGrant.length})</i>
+              <h2>Completed (${this.inactiveGrant.length})</h2>
                 ${this.inactiveGrant.map(grant => 
                     html`<div class="grant-panel"><a href=${grant.grant_url}>${grant.title}</a><br />
                     ${grant.yearStart} - ${grant.yearEnd} | ${grant.grant_type} ${grant.indivRole ? html`| ${grant.indivRole}`:html``} | Awarded by ${grant.funding_agency} 
