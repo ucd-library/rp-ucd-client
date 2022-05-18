@@ -47,7 +47,7 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     }
 
     textSearchFields = [];
-    ['default', 'concepts'].forEach(type => {
+    ['default', 'concepts', 'functions'].forEach(type => {
       textSearchFields.push({type, fields: assetDefs.textSearchFields[type] });
     });
     this.textSearchFields = textSearchFields;
@@ -88,7 +88,11 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     let editor = ace.edit(editorRoot);
     let type = editorRoot.getAttribute('type');
     editor.renderer.attachToShadowRoot();
-    editor.setValue(assetDefs.textSearchFields[type].join('\n'));
+    // if( type === 'functions') {
+      // todo fix formatting
+    // } else {
+      editor.setValue(assetDefs.textSearchFields[type].join('\n'));
+    // }
     editor.getSession().on('change', () => {
       let values = editor.getValue()
         .split('\n')

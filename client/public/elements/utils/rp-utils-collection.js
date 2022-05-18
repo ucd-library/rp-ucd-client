@@ -63,7 +63,7 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     this.defaultFacetId = AssetDefs.defaultFacetId;
     this.searchsubject = '';
 
-
+    this.functionScore = config.defaultFunctionScore;
 
     this._resetQueryProperties();
 
@@ -368,6 +368,13 @@ export default class RpUtilsCollection extends Mixin(LitElement)
     }
     if (this.subFacet && this.subFacet != 'none') {
       q.subFacet = this.subFacet;
+    }
+
+    const textSearchFields = localStorage.getItem('textSearchFields');
+    if( textSearchFields && JSON.parse(textSearchFields).functions) {      
+      q.functionScore = JSON.parse(JSON.parse(textSearchFields).functions.join(''));
+    } else if( this.functionScore ) {
+      q.functionScore = this.functionScore;
     }
 
     return q;

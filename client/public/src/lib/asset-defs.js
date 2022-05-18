@@ -17,27 +17,25 @@ class AssetDefs {
         'hasContactInfo.familyName.text^9',
         'hasContactInfo.givenName^8',
         'hasContactInfo.middleName^8',
-        "_.personLabel.text^6",
-        "_.workLabel.text^6",
-        "_.grantLabel.text^6",
-        "hasSubjectArea.label.text^5",
-        "abstract",
+        "hasSubjectArea.label.text^3",
+        "abstract^1",
         'hasContactInfo.title.text',
-        'hasResearchArea.label.text',
-        'hasPublicationVenue.issn',
-        "hasPublicationVenue.label.text",
+        'hasResearchArea.label.text^1',
+        'hasPublicationVenue.issn^1',
+        "hasPublicationVenue.label.text^1",
         'citation.label^10',
-        '_.top20Citation.label^15',
-        '_.lastCitation.label^15',
+        // 'citation.contrib-type^42',
+        // '_.top20Citation.label^15',
+        // '_.lastCitation.label^15',
+        // 'plusCitation.label^5',
         'assignedBy.label.text',
         'sponsorAwardId.text^2',
         'relates.hasContactInfo.familyName^10',
         'relates.hasContactInfo.givenName^10',
         'assignedBy.label^10',
-        'role.relatedBy.label.text^5',
+        'role.relatedBy.label.text^11',
         'role.relatedBy.sponsorAwardId.text^5',
-        "label.text^5",
-        "prefLabel.text^5"
+        "label.text^7",
       ],
       // people : [
       //   'hasContactInfo.familyName.text^9',
@@ -49,7 +47,6 @@ class AssetDefs {
       // ],
       concepts : [
         "label.text^10",
-        "prefLabel.text^10"
       ],
       // works : [
       //   "doi.text^10",
@@ -63,6 +60,10 @@ class AssetDefs {
       //   "relates.hasContactInfo.familyName^2",
       //   "relates.hasContactInfo.givenName^2"
       // ]
+      functions : [
+        JSON.stringify(config.defaultFunctionScore, '  ', '  ')
+        // config.defaultFunctionScore
+      ],
     };
   }
 
@@ -111,8 +112,8 @@ class AssetDefs {
           'hasPublicationVenue.issn',
           "hasPublicationVenue.label.text",
           'citation.label^10',
-          '_.top20Citation.label^15',
-          '_.lastCitation.label^15',
+          // '_.top20Citation.label^15',
+          // '_.lastCitation.label^15',
           'relates.hasContactInfo.familyName^10',
           'relates.hasContactInfo.givenName^10',
           'assignedBy.label^10'

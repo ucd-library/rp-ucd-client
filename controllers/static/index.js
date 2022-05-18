@@ -92,6 +92,18 @@ export default (app) => {
         defaultTypes : config.client.defaultTypes,
         gaCode : config.client.gaCode,
         enableUpdates : config.client.enableUpdates,
+        defaultFunctionScore : {
+          functions: [
+            {
+              filter: { "match": { "ucdrp:contrib-type": "ucdrp:FirstorLastAuthor" } },
+              weight: 15
+            }
+          ],
+          max_boost: 42,
+          score_mode: "max",
+          boost_mode: "multiply",
+          min_score: 42
+        },
         env : {
           CLIENT_TAG : process.env.CLIENT_TAG || '',
           VESSEL_TAG : process.env.VESSEL_TAG || '',
