@@ -95,14 +95,14 @@ export default (app) => {
         defaultFunctionScore : {
           functions: [
             {
-              filter: { "match": { "ucdrp:contrib-type": "ucdrp:FirstorLastAuthor" } },
-              weight: 15
+              filter : [
+                { term : { "ucdrp:contrib-type" : "ucdrp:FirstorLastAuthor" } }
+              ],
+              weight : 4
             }
           ],
-          max_boost: 42,
-          score_mode: "max",
-          boost_mode: "multiply",
-          min_score: 42
+          score_mode : "sum",
+          boost_mode : "multiply"
         },
         env : {
           CLIENT_TAG : process.env.CLIENT_TAG || '',
