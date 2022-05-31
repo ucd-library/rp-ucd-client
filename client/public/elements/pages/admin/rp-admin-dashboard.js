@@ -47,7 +47,7 @@ export default class RpAdminDashboard extends Mixin(LitElement)
     }
 
     textSearchFields = [];
-    ['default', 'concepts'].forEach(type => {
+    ['default', 'concepts', 'functions'].forEach(type => {
       textSearchFields.push({type, fields: assetDefs.textSearchFields[type] });
     });
     this.textSearchFields = textSearchFields;

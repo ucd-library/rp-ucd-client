@@ -488,6 +488,8 @@ class CollectionModel extends BaseModel {
     // Apply faceting to query
     query.facets = QueryUtils.defaultTypeFacet;
 
+    query.functionScore = elementQuery.functionScore;
+
     // Apply pagination
     if (elementQuery.offset) {
       query.offset = elementQuery.offset;
