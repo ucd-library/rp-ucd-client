@@ -24,10 +24,6 @@ class AssetDefs {
         'hasPublicationVenue.issn^1',
         "hasPublicationVenue.label.text^1",
         'citation.label^10',
-        // 'citation.contrib-type^42',
-        // '_.top20Citation.label^15',
-        // '_.lastCitation.label^15',
-        // 'plusCitation.label^5',
         'assignedBy.label.text',
         'sponsorAwardId.text^2',
         'relates.hasContactInfo.familyName^10',
@@ -62,7 +58,6 @@ class AssetDefs {
       // ]
       functions : [
         JSON.stringify(config.defaultFunctionScore, '  ', '  ')
-        // config.defaultFunctionScore
       ],
     };
   }

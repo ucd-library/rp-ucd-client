@@ -93,16 +93,16 @@ export default (app) => {
         gaCode : config.client.gaCode,
         enableUpdates : config.client.enableUpdates,
         defaultFunctionScore : {
-          functions: [
+          "functions": [
             {
-              filter : [
-                { term : { "ucdrp:contrib-type" : "ucdrp:FirstorLastAuthor" } }
+              "filter" : [
+                { "term" : { "citation.contrib-type" : "ucdrp:FirstorLastAuthor" } }
               ],
-              weight : 4
+              "weight" : 2
             }
           ],
-          score_mode : "sum",
-          boost_mode : "multiply"
+          "score_mode" : "sum",
+          "boost_mode" : "multiply"
         },
         env : {
           CLIENT_TAG : process.env.CLIENT_TAG || '',
