@@ -204,7 +204,7 @@ class PersonModel extends BaseModel {
     let contacts = rdfUtils.asArray(individual.hasContactInfo);
 
     for( let contact of contacts ) {
-      let id=rdfUtils.getFirstValue(contact.identifier || contact['experts:identifier']);
+      let id = rdfUtils.getFirstValue(contact.identifier || contact[`${APP_CONFIG.data.prefix.expertsSchema}:identifier`]);
       if( id && id.match('^'+type) ) {
         res.push({
           contact,
@@ -213,7 +213,7 @@ class PersonModel extends BaseModel {
       }
     }
 
-    if( res.length === 0 ) {
+    if( type !== 'oap' && res.length === 0 ) {
       for( let contact of contacts ) {
         res.push({
           contact,
@@ -295,7 +295,7 @@ class PersonModel extends BaseModel {
     }
 
     let contact = contacts[0].contact;
-    let id=rdfUtils.getFirstValue(contact.identifier || contact['experts:identifier']);
+    let id=rdfUtils.getFirstValue(contact.identifier || contact[`${APP_CONFIG.data.prefix.expertsSchema}:identifier`]);
 
     if (contact.hasName) {
       if (console.verbose) console.log("hasName "+JSON.stringify(contact));
@@ -457,9 +457,12 @@ class PersonModel extends BaseModel {
         type: 'scopus'
       });
     }
-    let oap = (this.getContacts(individual,'oap'))[0].contact;
+    let oap = this.getContacts(individual,'oap');
+    if( oap && oap[0] && oap[0].contact ){
+      oap = oap[0].contact;
+    }
     let websites = [];
-    if (oap && oap.hasURL ) websites=websites.concat(oap.hasURL);
+    if( oap && oap.hasURL ) websites = websites.concat(oap.hasURL);
 
     // There are multiple urlType available.  Should we push just the type, and
     // decode somewhere else or decode here? urlTypes are :
@@ -468,9 +471,10 @@ class PersonModel extends BaseModel {
     // Something like <aeq-icons icon="urlType-departement"> ?
 
     for (const website of websites) {
+      if (!website.url) continue;
       out.push({
-        text:website.label ,
-        href:website.url,
+        text: website.label || website.url,
+        href: website.url,
         type: 'url'
       });
     }
