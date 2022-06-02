@@ -584,9 +584,7 @@ export default class RpPagePerson extends RpUtilsLanding {
    */
   getWebsites() {
     if (this.websitesArray.length > 0) return this.websitesArray;
-    const websites = this.PersonModel.getWebsites(this.individual);
-    // filter out possible duplicate links in the Roles section
-    return websites.filter(w => !this.additionalTitles.find(t => t.url === w.href));
+    return this.PersonModel.getWebsites(this.individual);
   }
 
   /**

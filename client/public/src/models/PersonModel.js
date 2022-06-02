@@ -213,7 +213,7 @@ class PersonModel extends BaseModel {
       }
     }
 
-    if( type !== 'oap' && res.length === 0 ) {
+    if( type === 'odr' && res.length === 0 ) {
       for( let contact of contacts ) {
         res.push({
           contact,
