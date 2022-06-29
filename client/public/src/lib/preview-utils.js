@@ -1,5 +1,5 @@
 import striptags from "striptags";
-
+import rdfUtils from "./rdf-utils.js";
 class PreviewUtils {
 
   /**
@@ -15,6 +15,7 @@ class PreviewUtils {
    * @returns {Object}
    */
   getSnippetTitle(title, snippet) {
+    title = rdfUtils.getFirstValue(title);
     let stripped = striptags(snippet);
 
     if( stripped === title ) {
