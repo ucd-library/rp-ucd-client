@@ -420,7 +420,7 @@ class PersonModel extends BaseModel {
     let subjects = individual.hasResearchArea;
     if (!Array.isArray(subjects)) subjects = [subjects];
     for (const subject of subjects) {
-      subject.bestLabel = subject.prefLabel ? subject.prefLabel : subject.label;
+      subject.bestLabel = rdfUtils.getFirstValue(subject.prefLabel) ? rdfUtils.getFirstValue(subject.prefLabel) : rdfUtils.getFirstValue(subject.label);
       subject.href = urlUtils.idAsLocalUrlPath(subject['@id']);
       out.push(subject);
     }
