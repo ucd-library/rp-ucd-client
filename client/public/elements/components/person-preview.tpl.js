@@ -89,7 +89,7 @@ export default function render() {
       <div class="badge-container">
       ${this.showSubjects && this.getSubjects() ? html`
         <small class="badges">${this.getSubjects().map(subject => html`
-          <rp-badge class="my-1" href="${urlUtils.idAsLocalUrlPath(subject['@id'])}">${subject.prefLabel ? subject.prefLabel : subject.label}</rp-badge>
+          <rp-badge class="my-1" href="${urlUtils.idAsLocalUrlPath(subject['@id'])}">${subject.bestLabel}</rp-badge>
         `)}
         </small>
       </div>

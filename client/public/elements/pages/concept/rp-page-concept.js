@@ -422,8 +422,8 @@ export default class RpPageConcept extends RpUtilsLanding {
    * @returns {String}
    */
   _labelTitle(){
-    if(this.subject.prefLabel) return this.subject.prefLabel;
-    return this.subject.label;
+    if(this.subject.prefLabel) return rdfUtils.getFirstValue(this.subject.prefLabel);
+    return rdfUtils.getFirstValue(this.subject.label);
   }
 
   /**
