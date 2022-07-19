@@ -71,11 +71,14 @@ class AdminModel extends BaseModel {
     
     if( Array.isArray(jsonldState.payload['@type']) ) {
       type = jsonldState.payload['@type']
-        .filter(item => item.startsWith('experts:'))[0];
+        .filter(item => item.startsWith(`${APP_CONFIG.data.prefix.expertsSchema}:`))[0];
     } else {
       type = jsonldState.payload['@type'];
     }
-    if( type ) type = type.replace(/^experts:/, '').replace(/.*#/, '').toLowerCase();
+    if( type ) {
+      const re = new RegExp(String.raw`${APP_CONFIG.data.prefix.expertsSchema}:`);
+      type = type.replace(re, '').replace(/.*#/, '').toLowerCase();
+    }
 
     let record = await this.record(id);
 
