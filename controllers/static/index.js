@@ -96,14 +96,19 @@ export default (app) => {
           "functions": [
             {
               "filter":[{  
-                "bool":{  
-                   "must":[
-                        {
-                            "term": {
-                                "citation.contrib-type": "ucdrp:FirstorLastAuthor"
-                            }
+                "bool": {
+                  "must": [  
+                    {
+                        "match": { 
+                            "citation.label": "${searchText}" 
                         }
-                   ]
+                    },
+                    {
+                        "term": {
+                            "citation.contrib-type": "ucdrp:FirstorLastAuthor"
+                        }
+                    }
+                  ]
                 }
              }],
               "weight" : 2
