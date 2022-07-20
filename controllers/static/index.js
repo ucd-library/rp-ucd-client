@@ -95,9 +95,22 @@ export default (app) => {
         defaultFunctionScore : {
           "functions": [
             {
-              "filter" : [
-                { "term" : { "citation.contrib-type" : "ucdrp:FirstorLastAuthor" } }
-              ],
+              "filter":[{  
+                "bool": {
+                  "must": [  
+                    {
+                        "match": { 
+                            "citation.label": "${searchText}" 
+                        }
+                    },
+                    {
+                        "term": {
+                            "citation.contrib-type": "ucdrp:FirstorLastAuthor"
+                        }
+                    }
+                  ]
+                }
+             }],
               "weight" : 2
             }
           ],

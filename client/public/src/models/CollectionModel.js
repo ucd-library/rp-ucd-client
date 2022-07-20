@@ -488,6 +488,12 @@ class CollectionModel extends BaseModel {
     // Apply faceting to query
     query.facets = QueryUtils.defaultTypeFacet;
 
+    // Apply function score and update its query text
+    try {
+      elementQuery.functionScore.functions[0].filter[0].bool.must[0].match['citation.label'] = query.text || '';
+    } catch (e) {
+      // 
+    }
     query.functionScore = elementQuery.functionScore;
 
     // Apply pagination
